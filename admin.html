@@ -1,0 +1,2150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Espace administrateur sécurisé de Housing's YQD."
+    >
+
+    <meta name="theme-color" content="#0a3d78">
+
+    <title>Administration | Housing's YQD</title>
+
+    <!-- STYLE PRINCIPAL -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- FONT AWESOME -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+</head>
+
+
+<body class="dashboard-body admin-body">
+
+
+    <!-- =========================================
+         VERIFICATION DU CODE ADMINISTRATEUR
+    ========================================== -->
+
+    <div
+        class="admin-auth-screen"
+        id="adminAuthScreen"
+    >
+
+        <div class="admin-auth-card">
+
+
+            <div class="admin-auth-logo">
+
+                <span class="logo-icon">
+
+                    <i class="fa-solid fa-building"></i>
+
+                </span>
+
+            </div>
+
+
+            <h1>
+                Housing's YQD
+            </h1>
+
+
+            <p class="admin-auth-subtitle">
+
+                Accès réservé à l'administration
+
+            </p>
+
+
+            <div class="admin-security-icon">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+            </div>
+
+
+            <h2>
+                Vérification de sécurité
+            </h2>
+
+
+            <p>
+
+                Veuillez saisir votre code administrateur
+                pour accéder au tableau de contrôle.
+
+            </p>
+
+
+            <form
+                id="adminCodeForm"
+                autocomplete="off"
+            >
+
+
+                <div class="form-group">
+
+                    <label
+                        for="adminAccessCode"
+                        class="form-label"
+                    >
+
+                        Code administrateur
+
+                    </label>
+
+
+                    <div class="input-wrapper">
+
+
+                        <input
+
+                            type="password"
+
+                            id="adminAccessCode"
+
+                            class="form-control"
+
+                            placeholder="Saisissez votre code"
+
+                            autocomplete="off"
+
+                            required
+
+                        >
+
+
+                        <button
+
+                            type="button"
+
+                            class="password-toggle"
+
+                            id="toggleAdminCode"
+
+                            aria-label="Afficher ou masquer le code"
+
+                        >
+
+                            <i class="fa-solid fa-eye"></i>
+
+                        </button>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- MESSAGE -->
+
+                <div
+                    id="adminAuthMessage"
+                    role="alert"
+                    aria-live="polite"
+                    style="
+                        display: none;
+                        padding: 12px;
+                        margin-bottom: 18px;
+                        border-radius: 10px;
+                        font-size: 14px;
+                    "
+                ></div>
+
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary btn-full"
+                    id="adminLoginButton"
+                >
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    Vérifier et accéder
+
+                </button>
+
+
+            </form>
+
+
+
+            <div
+                style="
+                    text-align: center;
+                    margin-top: 22px;
+                "
+            >
+
+                <a
+                    href="login.html"
+                    style="
+                        color: #64748b;
+                        font-size: 14px;
+                    "
+                >
+
+                    <i class="fa-solid fa-arrow-left"></i>
+
+                    Retour à la connexion
+
+                </a>
+
+            </div>
+
+
+            <div class="admin-auth-security">
+
+                <i class="fa-solid fa-lock"></i>
+
+                <span>
+                    Zone administrative sécurisée
+                </span>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================================
+         ESPACE ADMINISTRATEUR
+    ========================================== -->
+
+    <div
+        id="adminPanel"
+        style="display: none;"
+    >
+
+
+        <!-- =====================================
+             SIDEBAR ADMIN
+        ====================================== -->
+
+        <aside
+            class="sidebar admin-sidebar"
+            id="adminSidebar"
+        >
+
+
+            <div class="sidebar-brand">
+
+                <span class="logo-icon">
+
+                    <i class="fa-solid fa-building"></i>
+
+                </span>
+
+
+                <span>
+
+                    Housing's YQD
+
+                </span>
+
+
+            </div>
+
+
+
+            <div class="admin-badge">
+
+                <i class="fa-solid fa-user-shield"></i>
+
+                Administration
+
+            </div>
+
+
+
+            <nav class="sidebar-menu">
+
+
+                <a
+                    href="#adminOverview"
+                    class="active"
+                    data-admin-section="adminOverview"
+                >
+
+                    <i class="fa-solid fa-chart-pie"></i>
+
+                    Tableau de bord
+
+                </a>
+
+
+
+                <a
+                    href="#adminUsers"
+                    data-admin-section="adminUsers"
+                >
+
+                    <i class="fa-solid fa-users"></i>
+
+                    Utilisateurs
+
+                </a>
+
+
+
+                <a
+                    href="#adminDeposits"
+                    data-admin-section="adminDeposits"
+                >
+
+                    <i class="fa-solid fa-wallet"></i>
+
+                    Dépôts
+
+                    <span
+                        class="menu-count"
+                        id="pendingDepositsCount"
+                    >
+                        0
+                    </span>
+
+                </a>
+
+
+
+                <a
+                    href="#adminWithdrawals"
+                    data-admin-section="adminWithdrawals"
+                >
+
+                    <i class="fa-solid fa-money-bill-transfer"></i>
+
+                    Retraits
+
+                    <span
+                        class="menu-count"
+                        id="pendingWithdrawalsCount"
+                    >
+                        0
+                    </span>
+
+                </a>
+
+
+
+                <a
+                    href="#adminInvestments"
+                    data-admin-section="adminInvestments"
+                >
+
+                    <i class="fa-solid fa-chart-line"></i>
+
+                    Investissements
+
+                </a>
+
+
+
+                <a
+                    href="#adminTickets"
+                    data-admin-section="adminTickets"
+                >
+
+                    <i class="fa-solid fa-headset"></i>
+
+                    Assistance
+
+                    <span
+                        class="menu-count"
+                        id="pendingTicketsCount"
+                    >
+                        0
+                    </span>
+
+                </a>
+
+
+
+                <a
+                    href="#adminTransactions"
+                    data-admin-section="adminTransactions"
+                >
+
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+
+                    Historique
+
+                </a>
+
+
+
+                <button
+                    type="button"
+                    class="logout-btn"
+                    id="adminLogoutButton"
+                >
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                    Déconnexion
+
+                </button>
+
+
+            </nav>
+
+
+        </aside>
+
+
+
+        <!-- =====================================
+             CONTENU PRINCIPAL
+        ====================================== -->
+
+        <div class="dashboard-main">
+
+
+            <!-- =================================
+                 TOPBAR
+            ================================== -->
+
+            <header class="dashboard-topbar">
+
+
+                <button
+                    class="mobile-menu-btn"
+                    id="adminMobileMenuButton"
+                    type="button"
+                >
+
+                    <i class="fa-solid fa-bars"></i>
+
+                </button>
+
+
+
+                <div class="topbar-title">
+
+                    <h2 id="adminPageTitle">
+
+                        Tableau de bord administrateur
+
+                    </h2>
+
+
+                    <p>
+
+                        Gestion et contrôle de Housing's YQD.
+
+                    </p>
+
+
+                </div>
+
+
+
+                <div class="topbar-actions">
+
+
+                    <button
+                        class="notification-btn"
+                        type="button"
+                        id="adminNotificationButton"
+                    >
+
+                        <i class="fa-solid fa-bell"></i>
+
+                        <span class="notification-dot"></span>
+
+                    </button>
+
+
+
+                    <div class="user-topbar">
+
+
+                        <div class="user-avatar">
+
+                            A
+
+                        </div>
+
+
+                        <span class="user-name">
+
+                            Administrateur
+
+                        </span>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </header>
+
+
+
+            <!-- =================================
+                 CONTENU ADMIN
+            ================================== -->
+
+            <main class="dashboard-content">
+
+
+
+                <!-- =================================
+                     OVERVIEW
+                ================================== -->
+
+                <section
+                    id="adminOverview"
+                    class="admin-section"
+                >
+
+
+                    <div class="welcome-banner">
+
+                        <h1>
+
+                            Centre de contrôle 👨‍💼
+
+                        </h1>
+
+
+                        <p>
+
+                            Surveillez les utilisateurs, transactions,
+                            investissements et demandes de la plateforme.
+
+                        </p>
+
+
+                    </div>
+
+
+
+                    <!-- STATISTIQUES -->
+
+                    <div class="balance-grid">
+
+
+                        <div class="balance-card">
+
+
+                            <div class="balance-card-icon">
+
+                                <i class="fa-solid fa-users"></i>
+
+                            </div>
+
+
+                            <div class="balance-card-label">
+
+                                Utilisateurs enregistrés
+
+                            </div>
+
+
+                            <div
+                                class="balance-card-value"
+                                id="adminTotalUsers"
+                            >
+
+                                0
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <div class="balance-card">
+
+
+                            <div class="balance-card-icon">
+
+                                <i class="fa-solid fa-wallet"></i>
+
+                            </div>
+
+
+                            <div class="balance-card-label">
+
+                                Dépôts en attente
+
+                            </div>
+
+
+                            <div
+                                class="balance-card-value"
+                                id="adminPendingDeposits"
+                            >
+
+                                0
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <div class="balance-card">
+
+
+                            <div class="balance-card-icon">
+
+                                <i class="fa-solid fa-money-bill-transfer"></i>
+
+                            </div>
+
+
+                            <div class="balance-card-label">
+
+                                Retraits en attente
+
+                            </div>
+
+
+                            <div
+                                class="balance-card-value"
+                                id="adminPendingWithdrawals"
+                            >
+
+                                0
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <div class="balance-card">
+
+
+                            <div class="balance-card-icon">
+
+                                <i class="fa-solid fa-chart-line"></i>
+
+                            </div>
+
+
+                            <div class="balance-card-label">
+
+                                Investissements actifs
+
+                            </div>
+
+
+                            <div
+                                class="balance-card-value"
+                                id="adminActiveInvestments"
+                            >
+
+                                0
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- ACTIONS RAPIDES -->
+
+                    <div class="quick-actions">
+
+
+                        <a
+                            href="#adminDeposits"
+                            class="admin-quick-action"
+                            data-admin-target="adminDeposits"
+                        >
+
+                            <div class="quick-action-icon">
+
+                                <i class="fa-solid fa-wallet"></i>
+
+                            </div>
+
+
+                            <strong>
+
+                                Valider les dépôts
+
+                            </strong>
+
+
+                        </a>
+
+
+
+                        <a
+                            href="#adminWithdrawals"
+                            class="admin-quick-action"
+                            data-admin-target="adminWithdrawals"
+                        >
+
+                            <div class="quick-action-icon">
+
+                                <i class="fa-solid fa-money-bill-transfer"></i>
+
+                            </div>
+
+
+                            <strong>
+
+                                Gérer les retraits
+
+                            </strong>
+
+
+                        </a>
+
+
+
+                        <a
+                            href="#adminTickets"
+                            class="admin-quick-action"
+                            data-admin-target="adminTickets"
+                        >
+
+                            <div class="quick-action-icon">
+
+                                <i class="fa-solid fa-headset"></i>
+
+                            </div>
+
+
+                            <strong>
+
+                                Voir l'assistance
+
+                            </strong>
+
+
+                        </a>
+
+
+
+                        <a
+                            href="#adminUsers"
+                            class="admin-quick-action"
+                            data-admin-target="adminUsers"
+                        >
+
+                            <div class="quick-action-icon">
+
+                                <i class="fa-solid fa-users"></i>
+
+                            </div>
+
+
+                            <strong>
+
+                                Gérer les utilisateurs
+
+                            </strong>
+
+
+                        </a>
+
+
+                    </div>
+
+
+
+                    <!-- ACTIVITE RECENTE -->
+
+                    <div class="dashboard-grid">
+
+
+                        <div class="dashboard-card">
+
+
+                            <div class="dashboard-card-header">
+
+                                <h3>
+
+                                    Dernières opérations
+
+                                </h3>
+
+
+                                <a
+                                    href="#adminTransactions"
+                                    class="view-all"
+                                    data-admin-target="adminTransactions"
+                                >
+
+                                    Voir tout
+
+                                </a>
+
+
+                            </div>
+
+
+
+                            <div class="table-wrapper">
+
+
+                                <table class="data-table">
+
+
+                                    <thead>
+
+                                        <tr>
+
+                                            <th>Utilisateur</th>
+
+                                            <th>Type</th>
+
+                                            <th>Montant</th>
+
+                                            <th>Statut</th>
+
+                                        </tr>
+
+                                    </thead>
+
+
+
+                                    <tbody
+                                        id="adminRecentActivityBody"
+                                    >
+
+                                        <tr>
+
+                                            <td colspan="4">
+
+                                                Aucune activité récente.
+
+                                            </td>
+
+                                        </tr>
+
+                                    </tbody>
+
+
+                                </table>
+
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <div class="dashboard-card">
+
+
+                            <div class="dashboard-card-header">
+
+                                <h3>
+
+                                    Demandes d'assistance
+
+                                </h3>
+
+                            </div>
+
+
+
+                            <div
+                                id="adminRecentTickets"
+                            >
+
+                                <p class="text-muted">
+
+                                    Aucune demande.
+
+                                </p>
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================
+                     UTILISATEURS
+                ================================== -->
+
+                <section
+                    id="adminUsers"
+                    class="admin-section"
+                    style="display: none;"
+                >
+
+
+                    <div class="dashboard-card">
+
+
+                        <div class="dashboard-card-header">
+
+                            <h3>
+
+                                Utilisateurs enregistrés
+
+                            </h3>
+
+
+                            <input
+                                type="search"
+                                id="userSearchInput"
+                                class="admin-search"
+                                placeholder="Rechercher un utilisateur..."
+                            >
+
+
+                        </div>
+
+
+
+                        <div class="table-wrapper">
+
+
+                            <table class="data-table">
+
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>Utilisateur</th>
+
+                                        <th>Téléphone</th>
+
+                                        <th>Solde</th>
+
+                                        <th>Investissement</th>
+
+                                        <th>Inscription</th>
+
+                                        <th>Action</th>
+
+                                    </tr>
+
+                                </thead>
+
+
+
+                                <tbody
+                                    id="adminUsersBody"
+                                >
+
+                                    <tr>
+
+                                        <td colspan="6">
+
+                                            Aucun utilisateur enregistré.
+
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+
+                            </table>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================
+                     DEPOTS
+                ================================== -->
+
+                <section
+                    id="adminDeposits"
+                    class="admin-section"
+                    style="display: none;"
+                >
+
+
+                    <div class="dashboard-card">
+
+
+                        <div class="dashboard-card-header">
+
+                            <h3>
+
+                                Demandes de dépôt
+
+                            </h3>
+
+
+                            <select
+                                id="depositStatusFilter"
+                                class="admin-filter"
+                            >
+
+                                <option value="all">
+
+                                    Tous les dépôts
+
+                                </option>
+
+
+                                <option value="pending">
+
+                                    En attente
+
+                                </option>
+
+
+                                <option value="approved">
+
+                                    Validés
+
+                                </option>
+
+
+                                <option value="rejected">
+
+                                    Refusés
+
+                                </option>
+
+
+                            </select>
+
+
+                        </div>
+
+
+
+                        <div class="table-wrapper">
+
+
+                            <table class="data-table">
+
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>Utilisateur</th>
+
+                                        <th>Montant</th>
+
+                                        <th>Moyen</th>
+
+                                        <th>Référence</th>
+
+                                        <th>Date</th>
+
+                                        <th>Statut</th>
+
+                                        <th>Action</th>
+
+                                    </tr>
+
+                                </thead>
+
+
+
+                                <tbody
+                                    id="adminDepositsBody"
+                                >
+
+                                    <tr>
+
+                                        <td colspan="7">
+
+                                            Aucune demande de dépôt.
+
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+
+                            </table>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================
+                     RETRAITS
+                ================================== -->
+
+                <section
+                    id="adminWithdrawals"
+                    class="admin-section"
+                    style="display: none;"
+                >
+
+
+                    <div class="dashboard-card">
+
+
+                        <div class="dashboard-card-header">
+
+                            <h3>
+
+                                Demandes de retrait
+
+                            </h3>
+
+
+                            <select
+                                id="withdrawalStatusFilter"
+                                class="admin-filter"
+                            >
+
+                                <option value="all">
+
+                                    Tous les retraits
+
+                                </option>
+
+
+                                <option value="pending">
+
+                                    En attente
+
+                                </option>
+
+
+                                <option value="approved">
+
+                                    Validés
+
+                                </option>
+
+
+                                <option value="rejected">
+
+                                    Refusés
+
+                                </option>
+
+
+                            </select>
+
+
+                        </div>
+
+
+
+                        <div class="table-wrapper">
+
+
+                            <table class="data-table">
+
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>Utilisateur</th>
+
+                                        <th>Montant</th>
+
+                                        <th>Moyen</th>
+
+                                        <th>Compte</th>
+
+                                        <th>Date</th>
+
+                                        <th>Statut</th>
+
+                                        <th>Action</th>
+
+                                    </tr>
+
+                                </thead>
+
+
+
+                                <tbody
+                                    id="adminWithdrawalsBody"
+                                >
+
+                                    <tr>
+
+                                        <td colspan="7">
+
+                                            Aucune demande de retrait.
+
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+
+                            </table>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================
+                     INVESTISSEMENTS
+                ================================== -->
+
+                <section
+                    id="adminInvestments"
+                    class="admin-section"
+                    style="display: none;"
+                >
+
+
+                    <div class="dashboard-card">
+
+
+                        <div class="dashboard-card-header">
+
+                            <h3>
+
+                                Tous les investissements
+
+                            </h3>
+
+                        </div>
+
+
+
+                        <div class="table-wrapper">
+
+
+                            <table class="data-table">
+
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>Utilisateur</th>
+
+                                        <th>Pack</th>
+
+                                        <th>Montant</th>
+
+                                        <th>Date début</th>
+
+                                        <th>Fin prévue</th>
+
+                                        <th>Statut</th>
+
+                                        <th>Détails</th>
+
+                                    </tr>
+
+                                </thead>
+
+
+
+                                <tbody
+                                    id="adminInvestmentsBody"
+                                >
+
+                                    <tr>
+
+                                        <td colspan="7">
+
+                                            Aucun investissement enregistré.
+
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+
+                            </table>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================
+                     ASSISTANCE
+                ================================== -->
+
+                <section
+                    id="adminTickets"
+                    class="admin-section"
+                    style="display: none;"
+                >
+
+
+                    <div class="dashboard-card">
+
+
+                        <div class="dashboard-card-header">
+
+                            <h3>
+
+                                Messages et assistance
+
+                            </h3>
+
+                        </div>
+
+
+
+                        <div
+                            id="adminTicketsContainer"
+                            class="admin-tickets-container"
+                        >
+
+                            <p class="text-muted">
+
+                                Aucun ticket utilisateur.
+
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================
+                     HISTORIQUE COMPLET
+                ================================== -->
+
+                <section
+                    id="adminTransactions"
+                    class="admin-section"
+                    style="display: none;"
+                >
+
+
+                    <div class="dashboard-card">
+
+
+                        <div class="dashboard-card-header">
+
+                            <h3>
+
+                                Historique complet des transactions
+
+                            </h3>
+
+                        </div>
+
+
+
+                        <div class="table-wrapper">
+
+
+                            <table class="data-table">
+
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>Utilisateur</th>
+
+                                        <th>Type</th>
+
+                                        <th>Montant</th>
+
+                                        <th>Détails</th>
+
+                                        <th>Date</th>
+
+                                        <th>Statut</th>
+
+                                    </tr>
+
+                                </thead>
+
+
+
+                                <tbody
+                                    id="adminTransactionsBody"
+                                >
+
+                                    <tr>
+
+                                        <td colspan="6">
+
+                                            Aucune transaction enregistrée.
+
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+
+                            </table>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </section>
+
+
+            </main>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =========================================
+         MODAL DETAILS UTILISATEUR
+    ========================================== -->
+
+    <div
+        class="modal"
+        id="userDetailsModal"
+    >
+
+
+        <div class="modal-box large-modal">
+
+
+            <div class="modal-header">
+
+
+                <h3>
+
+                    Détails de l'utilisateur
+
+                </h3>
+
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    data-close-modal="userDetailsModal"
+                >
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+
+            </div>
+
+
+
+            <div
+                id="userDetailsContent"
+            >
+
+                <!-- Généré par script.js -->
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =========================================
+         MODAL DETAILS INVESTISSEMENT
+    ========================================== -->
+
+    <div
+        class="modal"
+        id="adminInvestmentModal"
+    >
+
+
+        <div class="modal-box">
+
+
+            <div class="modal-header">
+
+
+                <h3>
+
+                    Détails de l'investissement
+
+                </h3>
+
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    data-close-modal="adminInvestmentModal"
+                >
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+
+            </div>
+
+
+
+            <div
+                id="adminInvestmentModalContent"
+            >
+
+                <!-- Généré par script.js -->
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =========================================
+         MODAL REPONSE TICKET
+    ========================================== -->
+
+    <div
+        class="modal"
+        id="ticketReplyModal"
+    >
+
+
+        <div class="modal-box">
+
+
+            <div class="modal-header">
+
+
+                <h3>
+
+                    Répondre au ticket
+
+                </h3>
+
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    data-close-modal="ticketReplyModal"
+                >
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+
+            </div>
+
+
+
+            <form
+                id="ticketReplyForm"
+            >
+
+
+                <input
+                    type="hidden"
+                    id="replyTicketId"
+                >
+
+
+
+                <div class="form-group">
+
+
+                    <label
+                        for="ticketReplyMessage"
+                        class="form-label"
+                    >
+
+                        Votre réponse
+
+                    </label>
+
+
+                    <textarea
+                        id="ticketReplyMessage"
+                        class="form-control"
+                        placeholder="Écrivez votre réponse..."
+                        required
+                    ></textarea>
+
+
+                </div>
+
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+
+                    <i class="fa-solid fa-paper-plane"></i>
+
+                    Envoyer la réponse
+
+                </button>
+
+
+            </form>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =========================================
+         MODAL NOTIFICATIONS
+    ========================================== -->
+
+    <div
+        class="modal"
+        id="adminNotificationsModal"
+    >
+
+
+        <div class="modal-box">
+
+
+            <div class="modal-header">
+
+
+                <h3>
+
+                    Notifications administrateur
+
+                </h3>
+
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    data-close-modal="adminNotificationsModal"
+                >
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+
+            </div>
+
+
+
+            <div
+                id="adminNotificationsContent"
+            >
+
+                <p class="text-muted">
+
+                    Aucune nouvelle notification.
+
+                </p>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =========================================
+         LOADER
+    ========================================== -->
+
+    <div
+        id="pageLoader"
+        class="page-loader"
+        style="display: none;"
+    >
+
+
+        <div class="loader-spinner"></div>
+
+
+        <span>
+
+            Chargement sécurisé...
+
+        </span>
+
+
+    </div>
+
+
+
+    <!-- =========================================
+         TOASTS
+    ========================================== -->
+
+    <div
+        id="toastContainer"
+        class="toast-container"
+    ></div>
+
+
+
+    <!-- =========================================
+         SCRIPT PRINCIPAL
+    ========================================== -->
+
+    <script src="script.js"></script>
+
+
+
+    <!-- =========================================
+         NAVIGATION ADMIN
+    ========================================== -->
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+
+                const adminMenuLinks =
+                    document.querySelectorAll(
+                        "[data-admin-section]"
+                    );
+
+
+                const adminSections =
+                    document.querySelectorAll(
+                        ".admin-section"
+                    );
+
+
+                const adminPageTitle =
+                    document.getElementById(
+                        "adminPageTitle"
+                    );
+
+
+                const adminSidebar =
+                    document.getElementById(
+                        "adminSidebar"
+                    );
+
+
+                const mobileButton =
+                    document.getElementById(
+                        "adminMobileMenuButton"
+                    );
+
+
+
+                /* =====================================
+                   AFFICHER UNE SECTION
+                ====================================== */
+
+                window.showAdminSection =
+                    function (
+                        sectionId
+                    ) {
+
+
+                        adminSections.forEach(
+                            function (
+                                section
+                            ) {
+
+
+                                section.style.display =
+                                    section.id === sectionId
+                                        ? "block"
+                                        : "none";
+
+
+                            }
+                        );
+
+
+                        adminMenuLinks.forEach(
+                            function (
+                                link
+                            ) {
+
+
+                                link.classList.toggle(
+                                    "active",
+                                    link.dataset.adminSection === sectionId
+                                );
+
+
+                            }
+                        );
+
+
+                        const activeLink =
+                            document.querySelector(
+                                '[data-admin-section="' +
+                                sectionId +
+                                '"]'
+                            );
+
+
+                        if (
+                            activeLink
+                        ) {
+
+
+                            adminPageTitle.textContent =
+                                activeLink.textContent
+                                    .trim();
+
+
+                        }
+
+
+                        window.scrollTo(
+                            {
+                                top: 0,
+                                behavior: "smooth"
+                            }
+                        );
+
+
+                        adminSidebar.classList.remove(
+                            "active"
+                        );
+
+
+                    };
+
+
+
+                /* =====================================
+                   MENU
+                ====================================== */
+
+                adminMenuLinks.forEach(
+                    function (
+                        link
+                    ) {
+
+
+                        link.addEventListener(
+                            "click",
+                            function (
+                                event
+                            ) {
+
+
+                                event.preventDefault();
+
+
+                                window.showAdminSection(
+                                    link.dataset.adminSection
+                                );
+
+
+                            }
+                        );
+
+
+                    }
+                );
+
+
+
+                /* =====================================
+                   ACTIONS RAPIDES
+                ====================================== */
+
+                document.querySelectorAll(
+                    "[data-admin-target]"
+                ).forEach(
+                    function (
+                        element
+                    ) {
+
+
+                        element.addEventListener(
+                            "click",
+                            function (
+                                event
+                            ) {
+
+
+                                event.preventDefault();
+
+
+                                window.showAdminSection(
+                                    element.dataset.adminTarget
+                                );
+
+
+                            }
+                        );
+
+
+                    }
+                );
+
+
+
+                /* =====================================
+                   MENU MOBILE
+                ====================================== */
+
+                mobileButton.addEventListener(
+                    "click",
+                    function () {
+
+
+                        adminSidebar.classList.toggle(
+                            "active"
+                        );
+
+
+                    }
+                );
+
+
+
+                /* =====================================
+                   AFFICHAGE CODE ADMIN
+                ====================================== */
+
+                const adminCodeInput =
+                    document.getElementById(
+                        "adminAccessCode"
+                    );
+
+
+                const toggleAdminCode =
+                    document.getElementById(
+                        "toggleAdminCode"
+                    );
+
+
+                toggleAdminCode.addEventListener(
+                    "click",
+                    function () {
+
+
+                        const icon =
+                            toggleAdminCode.querySelector(
+                                "i"
+                            );
+
+
+                        const isHidden =
+                            adminCodeInput.type === "password";
+
+
+                        adminCodeInput.type =
+                            isHidden
+                                ? "text"
+                                : "password";
+
+
+                        icon.className =
+                            isHidden
+                                ? "fa-solid fa-eye-slash"
+                                : "fa-solid fa-eye";
+
+
+                    }
+                );
+
+
+
+                /* =====================================
+                   FERMETURE MODALES
+                ====================================== */
+
+                document.querySelectorAll(
+                    "[data-close-modal]"
+                ).forEach(
+                    function (
+                        button
+                    ) {
+
+
+                        button.addEventListener(
+                            "click",
+                            function () {
+
+
+                                const modal =
+                                    document.getElementById(
+                                        button.dataset.closeModal
+                                    );
+
+
+                                if (
+                                    modal
+                                ) {
+
+
+                                    modal.classList.remove(
+                                        "active"
+                                    );
+
+
+                                }
+
+
+                            }
+                        );
+
+
+                    }
+                );
+
+
+
+                /* =====================================
+                   CLIC EXTERIEUR MODALE
+                ====================================== */
+
+                document.querySelectorAll(
+                    ".modal"
+                ).forEach(
+                    function (
+                        modal
+                    ) {
+
+
+                        modal.addEventListener(
+                            "click",
+                            function (
+                                event
+                            ) {
+
+
+                                if (
+                                    event.target === modal
+                                ) {
+
+
+                                    modal.classList.remove(
+                                        "active"
+                                    );
+
+
+                                }
+
+
+                            }
+                        );
+
+
+                    }
+                );
+
+
+
+                /* =====================================
+                   NOTIFICATIONS
+                ====================================== */
+
+                const notificationButton =
+                    document.getElementById(
+                        "adminNotificationButton"
+                    );
+
+
+                const notificationModal =
+                    document.getElementById(
+                        "adminNotificationsModal"
+                    );
+
+
+                notificationButton.addEventListener(
+                    "click",
+                    function () {
+
+
+                        notificationModal.classList.add(
+                            "active"
+                        );
+
+
+                    }
+                );
+
+
+            }
+        );
+
+    </script>
+
+
+</body>
+</html>
