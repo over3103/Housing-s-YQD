@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Connectez-vous à votre compte Housing's YQD et gérez vos investissements immobiliers."
+    >
+
+    <meta name="theme-color" content="#0a3d78">
+
+    <title>Connexion | Housing's YQD</title>
+
+    <!-- STYLE PRINCIPAL -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- FONT AWESOME -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+</head>
+
+
+<body class="auth-page">
+
+
+    <!-- =========================================
+         PARTIE GAUCHE
+    ========================================== -->
+
+    <section class="auth-brand">
+
+        <div class="auth-brand-content">
+
+
+            <!-- LOGO -->
+
+            <a
+                href="index.html"
+                class="logo"
+                style="color: white; margin-bottom: 45px;"
+            >
+
+                <span class="logo-icon">
+
+                    <i class="fa-solid fa-building"></i>
+
+                </span>
+
+                <span>Housing's YQD</span>
+
+            </a>
+
+
+            <!-- TITRE -->
+
+            <h1>
+
+                Investissez dans
+
+                <span>
+                    l'avenir immobilier.
+                </span>
+
+            </h1>
+
+
+            <!-- DESCRIPTION -->
+
+            <p>
+
+                Accédez à votre espace personnel et suivez
+                vos investissements immobiliers simplement
+                depuis votre téléphone ou votre ordinateur.
+
+            </p>
+
+
+            <!-- AVANTAGES -->
+
+            <div class="auth-features">
+
+
+                <!-- AVANTAGE 1 -->
+
+                <div class="auth-feature">
+
+                    <div class="auth-feature-icon">
+
+                        <i class="fa-solid fa-shield-halved"></i>
+
+                    </div>
+
+                    <span>
+                        Espace personnel sécurisé
+                    </span>
+
+                </div>
+
+
+
+                <!-- AVANTAGE 2 -->
+
+                <div class="auth-feature">
+
+                    <div class="auth-feature-icon">
+
+                        <i class="fa-solid fa-chart-line"></i>
+
+                    </div>
+
+                    <span>
+                        Suivi de vos investissements
+                    </span>
+
+                </div>
+
+
+
+                <!-- AVANTAGE 3 -->
+
+                <div class="auth-feature">
+
+                    <div class="auth-feature-icon">
+
+                        <i class="fa-solid fa-house"></i>
+
+                    </div>
+
+                    <span>
+                        Investissements liés à l'immobilier
+                    </span>
+
+                </div>
+
+
+
+                <!-- AVANTAGE 4 -->
+
+                <div class="auth-feature">
+
+                    <div class="auth-feature-icon">
+
+                        <i class="fa-solid fa-headset"></i>
+
+                    </div>
+
+                    <span>
+                        Assistance disponible
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         FORMULAIRE DE CONNEXION
+    ========================================== -->
+
+    <main class="auth-container">
+
+
+        <div class="auth-box">
+
+
+            <!-- LOGO MOBILE -->
+
+            <a
+                href="index.html"
+                class="logo auth-mobile-logo"
+            >
+
+                <span class="logo-icon">
+
+                    <i class="fa-solid fa-building"></i>
+
+                </span>
+
+                <span>
+                    Housing's YQD
+                </span>
+
+            </a>
+
+
+
+            <!-- TITRE -->
+
+            <div class="auth-box-header">
+
+
+                <h2>
+                    Bon retour 👋
+                </h2>
+
+
+                <p>
+                    Connectez-vous pour accéder à votre espace personnel.
+                </p>
+
+
+            </div>
+
+
+
+            <!-- =========================================
+                 FORMULAIRE
+            ========================================== -->
+
+            <form
+                id="loginForm"
+                novalidate
+            >
+
+
+
+                <!-- =====================================
+                     EMAIL OU TELEPHONE
+                ====================================== -->
+
+                <div class="form-group">
+
+
+                    <label
+                        for="loginIdentifier"
+                        class="form-label"
+                    >
+
+                        Adresse e-mail ou numéro de téléphone
+
+                    </label>
+
+
+
+                    <div class="input-wrapper has-icon">
+
+
+                        <span class="input-icon">
+
+                            <i class="fa-solid fa-user"></i>
+
+                        </span>
+
+
+
+                        <input
+
+                            type="text"
+
+                            id="loginIdentifier"
+
+                            name="loginIdentifier"
+
+                            class="form-control"
+
+                            placeholder="E-mail ou numéro de téléphone"
+
+                            autocomplete="username"
+
+                            required
+
+                        >
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- =====================================
+                     MOT DE PASSE
+                ====================================== -->
+
+                <div class="form-group">
+
+
+                    <label
+                        for="loginPassword"
+                        class="form-label"
+                    >
+
+                        Mot de passe
+
+                    </label>
+
+
+
+                    <div class="input-wrapper">
+
+
+                        <input
+
+                            type="password"
+
+                            id="loginPassword"
+
+                            name="loginPassword"
+
+                            class="form-control"
+
+                            placeholder="Entrez votre mot de passe"
+
+                            autocomplete="current-password"
+
+                            required
+
+                        >
+
+
+
+                        <!-- BOUTON AFFICHER MOT DE PASSE -->
+
+                        <button
+
+                            type="button"
+
+                            class="password-toggle"
+
+                            id="toggleLoginPassword"
+
+                            aria-label="Afficher ou masquer le mot de passe"
+
+                        >
+
+                            <i class="fa-solid fa-eye"></i>
+
+                        </button>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- =====================================
+                     OPTIONS
+                ====================================== -->
+
+                <div class="auth-links">
+
+
+                    <!-- SE SOUVENIR DE MOI -->
+
+                    <label
+                        style="
+                            display: flex;
+                            align-items: center;
+                            gap: 7px;
+                            cursor: pointer;
+                        "
+                    >
+
+                        <input
+                            type="checkbox"
+                            id="rememberMe"
+                        >
+
+                        <span>
+                            Se souvenir de moi
+                        </span>
+
+                    </label>
+
+
+
+                    <!-- MOT DE PASSE OUBLIE -->
+
+                    <a
+                        href="forgot-password.html"
+                    >
+
+                        Mot de passe oublié ?
+
+                    </a>
+
+
+                </div>
+
+
+
+                <!-- =====================================
+                     MESSAGE
+                ====================================== -->
+
+                <div
+
+                    id="loginMessage"
+
+                    role="alert"
+
+                    aria-live="polite"
+
+                    style="
+                        display: none;
+                        margin-bottom: 18px;
+                        padding: 12px;
+                        border-radius: 10px;
+                        font-size: 14px;
+                    "
+
+                ></div>
+
+
+
+                <!-- =====================================
+                     BOUTON CONNEXION
+                ====================================== -->
+
+                <button
+
+                    type="submit"
+
+                    id="loginButton"
+
+                    class="btn btn-primary btn-full"
+
+                >
+
+                    <i class="fa-solid fa-right-to-bracket"></i>
+
+                    <span>
+                        Se connecter
+                    </span>
+
+                </button>
+
+
+            </form>
+
+
+
+            <!-- =========================================
+                 INSCRIPTION
+            ========================================== -->
+
+            <div class="auth-footer">
+
+
+                Vous n'avez pas encore de compte ?
+
+
+                <a
+                    href="register.html"
+                >
+
+                    Créer un compte
+
+                </a>
+
+
+            </div>
+
+
+
+            <!-- =========================================
+                 RETOUR ACCUEIL
+            ========================================== -->
+
+            <div
+                style="
+                    text-align: center;
+                    margin-top: 20px;
+                "
+            >
+
+
+                <a
+                    href="index.html"
+                    style="
+                        font-size: 14px;
+                        color: #64748b;
+                    "
+                >
+
+                    <i class="fa-solid fa-arrow-left"></i>
+
+                    Retour à l'accueil
+
+
+                </a>
+
+
+            </div>
+
+
+
+            <!-- =========================================
+                 INFORMATION SECURITE
+            ========================================== -->
+
+            <div
+
+                style="
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 7px;
+                    margin-top: 25px;
+                    color: #64748b;
+                    font-size: 12px;
+                    text-align: center;
+                "
+
+            >
+
+
+                <i
+                    class="fa-solid fa-lock"
+                    style="color: #16a34a;"
+                ></i>
+
+
+                <span>
+
+                    Connexion protégée et sécurisée
+
+                </span>
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+
+    <!-- =========================================
+         LOADER
+    ========================================== -->
+
+    <div
+
+        id="pageLoader"
+
+        class="page-loader"
+
+        style="display: none;"
+
+    >
+
+
+        <div class="loader-spinner"></div>
+
+
+        <span>
+
+            Connexion sécurisée en cours...
+
+        </span>
+
+
+    </div>
+
+
+
+    <!-- =========================================
+         TOASTS
+    ========================================== -->
+
+    <div
+
+        id="toastContainer"
+
+        class="toast-container"
+
+    ></div>
+
+
+
+    <!-- =========================================
+         SCRIPT PRINCIPAL
+    ========================================== -->
+
+    <script src="script.js"></script>
+
+
+
+    <!-- =========================================
+         JAVASCRIPT DE L'INTERFACE
+    ========================================== -->
+
+    <script>
+
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+
+                /* ==============================
+                   ELEMENTS
+                ============================== */
+
+
+                const passwordInput =
+                    document.getElementById(
+                        "loginPassword"
+                    );
+
+
+                const toggleButton =
+                    document.getElementById(
+                        "toggleLoginPassword"
+                    );
+
+
+                const toggleIcon =
+                    toggleButton.querySelector("i");
+
+
+                const identifierInput =
+                    document.getElementById(
+                        "loginIdentifier"
+                    );
+
+
+                const loginForm =
+                    document.getElementById(
+                        "loginForm"
+                    );
+
+
+                const loginButton =
+                    document.getElementById(
+                        "loginButton"
+                    );
+
+
+
+                /* ==============================
+                   AFFICHER / MASQUER
+                   LE MOT DE PASSE
+                ============================== */
+
+
+                toggleButton.addEventListener(
+                    "click",
+                    function () {
+
+
+                        const isPassword =
+                            passwordInput.type === "password";
+
+
+                        passwordInput.type =
+                            isPassword
+                                ? "text"
+                                : "password";
+
+
+                        toggleIcon.className =
+                            isPassword
+                                ? "fa-solid fa-eye-slash"
+                                : "fa-solid fa-eye";
+
+
+                    }
+                );
+
+
+
+                /* ==============================
+                   SUPPRIMER LES ESPACES
+                ============================== */
+
+
+                identifierInput.addEventListener(
+                    "blur",
+                    function () {
+
+
+                        identifierInput.value =
+                            identifierInput.value.trim();
+
+
+                    }
+                );
+
+
+
+                /* ==============================
+                   PROTECTION CONTRE
+                   DOUBLE CLIC
+                ============================== */
+
+
+                loginForm.addEventListener(
+                    "submit",
+                    function () {
+
+
+                        /*
+                        Le véritable traitement
+                        de connexion sera effectué
+                        par script.js.
+                        */
+
+
+                        setTimeout(
+                            function () {
+
+
+                                loginButton.disabled = false;
+
+
+                            },
+                            3000
+                        );
+
+
+                    }
+                );
+
+
+            }
+        );
+
+
+    </script>
+
+
+</body>
+
+</html>
