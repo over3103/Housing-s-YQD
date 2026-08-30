@@ -1,229 +1,930 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <meta name="description"
-          content="Connexion sécurisée à Housing's YQD.">
+    <meta
+        name="description"
+        content="Connexion sécurisée à Housing's YQD"
+    >
 
     <title>Connexion | Housing's YQD</title>
 
-    <link rel="stylesheet"
-          href="style.css">
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
 
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        .hyqd-login-page {
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 30px 18px;
+
+            background:
+                radial-gradient(
+                    circle at 15% 15%,
+                    rgba(37, 99, 235, .24),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 85% 85%,
+                    rgba(14, 165, 233, .17),
+                    transparent 35%
+                ),
+                linear-gradient(
+                    135deg,
+                    #020617 0%,
+                    #061936 45%,
+                    #0b3b84 100%
+                );
+
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hyqd-login-page::before,
+        .hyqd-login-page::after {
+            content: "";
+
+            position: absolute;
+
+            border-radius: 999px;
+
+            pointer-events: none;
+        }
+
+        .hyqd-login-page::before {
+            width: 340px;
+            height: 340px;
+
+            top: -140px;
+            right: -120px;
+
+            background:
+                rgba(56, 189, 248, .09);
+        }
+
+        .hyqd-login-page::after {
+            width: 300px;
+            height: 300px;
+
+            bottom: -130px;
+            left: -100px;
+
+            background:
+                rgba(37, 99, 235, .13);
+        }
+
+        .hyqd-login-shell {
+            width: 100%;
+            max-width: 1050px;
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1fr)
+                minmax(390px, 470px);
+
+            overflow: hidden;
+
+            border-radius: 32px;
+
+            border:
+                1px solid
+                rgba(255, 255, 255, .10);
+
+            background:
+                rgba(255, 255, 255, .06);
+
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+
+            box-shadow:
+                0 30px 90px
+                rgba(0, 0, 0, .32);
+
+            position: relative;
+            z-index: 2;
+        }
+
+        .hyqd-login-brand {
+            min-height: 650px;
+
+            padding: 58px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            color: #fff;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(37, 99, 235, .20),
+                    rgba(2, 6, 23, .20)
+                );
+        }
+
+        .hyqd-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 13px;
+
+            color: #fff;
+
+            font-size: 23px;
+            font-weight: 900;
+
+            text-decoration: none;
+        }
+
+        .hyqd-logo-icon {
+            width: 48px;
+            height: 48px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            flex-shrink: 0;
+
+            border-radius: 15px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #38bdf8,
+                    #2563eb
+                );
+
+            box-shadow:
+                0 12px 30px
+                rgba(37, 99, 235, .35);
+        }
+
+        .hyqd-login-presentation {
+            max-width: 500px;
+        }
+
+        .hyqd-login-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 8px 13px;
+
+            margin-bottom: 22px;
+
+            border-radius: 999px;
+
+            border:
+                1px solid
+                rgba(255, 255, 255, .10);
+
+            background:
+                rgba(255, 255, 255, .08);
+
+            color: #bae6fd;
+
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .hyqd-login-presentation h1 {
+            margin: 0;
+
+            color: #fff;
+
+            font-size:
+                clamp(38px, 5vw, 63px);
+
+            line-height: 1.03;
+
+            letter-spacing: -2px;
+        }
+
+        .hyqd-login-presentation h1 span {
+            color: #38bdf8;
+        }
+
+        .hyqd-login-presentation p {
+            margin: 22px 0 0;
+
+            color: #cbd5e1;
+
+            font-size: 16px;
+            line-height: 1.75;
+        }
+
+        .hyqd-security-list {
+            margin-top: 30px;
+
+            display: grid;
+            gap: 13px;
+        }
+
+        .hyqd-security-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            color: #e2e8f0;
+
+            font-size: 14px;
+            font-weight: 650;
+        }
+
+        .hyqd-security-item i {
+            width: 31px;
+            height: 31px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 10px;
+
+            color: #7dd3fc;
+
+            background:
+                rgba(56, 189, 248, .10);
+        }
+
+        .hyqd-security-note {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+
+            padding: 16px;
+
+            border-radius: 17px;
+
+            background:
+                rgba(15, 23, 42, .36);
+
+            border:
+                1px solid
+                rgba(255, 255, 255, .08);
+
+            color: #94a3b8;
+
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .hyqd-security-note i {
+            color: #38bdf8;
+
+            margin-top: 3px;
+        }
+
+        .hyqd-login-area {
+            padding: 50px 42px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            background: #fff;
+        }
+
+        .hyqd-mobile-logo {
+            display: none;
+
+            margin-bottom: 28px;
+
+            color: #0f172a;
+        }
+
+        .hyqd-login-header {
+            margin-bottom: 30px;
+        }
+
+        .hyqd-login-header h2 {
+            margin: 0;
+
+            color: #0f172a;
+
+            font-size: 31px;
+            line-height: 1.15;
+
+            letter-spacing: -.7px;
+        }
+
+        .hyqd-login-header p {
+            margin: 10px 0 0;
+
+            color: #64748b;
+
+            font-size: 14px;
+            line-height: 1.65;
+        }
+
+        .hyqd-login-form {
+            display: grid;
+
+            gap: 19px;
+        }
+
+        .hyqd-field {
+            display: grid;
+
+            gap: 8px;
+        }
+
+        .hyqd-field label {
+            color: #334155;
+
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .hyqd-input-wrap {
+            position: relative;
+        }
+
+        .hyqd-input-icon {
+            position: absolute;
+
+            left: 16px;
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            color: #94a3b8;
+
+            pointer-events: none;
+        }
+
+        .hyqd-input-wrap input {
+            width: 100%;
+
+            min-height: 53px;
+
+            padding:
+                0 47px 0 45px;
+
+            border:
+                1px solid #dbe4f0;
+
+            border-radius: 14px;
+
+            outline: none;
+
+            background: #f8fafc;
+
+            color: #0f172a;
+
+            font-size: 15px;
+
+            transition:
+                border-color .2s ease,
+                background .2s ease,
+                box-shadow .2s ease;
+        }
+
+        .hyqd-input-wrap input:focus {
+            background: #fff;
+
+            border-color: #2563eb;
+
+            box-shadow:
+                0 0 0 4px
+                rgba(37, 99, 235, .10);
+        }
+
+        .hyqd-input-wrap input::placeholder {
+            color: #94a3b8;
+        }
+
+        .hyqd-password-toggle {
+            position: absolute;
+
+            right: 8px;
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            width: 38px;
+            height: 38px;
+
+            border: 0;
+
+            border-radius: 10px;
+
+            background: transparent;
+
+            color: #64748b;
+
+            cursor: pointer;
+        }
+
+        .hyqd-password-toggle:hover {
+            color: #2563eb;
+
+            background: #eef2ff;
+        }
+
+        .hyqd-login-tools {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+
+            margin-top: -3px;
+
+            font-size: 12px;
+        }
+
+        .hyqd-remember {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            color: #64748b;
+
+            cursor: pointer;
+        }
+
+        .hyqd-remember input {
+            accent-color: #2563eb;
+        }
+
+        .hyqd-forgot-link {
+            color: #2563eb;
+
+            font-weight: 800;
+
+            text-decoration: none;
+        }
+
+        .hyqd-forgot-link:hover {
+            text-decoration: underline;
+        }
+
+        .hyqd-login-message {
+            display: none;
+
+            padding: 13px 14px;
+
+            border-radius: 13px;
+
+            font-size: 13px;
+            line-height: 1.55;
+
+            font-weight: 650;
+        }
+
+        .hyqd-login-message.show {
+            display: block;
+        }
+
+        .hyqd-login-message.error {
+            color: #991b1b;
+
+            background: #fef2f2;
+
+            border:
+                1px solid #fecaca;
+        }
+
+        .hyqd-login-message.success {
+            color: #166534;
+
+            background: #f0fdf4;
+
+            border:
+                1px solid #bbf7d0;
+        }
+
+        .hyqd-login-message.info {
+            color: #1e40af;
+
+            background: #eff6ff;
+
+            border:
+                1px solid #bfdbfe;
+        }
+
+        .hyqd-login-button {
+            width: 100%;
+
+            min-height: 54px;
+
+            border: 0;
+
+            border-radius: 14px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #0284c7
+                );
+
+            color: #fff;
+
+            font-size: 15px;
+            font-weight: 900;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 14px 30px
+                rgba(37, 99, 235, .22);
+
+            transition:
+                transform .2s ease,
+                box-shadow .2s ease,
+                opacity .2s ease;
+        }
+
+        .hyqd-login-button:hover:not(:disabled) {
+            transform:
+                translateY(-1px);
+
+            box-shadow:
+                0 18px 36px
+                rgba(37, 99, 235, .30);
+        }
+
+        .hyqd-login-button:disabled {
+            opacity: .65;
+
+            cursor: not-allowed;
+        }
+
+        .hyqd-login-register {
+            margin: 5px 0 0;
+
+            text-align: center;
+
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+        .hyqd-login-register a {
+            color: #2563eb;
+
+            font-weight: 900;
+
+            text-decoration: none;
+        }
+
+        .hyqd-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            margin: 2px 0;
+
+            color: #94a3b8;
+
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .hyqd-divider::before,
+        .hyqd-divider::after {
+            content: "";
+
+            height: 1px;
+            flex: 1;
+
+            background: #e2e8f0;
+        }
+
+        .hyqd-home-link {
+            text-align: center;
+        }
+
+        .hyqd-home-link a {
+            color: #64748b;
+
+            font-size: 12px;
+            font-weight: 700;
+
+            text-decoration: none;
+        }
+
+        .hyqd-home-link a:hover {
+            color: #2563eb;
+        }
+
+        @media (max-width: 900px) {
+
+            .hyqd-login-shell {
+                max-width: 560px;
+
+                grid-template-columns: 1fr;
+            }
+
+            .hyqd-login-brand {
+                display: none;
+            }
+
+            .hyqd-mobile-logo {
+                display: inline-flex;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .hyqd-login-page {
+                padding: 0;
+
+                align-items: stretch;
+
+                background: #fff;
+            }
+
+            .hyqd-login-shell {
+                min-height: 100vh;
+
+                border: 0;
+                border-radius: 0;
+
+                box-shadow: none;
+            }
+
+            .hyqd-login-area {
+                padding:
+                    32px 20px 38px;
+            }
+
+            .hyqd-login-header h2 {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 390px) {
+
+            .hyqd-login-area {
+                padding:
+                    26px 15px 32px;
+            }
+
+            .hyqd-login-tools {
+                align-items: flex-start;
+                flex-direction: column;
+
+                gap: 10px;
+            }
+        }
+    </style>
 </head>
 
 
 <body>
 
+<main class="hyqd-login-page">
 
-<div class="auth-page">
-
-
-    <!-- PARTIE VISUELLE -->
-
-    <div class="auth-visual"
-         style="
-         background-image:
-         linear-gradient(
-             rgba(5, 35, 26, 0.85),
-             rgba(5, 35, 26, 0.75)
-         ),
-         url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85');
-         ">
+    <section class="hyqd-login-shell">
 
 
-        <div>
+        <!-- =================================================
+             PRESENTATION
+        ================================================== -->
 
-            <a href="index.html"
-               class="brand">
+        <aside class="hyqd-login-brand">
 
-                <div class="brand-logo">
+            <a
+                href="index.html"
+                class="hyqd-logo"
+            >
 
+                <span class="hyqd-logo-icon">
                     <i class="fa-solid fa-building"></i>
+                </span>
+
+                <span>
+                    Housing's YQD
+                </span>
+
+            </a>
+
+
+            <div class="hyqd-login-presentation">
+
+                <div class="hyqd-login-eyebrow">
+
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                    Connexion sécurisée
 
                 </div>
 
 
-                <div class="brand-text">
+                <h1>
 
-                    <strong style="color:white;">
-                        Housing's YQD
-                    </strong>
+                    Retrouvez votre
 
                     <span>
-                        IMMOBILIER
+                        espace personnel.
                     </span>
 
+                </h1>
+
+
+                <p>
+                    Connectez-vous pour consulter votre tableau de bord,
+                    vos opérations, vos investissements, votre assistance
+                    et vos notifications.
+                </p>
+
+
+                <div class="hyqd-security-list">
+
+                    <div class="hyqd-security-item">
+
+                        <i class="fa-solid fa-lock"></i>
+
+                        <span>
+                            Authentification Supabase
+                        </span>
+
+                    </div>
+
+
+                    <div class="hyqd-security-item">
+
+                        <i class="fa-solid fa-database"></i>
+
+                        <span>
+                            Données liées à votre compte personnel
+                        </span>
+
+                    </div>
+
+
+                    <div class="hyqd-security-item">
+
+                        <i class="fa-solid fa-mobile-screen-button"></i>
+
+                        <span>
+                            Compatible smartphone et ordinateur
+                        </span>
+
+                    </div>
+
                 </div>
-
-            </a>
-
-
-            <br><br>
-
-
-            <h1 style="font-size:42px; max-width:500px;">
-
-                Votre espace immobilier,
-                accessible simplement.
-
-            </h1>
-
-
-            <p style="
-            max-width:500px;
-            margin-top:18px;
-            color:rgba(255,255,255,0.8);
-            ">
-
-                Connectez-vous pour accéder à votre tableau
-                de bord et suivre vos opérations.
-
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <!-- FORMULAIRE -->
-
-    <div class="auth-form-container">
-
-
-        <div class="auth-form-box">
-
-
-            <a href="index.html"
-               style="
-               display:inline-flex;
-               align-items:center;
-               gap:8px;
-               color:var(--primary);
-               font-size:14px;
-               margin-bottom:25px;
-               ">
-
-                <i class="fa-solid fa-arrow-left"></i>
-
-                Retour à l'accueil
-
-            </a>
-
-
-            <h1 style="
-            font-size:30px;
-            color:var(--dark);
-            margin-bottom:8px;
-            ">
-
-                Bon retour !
-
-            </h1>
-
-
-            <p style="
-            color:var(--text-light);
-            margin-bottom:28px;
-            ">
-
-                Connectez-vous à votre compte
-                Housing's YQD.
-
-            </p>
-
-
-            <!-- MESSAGE -->
-
-            <div id="formMessage"
-                 class="form-message">
 
             </div>
 
 
-            <!-- FORM -->
+            <div class="hyqd-security-note">
 
-            <form id="loginForm">
+                <i class="fa-solid fa-circle-info"></i>
+
+                <span>
+                    Votre mot de passe est vérifié par Supabase Auth.
+                    Il n'est plus comparé à un mot de passe enregistré
+                    dans le navigateur.
+                </span>
+
+            </div>
+
+        </aside>
 
 
-                <div class="form-group">
+        <!-- =================================================
+             CONNEXION
+        ================================================== -->
 
-                    <label for="phone">
+        <section class="hyqd-login-area">
 
-                        Numéro de téléphone
 
+            <a
+                href="index.html"
+                class="hyqd-logo hyqd-mobile-logo"
+            >
+
+                <span class="hyqd-logo-icon">
+                    <i class="fa-solid fa-building"></i>
+                </span>
+
+                <span>
+                    Housing's YQD
+                </span>
+
+            </a>
+
+
+            <header class="hyqd-login-header">
+
+                <h2>
+                    Bon retour 👋
+                </h2>
+
+                <p>
+                    Entrez vos informations pour accéder à votre compte.
+                </p>
+
+            </header>
+
+
+            <form
+                id="loginForm"
+                class="hyqd-login-form"
+                novalidate
+            >
+
+
+                <!-- EMAIL -->
+
+                <div class="hyqd-field">
+
+                    <label for="email">
+                        Adresse email
                     </label>
 
+                    <div class="hyqd-input-wrap">
 
-                    <input
+                        <i
+                            class="fa-regular fa-envelope hyqd-input-icon"
+                        ></i>
 
-                        type="tel"
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            autocomplete="email"
+                            inputmode="email"
+                            placeholder="votre@email.com"
+                            maxlength="160"
+                            required
+                        >
 
-                        id="phone"
-
-                        class="form-control"
-
-                        placeholder="Exemple : 0700000000"
-
-                        autocomplete="tel"
-
-                        required
-
-                    >
+                    </div>
 
                 </div>
 
 
-                <div class="form-group">
+                <!-- PASSWORD -->
+
+                <div class="hyqd-field">
 
                     <label for="password">
-
                         Mot de passe
-
                     </label>
 
+                    <div class="hyqd-input-wrap">
 
-                    <div class="password-wrapper">
+                        <i
+                            class="fa-solid fa-lock hyqd-input-icon"
+                        ></i>
 
                         <input
-
                             type="password"
-
                             id="password"
-
-                            class="form-control"
-
-                            placeholder="Votre mot de passe"
-
+                            name="password"
                             autocomplete="current-password"
-
+                            placeholder="Votre mot de passe"
+                            maxlength="100"
                             required
-
                         >
 
 
                         <button
-
                             type="button"
-
-                            class="password-toggle"
-
                             id="togglePassword"
-
-                            aria-label="Afficher ou masquer le mot de passe"
-
+                            class="hyqd-password-toggle"
+                            aria-label="Afficher le mot de passe"
                         >
 
-                            <i class="fa-solid fa-eye"></i>
+                            <i class="fa-regular fa-eye"></i>
 
                         </button>
 
@@ -232,273 +933,559 @@
                 </div>
 
 
-                <div style="
-                display:flex;
-                justify-content:flex-end;
-                margin-bottom:22px;
-                ">
+                <!-- OPTIONS -->
 
-                    <a href="forgot-password.html"
-                       style="
-                       color:var(--primary);
-                       font-size:13px;
-                       font-weight:700;
-                       ">
+                <div class="hyqd-login-tools">
 
+                    <label class="hyqd-remember">
+
+                        <input
+                            type="checkbox"
+                            id="rememberEmail"
+                        >
+
+                        <span>
+                            Mémoriser mon email
+                        </span>
+
+                    </label>
+
+
+                    <a
+                        href="forgot-password.html"
+                        class="hyqd-forgot-link"
+                    >
                         Mot de passe oublié ?
-
                     </a>
 
                 </div>
 
 
+                <!-- MESSAGE -->
+
+                <div
+                    id="loginMessage"
+                    class="hyqd-login-message"
+                    role="alert"
+                    aria-live="polite"
+                ></div>
+
+
+                <!-- SUBMIT -->
+
                 <button
-
                     type="submit"
-
-                    class="form-submit"
-
                     id="loginButton"
-
+                    class="hyqd-login-button"
                 >
 
                     <i class="fa-solid fa-right-to-bracket"></i>
 
-                    Se connecter
+                    <span>
+                        Se connecter
+                    </span>
 
                 </button>
 
 
+                <p class="hyqd-login-register">
+
+                    Vous n'avez pas encore de compte ?
+
+                    <a href="register.html">
+                        Créer un compte
+                    </a>
+
+                </p>
+
+
+                <div class="hyqd-divider">
+                    Housing's YQD
+                </div>
+
+
+                <div class="hyqd-home-link">
+
+                    <a href="index.html">
+
+                        <i class="fa-solid fa-arrow-left"></i>
+
+                        Retour à l'accueil
+
+                    </a>
+
+                </div>
+
             </form>
 
+        </section>
 
-            <p style="
-            text-align:center;
-            margin-top:25px;
-            color:var(--text-light);
-            font-size:14px;
-            ">
+    </section>
 
-                Vous n'avez pas encore de compte ?
+</main>
 
 
-                <a href="register.html"
-                   style="
-                   color:var(--primary);
-                   font-weight:700;
-                   ">
+<!-- =========================================================
+     SUPABASE JS V2
+========================================================== -->
 
-                    Créer un compte
-
-                </a>
-
-            </p>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
-        </div>
+<!-- =========================================================
+     CONFIGURATION HOUSING'S YQD
+========================================================== -->
 
-    </div>
-
-
-</div>
-
-
-<script src="script.js"></script>
+<script src="supabase.js"></script>
 
 
 <script>
+"use strict";
 
 
-document.addEventListener(
-    "DOMContentLoaded",
+/* ============================================================
+   ELEMENTS
+============================================================ */
+
+const loginForm =
+    document.getElementById("loginForm");
+
+const emailInput =
+    document.getElementById("email");
+
+const passwordInput =
+    document.getElementById("password");
+
+const loginButton =
+    document.getElementById("loginButton");
+
+const loginMessage =
+    document.getElementById("loginMessage");
+
+const togglePassword =
+    document.getElementById("togglePassword");
+
+const rememberEmail =
+    document.getElementById("rememberEmail");
+
+
+/* ============================================================
+   MESSAGE
+============================================================ */
+
+function showLoginMessage(
+    message,
+    type = "error"
+) {
+
+    loginMessage.textContent =
+        String(message || "");
+
+    loginMessage.className =
+        "hyqd-login-message show " +
+        type;
+}
+
+
+function clearLoginMessage() {
+
+    loginMessage.textContent = "";
+
+    loginMessage.className =
+        "hyqd-login-message";
+}
+
+
+/* ============================================================
+   CHARGEMENT
+============================================================ */
+
+function setLoginLoading(
+    loading
+) {
+
+    loginButton.disabled =
+        Boolean(loading);
+
+
+    if (loading) {
+
+        loginButton.innerHTML = `
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+            <span>Connexion...</span>
+        `;
+
+    } else {
+
+        loginButton.innerHTML = `
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <span>Se connecter</span>
+        `;
+    }
+}
+
+
+/* ============================================================
+   AFFICHER / MASQUER MOT DE PASSE
+============================================================ */
+
+togglePassword.addEventListener(
+    "click",
     function () {
 
-
-        /* ============================================
-           SI UTILISATEUR DÉJÀ CONNECTÉ
-        ============================================ */
-
-        const currentUser =
-            getCurrentUser();
+        const isHidden =
+            passwordInput.type ===
+            "password";
 
 
-        if (
-            currentUser
-        ) {
+        passwordInput.type =
+            isHidden
+                ? "text"
+                : "password";
 
-            window.location.href =
-                "dashboard.html";
 
-            return;
+        const icon =
+            togglePassword.querySelector("i");
 
+
+        if (icon) {
+
+            icon.className =
+                isHidden
+                    ?
+                    "fa-regular fa-eye-slash"
+                    :
+                    "fa-regular fa-eye";
         }
 
 
-        /* ============================================
-           ÉLÉMENTS
-        ============================================ */
-
-        const loginForm =
-            document.getElementById(
-                "loginForm"
-            );
-
-
-        const phoneInput =
-            document.getElementById(
-                "phone"
-            );
-
-
-        const passwordInput =
-            document.getElementById(
-                "password"
-            );
-
-
-        const messageBox =
-            document.getElementById(
-                "formMessage"
-            );
-
-
-        const loginButton =
-            document.getElementById(
-                "loginButton"
-            );
-
-
-        const togglePassword =
-            document.getElementById(
-                "togglePassword"
-            );
-
-
-        /* ============================================
-           AFFICHER MESSAGE
-        ============================================ */
-
-        function showMessage(
-            message,
-            type
-        ) {
-
-            messageBox.textContent =
-                message;
-
-
-            messageBox.className =
-                "form-message " +
-                type;
-
-        }
-
-
-        /* ============================================
-           AFFICHER / MASQUER MOT DE PASSE
-        ============================================ */
-
-        togglePassword.addEventListener(
-            "click",
-            function () {
-
-
-                const isPassword =
-                    passwordInput.type ===
-                    "password";
-
-
-                passwordInput.type =
-                    isPassword
-                        ? "text"
-                        : "password";
-
-
-                togglePassword.innerHTML =
-                    isPassword
-                        ? '<i class="fa-solid fa-eye-slash"></i>'
-                        : '<i class="fa-solid fa-eye"></i>';
-
-            }
+        togglePassword.setAttribute(
+            "aria-label",
+            isHidden
+                ?
+                "Masquer le mot de passe"
+                :
+                "Afficher le mot de passe"
         );
-
-
-        /* ============================================
-           CONNEXION
-        ============================================ */
-
-        loginForm.addEventListener(
-            "submit",
-            function (
-                event
-            ) {
-
-                event.preventDefault();
-
-
-                const phone =
-                    phoneInput.value.trim();
-
-
-                const password =
-                    passwordInput.value;
-
-
-                const result =
-                    loginUser(
-                        phone,
-                        password
-                    );
-
-
-                if (
-                    !result.success
-                ) {
-
-                    showMessage(
-                        result.message,
-                        "error"
-                    );
-
-                    return;
-
-                }
-
-
-                showMessage(
-                    "Connexion réussie. Redirection...",
-                    "success"
-                );
-
-
-                loginButton.disabled =
-                    true;
-
-
-                loginButton.innerHTML =
-                    '<i class="fa-solid fa-spinner fa-spin"></i> Connexion...';
-
-
-                setTimeout(
-                    function () {
-
-                        window.location.href =
-                            "dashboard.html";
-
-                    },
-                    700
-                );
-
-            }
-        );
-
 
     }
 );
 
 
-</script>
+/* ============================================================
+   EMAIL MEMORISE
+============================================================ */
 
+(function restoreRememberedEmail() {
+
+    try {
+
+        const remembered =
+            localStorage.getItem(
+                "hyqd_remembered_email"
+            );
+
+
+        if (remembered) {
+
+            emailInput.value =
+                remembered;
+
+            rememberEmail.checked =
+                true;
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Impossible de restaurer l'email mémorisé.",
+            error
+        );
+    }
+
+})();
+
+
+function saveRememberedEmail(
+    email
+) {
+
+    try {
+
+        if (rememberEmail.checked) {
+
+            localStorage.setItem(
+                "hyqd_remembered_email",
+                email
+            );
+
+        } else {
+
+            localStorage.removeItem(
+                "hyqd_remembered_email"
+            );
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Impossible de mémoriser l'email.",
+            error
+        );
+    }
+}
+
+
+/* ============================================================
+   MESSAGES URL
+============================================================ */
+
+(function readUrlMessage() {
+
+    try {
+
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+
+        if (
+            params.get("registered") === "1"
+        ) {
+
+            showLoginMessage(
+                "Votre compte a été créé. Si la confirmation email est activée, confirmez d'abord votre adresse email puis connectez-vous.",
+                "success"
+            );
+
+            return;
+        }
+
+
+        if (
+            params.get("reset") === "1"
+        ) {
+
+            showLoginMessage(
+                "Votre mot de passe a été modifié. Vous pouvez maintenant vous connecter.",
+                "success"
+            );
+
+            return;
+        }
+
+
+        if (
+            params.get("logout") === "1"
+        ) {
+
+            showLoginMessage(
+                "Vous avez été déconnecté.",
+                "info"
+            );
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Impossible de lire les paramètres URL.",
+            error
+        );
+    }
+
+})();
+
+
+/* ============================================================
+   CONNEXION
+============================================================ */
+
+loginForm.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+        clearLoginMessage();
+
+
+        if (
+            typeof loginSupabaseUser !==
+            "function"
+        ) {
+
+            showLoginMessage(
+                "Le service de connexion sécurisé n'est pas disponible. Vérifiez supabase.js."
+            );
+
+            return;
+        }
+
+
+        const email =
+            emailInput.value
+                .trim()
+                .toLowerCase();
+
+        const password =
+            passwordInput.value;
+
+
+        if (
+            !email ||
+            !email.includes("@")
+        ) {
+
+            showLoginMessage(
+                "Veuillez saisir une adresse email valide."
+            );
+
+            emailInput.focus();
+
+            return;
+        }
+
+
+        if (!password) {
+
+            showLoginMessage(
+                "Veuillez saisir votre mot de passe."
+            );
+
+            passwordInput.focus();
+
+            return;
+        }
+
+
+        setLoginLoading(true);
+
+
+        try {
+
+            const result =
+                await loginSupabaseUser(
+                    email,
+                    password
+                );
+
+
+            if (
+                !result ||
+                !result.success
+            ) {
+
+                showLoginMessage(
+                    result?.message ||
+                    "Connexion impossible.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            saveRememberedEmail(
+                email
+            );
+
+
+            showLoginMessage(
+                "Connexion réussie. Ouverture de votre espace...",
+                "success"
+            );
+
+
+            setTimeout(
+                function () {
+
+                    window.location.replace(
+                        "dashboard.html"
+                    );
+
+                },
+                700
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Erreur connexion Housing's YQD :",
+                error
+            );
+
+
+            showLoginMessage(
+                "Une erreur inattendue est survenue pendant la connexion.",
+                "error"
+            );
+
+        } finally {
+
+            setLoginLoading(false);
+
+        }
+
+    }
+);
+
+
+/* ============================================================
+   UTILISATEUR DEJA CONNECTE
+============================================================ */
+
+(async function redirectExistingSession() {
+
+    try {
+
+        if (
+            typeof getSupabaseSession !==
+            "function"
+        ) {
+
+            return;
+        }
+
+
+        const result =
+            await getSupabaseSession();
+
+
+        if (
+            result.success &&
+            result.session
+        ) {
+
+            showLoginMessage(
+                "Session déjà active. Ouverture de votre espace...",
+                "info"
+            );
+
+
+            setTimeout(
+                function () {
+
+                    window.location.replace(
+                        "dashboard.html"
+                    );
+
+                },
+                500
+            );
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Impossible de vérifier la session existante.",
+            error
+        );
+    }
+
+})();
+</script>
 
 </body>
 </html>
