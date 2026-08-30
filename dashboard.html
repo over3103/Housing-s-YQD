@@ -2,7 +2,6 @@
 <html lang="fr">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -18,11 +17,6 @@
     <title>
         Mon espace | Housing's YQD
     </title>
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
 
     <link
         rel="stylesheet"
@@ -56,9 +50,7 @@
         }
 
         body {
-
             margin: 0;
-
             min-height: 100vh;
 
             font-family:
@@ -69,12 +61,8 @@
                 "Segoe UI",
                 sans-serif;
 
-            background:
-                var(--bg);
-
-            color:
-                var(--text);
-
+            background: var(--bg);
+            color: var(--text);
         }
 
         button,
@@ -93,7 +81,6 @@
         }
 
         .app {
-
             min-height: 100vh;
 
             display: grid;
@@ -101,7 +88,6 @@
             grid-template-columns:
                 260px
                 minmax(0, 1fr);
-
         }
 
         /* ============================
@@ -109,7 +95,6 @@
         ============================ */
 
         .sidebar {
-
             position: sticky;
 
             top: 0;
@@ -126,15 +111,12 @@
                     #0b5cab
                 );
 
-            color:
-                white;
+            color: white;
 
             overflow-y: auto;
-
         }
 
         .brand {
-
             display: flex;
 
             align-items: center;
@@ -142,11 +124,9 @@
             gap: 12px;
 
             padding: 7px 8px 25px;
-
         }
 
         .brand-logo {
-
             width: 47px;
 
             height: 47px;
@@ -170,22 +150,20 @@
 
             box-shadow:
                 0 15px 30px
-                rgba(37,99,235,.3);
-
+                rgba(37, 99, 235, .3);
         }
 
         .brand-text strong {
-
             display: block;
 
             font-size: 18px;
 
             font-weight: 900;
 
+            color: white;
         }
 
         .brand-text span {
-
             display: block;
 
             margin-top: 2px;
@@ -197,11 +175,9 @@
             color: #94a3b8;
 
             font-weight: 800;
-
         }
 
         .user-mini {
-
             margin-bottom: 18px;
 
             padding: 13px;
@@ -209,16 +185,14 @@
             border-radius: 17px;
 
             background:
-                rgba(255,255,255,.07);
+                rgba(255, 255, 255, .07);
 
             border:
                 1px solid
-                rgba(255,255,255,.08);
-
+                rgba(255, 255, 255, .08);
         }
 
         .user-mini strong {
-
             display: block;
 
             font-size: 12px;
@@ -228,11 +202,9 @@
             overflow: hidden;
 
             text-overflow: ellipsis;
-
         }
 
         .user-mini span {
-
             display: block;
 
             margin-top: 5px;
@@ -246,19 +218,15 @@
             overflow: hidden;
 
             text-overflow: ellipsis;
-
         }
 
         .menu {
-
             display: grid;
 
             gap: 6px;
-
         }
 
         .menu button {
-
             width: 100%;
 
             min-height: 44px;
@@ -277,56 +245,50 @@
 
             color: #cbd5e1;
 
-            background:
-                transparent;
+            background: transparent;
 
             font-size: 10px;
 
             font-weight: 800;
 
             text-align: left;
-
         }
 
         .menu button:hover,
         .menu button.active {
-
             color: white;
 
             background:
-                rgba(255,255,255,.1);
-
+                rgba(255, 255, 255, .1);
         }
 
         .menu button i {
-
             width: 20px;
 
             text-align: center;
-
         }
 
         .logout-side {
-
             margin-top: 18px;
 
             width: 100%;
 
             min-height: 42px;
 
-            border: 1px solid rgba(248,113,113,.25);
+            border:
+                1px solid
+                rgba(248, 113, 113, .25);
 
             border-radius: 12px;
 
             color: #fecaca;
 
             background:
-                rgba(220,38,38,.08);
+                rgba(220, 38, 38, .08);
 
             font-size: 10px;
 
             font-weight: 900;
-
         }
 
         /* ============================
@@ -334,18 +296,15 @@
         ============================ */
 
         .main {
-
             min-width: 0;
-
         }
 
         .topbar {
-
             position: sticky;
 
             top: 0;
 
-            z-index: 20;
+            z-index: 50;
 
             min-height: 68px;
 
@@ -360,7 +319,7 @@
             gap: 15px;
 
             background:
-                rgba(255,255,255,.93);
+                rgba(255, 255, 255, .95);
 
             backdrop-filter:
                 blur(14px);
@@ -368,41 +327,33 @@
             border-bottom:
                 1px solid
                 var(--border);
-
         }
 
         .topbar-title h1 {
-
             margin: 0;
 
             font-size: 20px;
 
             color: var(--dark);
-
         }
 
         .topbar-title p {
-
             margin: 3px 0 0;
 
             font-size: 9px;
 
             color: var(--muted);
-
         }
 
         .top-actions {
-
             display: flex;
 
             align-items: center;
 
             gap: 9px;
-
         }
 
         .icon-button {
-
             position: relative;
 
             width: 42px;
@@ -415,19 +366,26 @@
 
             justify-content: center;
 
-            border: 1px solid var(--border);
+            border:
+                1px solid
+                var(--border);
 
             border-radius: 12px;
 
             color: var(--text);
 
-            background:
-                white;
+            background: white;
+        }
 
+        .icon-button:hover {
+            color: var(--primary);
+
+            border-color: #bfdbfe;
+
+            background: #eff6ff;
         }
 
         .badge {
-
             position: absolute;
 
             top: -5px;
@@ -450,13 +408,11 @@
 
             color: white;
 
-            background:
-                var(--danger);
+            background: var(--danger);
 
             font-size: 8px;
 
             font-weight: 900;
-
         }
 
         .badge.show {
@@ -468,13 +424,11 @@
         }
 
         .content {
-
             width: min(1450px, 100%);
 
             margin: 0 auto;
 
             padding: 25px;
-
         }
 
         /* ============================
@@ -482,7 +436,6 @@
         ============================ */
 
         .hero {
-
             position: relative;
 
             overflow: hidden;
@@ -496,7 +449,7 @@
             background:
                 radial-gradient(
                     circle at 80% 20%,
-                    rgba(56,189,248,.35),
+                    rgba(56, 189, 248, .35),
                     transparent 25%
                 ),
                 linear-gradient(
@@ -507,12 +460,10 @@
 
             box-shadow:
                 0 20px 50px
-                rgba(15,23,42,.12);
-
+                rgba(15, 23, 42, .12);
         }
 
         .hero::after {
-
             content: "";
 
             position: absolute;
@@ -528,20 +479,16 @@
             border-radius: 50%;
 
             background:
-                rgba(255,255,255,.06);
-
+                rgba(255, 255, 255, .06);
         }
 
         .hero-content {
-
             position: relative;
 
             z-index: 2;
-
         }
 
         .hero small {
-
             display: inline-block;
 
             padding: 6px 10px;
@@ -549,7 +496,7 @@
             border-radius: 999px;
 
             background:
-                rgba(255,255,255,.1);
+                rgba(255, 255, 255, .1);
 
             color: #bae6fd;
 
@@ -558,11 +505,9 @@
             font-weight: 900;
 
             letter-spacing: 1px;
-
         }
 
         .hero h2 {
-
             margin: 13px 0 6px;
 
             font-size:
@@ -571,11 +516,9 @@
                     4vw,
                     40px
                 );
-
         }
 
         .hero p {
-
             max-width: 700px;
 
             margin: 0;
@@ -585,11 +528,9 @@
             font-size: 11px;
 
             line-height: 1.7;
-
         }
 
         .hero-actions {
-
             margin-top: 19px;
 
             display: flex;
@@ -597,12 +538,10 @@
             flex-wrap: wrap;
 
             gap: 9px;
-
         }
 
         .primary-btn,
         .secondary-btn {
-
             min-height: 42px;
 
             padding: 0 15px;
@@ -612,11 +551,9 @@
             font-size: 9px;
 
             font-weight: 900;
-
         }
 
         .primary-btn {
-
             border: 0;
 
             color: white;
@@ -627,20 +564,17 @@
                     #2563eb,
                     #0ea5e9
                 );
-
         }
 
         .secondary-btn {
-
             border:
                 1px solid
-                rgba(255,255,255,.18);
+                rgba(255, 255, 255, .18);
 
             color: white;
 
             background:
-                rgba(255,255,255,.08);
-
+                rgba(255, 255, 255, .08);
         }
 
         /* ============================
@@ -648,7 +582,6 @@
         ============================ */
 
         .ticker {
-
             margin-top: 16px;
 
             padding: 11px 15px;
@@ -667,13 +600,10 @@
                 1px solid
                 #dbeafe;
 
-            background:
-                #eff6ff;
-
+            background: #eff6ff;
         }
 
         .ticker-label {
-
             flex: 0 0 auto;
 
             display: flex;
@@ -687,11 +617,9 @@
             font-size: 9px;
 
             font-weight: 900;
-
         }
 
         .ticker-content {
-
             min-width: 0;
 
             flex: 1;
@@ -704,6 +632,7 @@
 
             white-space: nowrap;
 
+            text-overflow: ellipsis;
         }
 
         /* ============================
@@ -711,7 +640,6 @@
         ============================ */
 
         .stats-grid {
-
             margin-top: 18px;
 
             display: grid;
@@ -720,11 +648,9 @@
                 repeat(4, minmax(0, 1fr));
 
             gap: 13px;
-
         }
 
         .stat {
-
             padding: 18px;
 
             border-radius: 18px;
@@ -733,13 +659,10 @@
                 1px solid
                 var(--border);
 
-            background:
-                white;
-
+            background: white;
         }
 
         .stat-top {
-
             display: flex;
 
             align-items: center;
@@ -747,11 +670,9 @@
             justify-content: space-between;
 
             gap: 10px;
-
         }
 
         .stat-icon {
-
             width: 39px;
 
             height: 39px;
@@ -766,13 +687,10 @@
 
             color: #1d4ed8;
 
-            background:
-                #eff6ff;
-
+            background: #eff6ff;
         }
 
         .stat span {
-
             display: block;
 
             margin-top: 14px;
@@ -782,11 +700,9 @@
             font-size: 9px;
 
             font-weight: 700;
-
         }
 
         .stat strong {
-
             display: block;
 
             margin-top: 5px;
@@ -796,7 +712,6 @@
             font-size: 19px;
 
             font-weight: 900;
-
         }
 
         /* ============================
@@ -804,13 +719,10 @@
         ============================ */
 
         .section {
-
             margin-top: 23px;
-
         }
 
         .section-head {
-
             margin-bottom: 13px;
 
             display: flex;
@@ -820,42 +732,34 @@
             justify-content: space-between;
 
             gap: 15px;
-
         }
 
         .section-head h3 {
-
             margin: 0;
 
             color: var(--dark);
 
             font-size: 18px;
-
         }
 
         .section-head p {
-
             margin: 4px 0 0;
 
             color: var(--muted);
 
             font-size: 9px;
-
         }
 
         .section-card {
-
             border:
                 1px solid
                 var(--border);
 
             border-radius: 19px;
 
-            background:
-                white;
+            background: white;
 
             overflow: hidden;
-
         }
 
         /* ============================
@@ -863,18 +767,15 @@
         ============================ */
 
         .packs-grid {
-
             display: grid;
 
             grid-template-columns:
-                repeat(4, minmax(0,1fr));
+                repeat(4, minmax(0, 1fr));
 
             gap: 14px;
-
         }
 
         .pack {
-
             overflow: hidden;
 
             border-radius: 19px;
@@ -883,51 +784,41 @@
                 1px solid
                 var(--border);
 
-            background:
-                white;
+            background: white;
 
             transition:
                 transform .2s ease,
                 box-shadow .2s ease;
-
         }
 
         .pack:hover {
-
             transform:
                 translateY(-3px);
 
             box-shadow:
                 0 18px 45px
-                rgba(15,23,42,.09);
-
+                rgba(15, 23, 42, .09);
         }
 
         .pack-image {
-
             height: 145px;
 
             position: relative;
 
             overflow: hidden;
 
-            background:
-                #dbeafe;
-
+            background: #dbeafe;
         }
 
         .pack-image img {
-
             width: 100%;
 
             height: 100%;
 
             object-fit: cover;
-
         }
 
         .pack-badge {
-
             position: absolute;
 
             top: 10px;
@@ -941,32 +832,26 @@
             color: white;
 
             background:
-                rgba(15,23,42,.78);
+                rgba(15, 23, 42, .78);
 
             font-size: 7px;
 
             font-weight: 900;
-
         }
 
         .pack-body {
-
             padding: 15px;
-
         }
 
         .pack-body h4 {
-
             margin: 0;
 
             color: var(--dark);
 
             font-size: 14px;
-
         }
 
         .pack-amount {
-
             margin-top: 8px;
 
             color: var(--primary);
@@ -974,21 +859,17 @@
             font-size: 18px;
 
             font-weight: 900;
-
         }
 
         .pack-details {
-
             margin-top: 11px;
 
             display: grid;
 
             gap: 7px;
-
         }
 
         .pack-detail {
-
             display: flex;
 
             justify-content: space-between;
@@ -998,17 +879,13 @@
             color: var(--muted);
 
             font-size: 8px;
-
         }
 
         .pack-detail strong {
-
             color: var(--dark);
-
         }
 
         .invest-btn {
-
             width: 100%;
 
             min-height: 39px;
@@ -1031,11 +908,10 @@
             font-size: 9px;
 
             font-weight: 900;
-
         }
 
         /* ============================
-           TABLES / LISTS
+           TABLES
         ============================ */
 
         .table-wrap {
@@ -1043,18 +919,15 @@
         }
 
         table {
-
             width: 100%;
 
             border-collapse: collapse;
 
             min-width: 760px;
-
         }
 
         th,
         td {
-
             padding: 12px 14px;
 
             border-bottom:
@@ -1064,18 +937,14 @@
             text-align: left;
 
             font-size: 9px;
-
         }
 
         th {
-
             color: #64748b;
 
-            background:
-                #f8fafc;
+            background: #f8fafc;
 
             font-weight: 900;
-
         }
 
         td {
@@ -1083,7 +952,6 @@
         }
 
         .status {
-
             display: inline-flex;
 
             align-items: center;
@@ -1099,51 +967,33 @@
             font-size: 7px;
 
             font-weight: 900;
-
         }
 
         .status.pending {
-
             color: #92400e;
-
-            background:
-                #fffbeb;
-
+            background: #fffbeb;
         }
 
         .status.approved,
         .status.active,
         .status.answered {
-
             color: #166534;
-
-            background:
-                #f0fdf4;
-
+            background: #f0fdf4;
         }
 
         .status.rejected,
         .status.cancelled {
-
             color: #991b1b;
-
-            background:
-                #fef2f2;
-
+            background: #fef2f2;
         }
 
         .status.completed,
         .status.closed {
-
             color: #1e40af;
-
-            background:
-                #eff6ff;
-
+            background: #eff6ff;
         }
 
         .empty {
-
             padding: 32px 20px;
 
             text-align: center;
@@ -1151,7 +1001,6 @@
             color: #94a3b8;
 
             font-size: 10px;
-
         }
 
         /* ============================
@@ -1159,13 +1008,12 @@
         ============================ */
 
         .referral-card {
-
             padding: 20px;
 
             display: grid;
 
             grid-template-columns:
-                minmax(0,1fr)
+                minmax(0, 1fr)
                 auto;
 
             gap: 18px;
@@ -1178,21 +1026,17 @@
                     #eff6ff,
                     #f8fafc
                 );
-
         }
 
         .referral-card h4 {
-
             margin: 0;
 
             color: var(--dark);
 
             font-size: 15px;
-
         }
 
         .referral-card p {
-
             margin: 7px 0 0;
 
             color: var(--muted);
@@ -1200,21 +1044,17 @@
             font-size: 9px;
 
             line-height: 1.6;
-
         }
 
         .referral-code {
-
             margin-top: 13px;
 
             display: flex;
 
             gap: 7px;
-
         }
 
         .referral-code input {
-
             min-width: 0;
 
             flex: 1;
@@ -1229,34 +1069,29 @@
 
             border-radius: 10px;
 
-            background:
-                white;
+            background: white;
 
             color: #0f172a;
 
             font-size: 10px;
 
             font-weight: 900;
-
         }
 
         /* ============================
-           SUPPORT / PROFILE
+           PANELS
         ============================ */
 
         .two-grid {
-
             display: grid;
 
             grid-template-columns:
-                repeat(2, minmax(0,1fr));
+                repeat(2, minmax(0, 1fr));
 
             gap: 14px;
-
         }
 
         .panel {
-
             padding: 18px;
 
             border:
@@ -1265,29 +1100,22 @@
 
             border-radius: 18px;
 
-            background:
-                white;
-
+            background: white;
         }
 
         .panel h4 {
-
             margin: 0 0 14px;
 
             color: var(--dark);
 
             font-size: 14px;
-
         }
 
         .field {
-
             margin-bottom: 12px;
-
         }
 
         .field label {
-
             display: block;
 
             margin-bottom: 6px;
@@ -1297,13 +1125,11 @@
             font-size: 8px;
 
             font-weight: 900;
-
         }
 
         .field input,
         .field textarea,
         .field select {
-
             width: 100%;
 
             border:
@@ -1314,53 +1140,41 @@
 
             outline: none;
 
-            background:
-                #f8fafc;
+            background: #f8fafc;
 
-            color:
-                var(--dark);
+            color: var(--dark);
 
             font-size: 10px;
-
         }
 
         .field input,
         .field select {
-
             min-height: 42px;
 
             padding: 0 11px;
-
         }
 
         .field textarea {
-
             min-height: 115px;
 
             padding: 11px;
 
             resize: vertical;
-
         }
 
         .field input:focus,
         .field textarea:focus,
         .field select:focus {
-
-            border-color:
-                #60a5fa;
+            border-color: #60a5fa;
 
             box-shadow:
                 0 0 0 3px
-                rgba(37,99,235,.07);
+                rgba(37, 99, 235, .07);
 
-            background:
-                white;
-
+            background: white;
         }
 
         .submit-btn {
-
             min-height: 40px;
 
             padding: 0 15px;
@@ -1371,66 +1185,67 @@
 
             color: white;
 
-            background:
-                var(--primary);
+            background: var(--primary);
 
             font-size: 9px;
 
             font-weight: 900;
-
         }
 
         .submit-btn:disabled {
-
             opacity: .6;
-
             cursor: not-allowed;
-
         }
 
         /* ============================
-           NOTIFICATIONS
+           NOTIFICATIONS CORRIGÉES
         ============================ */
 
         .notification-panel {
+            position: fixed !important;
 
-            position: fixed;
+            z-index: 99999 !important;
 
-            z-index: 60;
+            top: 76px !important;
 
-            top: 76px;
+            right: 20px !important;
 
-            right: 20px;
+            width:
+                min(
+                    390px,
+                    calc(100vw - 30px)
+                ) !important;
 
-            width: min(390px, calc(100vw - 30px));
-
-            max-height: 70vh;
+            max-height: 72vh !important;
 
             display: none;
+
+            visibility: visible !important;
+
+            opacity: 1 !important;
+
+            pointer-events: auto !important;
 
             overflow: hidden;
 
             border:
                 1px solid
-                var(--border);
+                #e2e8f0;
 
             border-radius: 18px;
 
-            background:
-                white;
+            background: white;
 
             box-shadow:
-                0 25px 70px
-                rgba(15,23,42,.2);
-
+                0 25px 80px
+                rgba(15, 23, 42, .28);
         }
 
         .notification-panel.show {
-            display: block;
+            display: block !important;
         }
 
         .notification-head {
-
             padding: 14px 15px;
 
             display: flex;
@@ -1445,68 +1260,66 @@
                 1px solid
                 var(--border);
 
+            background: white;
         }
 
         .notification-head strong {
-
             color: var(--dark);
 
             font-size: 12px;
-
         }
 
         .notification-head button {
-
             border: 0;
 
             color: var(--primary);
 
-            background:
-                transparent;
+            background: transparent;
 
             font-size: 8px;
 
             font-weight: 900;
-
         }
 
         .notification-list {
-
-            max-height: 58vh;
+            max-height: 60vh;
 
             overflow-y: auto;
 
+            background: white;
         }
 
         .notification-item {
-
             padding: 13px 15px;
 
             border-bottom:
                 1px solid
                 #eef2f7;
 
+            cursor: pointer;
+        }
+
+        .notification-item:hover {
+            background: #f8fafc;
         }
 
         .notification-item.unread {
+            background: #eff6ff;
+        }
 
-            background:
-                #eff6ff;
-
+        .notification-item.unread:hover {
+            background: #dbeafe;
         }
 
         .notification-item strong {
-
             display: block;
 
             color: var(--dark);
 
             font-size: 9px;
-
         }
 
         .notification-item p {
-
             margin: 5px 0 0;
 
             color: var(--muted);
@@ -1514,7 +1327,6 @@
             font-size: 8px;
 
             line-height: 1.5;
-
         }
 
         /* ============================
@@ -1522,10 +1334,9 @@
         ============================ */
 
         .modal-overlay {
-
             position: fixed;
 
-            z-index: 100;
+            z-index: 100000;
 
             inset: 0;
 
@@ -1538,11 +1349,9 @@
             padding: 20px;
 
             background:
-                rgba(2,6,23,.66);
+                rgba(2, 6, 23, .66);
 
-            backdrop-filter:
-                blur(7px);
-
+            backdrop-filter: blur(7px);
         }
 
         .modal-overlay.show {
@@ -1550,7 +1359,6 @@
         }
 
         .modal {
-
             width: min(480px, 100%);
 
             max-height: 90vh;
@@ -1559,17 +1367,14 @@
 
             border-radius: 20px;
 
-            background:
-                white;
+            background: white;
 
             box-shadow:
                 0 30px 90px
-                rgba(0,0,0,.3);
-
+                rgba(0, 0, 0, .3);
         }
 
         .modal-head {
-
             padding: 17px 19px;
 
             display: flex;
@@ -1583,21 +1388,17 @@
             border-bottom:
                 1px solid
                 var(--border);
-
         }
 
         .modal-head h3 {
-
             margin: 0;
 
             color: var(--dark);
 
             font-size: 16px;
-
         }
 
         .modal-close {
-
             width: 35px;
 
             height: 35px;
@@ -1608,9 +1409,7 @@
 
             color: #64748b;
 
-            background:
-                #f1f5f9;
-
+            background: #f1f5f9;
         }
 
         .modal-body {
@@ -1618,22 +1417,19 @@
         }
 
         .fee-box {
-
             margin-bottom: 14px;
 
             padding: 12px;
 
             border-radius: 11px;
 
-            background:
-                #f8fafc;
+            background: #f8fafc;
 
             color: #64748b;
 
             font-size: 9px;
 
             line-height: 1.6;
-
         }
 
         /* ============================
@@ -1641,10 +1437,9 @@
         ============================ */
 
         .toast-container {
-
             position: fixed;
 
-            z-index: 200;
+            z-index: 200000;
 
             right: 18px;
 
@@ -1654,29 +1449,29 @@
 
             gap: 9px;
 
-            width: min(360px, calc(100vw - 30px));
-
+            width:
+                min(
+                    360px,
+                    calc(100vw - 30px)
+                );
         }
 
         .toast {
-
             padding: 13px 14px;
 
             border-radius: 13px;
 
             color: white;
 
-            background:
-                #0f172a;
+            background: #0f172a;
 
             box-shadow:
                 0 15px 45px
-                rgba(15,23,42,.2);
+                rgba(15, 23, 42, .2);
 
             font-size: 9px;
 
             line-height: 1.5;
-
         }
 
         .toast.success {
@@ -1696,10 +1491,9 @@
         ============================ */
 
         .loading-screen {
-
             position: fixed;
 
-            z-index: 500;
+            z-index: 500000;
 
             inset: 0;
 
@@ -1721,21 +1515,18 @@
                     #020617,
                     #0b4b94
                 );
-
         }
 
         .loading-spinner {
-
             width: 44px;
 
             height: 44px;
 
             border:
                 4px solid
-                rgba(255,255,255,.2);
+                rgba(255, 255, 255, .2);
 
-            border-top-color:
-                white;
+            border-top-color: white;
 
             border-radius: 50%;
 
@@ -1743,29 +1534,22 @@
                 spin .8s
                 linear
                 infinite;
-
         }
 
         @keyframes spin {
-
             to {
                 transform: rotate(360deg);
             }
-
         }
 
         .loading-screen strong {
-
             font-size: 15px;
-
         }
 
         .loading-screen span {
-
             color: #cbd5e1;
 
             font-size: 9px;
-
         }
 
         /* ============================
@@ -1776,12 +1560,12 @@
 
             .stats-grid {
                 grid-template-columns:
-                    repeat(2, minmax(0,1fr));
+                    repeat(2, minmax(0, 1fr));
             }
 
             .packs-grid {
                 grid-template-columns:
-                    repeat(2, minmax(0,1fr));
+                    repeat(2, minmax(0, 1fr));
             }
 
         }
@@ -1793,10 +1577,9 @@
             }
 
             .sidebar {
-
                 position: fixed;
 
-                z-index: 80;
+                z-index: 90000;
 
                 left: -280px;
 
@@ -1807,8 +1590,7 @@
 
                 box-shadow:
                     20px 0 50px
-                    rgba(2,6,23,.25);
-
+                    rgba(2, 6, 23, .25);
             }
 
             .sidebar.show {
@@ -1827,16 +1609,21 @@
                 grid-template-columns: 1fr;
             }
 
+            .notification-panel {
+                top: 68px !important;
+
+                right: 10px !important;
+
+                width:
+                    calc(100vw - 20px) !important;
+            }
+
         }
 
         @media (max-width: 580px) {
 
             .topbar {
-
-                padding:
-                    10px
-                    13px;
-
+                padding: 10px 13px;
             }
 
             .topbar-title h1 {
@@ -1852,7 +1639,9 @@
             }
 
             .stats-grid {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns:
+                    1fr 1fr;
+
                 gap: 9px;
             }
 
@@ -1884,6 +1673,7 @@
     id="loadingScreen"
     class="loading-screen"
 >
+
     <div class="loading-spinner"></div>
 
     <strong>
@@ -1893,6 +1683,7 @@
     <span>
         Chargement de votre espace sécurisé...
     </span>
+
 </div>
 
 
@@ -1945,6 +1736,7 @@
             <button
                 class="active"
                 data-scroll="homeSection"
+                type="button"
             >
                 <i class="fa-solid fa-house"></i>
                 Accueil
@@ -1952,6 +1744,7 @@
 
             <button
                 data-scroll="packsSection"
+                type="button"
             >
                 <i class="fa-solid fa-building"></i>
                 Packs
@@ -1959,6 +1752,7 @@
 
             <button
                 data-scroll="investmentsSection"
+                type="button"
             >
                 <i class="fa-solid fa-chart-line"></i>
                 Mes investissements
@@ -1966,6 +1760,7 @@
 
             <button
                 data-scroll="historySection"
+                type="button"
             >
                 <i class="fa-solid fa-clock-rotate-left"></i>
                 Historique
@@ -1973,6 +1768,7 @@
 
             <button
                 data-scroll="referralSection"
+                type="button"
             >
                 <i class="fa-solid fa-user-group"></i>
                 Parrainage
@@ -1980,6 +1776,7 @@
 
             <button
                 data-scroll="supportSection"
+                type="button"
             >
                 <i class="fa-solid fa-headset"></i>
                 Assistance
@@ -1987,6 +1784,7 @@
 
             <button
                 data-scroll="profileSection"
+                type="button"
             >
                 <i class="fa-solid fa-user"></i>
                 Profil
@@ -1998,6 +1796,7 @@
         <button
             id="logoutSideButton"
             class="logout-side"
+            type="button"
         >
             <i class="fa-solid fa-right-from-bracket"></i>
             Déconnexion
@@ -2020,7 +1819,6 @@
                     <i class="fa-solid fa-bars"></i>
                 </button>
 
-
                 <div class="topbar-title">
 
                     <h1>
@@ -2042,6 +1840,7 @@
                     id="notificationButton"
                     class="icon-button"
                     type="button"
+                    aria-label="Notifications"
                 >
 
                     <i class="fa-regular fa-bell"></i>
@@ -2072,8 +1871,6 @@
 
         <div class="content">
 
-            <!-- ACCUEIL -->
-
             <section id="homeSection">
 
                 <div class="hero">
@@ -2085,18 +1882,15 @@
                             COMPTE CONNECTÉ À SUPABASE
                         </small>
 
-
                         <h2 id="heroName">
                             Bienvenue
                         </h2>
-
 
                         <p>
                             Consultez votre solde, vos opérations,
                             vos investissements, votre assistance
                             et votre parrainage depuis un seul espace.
                         </p>
-
 
                         <div class="hero-actions">
 
@@ -2108,7 +1902,6 @@
                                 <i class="fa-solid fa-arrow-down"></i>
                                 Déposer
                             </button>
-
 
                             <button
                                 id="openWithdrawalButton"
@@ -2236,8 +2029,6 @@
             </section>
 
 
-            <!-- PACKS -->
-
             <section
                 id="packsSection"
                 class="section"
@@ -2252,24 +2043,20 @@
                         </h3>
 
                         <p>
-                            Durée enregistrée dans la base : 180 jours pour les packs actuels.
+                            Consultez les paramètres de chaque pack avant toute opération.
                         </p>
 
                     </div>
 
                 </div>
 
-
                 <div
                     id="packsGrid"
                     class="packs-grid"
-                >
-                </div>
+                ></div>
 
             </section>
 
-
-            <!-- INVESTISSEMENTS -->
 
             <section
                 id="investmentsSection"
@@ -2301,34 +2088,21 @@
 
                         <tr>
 
-                            <th>
-                                Pack
-                            </th>
+                            <th>Pack</th>
 
-                            <th>
-                                Montant
-                            </th>
+                            <th>Montant</th>
 
-                            <th>
-                                Gain journalier
-                            </th>
+                            <th>Gain journalier</th>
 
-                            <th>
-                                Jours crédités
-                            </th>
+                            <th>Jours crédités</th>
 
-                            <th>
-                                Total crédité
-                            </th>
+                            <th>Total crédité</th>
 
-                            <th>
-                                Statut
-                            </th>
+                            <th>Statut</th>
 
                         </tr>
 
                         </thead>
-
 
                         <tbody id="investmentsTableBody">
 
@@ -2351,8 +2125,6 @@
 
             </section>
 
-
-            <!-- HISTORIQUE -->
 
             <section
                 id="historySection"
@@ -2383,35 +2155,15 @@
                         <thead>
 
                         <tr>
-
-                            <th>
-                                Type
-                            </th>
-
-                            <th>
-                                Montant brut
-                            </th>
-
-                            <th>
-                                Frais
-                            </th>
-
-                            <th>
-                                Montant net
-                            </th>
-
-                            <th>
-                                Statut
-                            </th>
-
-                            <th>
-                                Date
-                            </th>
-
+                            <th>Type</th>
+                            <th>Montant brut</th>
+                            <th>Frais</th>
+                            <th>Montant net</th>
+                            <th>Statut</th>
+                            <th>Date</th>
                         </tr>
 
                         </thead>
-
 
                         <tbody id="historyTableBody">
 
@@ -2434,8 +2186,6 @@
 
             </section>
 
-
-            <!-- PARRAINAGE -->
 
             <section
                 id="referralSection"
@@ -2469,10 +2219,7 @@
 
                         <p>
                             Partagez votre code ou votre lien personnel.
-                            Le système enregistre automatiquement le parrain
-                            lorsque le code est utilisé à l'inscription.
                         </p>
-
 
                         <div class="referral-code">
 
@@ -2491,7 +2238,6 @@
                             </button>
 
                         </div>
-
 
                         <div class="referral-code">
 
@@ -2535,8 +2281,6 @@
             </section>
 
 
-            <!-- SUPPORT -->
-
             <section
                 id="supportSection"
                 class="section"
@@ -2551,7 +2295,7 @@
                         </h3>
 
                         <p>
-                            Envoyez une demande et consultez les réponses de l'administration.
+                            Envoyez une demande et consultez les réponses.
                         </p>
 
                     </div>
@@ -2566,7 +2310,6 @@
                         <h4>
                             Nouveau ticket
                         </h4>
-
 
                         <form id="supportForm">
 
@@ -2585,7 +2328,6 @@
 
                             </div>
 
-
                             <div class="field">
 
                                 <label for="supportMessage">
@@ -2599,7 +2341,6 @@
                                 ></textarea>
 
                             </div>
-
 
                             <button
                                 id="supportSubmitButton"
@@ -2635,8 +2376,6 @@
             </section>
 
 
-            <!-- PROFIL -->
-
             <section
                 id="profileSection"
                 class="section"
@@ -2651,7 +2390,7 @@
                         </h3>
 
                         <p>
-                            Seuls votre nom et votre téléphone peuvent être modifiés depuis le navigateur.
+                            Modifiez votre nom et votre téléphone.
                         </p>
 
                     </div>
@@ -2738,6 +2477,7 @@
 <div
     id="notificationPanel"
     class="notification-panel"
+    aria-hidden="true"
 >
 
     <div class="notification-head">
@@ -2754,7 +2494,6 @@
         </button>
 
     </div>
-
 
     <div
         id="notificationList"
@@ -2799,7 +2538,8 @@
         <div class="modal-body">
 
             <div class="fee-box">
-                Les frais de dépôt sont calculés automatiquement côté serveur à <strong>1 %</strong>.
+                Les frais de dépôt sont calculés automatiquement côté serveur à
+                <strong>1 %</strong>.
                 Le solde n'est crédité qu'après validation administrateur.
             </div>
 
@@ -2921,8 +2661,9 @@
         <div class="modal-body">
 
             <div class="fee-box">
-                Les frais de retrait sont calculés automatiquement côté serveur à <strong>25 %</strong>.
-                Le montant brut demandé est réservé immédiatement afin d'éviter plusieurs retraits dépassant votre solde.
+                Les frais de retrait sont calculés automatiquement côté serveur à
+                <strong>25 %</strong>.
+                Le montant brut est réservé dès la demande.
             </div>
 
 
@@ -3043,9 +2784,10 @@
 
         <div class="modal-body">
 
-            <div id="investmentConfirmationText" class="fee-box">
-            </div>
-
+            <div
+                id="investmentConfirmationText"
+                class="fee-box"
+            ></div>
 
             <button
                 id="confirmInvestmentButton"
@@ -3078,10 +2820,6 @@
 "use strict";
 
 
-/* ============================================================
-   ETAT GLOBAL
-============================================================ */
-
 let currentUser = null;
 
 let currentProfile = null;
@@ -3091,9 +2829,9 @@ let currentPacks = [];
 let selectedPack = null;
 
 
-/* ============================================================
+/* ============================
    FORMAT
-============================================================ */
+============================ */
 
 function formatMoney(value) {
 
@@ -3147,9 +2885,9 @@ function escapeHtml(value) {
 }
 
 
-/* ============================================================
+/* ============================
    TOAST
-============================================================ */
+============================ */
 
 function showToast(
     message,
@@ -3194,9 +2932,9 @@ function showToast(
 }
 
 
-/* ============================================================
+/* ============================
    MODALS
-============================================================ */
+============================ */
 
 function openModal(id) {
 
@@ -3268,9 +3006,9 @@ document
     );
 
 
-/* ============================================================
+/* ============================
    NAVIGATION
-============================================================ */
+============================ */
 
 document
     .querySelectorAll(
@@ -3336,7 +3074,9 @@ document
     )
     .addEventListener(
         "click",
-        () => {
+        event => {
+
+            event.stopPropagation();
 
             document
                 .getElementById(
@@ -3351,9 +3091,9 @@ document
     );
 
 
-/* ============================================================
+/* ============================
    AUTH
-============================================================ */
+============================ */
 
 async function ensureAuthenticated() {
 
@@ -3384,9 +3124,9 @@ async function ensureAuthenticated() {
 }
 
 
-/* ============================================================
+/* ============================
    PROFIL
-============================================================ */
+============================ */
 
 async function loadProfile() {
 
@@ -3537,9 +3277,9 @@ async function loadProfile() {
 }
 
 
-/* ============================================================
+/* ============================
    PACKS
-============================================================ */
+============================ */
 
 const fallbackImages = [
 
@@ -3729,8 +3469,8 @@ async function loadPacks() {
                             dans
                             <strong>${escapeHtml(selectedPack.name)}</strong>.
                             <br><br>
-                            Le montant sera débité directement de votre solde
-                            par la fonction sécurisée Supabase.
+                            Le montant sera débité de votre solde
+                            après confirmation côté Supabase.
                         `;
 
 
@@ -3747,9 +3487,9 @@ async function loadPacks() {
 }
 
 
-/* ============================================================
+/* ============================
    INVESTISSEMENTS
-============================================================ */
+============================ */
 
 async function loadInvestments() {
 
@@ -3825,9 +3565,9 @@ async function loadInvestments() {
 }
 
 
-/* ============================================================
+/* ============================
    HISTORIQUE
-============================================================ */
+============================ */
 
 async function loadHistory() {
 
@@ -3854,23 +3594,17 @@ async function loadHistory() {
 
         rows.push({
 
-            type:
-                "Dépôt",
+            type: "Dépôt",
 
-            gross:
-                deposit.gross_amount,
+            gross: deposit.gross_amount,
 
-            fee:
-                deposit.fee_amount,
+            fee: deposit.fee_amount,
 
-            net:
-                deposit.net_amount,
+            net: deposit.net_amount,
 
-            status:
-                deposit.status,
+            status: deposit.status,
 
-            date:
-                deposit.created_at
+            date: deposit.created_at
 
         });
 
@@ -3884,23 +3618,17 @@ async function loadHistory() {
 
         rows.push({
 
-            type:
-                "Retrait",
+            type: "Retrait",
 
-            gross:
-                withdrawal.gross_amount,
+            gross: withdrawal.gross_amount,
 
-            fee:
-                withdrawal.fee_amount,
+            fee: withdrawal.fee_amount,
 
-            net:
-                withdrawal.net_amount,
+            net: withdrawal.net_amount,
 
-            status:
-                withdrawal.status,
+            status: withdrawal.status,
 
-            date:
-                withdrawal.created_at
+            date: withdrawal.created_at
 
         });
 
@@ -3908,10 +3636,7 @@ async function loadHistory() {
 
 
     rows.sort(
-        (
-            a,
-            b
-        ) =>
+        (a, b) =>
             new Date(b.date) -
             new Date(a.date)
     );
@@ -3961,11 +3686,9 @@ async function loadHistory() {
                         </td>
 
                         <td>
-
                             <span class="status ${escapeHtml(row.status)}">
                                 ${escapeHtml(row.status)}
                             </span>
-
                         </td>
 
                         <td>
@@ -3980,9 +3703,9 @@ async function loadHistory() {
 }
 
 
-/* ============================================================
+/* ============================
    SUPPORT
-============================================================ */
+============================ */
 
 async function loadSupportTickets() {
 
@@ -4094,9 +3817,9 @@ async function loadSupportTickets() {
 }
 
 
-/* ============================================================
+/* ============================
    NOTIFICATIONS
-============================================================ */
+============================ */
 
 async function loadNotifications() {
 
@@ -4186,7 +3909,10 @@ async function loadNotifications() {
 
                 item.addEventListener(
                     "click",
-                    async () => {
+                    async event => {
+
+                        event.stopPropagation();
+
 
                         if (
                             !item.classList.contains(
@@ -4199,12 +3925,19 @@ async function loadNotifications() {
                         }
 
 
-                        await markSupabaseNotificationRead(
-                            item.dataset.notificationId
-                        );
+                        const result =
+                            await markSupabaseNotificationRead(
+                                item.dataset.notificationId
+                            );
 
 
-                        await loadNotifications();
+                        if (
+                            result?.success
+                        ) {
+
+                            await loadNotifications();
+
+                        }
 
                     }
                 );
@@ -4215,9 +3948,9 @@ async function loadNotifications() {
 }
 
 
-/* ============================================================
+/* ============================
    TICKER
-============================================================ */
+============================ */
 
 async function loadTicker() {
 
@@ -4262,9 +3995,9 @@ async function loadTicker() {
 }
 
 
-/* ============================================================
-   RAFRAICHIR DONNEES
-============================================================ */
+/* ============================
+   REFRESH
+============================ */
 
 async function refreshDashboard() {
 
@@ -4287,9 +4020,9 @@ async function refreshDashboard() {
 }
 
 
-/* ============================================================
+/* ============================
    DEPOT
-============================================================ */
+============================ */
 
 document
     .getElementById(
@@ -4413,9 +4146,9 @@ document
     );
 
 
-/* ============================================================
+/* ============================
    RETRAIT
-============================================================ */
+============================ */
 
 document
     .getElementById(
@@ -4546,9 +4279,9 @@ document
     );
 
 
-/* ============================================================
+/* ============================
    INVESTIR
-============================================================ */
+============================ */
 
 document
     .getElementById(
@@ -4559,9 +4292,7 @@ document
         async function () {
 
             if (!selectedPack) {
-
                 return;
-
             }
 
 
@@ -4636,9 +4367,9 @@ document
     );
 
 
-/* ============================================================
+/* ============================
    SUPPORT
-============================================================ */
+============================ */
 
 document
     .getElementById(
@@ -4736,9 +4467,9 @@ document
     );
 
 
-/* ============================================================
+/* ============================
    PROFIL
-============================================================ */
+============================ */
 
 document
     .getElementById(
@@ -4829,13 +4560,11 @@ document
     );
 
 
-/* ============================================================
-   PARRAINAGE
-============================================================ */
+/* ============================
+   COPIE
+============================ */
 
-async function copyText(
-    text
-) {
+async function copyText(text) {
 
     try {
 
@@ -4899,58 +4628,235 @@ document
     );
 
 
-/* ============================================================
+/* ============================
    NOTIFICATIONS
-============================================================ */
+   CORRECTION PRINCIPALE
+============================ */
 
-document
-    .getElementById(
+const notificationButton =
+    document.getElementById(
         "notificationButton"
-    )
-    .addEventListener(
-        "click",
-        () => {
-
-            document
-                .getElementById(
-                    "notificationPanel"
-                )
-                .classList
-                .toggle(
-                    "show"
-                );
-
-        }
     );
 
 
-document
-    .getElementById(
+const notificationPanel =
+    document.getElementById(
+        "notificationPanel"
+    );
+
+
+const markAllNotificationsButton =
+    document.getElementById(
         "markAllNotificationsButton"
-    )
-    .addEventListener(
-        "click",
-        async () => {
+    );
+
+
+function openNotificationPanel() {
+
+    notificationPanel
+        .classList
+        .add(
+            "show"
+        );
+
+
+    notificationPanel.style.display =
+        "block";
+
+
+    notificationPanel.style.visibility =
+        "visible";
+
+
+    notificationPanel.style.opacity =
+        "1";
+
+
+    notificationPanel.style.pointerEvents =
+        "auto";
+
+
+    notificationPanel.style.zIndex =
+        "99999";
+
+
+    notificationPanel.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+}
+
+
+function closeNotificationPanel() {
+
+    notificationPanel
+        .classList
+        .remove(
+            "show"
+        );
+
+
+    notificationPanel.style.display =
+        "none";
+
+
+    notificationPanel.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+}
+
+
+notificationButton.addEventListener(
+    "click",
+    function (event) {
+
+        event.preventDefault();
+
+        event.stopPropagation();
+
+
+        const isOpen =
+            notificationPanel
+                .classList
+                .contains(
+                    "show"
+                );
+
+
+        if (isOpen) {
+
+            closeNotificationPanel();
+
+        } else {
+
+            openNotificationPanel();
+
+        }
+
+    }
+);
+
+
+notificationPanel.addEventListener(
+    "click",
+    function (event) {
+
+        event.stopPropagation();
+
+    }
+);
+
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        if (
+            notificationPanel
+                .classList
+                .contains(
+                    "show"
+                ) &&
+            !notificationPanel
+                .contains(
+                    event.target
+                ) &&
+            !notificationButton
+                .contains(
+                    event.target
+                )
+        ) {
+
+            closeNotificationPanel();
+
+        }
+
+    }
+);
+
+
+markAllNotificationsButton.addEventListener(
+    "click",
+    async function (event) {
+
+        event.preventDefault();
+
+        event.stopPropagation();
+
+
+        const oldText =
+            this.textContent;
+
+
+        this.disabled =
+            true;
+
+
+        this.textContent =
+            "Lecture...";
+
+
+        try {
+
 
             const result =
                 await markAllSupabaseNotificationsRead();
 
 
-            if (
-                result?.success
-            ) {
+            if (!result?.success) {
 
-                await loadNotifications();
+                throw new Error(
+                    result?.message ||
+                    "Impossible de mettre à jour les notifications."
+                );
 
             }
 
+
+            await loadNotifications();
+
+
+            openNotificationPanel();
+
+
+            showToast(
+                "Toutes les notifications ont été marquées comme lues.",
+                "success"
+            );
+
+
+        } catch (error) {
+
+
+            showToast(
+                error?.message ||
+                "Erreur lors de la lecture des notifications.",
+                "error"
+            );
+
+
+        } finally {
+
+
+            this.disabled =
+                false;
+
+
+            this.textContent =
+                oldText;
+
         }
-    );
+
+    }
+);
 
 
-/* ============================================================
+/* ============================
    DECONNEXION
-============================================================ */
+============================ */
 
 async function performLogout() {
 
@@ -4989,9 +4895,9 @@ document
     );
 
 
-/* ============================================================
+/* ============================
    DEMARRAGE
-============================================================ */
+============================ */
 
 async function startDashboard() {
 
@@ -5009,9 +4915,7 @@ async function startDashboard() {
 
 
         if (!authenticated) {
-
             return;
-
         }
 
 
