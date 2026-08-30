@@ -1,294 +1,612 @@
 /* =========================================================
    HOUSING'S YQD
-   SCRIPT GLOBAL
-   Version de démonstration locale
+   SCRIPT GLOBAL DE LA PLATEFORME
+
+   Gestion :
+   - Utilisateurs
+   - Inscription
+   - Connexion
+   - Session
+   - Parrainage
+   - Dépôts
+   - Retraits
+   - Investissements
+   - Tickets
+   - Administration
+
+   VERSION DE DÉVELOPPEMENT
 
    IMPORTANT :
-   Les données sont actuellement stockées dans localStorage.
-   Pour la version publique réelle, il faudra utiliser
-   Supabase ou un véritable serveur sécurisé.
+   localStorage ne constitue pas une sécurité suffisante
+   pour une plateforme réelle. Une migration vers Supabase
+   ou un serveur sécurisé sera nécessaire avant publication.
 ========================================================= */
 
-"use strict";
 
 /* =========================================================
    CONFIGURATION
 ========================================================= */
 
 const HYQD_CONFIG = {
-    APP_NAME: "Housing's YQD",
-    USERS_KEY: "hyqd_users",
-    CURRENT_USER_KEY: "hyqd_current_user",
-    ADMIN_KEY: "hyqd_admin_authenticated",
-    ADMIN_CODE: "937854M",
-    DEPOSITS_KEY: "hyqd_deposits",
-    WITHDRAWALS_KEY: "hyqd_withdrawals",
-    INVESTMENTS_KEY: "hyqd_investments",
-    TICKETS_KEY: "hyqd_tickets",
-    NOTIFICATIONS_KEY: "hyqd_notifications",
-    REFERRAL_REWARDS_KEY: "hyqd_referral_rewards",
-    TRANSACTIONS_KEY: "hyqd_transactions"
+
+    platformName:
+        "Housing's YQD",
+
+    adminCode:
+        "937854M",
+
+    investmentDuration:
+        180,
+
+    referralBonus:
+        0.10,
+
+    currency:
+        "FCFA"
+
 };
 
 
 /* =========================================================
-   OUTILS LOCAL STORAGE
+   CLÉS DE STOCKAGE
 ========================================================= */
 
-function hyqdGet(key, fallback = null) {
+const STORAGE_KEYS = {
 
-    try {
+    users:
+        "housingYQDUsers",
 
-        const value = localStorage.getItem(key);
+    currentUser:
+        "housingYQDCurrentUser",
 
-        if (!value) {
-            return fallback;
-        }
+    adminSession:
+        "housingYQDAdminSession",
 
-        return JSON.parse(value);
+    passwordResets:
+        "housingYQDPasswordResets"
 
-    } catch (error) {
-
-        console.error("Erreur de lecture :", key, error);
-
-        return fallback;
-
-    }
-
-}
-
-
-function hyqdSet(key, value) {
-
-    try {
-
-        localStorage.setItem(
-            key,
-            JSON.stringify(value)
-        );
-
-        return true;
-
-    } catch (error) {
-
-        console.error("Erreur d'enregistrement :", key, error);
-
-        return false;
-
-    }
-
-}
-
-
-function hyqdRemove(key) {
-
-    localStorage.removeItem(key);
-
-}
+};
 
 
 /* =========================================================
-   UTILITAIRES
+   PACKS D'INVESTISSEMENT
 ========================================================= */
 
-function generateId(prefix = "HYQD") {
+const INVESTMENT_PACKS = [
+
+    {
+        id:
+            "starter",
+
+        name:
+            "Pack Starter",
+
+        amount:
+            3000,
+
+        dailyIncome:
+            800,
+
+        duration:
+            180,
+
+        image:
+            "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80"
+    },
+
+    {
+        id:
+            "familial",
+
+        name:
+            "Pack Familial",
+
+        amount:
+            10000,
+
+        dailyIncome:
+            3000,
+
+        duration:
+            180,
+
+        image:
+            "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=80"
+    },
+
+    {
+        id:
+            "confort",
+
+        name:
+            "Pack Confort",
+
+        amount:
+            20000,
+
+        dailyIncome:
+            6000,
+
+        duration:
+            180,
+
+        image:
+            "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=80"
+    },
+
+    {
+        id:
+            "premium",
+
+        name:
+            "Pack Premium",
+
+        amount:
+            45000,
+
+        dailyIncome:
+            14000,
+
+        duration:
+            180,
+
+        image:
+            "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200&q=80"
+    },
+
+    {
+        id:
+            "prestige",
+
+        name:
+            "Pack Prestige",
+
+        amount:
+            100000,
+
+        dailyIncome:
+            30000,
+
+        duration:
+            180,
+
+        image:
+            "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=1200&q=80"
+    },
+
+    {
+        id:
+            "premium-plus",
+
+        name:
+            "Pack Premium Plus",
+
+        amount:
+            200000,
+
+        dailyIncome:
+            65000,
+
+        duration:
+            180,
+
+        image:
+            "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80"
+    },
+
+    {
+        id:
+            "elite",
+
+        name:
+            "Pack Elite",
+
+        amount:
+            400000,
+
+        dailyIncome:
+            140000,
+
+        duration:
+            180,
+
+        image:
+            "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80"
+    },
+
+    {
+        id:
+            "luxury",
+
+        name:
+            "Pack Luxury",
+
+        amount:
+            800000,
+
+        dailyIncome:
+            290000,
+
+        duration:
+            180,
+
+        image:
+            "https://images.unsplash.com/photo-1600585152915-d208bec867a1?auto=format&fit=crop&w=1200&q=80"
+    }
+
+];
+
+
+/* =========================================================
+   OUTILS GENERAUX
+========================================================= */
+
+
+/* Générer un identifiant */
+
+function generateId(
+    prefix = "HYQD"
+) {
 
     return (
         prefix +
-        "-" +
+        "_" +
         Date.now() +
-        "-" +
+        "_" +
         Math.random()
             .toString(36)
-            .substring(2, 8)
-            .toUpperCase()
+            .substring(2, 10)
     );
 
 }
 
 
-function formatFCFA(amount) {
+/* Générer un code */
 
-    const number = Number(amount || 0);
+function generateCode(
+    length = 8
+) {
 
-    return number.toLocaleString(
-        "fr-FR",
-        {
-            maximumFractionDigits: 0
-        }
-    ) + " FCFA";
-
-}
+    const characters =
+        "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
 
-function getCurrentDate() {
-
-    return new Date().toISOString();
-
-}
+    let result =
+        "";
 
 
-function formatDate(date) {
+    for (
+        let index = 0;
+        index < length;
+        index++
+    ) {
 
-    if (!date) {
-        return "-";
+        result +=
+            characters.charAt(
+                Math.floor(
+                    Math.random() *
+                    characters.length
+                )
+            );
+
     }
+
+
+    return result;
+
+}
+
+
+/* Formater les montants */
+
+function formatFCFA(
+    amount
+) {
+
+    const value =
+        Number(
+            amount || 0
+        );
+
+
+    return (
+        value.toLocaleString(
+            "fr-FR"
+        ) +
+        " FCFA"
+    );
+
+}
+
+
+/* Masquer numéro */
+
+function maskPhoneNumber(
+    phone
+) {
+
+    if (
+        !phone
+    ) {
+
+        return
+            "*****";
+
+    }
+
+
+    const clean =
+        String(phone)
+            .replace(
+                /\D/g,
+                ""
+            );
+
+
+    if (
+        clean.length < 4
+    ) {
+
+        return
+            "*****";
+
+    }
+
+
+    return (
+        "*****" +
+        clean.slice(
+            -4
+        )
+    );
+
+}
+
+
+/* Date */
+
+function formatDate(
+    value
+) {
+
+    if (
+        !value
+    ) {
+
+        return
+            "-";
+
+    }
+
 
     try {
 
-        return new Date(date).toLocaleDateString(
-            "fr-FR",
-            {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric",
-                hour: "2-digit",
-                minute: "2-digit"
-            }
+        return new Date(
+            value
+        ).toLocaleString(
+            "fr-FR"
         );
 
-    } catch (error) {
-
-        return "-";
-
     }
 
-}
+    catch (
+        error
+    ) {
 
+        return
+            "-";
 
-function escapeHtml(value) {
-
-    if (value === null || value === undefined) {
-        return "";
     }
-
-    const div = document.createElement("div");
-
-    div.textContent = String(value);
-
-    return div.innerHTML;
 
 }
 
 
 /* =========================================================
-   GESTION DES UTILISATEURS
+   GESTION UTILISATEURS
 ========================================================= */
+
+
+/* Obtenir tous les utilisateurs */
 
 function getUsers() {
 
-    return hyqdGet(
-        HYQD_CONFIG.USERS_KEY,
-        []
-    );
+    try {
 
-}
-
-
-function saveUsers(users) {
-
-    return hyqdSet(
-        HYQD_CONFIG.USERS_KEY,
-        users
-    );
-
-}
+        const users =
+            JSON.parse(
+                localStorage.getItem(
+                    STORAGE_KEYS.users
+                )
+            );
 
 
-function getCurrentUser() {
+        return Array.isArray(
+            users
+        )
 
-    return hyqdGet(
-        HYQD_CONFIG.CURRENT_USER_KEY,
-        null
-    );
+            ? users
 
-}
-
-
-function saveCurrentUser(user) {
-
-    return hyqdSet(
-        HYQD_CONFIG.CURRENT_USER_KEY,
-        user
-    );
-
-}
+            : [];
 
 
-function findUserById(userId) {
-
-    const users = getUsers();
-
-    return users.find(
-        user => user.id === userId
-    ) || null;
-
-}
-
-
-function findUserByPhone(phone) {
-
-    const users = getUsers();
-
-    return users.find(
-        user => user.phone === phone
-    ) || null;
-
-}
-
-
-function findUserByReferralCode(code) {
-
-    if (!code) {
-        return null;
     }
 
-    const users = getUsers();
+    catch (
+        error
+    ) {
 
-    const cleanCode =
+        return [];
+
+    }
+
+}
+
+
+/* Sauvegarder utilisateurs */
+
+function saveUsers(
+    users
+) {
+
+    localStorage.setItem(
+        STORAGE_KEYS.users,
+        JSON.stringify(
+            users
+        )
+    );
+
+}
+
+
+/* Trouver utilisateur */
+
+function findUserById(
+    userId
+) {
+
+    return getUsers()
+        .find(
+            function (
+                user
+            ) {
+
+                return user.id ===
+                    userId;
+
+            }
+        );
+
+}
+
+
+/* Trouver téléphone */
+
+function findUserByPhone(
+    phone
+) {
+
+    const cleanPhone =
+        normalizePhone(
+            phone
+        );
+
+
+    return getUsers()
+        .find(
+            function (
+                user
+            ) {
+
+                return normalizePhone(
+                    user.phone
+                ) ===
+                cleanPhone;
+
+            }
+        );
+
+}
+
+
+/* Trouver code */
+
+function findUserByReferralCode(
+    code
+) {
+
+    if (
+        !code
+    ) {
+
+        return null;
+
+    }
+
+
+    const searchCode =
         String(code)
             .trim()
             .toUpperCase();
 
-    return users.find(
-        user =>
-            String(
-                user.referralCode || ""
-            ).toUpperCase() === cleanCode
-    ) || null;
+
+    return getUsers()
+        .find(
+            function (
+                user
+            ) {
+
+                return String(
+                    user.referralCode ||
+                    ""
+                )
+                    .toUpperCase() ===
+                    searchCode;
+
+            }
+        );
 
 }
 
 
-function updateUser(updatedUser) {
+/* Mettre à jour utilisateur */
 
-    const users = getUsers();
+function updateUser(
+    updatedUser
+) {
+
+    const users =
+        getUsers();
+
 
     const index =
         users.findIndex(
-            user =>
-                user.id === updatedUser.id
+            function (
+                user
+            ) {
+
+                return user.id ===
+                    updatedUser.id;
+
+            }
         );
 
-    if (index === -1) {
+
+    if (
+        index === -1
+    ) {
+
         return false;
+
     }
 
-    users[index] = updatedUser;
 
-    saveUsers(users);
+    users[
+        index
+    ] =
+        updatedUser;
+
+
+    saveUsers(
+        users
+    );
+
 
     const currentUser =
         getCurrentUser();
 
+
     if (
         currentUser &&
-        currentUser.id === updatedUser.id
+        currentUser.id ===
+        updatedUser.id
     ) {
 
-        saveCurrentUser(updatedUser);
+        setCurrentUser(
+            updatedUser
+        );
 
     }
+
 
     return true;
 
@@ -296,51 +614,138 @@ function updateUser(updatedUser) {
 
 
 /* =========================================================
-   CODE DE PARRAINAGE
+   TELEPHONE
 ========================================================= */
 
-function generateReferralCode(
-    fullName = ""
+function normalizePhone(
+    phone
 ) {
 
-    const cleanName =
-        String(fullName)
-            .replace(/[^a-zA-Z]/g, "")
-            .substring(0, 4)
-            .toUpperCase() || "YQD";
+    if (
+        !phone
+    ) {
 
-    const random =
-        Math.floor(
-            100000 +
-            Math.random() * 900000
-        );
+        return "";
 
-    return cleanName + random;
+    }
+
+
+    let clean =
+        String(phone)
+            .replace(
+                /\D/g,
+                ""
+            );
+
+
+    if (
+        clean.startsWith(
+            "225"
+        )
+    ) {
+
+        clean =
+            clean.substring(
+                3
+            );
+
+    }
+
+
+    return clean;
 
 }
 
 
-function generateUniqueReferralCode(
-    fullName
-) {
+/* =========================================================
+   SESSION UTILISATEUR
+========================================================= */
 
-    let code =
-        generateReferralCode(fullName);
+function getCurrentUser() {
 
-    let existing =
-        findUserByReferralCode(code);
+    try {
 
-    while (existing) {
-
-        code =
-            generateReferralCode(fullName);
-
-        existing =
-            findUserByReferralCode(code);
+        return JSON.parse(
+            localStorage.getItem(
+                STORAGE_KEYS.currentUser
+            )
+        );
 
     }
 
-    return code;
+    catch (
+        error
+    ) {
+
+        return null;
+
+    }
+
+}
+
+
+function setCurrentUser(
+    user
+) {
+
+    localStorage.setItem(
+        STORAGE_KEYS.currentUser,
+        JSON.stringify(
+            user
+        )
+    );
+
+}
+
+
+function saveCurrentUser(
+    user
+) {
+
+    setCurrentUser(
+        user
+    );
+
+
+    updateUser(
+        user
+    );
+
+}
+
+
+function clearCurrentUser() {
+
+    localStorage.removeItem(
+        STORAGE_KEYS.currentUser
+    );
+
+}
+
+
+function isLoggedIn() {
+
+    const user =
+        getCurrentUser();
+
+
+    if (
+        !user ||
+        !user.id
+    ) {
+
+        return false;
+
+    }
+
+
+    const databaseUser =
+        findUserById(
+            user.id
+        );
+
+
+    return !!databaseUser;
 
 }
 
@@ -349,188 +754,276 @@ function generateUniqueReferralCode(
    INSCRIPTION
 ========================================================= */
 
-function registerUser({
-    fullName,
-    phone,
-    email = "",
-    password,
-    confirmPassword,
-    referralCode = ""
-}) {
+function registerUser(
+    data
+) {
 
     const name =
-        String(fullName || "")
+        String(
+            data.name ||
+            data.fullName ||
+            ""
+        )
             .trim();
 
-    const cleanPhone =
-        String(phone || "")
-            .trim();
 
-    const cleanEmail =
-        String(email || "")
+    const phone =
+        normalizePhone(
+            data.phone
+        );
+
+
+    const password =
+        String(
+            data.password ||
+            ""
+        );
+
+
+    const invitationCode =
+        String(
+            data.invitationCode ||
+            data.referralCode ||
+            ""
+        )
             .trim()
-            .toLowerCase();
-
-    const cleanPassword =
-        String(password || "");
-
-    const cleanConfirmPassword =
-        String(confirmPassword || "");
+            .toUpperCase();
 
 
-    if (name.length < 3) {
+    if (
+        name.length < 2
+    ) {
 
         return {
-            success: false,
+
+            success:
+                false,
+
             message:
                 "Veuillez saisir votre nom complet."
+
         };
 
     }
 
 
     if (
-        cleanPhone.length < 8
+        phone.length < 8
     ) {
 
         return {
-            success: false,
+
+            success:
+                false,
+
             message:
                 "Veuillez saisir un numéro de téléphone valide."
+
         };
 
     }
 
 
     if (
-        cleanPassword.length < 6
+        password.length < 6
     ) {
 
         return {
-            success: false,
+
+            success:
+                false,
+
             message:
                 "Le mot de passe doit contenir au moins 6 caractères."
+
         };
 
     }
-
-
-    if (
-        cleanPassword !==
-        cleanConfirmPassword
-    ) {
-
-        return {
-            success: false,
-            message:
-                "Les mots de passe ne correspondent pas."
-        };
-
-    }
-
-
-    const existingUser =
-        findUserByPhone(cleanPhone);
-
-
-    if (existingUser) {
-
-        return {
-            success: false,
-            message:
-                "Ce numéro est déjà enregistré."
-        };
-
-    }
-
-
-    let referrer = null;
-
-
-    if (
-        referralCode &&
-        String(referralCode).trim()
-    ) {
-
-        referrer =
-            findUserByReferralCode(
-                referralCode
-            );
-
-    }
-
-
-    const newUser = {
-
-        id:
-            generateId("USER"),
-
-        fullName:
-            name,
-
-        phone:
-            cleanPhone,
-
-        email:
-            cleanEmail,
-
-        password:
-            cleanPassword,
-
-        balance:
-            0,
-
-        totalDeposited:
-            0,
-
-        totalWithdrawn:
-            0,
-
-        totalInvested:
-            0,
-
-        referralCode:
-            generateUniqueReferralCode(name),
-
-        referredBy:
-            referrer
-                ? referrer.id
-                : null,
-
-        referralRewardReceived:
-            false,
-
-        status:
-            "active",
-
-        createdAt:
-            getCurrentDate()
-
-    };
 
 
     const users =
         getUsers();
 
 
-    users.push(newUser);
+    const existingUser =
+        users.find(
+            function (
+                user
+            ) {
+
+                return normalizePhone(
+                    user.phone
+                ) ===
+                phone;
+
+            }
+        );
 
 
-    saveUsers(users);
+    if (
+        existingUser
+    ) {
+
+        return {
+
+            success:
+                false,
+
+            message:
+                "Ce numéro possède déjà un compte."
+
+        };
+
+    }
 
 
-    saveCurrentUser(newUser);
+    let sponsor =
+        null;
+
+
+    if (
+        invitationCode
+    ) {
+
+        sponsor =
+            findUserByReferralCode(
+                invitationCode
+            );
+
+
+        if (
+            !sponsor
+        ) {
+
+            return {
+
+                success:
+                    false,
+
+                message:
+                    "Le code de parrainage est invalide."
+
+            };
+
+        }
+
+    }
+
+
+    let personalReferralCode;
+
+
+    do {
+
+        personalReferralCode =
+            "YQD" +
+            generateCode(
+                6
+            );
+
+    }
+
+    while (
+        findUserByReferralCode(
+            personalReferralCode
+        )
+    );
+
+
+    const user = {
+
+        id:
+            generateId(
+                "USER"
+            ),
+
+        name:
+            name,
+
+        fullName:
+            name,
+
+        phone:
+            phone,
+
+        password:
+            password,
+
+        balance:
+            0,
+
+        totalDeposits:
+            0,
+
+        totalWithdrawals:
+            0,
+
+        totalInvested:
+            0,
+
+        totalReferralBonus:
+            0,
+
+        referralCode:
+            personalReferralCode,
+
+        sponsorId:
+            sponsor
+                ? sponsor.id
+                : null,
+
+        sponsorCode:
+            sponsor
+                ? sponsor.referralCode
+                : null,
+
+        firstDepositCompleted:
+            false,
+
+        transactions:
+            [],
+
+        investments:
+            [],
+
+        tickets:
+            [],
+
+        notifications:
+            [],
+
+        createdAt:
+            new Date()
+                .toISOString()
+
+    };
+
+
+    users.push(
+        user
+    );
+
+
+    saveUsers(
+        users
+    );
+
+
+    setCurrentUser(
+        user
+    );
 
 
     return {
 
-        success: true,
+        success:
+            true,
 
         message:
-            "Inscription réussie. Bienvenue sur Housing's YQD !",
+            "Votre compte a été créé avec succès.",
 
         user:
-            newUser
+            user
 
     };
 
@@ -547,44 +1040,38 @@ function loginUser(
 ) {
 
     const cleanPhone =
-        String(phone || "")
-            .trim();
+        normalizePhone(
+            phone
+        );
 
-    const cleanPassword =
-        String(password || "");
+
+    const user =
+        getUsers()
+            .find(
+                function (
+                    item
+                ) {
+
+                    return normalizePhone(
+                        item.phone
+                    ) ===
+                    cleanPhone;
+
+                }
+            );
 
 
     if (
-        !cleanPhone ||
-        !cleanPassword
+        !user
     ) {
 
         return {
 
-            success: false,
+            success:
+                false,
 
             message:
-                "Veuillez renseigner votre numéro et votre mot de passe."
-
-        };
-
-    }
-
-
-    const user =
-        findUserByPhone(
-            cleanPhone
-        );
-
-
-    if (!user) {
-
-        return {
-
-            success: false,
-
-            message:
-                "Aucun compte ne correspond à ce numéro."
+                "Aucun compte n'est associé à ce numéro."
 
         };
 
@@ -593,12 +1080,13 @@ function loginUser(
 
     if (
         user.password !==
-        cleanPassword
+        password
     ) {
 
         return {
 
-            success: false,
+            success:
+                false,
 
             message:
                 "Mot de passe incorrect."
@@ -608,33 +1096,21 @@ function loginUser(
     }
 
 
-    if (
-        user.status === "blocked"
-    ) {
-
-        return {
-
-            success: false,
-
-            message:
-                "Votre compte est actuellement suspendu."
-
-        };
-
-    }
-
-
-    saveCurrentUser(user);
+    setCurrentUser(
+        user
+    );
 
 
     return {
 
-        success: true,
+        success:
+            true,
 
         message:
             "Connexion réussie.",
 
-        user
+        user:
+            user
 
     };
 
@@ -642,182 +1118,94 @@ function loginUser(
 
 
 /* =========================================================
-   DÉCONNEXION
+   DECONNEXION
 ========================================================= */
 
 function logoutUser() {
 
-    hyqdRemove(
-        HYQD_CONFIG.CURRENT_USER_KEY
-    );
-
-    window.location.href =
-        "login.html";
+    clearCurrentUser();
 
 }
 
 
 /* =========================================================
-   PROTECTION DES PAGES
+   PROFIL
 ========================================================= */
 
-function requireAuth() {
+function updateUserProfile(
+    data
+) {
 
     const user =
         getCurrentUser();
 
 
-    if (!user) {
-
-        window.location.href =
-            "login.html";
-
-        return null;
-
-    }
-
-
-    const realUser =
-        findUserById(
-            user.id
-        );
-
-
-    if (!realUser) {
-
-        hyqdRemove(
-            HYQD_CONFIG.CURRENT_USER_KEY
-        );
-
-        window.location.href =
-            "login.html";
-
-        return null;
-
-    }
-
-
     if (
-        realUser.status === "blocked"
-    ) {
-
-        hyqdRemove(
-            HYQD_CONFIG.CURRENT_USER_KEY
-        );
-
-        window.location.href =
-            "login.html";
-
-        return null;
-
-    }
-
-
-    saveCurrentUser(realUser);
-
-
-    return realUser;
-
-}
-
-
-/* =========================================================
-   DÉPÔTS
-========================================================= */
-
-function getDeposits() {
-
-    return hyqdGet(
-        HYQD_CONFIG.DEPOSITS_KEY,
-        []
-    );
-
-}
-
-
-function saveDeposits(deposits) {
-
-    return hyqdSet(
-        HYQD_CONFIG.DEPOSITS_KEY,
-        deposits
-    );
-
-}
-
-
-function requestDeposit({
-    userId,
-    amount,
-    method = "",
-    reference = ""
-}) {
-
-    const numericAmount =
-        Number(amount);
-
-
-    if (
-        !userId ||
-        !numericAmount ||
-        numericAmount <= 0
+        !user
     ) {
 
         return {
 
-            success: false,
+            success:
+                false,
 
             message:
-                "Montant invalide."
+                "Session utilisateur introuvable."
 
         };
 
     }
 
 
-    const deposit = {
-
-        id:
-            generateId("DEP"),
-
-        userId,
-
-        amount:
-            numericAmount,
-
-        method:
-            method || "Non précisé",
-
-        reference:
-            reference || "",
-
-        status:
-            "pending",
-
-        createdAt:
-            getCurrentDate(),
-
-        validatedAt:
-            null
-
-    };
+    const name =
+        String(
+            data.name ||
+            data.fullName ||
+            user.name
+        )
+            .trim();
 
 
-    const deposits =
-        getDeposits();
+    if (
+        name.length < 2
+    ) {
+
+        return {
+
+            success:
+                false,
+
+            message:
+                "Nom invalide."
+
+        };
+
+    }
 
 
-    deposits.unshift(deposit);
+    user.name =
+        name;
 
 
-    saveDeposits(deposits);
+    user.fullName =
+        name;
+
+
+    updateUser(
+        user
+    );
 
 
     return {
 
-        success: true,
+        success:
+            true,
 
         message:
-            "Votre demande de dépôt a été enregistrée et attend validation."
+            "Profil mis à jour.",
+
+        user:
+            user
 
     };
 
@@ -825,66 +1213,26 @@ function requestDeposit({
 
 
 /* =========================================================
-   VALIDATION DÉPÔT ADMIN
+   CHANGEMENT MOT DE PASSE
 ========================================================= */
 
-function validateDeposit(
-    depositId
+function changePassword(
+    oldPassword,
+    newPassword
 ) {
 
-    const deposits =
-        getDeposits();
-
-
-    const deposit =
-        deposits.find(
-            item =>
-                item.id === depositId
-        );
-
-
-    if (!deposit) {
-
-        return {
-
-            success: false,
-
-            message:
-                "Dépôt introuvable."
-
-        };
-
-    }
+    const user =
+        getCurrentUser();
 
 
     if (
-        deposit.status !==
-        "pending"
+        !user
     ) {
 
         return {
 
-            success: false,
-
-            message:
-                "Cette demande a déjà été traitée."
-
-        };
-
-    }
-
-
-    const user =
-        findUserById(
-            deposit.userId
-        );
-
-
-    if (!user) {
-
-        return {
-
-            success: false,
+            success:
+                false,
 
             message:
                 "Utilisateur introuvable."
@@ -894,488 +1242,553 @@ function validateDeposit(
     }
 
 
-    deposit.status =
-        "approved";
+    if (
+        user.password !==
+        oldPassword
+    ) {
+
+        return {
+
+            success:
+                false,
+
+            message:
+                "Ancien mot de passe incorrect."
+
+        };
+
+    }
 
 
-    deposit.validatedAt =
-        getCurrentDate();
+    if (
+        String(
+            newPassword
+        ).length < 6
+    ) {
+
+        return {
+
+            success:
+                false,
+
+            message:
+                "Le nouveau mot de passe doit contenir au moins 6 caractères."
+
+        };
+
+    }
 
 
-    saveDeposits(deposits);
+    user.password =
+        newPassword;
 
 
-    user.balance =
-        Number(user.balance || 0) +
-        Number(deposit.amount);
-
-
-    user.totalDeposited =
-        Number(user.totalDeposited || 0) +
-        Number(deposit.amount);
-
-
-    updateUser(user);
-
-
-    processReferralReward(
-        user,
-        deposit.amount
+    updateUser(
+        user
     );
 
 
-    addTransaction({
+    return {
 
-        userId:
-            user.id,
+        success:
+            true,
+
+        message:
+            "Mot de passe modifié avec succès."
+
+    };
+
+}
+
+
+/* =========================================================
+   RECUPERATION MOT DE PASSE
+
+   MODE LOCAL DE DEVELOPPEMENT
+========================================================= */
+
+function requestPasswordReset(
+    phone
+) {
+
+    const user =
+        findUserByPhone(
+            phone
+        );
+
+
+    if (
+        !user
+    ) {
+
+        return {
+
+            success:
+                false,
+
+            message:
+                "Aucun compte trouvé avec ce numéro."
+
+        };
+
+    }
+
+
+    const resetCode =
+        generateCode(
+            6
+        );
+
+
+    let resetRequests;
+
+
+    try {
+
+        resetRequests =
+            JSON.parse(
+                localStorage.getItem(
+                    STORAGE_KEYS.passwordResets
+                )
+            ) ||
+            [];
+
+    }
+
+    catch (
+        error
+    ) {
+
+        resetRequests =
+            [];
+
+    }
+
+
+    resetRequests =
+        resetRequests.filter(
+            function (
+                request
+            ) {
+
+                return request.userId !==
+                    user.id;
+
+            }
+        );
+
+
+    resetRequests.push(
+        {
+
+            userId:
+                user.id,
+
+            code:
+                resetCode,
+
+            expiresAt:
+                Date.now() +
+                (
+                    30 *
+                    60 *
+                    1000
+                )
+
+        }
+    );
+
+
+    localStorage.setItem(
+        STORAGE_KEYS.passwordResets,
+        JSON.stringify(
+            resetRequests
+        )
+    );
+
+
+    return {
+
+        success:
+            true,
+
+        message:
+            "Demande enregistrée.",
+
+        developmentCode:
+            resetCode
+
+    };
+
+}
+
+
+function resetPassword(
+    phone,
+    code,
+    newPassword
+) {
+
+    const user =
+        findUserByPhone(
+            phone
+        );
+
+
+    if (
+        !user
+    ) {
+
+        return {
+
+            success:
+                false,
+
+            message:
+                "Utilisateur introuvable."
+
+        };
+
+    }
+
+
+    let resetRequests;
+
+
+    try {
+
+        resetRequests =
+            JSON.parse(
+                localStorage.getItem(
+                    STORAGE_KEYS.passwordResets
+                )
+            ) ||
+            [];
+
+    }
+
+    catch (
+        error
+    ) {
+
+        resetRequests =
+            [];
+
+    }
+
+
+    const request =
+        resetRequests.find(
+            function (
+                item
+            ) {
+
+                return item.userId ===
+                    user.id;
+
+            }
+        );
+
+
+    if (
+        !request
+    ) {
+
+        return {
+
+            success:
+                false,
+
+            message:
+                "Aucune demande de réinitialisation active."
+
+        };
+
+    }
+
+
+    if (
+        Date.now() >
+        request.expiresAt
+    ) {
+
+        return {
+
+            success:
+                false,
+
+            message:
+                "Le code a expiré."
+
+        };
+
+    }
+
+
+    if (
+        String(
+            request.code
+        ).toUpperCase() !==
+        String(
+            code
+        ).trim()
+            .toUpperCase()
+    ) {
+
+        return {
+
+            success:
+                false,
+
+            message:
+                "Code incorrect."
+
+        };
+
+    }
+
+
+    if (
+        String(
+            newPassword
+        ).length < 6
+    ) {
+
+        return {
+
+            success:
+                false,
+
+            message:
+                "Le mot de passe doit contenir au moins 6 caractères."
+
+        };
+
+    }
+
+
+    user.password =
+        newPassword;
+
+
+    updateUser(
+        user
+    );
+
+
+    resetRequests =
+        resetRequests.filter(
+            function (
+                item
+            ) {
+
+                return item.userId !==
+                    user.id;
+
+            }
+        );
+
+
+    localStorage.setItem(
+        STORAGE_KEYS.passwordResets,
+        JSON.stringify(
+            resetRequests
+        )
+    );
+
+
+    return {
+
+        success:
+            true,
+
+        message:
+            "Votre mot de passe a été modifié."
+
+    };
+
+}
+
+
+/* =========================================================
+   NOTIFICATIONS
+========================================================= */
+
+function addNotification(
+    user,
+    title,
+    message
+) {
+
+    if (
+        !Array.isArray(
+            user.notifications
+        )
+    ) {
+
+        user.notifications =
+            [];
+
+    }
+
+
+    user.notifications.unshift(
+        {
+
+            id:
+                generateId(
+                    "NOTIF"
+                ),
+
+            title:
+                title,
+
+            message:
+                message,
+
+            read:
+                false,
+
+            createdAt:
+                new Date()
+                    .toISOString()
+
+        }
+    );
+
+
+}
+
+
+/* =========================================================
+   DEPOT
+========================================================= */
+
+function requestDeposit(
+    amount,
+    method,
+    reference
+) {
+
+    const user =
+        getCurrentUser();
+
+
+    if (
+        !user
+    ) {
+
+        return {
+
+            success:
+                false,
+
+            message:
+                "Veuillez vous connecter."
+
+        };
+
+    }
+
+
+    const depositAmount =
+        Number(
+            amount
+        );
+
+
+    if (
+        !Number.isFinite(
+            depositAmount
+        ) ||
+        depositAmount <= 0
+    ) {
+
+        return {
+
+            success:
+                false,
+
+            message:
+                "Montant invalide."
+
+        };
+
+    }
+
+
+    const transaction = {
+
+        id:
+            generateId(
+                "DEP"
+            ),
 
         type:
             "deposit",
 
         amount:
-            deposit.amount,
-
-        status:
-            "approved",
-
-        description:
-            "Dépôt validé"
-
-    });
-
-
-    return {
-
-        success: true,
-
-        message:
-            "Dépôt validé avec succès."
-
-    };
-
-}
-
-
-function rejectDeposit(
-    depositId
-) {
-
-    const deposits =
-        getDeposits();
-
-
-    const deposit =
-        deposits.find(
-            item =>
-                item.id === depositId
-        );
-
-
-    if (!deposit) {
-
-        return {
-
-            success: false,
-
-            message:
-                "Dépôt introuvable."
-
-        };
-
-    }
-
-
-    if (
-        deposit.status !==
-        "pending"
-    ) {
-
-        return {
-
-            success: false,
-
-            message:
-                "Cette demande a déjà été traitée."
-
-        };
-
-    }
-
-
-    deposit.status =
-        "rejected";
-
-
-    deposit.validatedAt =
-        getCurrentDate();
-
-
-    saveDeposits(deposits);
-
-
-    return {
-
-        success: true,
-
-        message:
-            "Dépôt refusé."
-
-    };
-
-}
-
-
-/* =========================================================
-   RETRAITS
-========================================================= */
-
-function getWithdrawals() {
-
-    return hyqdGet(
-        HYQD_CONFIG.WITHDRAWALS_KEY,
-        []
-    );
-
-}
-
-
-function saveWithdrawals(
-    withdrawals
-) {
-
-    return hyqdSet(
-        HYQD_CONFIG.WITHDRAWALS_KEY,
-        withdrawals
-    );
-
-}
-
-
-function requestWithdrawal({
-    userId,
-    amount,
-    method = ""
-}) {
-
-    const user =
-        findUserById(userId);
-
-
-    const numericAmount =
-        Number(amount);
-
-
-    if (!user) {
-
-        return {
-
-            success: false,
-
-            message:
-                "Utilisateur introuvable."
-
-        };
-
-    }
-
-
-    if (
-        !numericAmount ||
-        numericAmount <= 0
-    ) {
-
-        return {
-
-            success: false,
-
-            message:
-                "Montant invalide."
-
-        };
-
-    }
-
-
-    if (
-        numericAmount >
-        Number(user.balance || 0)
-    ) {
-
-        return {
-
-            success: false,
-
-            message:
-                "Solde insuffisant."
-
-        };
-
-    }
-
-
-    const withdrawals =
-        getWithdrawals();
-
-
-    const withdrawal = {
-
-        id:
-            generateId("WIT"),
-
-        userId,
-
-        amount:
-            numericAmount,
-
-        fee:
-            0,
-
-        netAmount:
-            numericAmount,
+            depositAmount,
 
         method:
-            method || "Non précisé",
+            method ||
+            "Mobile Money",
+
+        reference:
+            reference ||
+            generateCode(
+                10
+            ),
 
         status:
             "pending",
 
         createdAt:
-            getCurrentDate(),
-
-        validatedAt:
-            null
+            new Date()
+                .toISOString()
 
     };
 
 
-    withdrawals.unshift(
-        withdrawal
+    if (
+        !Array.isArray(
+            user.transactions
+        )
+    ) {
+
+        user.transactions =
+            [];
+
+    }
+
+
+    user.transactions.unshift(
+        transaction
     );
 
 
-    saveWithdrawals(
-        withdrawals
+    addNotification(
+        user,
+        "Dépôt en attente",
+        "Votre demande de dépôt est en cours de vérification."
+    );
+
+
+    updateUser(
+        user
     );
 
 
     return {
 
-        success: true,
+        success:
+            true,
 
         message:
-            "Votre demande de retrait attend validation."
+            "Votre demande de dépôt a été envoyée.",
 
-    };
-
-}
-
-
-function validateWithdrawal(
-    withdrawalId
-) {
-
-    const withdrawals =
-        getWithdrawals();
-
-
-    const withdrawal =
-        withdrawals.find(
-            item =>
-                item.id === withdrawalId
-        );
-
-
-    if (!withdrawal) {
-
-        return {
-
-            success: false,
-
-            message:
-                "Retrait introuvable."
-
-        };
-
-    }
-
-
-    if (
-        withdrawal.status !==
-        "pending"
-    ) {
-
-        return {
-
-            success: false,
-
-            message:
-                "Cette demande a déjà été traitée."
-
-        };
-
-    }
-
-
-    const user =
-        findUserById(
-            withdrawal.userId
-        );
-
-
-    if (!user) {
-
-        return {
-
-            success: false,
-
-            message:
-                "Utilisateur introuvable."
-
-        };
-
-    }
-
-
-    if (
-        Number(user.balance || 0) <
-        Number(withdrawal.amount)
-    ) {
-
-        return {
-
-            success: false,
-
-            message:
-                "Solde utilisateur insuffisant."
-
-        };
-
-    }
-
-
-    user.balance =
-        Number(user.balance || 0) -
-        Number(withdrawal.amount);
-
-
-    user.totalWithdrawn =
-        Number(user.totalWithdrawn || 0) +
-        Number(withdrawal.amount);
-
-
-    updateUser(user);
-
-
-    withdrawal.status =
-        "approved";
-
-
-    withdrawal.validatedAt =
-        getCurrentDate();
-
-
-    saveWithdrawals(
-        withdrawals
-    );
-
-
-    addTransaction({
-
-        userId:
-            user.id,
-
-        type:
-            "withdrawal",
-
-        amount:
-            withdrawal.amount,
-
-        status:
-            "approved",
-
-        description:
-            "Retrait validé"
-
-    });
-
-
-    return {
-
-        success: true,
-
-        message:
-            "Retrait validé avec succès."
-
-    };
-
-}
-
-
-function rejectWithdrawal(
-    withdrawalId
-) {
-
-    const withdrawals =
-        getWithdrawals();
-
-
-    const withdrawal =
-        withdrawals.find(
-            item =>
-                item.id === withdrawalId
-        );
-
-
-    if (!withdrawal) {
-
-        return {
-
-            success: false,
-
-            message:
-                "Retrait introuvable."
-
-        };
-
-    }
-
-
-    if (
-        withdrawal.status !==
-        "pending"
-    ) {
-
-        return {
-
-            success: false,
-
-            message:
-                "Cette demande a déjà été traitée."
-
-        };
-
-    }
-
-
-    withdrawal.status =
-        "rejected";
-
-
-    withdrawal.validatedAt =
-        getCurrentDate();
-
-
-    saveWithdrawals(
-        withdrawals
-    );
-
-
-    return {
-
-        success: true,
-
-        message:
-            "Retrait refusé."
+        transaction:
+            transaction
 
     };
 
@@ -1383,69 +1796,53 @@ function rejectWithdrawal(
 
 
 /* =========================================================
-   INVESTISSEMENTS
+   RETRAIT
 ========================================================= */
 
-function getInvestments() {
-
-    return hyqdGet(
-        HYQD_CONFIG.INVESTMENTS_KEY,
-        []
-    );
-
-}
-
-
-function saveInvestments(
-    investments
+function requestWithdrawal(
+    amount,
+    method,
+    phone
 ) {
 
-    return hyqdSet(
-        HYQD_CONFIG.INVESTMENTS_KEY,
-        investments
-    );
-
-}
-
-
-function createInvestment({
-    userId,
-    packName,
-    amount,
-    dailyReturn = 0,
-    duration = 180,
-    houseImage = ""
-}) {
-
     const user =
-        findUserById(userId);
+        getCurrentUser();
 
 
-    const numericAmount =
-        Number(amount);
-
-
-    if (!user) {
+    if (
+        !user
+    ) {
 
         return {
 
-            success: false,
+            success:
+                false,
 
             message:
-                "Utilisateur introuvable."
+                "Veuillez vous connecter."
 
         };
 
     }
 
 
+    const withdrawAmount =
+        Number(
+            amount
+        );
+
+
     if (
-        numericAmount <= 0
+        !Number.isFinite(
+            withdrawAmount
+        ) ||
+        withdrawAmount <= 0
     ) {
 
         return {
 
-            success: false,
+            success:
+                false,
 
             message:
                 "Montant invalide."
@@ -1456,16 +1853,178 @@ function createInvestment({
 
 
     if (
-        Number(user.balance || 0) <
-        numericAmount
+        withdrawAmount >
+        Number(
+            user.balance ||
+            0
+        )
     ) {
 
         return {
 
-            success: false,
+            success:
+                false,
 
             message:
-                "Solde insuffisant pour cet investissement."
+                "Votre solde disponible est insuffisant."
+
+        };
+
+    }
+
+
+    const transaction = {
+
+        id:
+            generateId(
+                "WIT"
+            ),
+
+        type:
+            "withdraw",
+
+        amount:
+            withdrawAmount,
+
+        method:
+            method ||
+            "Mobile Money",
+
+        phone:
+            normalizePhone(
+                phone ||
+                user.phone
+            ),
+
+        status:
+            "pending",
+
+        createdAt:
+            new Date()
+                .toISOString()
+
+    };
+
+
+    if (
+        !Array.isArray(
+            user.transactions
+        )
+    ) {
+
+        user.transactions =
+            [];
+
+    }
+
+
+    user.transactions.unshift(
+        transaction
+    );
+
+
+    addNotification(
+        user,
+        "Retrait en attente",
+        "Votre demande de retrait est en cours d'examen."
+    );
+
+
+    updateUser(
+        user
+    );
+
+
+    return {
+
+        success:
+            true,
+
+        message:
+            "Votre demande de retrait a été envoyée.",
+
+        transaction:
+            transaction
+
+    };
+
+}
+
+
+/* =========================================================
+   INVESTISSEMENT
+========================================================= */
+
+function investInPack(
+    packId
+) {
+
+    const user =
+        getCurrentUser();
+
+
+    if (
+        !user
+    ) {
+
+        return {
+
+            success:
+                false,
+
+            message:
+                "Veuillez vous connecter."
+
+        };
+
+    }
+
+
+    const pack =
+        INVESTMENT_PACKS.find(
+            function (
+                item
+            ) {
+
+                return item.id ===
+                    packId;
+
+            }
+        );
+
+
+    if (
+        !pack
+    ) {
+
+        return {
+
+            success:
+                false,
+
+            message:
+                "Pack introuvable."
+
+        };
+
+    }
+
+
+    if (
+        Number(
+            user.balance ||
+            0
+        ) <
+        pack.amount
+    ) {
+
+        return {
+
+            success:
+                false,
+
+            message:
+                "Votre solde est insuffisant pour cet investissement."
 
         };
 
@@ -1473,100 +2032,119 @@ function createInvestment({
 
 
     user.balance =
-        Number(user.balance || 0) -
-        numericAmount;
+        Number(
+            user.balance
+        ) -
+        pack.amount;
 
 
     user.totalInvested =
-        Number(user.totalInvested || 0) +
-        numericAmount;
+        Number(
+            user.totalInvested ||
+            0
+        ) +
+        pack.amount;
 
 
-    updateUser(user);
+    const startDate =
+        new Date();
+
+
+    const endDate =
+        new Date(
+            startDate.getTime() +
+            (
+                pack.duration *
+                24 *
+                60 *
+                60 *
+                1000
+            )
+        );
 
 
     const investment = {
 
         id:
-            generateId("INV"),
+            generateId(
+                "INV"
+            ),
 
-        userId,
+        packId:
+            pack.id,
 
-        packName,
+        packName:
+            pack.name,
 
         amount:
-            numericAmount,
+            pack.amount,
 
-        dailyReturn:
-            Number(dailyReturn || 0),
+        dailyIncome:
+            pack.dailyIncome,
 
         duration:
-            Number(duration || 180),
+            pack.duration,
 
-        daysCompleted:
-            0,
+        image:
+            pack.image,
 
         status:
             "active",
 
-        houseImage,
-
-        createdAt:
-            getCurrentDate(),
+        startDate:
+            startDate.toISOString(),
 
         endDate:
-            new Date(
-                Date.now() +
-                Number(duration || 180) *
-                24 *
-                60 *
-                60 *
-                1000
-            ).toISOString()
+            endDate.toISOString(),
+
+        createdAt:
+            new Date()
+                .toISOString()
 
     };
 
 
-    const investments =
-        getInvestments();
+    if (
+        !Array.isArray(
+            user.investments
+        )
+    ) {
+
+        user.investments =
+            [];
+
+    }
 
 
-    investments.unshift(
+    user.investments.unshift(
         investment
     );
 
 
-    saveInvestments(
-        investments
+    addNotification(
+        user,
+        "Investissement activé",
+        "Votre investissement " +
+        pack.name +
+        " est maintenant actif."
     );
 
 
-    addTransaction({
-
-        userId,
-
-        type:
-            "investment",
-
-        amount:
-            numericAmount,
-
-        status:
-            "approved",
-
-        description:
-            "Investissement " +
-            packName
-
-    });
+    updateUser(
+        user
+    );
 
 
     return {
 
-        success: true,
+        success:
+            true,
 
         message:
-            "Investissement créé avec succès."
+            "Investissement activé avec succès.",
+
+        investment:
+            investment
 
     };
 
@@ -1574,326 +2152,127 @@ function createInvestment({
 
 
 /* =========================================================
-   PARRAINAGE
+   ASSISTANCE
 ========================================================= */
 
-function processReferralReward(
-    user,
-    firstDepositAmount
-) {
-
-    if (
-        !user.referredBy
-    ) {
-        return;
-    }
-
-
-    if (
-        user.referralRewardReceived
-    ) {
-        return;
-    }
-
-
-    const referrer =
-        findUserById(
-            user.referredBy
-        );
-
-
-    if (!referrer) {
-        return;
-    }
-
-
-    const reward =
-        Number(firstDepositAmount) *
-        0.10;
-
-
-    referrer.balance =
-        Number(referrer.balance || 0) +
-        reward;
-
-
-    updateUser(referrer);
-
-
-    user.referralRewardReceived =
-        true;
-
-
-    updateUser(user);
-
-
-    const rewards =
-        hyqdGet(
-            HYQD_CONFIG.REFERRAL_REWARDS_KEY,
-            []
-        );
-
-
-    rewards.unshift({
-
-        id:
-            generateId("REF"),
-
-        referrerId:
-            referrer.id,
-
-        referredUserId:
-            user.id,
-
-        amount:
-            reward,
-
-        createdAt:
-            getCurrentDate()
-
-    });
-
-
-    hyqdSet(
-        HYQD_CONFIG.REFERRAL_REWARDS_KEY,
-        rewards
-    );
-
-
-    addTransaction({
-
-        userId:
-            referrer.id,
-
-        type:
-            "referral",
-
-        amount:
-            reward,
-
-        status:
-            "approved",
-
-        description:
-            "Bonus de parrainage"
-
-    });
-
-}
-
-
-/* =========================================================
-   TRANSACTIONS
-========================================================= */
-
-function getTransactions() {
-
-    return hyqdGet(
-        HYQD_CONFIG.TRANSACTIONS_KEY,
-        []
-    );
-
-}
-
-
-function addTransaction({
-
-    userId,
-    type,
-    amount,
-    status,
-    description
-
-}) {
-
-    const transactions =
-        getTransactions();
-
-
-    transactions.unshift({
-
-        id:
-            generateId("TRX"),
-
-        userId,
-
-        type,
-
-        amount:
-            Number(amount || 0),
-
-        status,
-
-        description:
-            description || "",
-
-        createdAt:
-            getCurrentDate()
-
-    });
-
-
-    hyqdSet(
-        HYQD_CONFIG.TRANSACTIONS_KEY,
-        transactions
-    );
-
-}
-
-
-/* =========================================================
-   TICKETS ASSISTANCE
-========================================================= */
-
-function getTickets() {
-
-    return hyqdGet(
-        HYQD_CONFIG.TICKETS_KEY,
-        []
-    );
-
-}
-
-
-function saveTickets(
-    tickets
-) {
-
-    return hyqdSet(
-        HYQD_CONFIG.TICKETS_KEY,
-        tickets
-    );
-
-}
-
-
-function createTicket({
-
-    userId,
-
+function createTicket(
     subject,
-
     message
+) {
 
-}) {
+    const user =
+        getCurrentUser();
+
 
     if (
-        !subject ||
-        !message
+        !user
     ) {
 
         return {
 
-            success: false,
+            success:
+                false,
 
             message:
-                "Veuillez remplir tous les champs."
+                "Veuillez vous connecter."
 
         };
 
     }
 
 
-    const tickets =
-        getTickets();
+    const cleanSubject =
+        String(
+            subject ||
+            ""
+        )
+            .trim();
 
 
-    tickets.unshift({
+    const cleanMessage =
+        String(
+            message ||
+            ""
+        )
+            .trim();
+
+
+    if (
+        cleanSubject.length < 3 ||
+        cleanMessage.length < 3
+    ) {
+
+        return {
+
+            success:
+                false,
+
+            message:
+                "Veuillez remplir correctement votre demande."
+
+        };
+
+    }
+
+
+    const ticket = {
 
         id:
-            generateId("TICKET"),
+            generateId(
+                "TICKET"
+            ),
 
-        userId,
+        subject:
+            cleanSubject,
 
-        subject,
-
-        message,
-
-        reply:
-            "",
+        message:
+            cleanMessage,
 
         status:
             "open",
 
+        adminReply:
+            "",
+
         createdAt:
-            getCurrentDate(),
-
-        updatedAt:
-            getCurrentDate()
-
-    });
-
-
-    saveTickets(
-        tickets
-    );
-
-
-    return {
-
-        success: true,
-
-        message:
-            "Votre demande a été envoyée."
+            new Date()
+                .toISOString()
 
     };
 
-}
 
+    if (
+        !Array.isArray(
+            user.tickets
+        )
+    ) {
 
-function replyTicket(
-    ticketId,
-    reply
-) {
-
-    const tickets =
-        getTickets();
-
-
-    const ticket =
-        tickets.find(
-            item =>
-                item.id === ticketId
-        );
-
-
-    if (!ticket) {
-
-        return {
-
-            success: false,
-
-            message:
-                "Ticket introuvable."
-
-        };
+        user.tickets =
+            [];
 
     }
 
 
-    ticket.reply =
-        reply;
+    user.tickets.unshift(
+        ticket
+    );
 
 
-    ticket.status =
-        "answered";
-
-
-    ticket.updatedAt =
-        getCurrentDate();
-
-
-    saveTickets(
-        tickets
+    updateUser(
+        user
     );
 
 
     return {
 
-        success: true,
+        success:
+            true,
 
         message:
-            "Réponse envoyée."
+            "Votre demande a été envoyée.",
+
+        ticket:
+            ticket
 
     };
 
@@ -1904,195 +2283,791 @@ function replyTicket(
    ADMINISTRATION
 ========================================================= */
 
-function adminLogin(
+
+/* Authentification */
+
+function authenticateAdmin(
     code
 ) {
 
     if (
-        String(code).trim() ===
-        HYQD_CONFIG.ADMIN_CODE
+        String(
+            code
+        ).trim() !==
+        HYQD_CONFIG.adminCode
     ) {
-
-        sessionStorage.setItem(
-            HYQD_CONFIG.ADMIN_KEY,
-            "true"
-        );
-
 
         return {
 
-            success: true,
+            success:
+                false,
 
             message:
-                "Code administrateur accepté."
+                "Code administrateur incorrect."
 
         };
 
     }
 
 
+    const session = {
+
+        authenticated:
+            true,
+
+        createdAt:
+            new Date()
+                .toISOString()
+
+    };
+
+
+    localStorage.setItem(
+        STORAGE_KEYS.adminSession,
+        JSON.stringify(
+            session
+        )
+    );
+
+
     return {
 
-        success: false,
+        success:
+            true,
 
         message:
-            "Code administrateur incorrect."
+            "Accès administrateur autorisé."
 
     };
 
 }
 
 
+/* Vérifier admin */
+
 function isAdminAuthenticated() {
 
-    return (
-        sessionStorage.getItem(
-            HYQD_CONFIG.ADMIN_KEY
-        ) === "true"
-    );
+    try {
 
-}
+        const session =
+            JSON.parse(
+                localStorage.getItem(
+                    STORAGE_KEYS.adminSession
+                )
+            );
 
 
-function requireAdminAuth() {
+        return (
+            session &&
+            session.authenticated ===
+            true
+        );
 
-    if (
-        !isAdminAuthenticated()
+    }
+
+    catch (
+        error
     ) {
 
         return false;
 
     }
 
-    return true;
-
 }
 
+
+/* Déconnexion admin */
 
 function adminLogout() {
 
-    sessionStorage.removeItem(
-        HYQD_CONFIG.ADMIN_KEY
+    localStorage.removeItem(
+        STORAGE_KEYS.adminSession
     );
-
-    window.location.href =
-        "index.html";
 
 }
 
 
 /* =========================================================
-   NOTIFICATIONS
+   TRAITEMENT TRANSACTION ADMIN
 ========================================================= */
 
-function showToast(
-    message,
-    type = "info"
+function adminProcessTransaction(
+    userId,
+    transactionId,
+    action
 ) {
 
-    const oldToast =
-        document.querySelector(
-            ".hyqd-toast"
+    if (
+        !isAdminAuthenticated()
+    ) {
+
+        return {
+
+            success:
+                false,
+
+            message:
+                "Accès administrateur refusé."
+
+        };
+
+    }
+
+
+    const users =
+        getUsers();
+
+
+    const userIndex =
+        users.findIndex(
+            function (
+                user
+            ) {
+
+                return user.id ===
+                    userId;
+
+            }
         );
 
 
-    if (oldToast) {
+    if (
+        userIndex === -1
+    ) {
 
-        oldToast.remove();
+        return {
+
+            success:
+                false,
+
+            message:
+                "Utilisateur introuvable."
+
+        };
 
     }
 
 
-    const toast =
-        document.createElement("div");
+    const user =
+        users[
+            userIndex
+        ];
 
 
-    toast.className =
-        "hyqd-toast hyqd-toast-" +
-        type;
+    const transaction =
+        (
+            user.transactions ||
+            []
+        ).find(
+            function (
+                item
+            ) {
+
+                return item.id ===
+                    transactionId;
+
+            }
+        );
 
 
-    toast.innerHTML = `
+    if (
+        !transaction
+    ) {
 
-        <div class="hyqd-toast-content">
+        return {
 
-            <span>${escapeHtml(message)}</span>
+            success:
+                false,
 
-        </div>
+            message:
+                "Transaction introuvable."
 
-    `;
+        };
+
+    }
 
 
-    document.body.appendChild(
-        toast
+    if (
+        transaction.status !==
+        "pending"
+    ) {
+
+        return {
+
+            success:
+                false,
+
+            message:
+                "Cette transaction a déjà été traitée."
+
+        };
+
+    }
+
+
+    if (
+        action !==
+        "approved" &&
+        action !==
+        "rejected"
+    ) {
+
+        return {
+
+            success:
+                false,
+
+            message:
+                "Action invalide."
+
+        };
+
+    }
+
+
+    transaction.status =
+        action;
+
+
+    transaction.processedAt =
+        new Date()
+            .toISOString();
+
+
+    /* =====================================
+       DEPOT
+    ====================================== */
+
+    if (
+        transaction.type ===
+        "deposit" &&
+        action ===
+        "approved"
+    ) {
+
+
+        user.balance =
+            Number(
+                user.balance ||
+                0
+            ) +
+            Number(
+                transaction.amount
+            );
+
+
+        user.totalDeposits =
+            Number(
+                user.totalDeposits ||
+                0
+            ) +
+            Number(
+                transaction.amount
+            );
+
+
+        /* =================================
+           BONUS PARRAINAGE
+
+           Seulement sur le premier dépôt.
+        ================================== */
+
+        if (
+            user.firstDepositCompleted !==
+            true
+        ) {
+
+
+            user.firstDepositCompleted =
+                true;
+
+
+            if (
+                user.sponsorId
+            ) {
+
+
+                const sponsorIndex =
+                    users.findIndex(
+                        function (
+                            item
+                        ) {
+
+                            return item.id ===
+                                user.sponsorId;
+
+                        }
+                    );
+
+
+                if (
+                    sponsorIndex !==
+                    -1
+                ) {
+
+
+                    const sponsor =
+                        users[
+                            sponsorIndex
+                        ];
+
+
+                    const bonus =
+                        Number(
+                            transaction.amount
+                        ) *
+                        HYQD_CONFIG
+                            .referralBonus;
+
+
+                    sponsor.balance =
+                        Number(
+                            sponsor.balance ||
+                            0
+                        ) +
+                        bonus;
+
+
+                    sponsor.totalReferralBonus =
+                        Number(
+                            sponsor.totalReferralBonus ||
+                            0
+                        ) +
+                        bonus;
+
+
+                    if (
+                        !Array.isArray(
+                            sponsor.transactions
+                        )
+                    ) {
+
+                        sponsor.transactions =
+                            [];
+
+                    }
+
+
+                    sponsor.transactions.unshift(
+                        {
+
+                            id:
+                                generateId(
+                                    "REF"
+                                ),
+
+                            type:
+                                "referral_bonus",
+
+                            amount:
+                                bonus,
+
+                            sourceUserId:
+                                user.id,
+
+                            sourceUserName:
+                                user.name,
+
+                            status:
+                                "approved",
+
+                            createdAt:
+                                new Date()
+                                    .toISOString()
+
+                        }
+                    );
+
+
+                    addNotification(
+                        sponsor,
+                        "Bonus de parrainage",
+                        "Vous avez reçu " +
+                        formatFCFA(
+                            bonus
+                        ) +
+                        " grâce au premier dépôt de votre filleul."
+                    );
+
+
+                    users[
+                        sponsorIndex
+                    ] =
+                        sponsor;
+
+
+                }
+
+
+            }
+
+
+        }
+
+
+        addNotification(
+            user,
+            "Dépôt validé",
+            "Votre dépôt de " +
+            formatFCFA(
+                transaction.amount
+            ) +
+            " a été validé."
+        );
+
+
+    }
+
+
+    /* =====================================
+       RETRAIT
+    ====================================== */
+
+    if (
+        transaction.type ===
+        "withdraw" &&
+        action ===
+        "approved"
+    ) {
+
+
+        const amount =
+            Number(
+                transaction.amount
+            );
+
+
+        if (
+            Number(
+                user.balance ||
+                0
+            ) <
+            amount
+        ) {
+
+
+            transaction.status =
+                "pending";
+
+
+            return {
+
+                success:
+                    false,
+
+                message:
+                    "Solde utilisateur insuffisant."
+
+            };
+
+        }
+
+
+        user.balance =
+            Number(
+                user.balance
+            ) -
+            amount;
+
+
+        user.totalWithdrawals =
+            Number(
+                user.totalWithdrawals ||
+                0
+            ) +
+            amount;
+
+
+        addNotification(
+            user,
+            "Retrait validé",
+            "Votre retrait de " +
+            formatFCFA(
+                amount
+            ) +
+            " a été validé."
+        );
+
+
+    }
+
+
+    if (
+        action ===
+        "rejected"
+    ) {
+
+
+        addNotification(
+            user,
+            transaction.type ===
+            "deposit"
+
+                ? "Dépôt refusé"
+
+                : "Retrait refusé",
+
+            "Votre demande de transaction a été refusée."
+        );
+
+
+    }
+
+
+    users[
+        userIndex
+    ] =
+        user;
+
+
+    saveUsers(
+        users
     );
 
 
-    setTimeout(
-        () => {
-
-            toast.classList.add(
-                "show"
-            );
-
-        },
-        50
-    );
+    const currentUser =
+        getCurrentUser();
 
 
-    setTimeout(
-        () => {
+    if (
+        currentUser &&
+        currentUser.id ===
+        user.id
+    ) {
 
-            toast.classList.remove(
-                "show"
-            );
+        setCurrentUser(
+            user
+        );
+
+    }
 
 
-            setTimeout(
-                () => {
+    return {
 
-                    toast.remove();
+        success:
+            true,
 
-                },
-                300
-            );
+        message:
+            action ===
+            "approved"
 
-        },
-        4000
-    );
+                ? "Transaction validée."
+
+                : "Transaction refusée."
+
+    };
 
 }
 
 
 /* =========================================================
-   AFFICHAGE NUMÉRO MASQUÉ
+   REPONSE ADMIN TICKET
 ========================================================= */
 
-function maskPhone(
-    phone
+function adminReplyToTicket(
+    userId,
+    ticketId,
+    reply
 ) {
 
-    const value =
-        String(phone || "");
-
-
     if (
-        value.length <= 4
+        !isAdminAuthenticated()
     ) {
 
-        return "*****";
+        return {
+
+            success:
+                false,
+
+            message:
+                "Accès administrateur refusé."
+
+        };
 
     }
 
 
-    const lastFour =
-        value.slice(-4);
+    const users =
+        getUsers();
 
 
-    return (
-        "*****" +
-        lastFour
+    const userIndex =
+        users.findIndex(
+            function (
+                user
+            ) {
+
+                return user.id ===
+                    userId;
+
+            }
+        );
+
+
+    if (
+        userIndex === -1
+    ) {
+
+        return {
+
+            success:
+                false,
+
+            message:
+                "Utilisateur introuvable."
+
+        };
+
+    }
+
+
+    const user =
+        users[
+            userIndex
+        ];
+
+
+    const ticket =
+        (
+            user.tickets ||
+            []
+        ).find(
+            function (
+                item
+            ) {
+
+                return item.id ===
+                    ticketId;
+
+            }
+        );
+
+
+    if (
+        !ticket
+    ) {
+
+        return {
+
+            success:
+                false,
+
+            message:
+                "Ticket introuvable."
+
+        };
+
+    }
+
+
+    ticket.adminReply =
+        String(
+            reply
+        ).trim();
+
+
+    ticket.status =
+        "answered";
+
+
+    ticket.answeredAt =
+        new Date()
+            .toISOString();
+
+
+    addNotification(
+        user,
+        "Réponse de l'assistance",
+        "L'administration a répondu à votre demande : " +
+        ticket.subject
     );
+
+
+    users[
+        userIndex
+    ] =
+        user;
+
+
+    saveUsers(
+        users
+    );
+
+
+    const currentUser =
+        getCurrentUser();
+
+
+    if (
+        currentUser &&
+        currentUser.id ===
+        user.id
+    ) {
+
+        setCurrentUser(
+            user
+        );
+
+    }
+
+
+    return {
+
+        success:
+            true,
+
+        message:
+            "Réponse envoyée avec succès."
+
+    };
+
+}
+
+
+/* =========================================================
+   SECURISATION DES PAGES
+========================================================= */
+
+function protectDashboardPage() {
+
+    const currentPage =
+        window.location
+            .pathname
+            .split(
+                "/"
+            )
+            .pop()
+            .toLowerCase();
+
+
+    const protectedPages = [
+
+        "dashboard.html"
+
+    ];
+
+
+    if (
+        protectedPages.includes(
+            currentPage
+        )
+    ) {
+
+
+        if (
+            !isLoggedIn()
+        ) {
+
+
+            window.location.href =
+                "login.html";
+
+
+        }
+
+
+    }
+
 
 }
 
@@ -2105,9 +3080,9 @@ document.addEventListener(
     "DOMContentLoaded",
     function () {
 
-        console.log(
-            "Housing's YQD initialisé."
-        );
+
+        protectDashboardPage();
+
 
     }
 );
