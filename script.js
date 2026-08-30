@@ -1,16 +1,39 @@
+"use strict";
+
 /* =========================================================
-   HOUSING'S YQD — SCRIPT GLOBAL
-   Version synchronisée
+   HOUSING'S YQD
+   SCRIPT PRINCIPAL
+
+   Fonctionnalités :
+   - Inscription / connexion
+   - Sessions utilisateur
+   - Dépôts
+   - Retraits
+   - Investissements
+   - Gains quotidiens pendant 180 jours
+   - Parrainage
+   - Assistance
+   - Notifications
+   - Administration
 ========================================================= */
 
-"use strict";
+
+/* =========================================================
+   CONFIGURATION
+========================================================= */
 
 const HYQD_CONFIG = {
     APP_NAME: "Housing's YQD",
     ADMIN_CODE: "937854M",
     REFERRAL_RATE: 0.10,
-    INVESTMENT_DURATION: 180
+    INVESTMENT_DURATION: 180,
+    DAY_MS: 24 * 60 * 60 * 1000
 };
+
+
+/* =========================================================
+   CLÉS DE STOCKAGE
+========================================================= */
 
 const HYQD_KEYS = {
     USERS: "hyqd_users_v4",
@@ -21,70 +44,264 @@ const HYQD_KEYS = {
 
 
 /* =========================================================
-   OUTILS
+   GRILLE OFFICIELLE DES 8 PACKS
+========================================================= */
+
+const HYQD_INVESTMENT_PACKS = [
+
+    {
+        id: "starter",
+        name: "Starter",
+        amount: 3000,
+        dailyIncome: 700,
+        totalIncome: 126000,
+        duration: 180
+    },
+
+    {
+        id: "familial",
+        name: "Familial",
+        amount: 10000,
+        dailyIncome: 2250,
+        totalIncome: 405000,
+        duration: 180
+    },
+
+    {
+        id: "confort",
+        name: "Confort",
+        amount: 20000,
+        dailyIncome: 5300,
+        totalIncome: 954000,
+        duration: 180
+    },
+
+    {
+        id: "premium",
+        name: "Premium",
+        amount: 45000,
+        dailyIncome: 12571,
+        totalIncome: 2262780,
+        duration: 180
+    },
+
+    {
+        id: "prestige",
+        name: "Prestige",
+        amount: 100000,
+        dailyIncome: 28225,
+        totalIncome: 5080500,
+        duration: 180
+    },
+
+    {
+        id: "premium-plus",
+        name: "Premium Plus",
+        amount: 200000,
+        dailyIncome: 57000,
+        totalIncome: 10260000,
+        duration: 180
+    },
+
+    {
+        id: "elite",
+        name: "Elite",
+        amount: 400000,
+        dailyIncome: 114600,
+        totalIncome: 20628000,
+        duration: 180
+    },
+
+    {
+        id: "luxury",
+        name: "Luxury",
+        amount: 800000,
+        dailyIncome: 229900,
+        totalIncome: 41382000,
+        duration: 180
+    }
+
+];
+
+
+/* =========================================================
+   STOCKAGE
 ========================================================= */
 
 function hyqdGet(key, fallback = null) {
     try {
-        const value = localStorage.getItem(key);
-        return value ? JSON.parse(value) : fallback;
+        const raw = localStorage.getItem(key);
+
+        if (raw === null) {
+            return fallback;
+        }
+
+        return JSON.parse(raw);
+
     } catch (error) {
-        console.error(error);
+        console.error("Erreur lecture localStorage :", error);
         return fallback;
     }
 }
 
+
 function hyqdSet(key, value) {
-    localStorage.setItem(key, JSON.stringify(value));
+    try {
+        localStorage.setItem(
+            key,
+            JSON.stringify(value)
+        );
+
+        return true;
+
+    } catch (error) {
+        console.error("Erreur écriture localStorage :", error);
+        return false;
+    }
 }
 
-function generateId(prefix = "HYQD") {
+
+/* =========================================================
+   OUTILS
+========================================================= */
+
+function generateId(prefix = "id") {
     return (
         prefix +
         "_" +
-        Date.now() +
+        Date.now().toString(36) +
         "_" +
         Math.random().toString(36).slice(2, 10)
     );
 }
 
-function generateCode(length = 6) {
-    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-    let result = "";
 
-    for (let i = 0; i < length; i++) {
-        result += chars.charAt(
-            Math.floor(Math.random() * chars.length)
+function generateCode() {
+    const letters =
+        Math.random()
+            .toString(36)
+            .slice(2, 6)
+            .toUpperCase();
+
+    const numbers =
+        Math.floor(
+            1000 +
+            Math.random() * 9000
         );
-    }
 
-    return result;
+    return "YQD" + letters + numbers;
 }
+
 
 function normalizePhone(phone) {
-    let clean = String(phone || "").replace(/\D/g, "");
 
-    if (clean.startsWith("225")) {
-        clean = clean.slice(3);
+    let value =
+        String(phone || "")
+            .trim()
+            .replace(/\s+/g, "")
+            .replace(/[^\d+]/g, "");
+
+    if (value.startsWith("+225")) {
+        value = value.substring(4);
     }
 
-    return clean;
+    if (value.startsWith("00225")) {
+        value = value.substring(5);
+    }
+
+    return value.replace(/\D/g, "");
 }
 
+
 function formatFCFA(amount) {
+
     return (
-        Number(amount || 0).toLocaleString("fr-FR") +
+        new Intl.NumberFormat("fr-FR")
+            .format(Number(amount || 0)) +
         " FCFA"
     );
 }
 
+
 function escapeHtml(value) {
-    return String(value || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        String(value ?? "");
+
+    return div.innerHTML;
+}
+
+
+function safeNumber(value) {
+
+    const number =
+        Number(value);
+
+    return Number.isFinite(number)
+        ? number
+        : 0;
+}
+
+
+function cloneData(value) {
+
+    return JSON.parse(
+        JSON.stringify(value)
+    );
+}
+
+
+/* =========================================================
+   PACKS
+========================================================= */
+
+function getPackById(packId) {
+
+    return HYQD_INVESTMENT_PACKS.find(
+        pack =>
+            pack.id === packId
+    ) || null;
+}
+
+
+function getPackByAmount(amount) {
+
+    return HYQD_INVESTMENT_PACKS.find(
+        pack =>
+            Number(pack.amount) ===
+            Number(amount)
+    ) || null;
+}
+
+
+function getCanonicalPack(pack) {
+
+    if (!pack) {
+        return null;
+    }
+
+    if (typeof pack === "string") {
+        return getPackById(pack);
+    }
+
+    if (pack.id) {
+
+        const byId =
+            getPackById(pack.id);
+
+        if (byId) {
+            return byId;
+        }
+    }
+
+    if (pack.amount) {
+        return getPackByAmount(pack.amount);
+    }
+
+    return null;
 }
 
 
@@ -92,99 +309,68 @@ function escapeHtml(value) {
    UTILISATEURS
 ========================================================= */
 
-function getUsers() {
-    const users = hyqdGet(HYQD_KEYS.USERS, []);
-    return Array.isArray(users) ? users : [];
+function getUsersRaw() {
+
+    const users =
+        hyqdGet(
+            HYQD_KEYS.USERS,
+            []
+        );
+
+    return Array.isArray(users)
+        ? users
+        : [];
 }
+
 
 function saveUsers(users) {
-    hyqdSet(HYQD_KEYS.USERS, users);
+
+    return hyqdSet(
+        HYQD_KEYS.USERS,
+        users
+    );
 }
 
-function getCurrentUser() {
-    const sessionUser = hyqdGet(
-        HYQD_KEYS.CURRENT_USER,
-        null
-    );
 
-    if (!sessionUser || !sessionUser.id) {
+function findUserById(userId) {
+
+    return getUsersRaw().find(
+        user =>
+            user.id === userId
+    ) || null;
+}
+
+
+function findUserByPhone(phone) {
+
+    const normalized =
+        normalizePhone(phone);
+
+    return getUsersRaw().find(
+        user =>
+            normalizePhone(user.phone) ===
+            normalized
+    ) || null;
+}
+
+
+function findUserByReferralCode(code) {
+
+    const referral =
+        String(code || "")
+            .trim()
+            .toUpperCase();
+
+    if (!referral) {
         return null;
     }
 
-    const databaseUser = getUsers().find(
-        user => user.id === sessionUser.id
-    );
-
-    return databaseUser || null;
-}
-
-function setCurrentUser(user) {
-    if (!user) {
-        localStorage.removeItem(HYQD_KEYS.CURRENT_USER);
-        return;
-    }
-
-    hyqdSet(HYQD_KEYS.CURRENT_USER, {
-        id: user.id
-    });
-}
-
-function saveCurrentUser(user) {
-    if (!user) return false;
-
-    const result = updateUser(user);
-
-    if (result) {
-        setCurrentUser(user);
-    }
-
-    return result;
-}
-
-function findUserById(id) {
-    return getUsers().find(
-        user => user.id === id
-    ) || null;
-}
-
-function findUserByPhone(phone) {
-    const normalized = normalizePhone(phone);
-
-    return getUsers().find(
+    return getUsersRaw().find(
         user =>
-            normalizePhone(user.phone) === normalized
+            String(
+                user.referralCode || ""
+            ).toUpperCase() === referral
     ) || null;
-}
-
-function findUserByReferralCode(code) {
-    const normalized = String(code || "")
-        .trim()
-        .toUpperCase();
-
-    if (!normalized) return null;
-
-    return getUsers().find(
-        user =>
-            String(user.referralCode || "")
-                .toUpperCase() === normalized
-    ) || null;
-}
-
-function updateUser(updatedUser) {
-    const users = getUsers();
-
-    const index = users.findIndex(
-        user => user.id === updatedUser.id
-    );
-
-    if (index === -1) {
-        return false;
-    }
-
-    users[index] = updatedUser;
-    saveUsers(users);
-
-    return true;
 }
 
 
@@ -192,63 +378,80 @@ function updateUser(updatedUser) {
    INSCRIPTION
 ========================================================= */
 
-function registerUser(data, phoneArg, passwordArg, referralArg) {
+function registerUser(...args) {
 
-    /*
-       Compatibilité :
-       registerUser({...})
-
-       et ancienne forme :
-       registerUser(name, phone, password, referral)
-    */
-
-    let formData;
+    let data = {};
 
     if (
-        data &&
-        typeof data === "object" &&
-        !Array.isArray(data)
+        args.length === 1 &&
+        typeof args[0] === "object"
     ) {
-        formData = data;
+        data = args[0];
+
     } else {
-        formData = {
-            fullName: data,
-            phone: phoneArg,
-            password: passwordArg,
-            confirmPassword: passwordArg,
-            referralCode: referralArg
+        data = {
+
+            fullName:
+                args[0] || "",
+
+            phone:
+                args[1] || "",
+
+            password:
+                args[2] || "",
+
+            confirmPassword:
+                args[3] ||
+                args[2] ||
+                "",
+
+            referralCode:
+                args[4] || ""
         };
     }
 
-    const fullName = String(
-        formData.fullName ||
-        formData.name ||
-        ""
-    ).trim();
 
-    const phone = normalizePhone(
-        formData.phone
-    );
+    const fullName =
+        String(
+            data.fullName ||
+            data.name ||
+            ""
+        ).trim();
 
-    const password = String(
-        formData.password || ""
-    );
 
-    const confirmPassword = String(
-        formData.confirmPassword ||
-        formData.password ||
-        ""
-    );
+    const phone =
+        normalizePhone(
+            data.phone
+        );
 
-    const referralCode = String(
-        formData.referralCode ||
-        formData.invitationCode ||
-        ""
-    )
-        .trim()
-        .toUpperCase();
 
-    if (fullName.length < 3) {
+    const password =
+        String(
+            data.password || ""
+        );
+
+
+    const confirmPassword =
+        String(
+            data.confirmPassword ??
+            password
+        );
+
+
+    const referralCode =
+        String(
+            data.referralCode || ""
+        ).trim();
+
+
+    if (
+        fullName.length < 3 ||
+        fullName
+            .split(/\s+/)
+            .filter(Boolean)
+            .length < 2
+    ) {
+
         return {
             success: false,
             message:
@@ -256,23 +459,19 @@ function registerUser(data, phoneArg, passwordArg, referralArg) {
         };
     }
 
-    if (fullName.split(/\s+/).length < 2) {
-        return {
-            success: false,
-            message:
-                "Veuillez saisir votre nom et votre prénom."
-        };
-    }
 
     if (phone.length < 8) {
+
         return {
             success: false,
             message:
-                "Veuillez saisir un numéro de téléphone valide."
+                "Veuillez renseigner un numéro de téléphone valide."
         };
     }
 
+
     if (password.length < 6) {
+
         return {
             success: false,
             message:
@@ -280,15 +479,35 @@ function registerUser(data, phoneArg, passwordArg, referralArg) {
         };
     }
 
-    if (password !== confirmPassword) {
+
+    if (
+        password !==
+        confirmPassword
+    ) {
+
         return {
             success: false,
             message:
-                "Les deux mots de passe ne correspondent pas."
+                "Les mots de passe ne correspondent pas."
         };
     }
 
-    if (findUserByPhone(phone)) {
+
+    const users =
+        getUsersRaw();
+
+
+    const existing =
+        users.find(
+            user =>
+                normalizePhone(
+                    user.phone
+                ) === phone
+        );
+
+
+    if (existing) {
+
         return {
             success: false,
             message:
@@ -296,78 +515,135 @@ function registerUser(data, phoneArg, passwordArg, referralArg) {
         };
     }
 
+
     let sponsor = null;
 
+
     if (referralCode) {
-        sponsor = findUserByReferralCode(
-            referralCode
-        );
+
+        sponsor =
+            users.find(
+                user =>
+                    String(
+                        user.referralCode || ""
+                    ).toUpperCase() ===
+                    referralCode.toUpperCase()
+            );
+
 
         if (!sponsor) {
+
             return {
                 success: false,
                 message:
-                    "Le code d'invitation renseigné est invalide."
+                    "Le code de parrainage est invalide."
             };
         }
     }
 
-    let personalCode;
 
-    do {
-        personalCode =
-            "YQD" + generateCode(6);
-    } while (
-        findUserByReferralCode(personalCode)
-    );
+    let personalReferralCode =
+        generateCode();
 
-    const newUser = {
-        id: generateId("USER"),
+
+    while (
+        users.some(
+            user =>
+                user.referralCode ===
+                personalReferralCode
+        )
+    ) {
+        personalReferralCode =
+            generateCode();
+    }
+
+
+    const user = {
+
+        id:
+            generateId("user"),
+
         fullName,
-        name: fullName,
+
+        name:
+            fullName,
+
         phone,
+
         password,
 
-        balance: 0,
-        totalDeposited: 0,
-        totalWithdrawn: 0,
-        totalInvested: 0,
-        totalReferralBonus: 0,
+        balance:
+            0,
 
-        referralCode: personalCode,
+        totalDeposited:
+            0,
 
-        referredBy: sponsor
-            ? sponsor.referralCode
-            : null,
+        totalWithdrawn:
+            0,
 
-        sponsorId: sponsor
-            ? sponsor.id
-            : null,
+        totalInvested:
+            0,
 
-        firstDepositCompleted: false,
+        totalInvestmentIncome:
+            0,
 
-        transactions: [],
-        investments: [],
-        tickets: [],
-        notifications: [],
+        totalReferralBonus:
+            0,
 
-        status: "active",
+        referralCode:
+            personalReferralCode,
+
+        referredBy:
+            sponsor
+                ? sponsor.referralCode
+                : "",
+
+        sponsorId:
+            sponsor
+                ? sponsor.id
+                : null,
+
+        firstDepositCompleted:
+            false,
+
+        transactions:
+            [],
+
+        investments:
+            [],
+
+        tickets:
+            [],
+
+        notifications:
+            [],
+
+        status:
+            "active",
 
         createdAt:
             new Date().toISOString()
+
     };
 
-    const users = getUsers();
 
-    users.push(newUser);
+    users.unshift(user);
+
     saveUsers(users);
-    setCurrentUser(newUser);
+
+
+    hyqdSet(
+        HYQD_KEYS.CURRENT_USER,
+        user.id
+    );
+
 
     return {
         success: true,
         message:
-            "Inscription réussie. Bienvenue sur Housing's YQD.",
-        user: newUser
+            "Inscription réussie.",
+        user:
+            cloneData(user)
     };
 }
 
@@ -377,17 +653,39 @@ function registerUser(data, phoneArg, passwordArg, referralArg) {
 ========================================================= */
 
 function loginUser(phone, password) {
-    const user = findUserByPhone(phone);
+
+    const normalized =
+        normalizePhone(phone);
+
+
+    const users =
+        getUsersRaw();
+
+
+    const user =
+        users.find(
+            item =>
+                normalizePhone(
+                    item.phone
+                ) === normalized
+        );
+
 
     if (!user) {
+
         return {
             success: false,
             message:
-                "Aucun compte n'est associé à ce numéro."
+                "Compte introuvable."
         };
     }
 
-    if (String(user.password) !== String(password)) {
+
+    if (
+        String(user.password) !==
+        String(password)
+    ) {
+
         return {
             success: false,
             message:
@@ -395,52 +693,795 @@ function loginUser(phone, password) {
         };
     }
 
-    setCurrentUser(user);
+
+    if (
+        user.status ===
+        "blocked"
+    ) {
+
+        return {
+            success: false,
+            message:
+                "Ce compte est actuellement bloqué."
+        };
+    }
+
+
+    hyqdSet(
+        HYQD_KEYS.CURRENT_USER,
+        user.id
+    );
+
+
+    processInvestmentGainsForUser(
+        user.id
+    );
+
 
     return {
         success: true,
         message:
             "Connexion réussie.",
-        user
+        user:
+            getCurrentUser()
     };
 }
 
+
 function logoutUser() {
+
     localStorage.removeItem(
         HYQD_KEYS.CURRENT_USER
     );
+
+    return true;
 }
 
-function requireAuth() {
-    const user = getCurrentUser();
 
-    if (!user) {
-        window.location.href =
-            "login.html";
+/* =========================================================
+   SESSION UTILISATEUR
+========================================================= */
+
+function getCurrentUserId() {
+
+    return hyqdGet(
+        HYQD_KEYS.CURRENT_USER,
+        null
+    );
+}
+
+
+function getCurrentUser() {
+
+    const userId =
+        getCurrentUserId();
+
+
+    if (!userId) {
         return null;
     }
+
+
+    processInvestmentGainsForUser(
+        userId
+    );
+
+
+    const users =
+        getUsersRaw();
+
+
+    const user =
+        users.find(
+            item =>
+                item.id === userId
+        );
+
+
+    return user
+        ? cloneData(user)
+        : null;
+}
+
+
+function requireAuth() {
+
+    const user =
+        getCurrentUser();
+
+
+    if (!user) {
+
+        if (
+            typeof window !==
+            "undefined"
+        ) {
+
+            window.location.replace(
+                "login.html"
+            );
+        }
+
+        return null;
+    }
+
 
     return user;
 }
 
 
 /* =========================================================
-   NOTIFICATIONS
+   GAINS QUOTIDIENS
 ========================================================= */
 
-function addNotification(user, title, message) {
-    if (!Array.isArray(user.notifications)) {
+function processInvestmentGainsForUser(userId) {
+
+    if (!userId) {
+        return;
+    }
+
+
+    const users =
+        getUsersRaw();
+
+
+    const userIndex =
+        users.findIndex(
+            user =>
+                user.id === userId
+        );
+
+
+    if (userIndex < 0) {
+        return;
+    }
+
+
+    const user =
+        users[userIndex];
+
+
+    if (
+        !Array.isArray(
+            user.investments
+        ) ||
+        !user.investments.length
+    ) {
+        return;
+    }
+
+
+    if (
+        !Array.isArray(
+            user.transactions
+        )
+    ) {
+        user.transactions = [];
+    }
+
+
+    if (
+        !Array.isArray(
+            user.notifications
+        )
+    ) {
         user.notifications = [];
     }
 
-    user.notifications.unshift({
-        id: generateId("NOTIFICATION"),
-        title,
-        message,
-        read: false,
+
+    let changed = false;
+
+    const now =
+        Date.now();
+
+
+    user.investments.forEach(
+        investment => {
+
+
+            if (!investment) {
+                return;
+            }
+
+
+            const canonicalPack =
+                getPackById(
+                    investment.packId
+                ) ||
+                getPackByAmount(
+                    investment.amount
+                );
+
+
+            if (!canonicalPack) {
+                return;
+            }
+
+
+            if (
+                !investment.dailyIncome
+            ) {
+
+                investment.dailyIncome =
+                    canonicalPack.dailyIncome;
+
+                changed = true;
+            }
+
+
+            if (
+                !investment.totalIncome
+            ) {
+
+                investment.totalIncome =
+                    canonicalPack.totalIncome;
+
+                changed = true;
+            }
+
+
+            if (
+                !investment.duration
+            ) {
+
+                investment.duration =
+                    canonicalPack.duration;
+
+                changed = true;
+            }
+
+
+            if (
+                typeof investment.creditedDays !==
+                "number"
+            ) {
+
+                investment.creditedDays =
+                    0;
+
+                changed = true;
+            }
+
+
+            if (
+                typeof investment.totalIncomeCredited !==
+                "number"
+            ) {
+
+                investment.totalIncomeCredited =
+                    investment.creditedDays *
+                    Number(
+                        investment.dailyIncome ||
+                        0
+                    );
+
+                changed = true;
+            }
+
+
+            if (
+                investment.status ===
+                "completed"
+            ) {
+                return;
+            }
+
+
+            if (
+                investment.status &&
+                investment.status !==
+                "active"
+            ) {
+                return;
+            }
+
+
+            const start =
+                new Date(
+                    investment.startDate ||
+                    investment.createdAt
+                ).getTime();
+
+
+            if (
+                !Number.isFinite(start)
+            ) {
+                return;
+            }
+
+
+            const duration =
+                Number(
+                    investment.duration ||
+                    canonicalPack.duration ||
+                    HYQD_CONFIG
+                        .INVESTMENT_DURATION
+                );
+
+
+            const dailyIncome =
+                Number(
+                    investment.dailyIncome ||
+                    canonicalPack.dailyIncome ||
+                    0
+                );
+
+
+            if (
+                dailyIncome <= 0 ||
+                duration <= 0
+            ) {
+                return;
+            }
+
+
+            const elapsedFullDays =
+                Math.floor(
+                    Math.max(
+                        0,
+                        now - start
+                    ) /
+                    HYQD_CONFIG.DAY_MS
+                );
+
+
+            const payableDays =
+                Math.min(
+                    duration,
+                    elapsedFullDays
+                );
+
+
+            const creditedDays =
+                Math.max(
+                    0,
+                    Number(
+                        investment.creditedDays ||
+                        0
+                    )
+                );
+
+
+            const dueDays =
+                payableDays -
+                creditedDays;
+
+
+            if (dueDays <= 0) {
+
+                if (
+                    creditedDays >= duration &&
+                    investment.status !==
+                    "completed"
+                ) {
+
+                    investment.status =
+                        "completed";
+
+                    investment.completedAt =
+                        investment.completedAt ||
+                        new Date(
+                            start +
+                            duration *
+                            HYQD_CONFIG.DAY_MS
+                        ).toISOString();
+
+                    changed = true;
+                }
+
+                return;
+            }
+
+
+            for (
+                let day =
+                    creditedDays + 1;
+
+                day <= payableDays;
+
+                day++
+            ) {
+
+                const payoutDate =
+                    new Date(
+                        start +
+                        day *
+                        HYQD_CONFIG.DAY_MS
+                    ).toISOString();
+
+
+                user.balance =
+                    safeNumber(
+                        user.balance
+                    ) +
+                    dailyIncome;
+
+
+                user.totalInvestmentIncome =
+                    safeNumber(
+                        user.totalInvestmentIncome
+                    ) +
+                    dailyIncome;
+
+
+                investment.totalIncomeCredited =
+                    safeNumber(
+                        investment.totalIncomeCredited
+                    ) +
+                    dailyIncome;
+
+
+                investment.creditedDays =
+                    day;
+
+
+                investment.lastPayoutAt =
+                    payoutDate;
+
+
+                user.transactions.unshift({
+
+                    id:
+                        generateId("gain"),
+
+                    type:
+                        "daily_gain",
+
+                    amount:
+                        dailyIncome,
+
+                    status:
+                        "approved",
+
+                    investmentId:
+                        investment.id,
+
+                    packId:
+                        investment.packId,
+
+                    packName:
+                        investment.packName,
+
+                    payoutDay:
+                        day,
+
+                    description:
+                        "Gain journalier - jour " +
+                        day +
+                        "/" +
+                        duration,
+
+                    createdAt:
+                        payoutDate,
+
+                    processedAt:
+                        payoutDate
+
+                });
+
+
+                user.notifications.unshift({
+
+                    id:
+                        generateId(
+                            "notification"
+                        ),
+
+                    type:
+                        "daily_gain",
+
+                    title:
+                        "Gain journalier crédité",
+
+                    message:
+                        formatFCFA(
+                            dailyIncome
+                        ) +
+                        " ont été ajoutés à votre solde pour le pack " +
+                        (
+                            investment.packName ||
+                            canonicalPack.name
+                        ) +
+                        ".",
+
+                    read:
+                        false,
+
+                    createdAt:
+                        payoutDate
+
+                });
+
+            }
+
+
+            if (
+                investment.creditedDays >=
+                duration
+            ) {
+
+                investment.status =
+                    "completed";
+
+
+                investment.completedAt =
+                    new Date(
+                        start +
+                        duration *
+                        HYQD_CONFIG.DAY_MS
+                    ).toISOString();
+
+            }
+
+
+            changed = true;
+
+        }
+    );
+
+
+    if (changed) {
+
+        users[userIndex] =
+            user;
+
+        saveUsers(users);
+    }
+}
+
+
+function processAllInvestmentGains() {
+
+    const users =
+        getUsersRaw();
+
+
+    users.forEach(
+        user => {
+
+            processInvestmentGainsForUser(
+                user.id
+            );
+
+        }
+    );
+}
+
+
+/* =========================================================
+   INVESTISSEMENT
+========================================================= */
+
+function investInPack(packInput) {
+
+    const currentUserId =
+        getCurrentUserId();
+
+
+    if (!currentUserId) {
+
+        return {
+            success: false,
+            message:
+                "Vous devez être connecté."
+        };
+    }
+
+
+    const pack =
+        getCanonicalPack(
+            packInput
+        );
+
+
+    if (!pack) {
+
+        return {
+            success: false,
+            message:
+                "Ce pack d'investissement est invalide."
+        };
+    }
+
+
+    const users =
+        getUsersRaw();
+
+
+    const userIndex =
+        users.findIndex(
+            user =>
+                user.id ===
+                currentUserId
+        );
+
+
+    if (userIndex < 0) {
+
+        return {
+            success: false,
+            message:
+                "Utilisateur introuvable."
+        };
+    }
+
+
+    const user =
+        users[userIndex];
+
+
+    const amount =
+        Number(pack.amount);
+
+
+    if (
+        safeNumber(
+            user.balance
+        ) < amount
+    ) {
+
+        return {
+            success: false,
+            message:
+                "Votre solde est insuffisant pour activer ce pack."
+        };
+    }
+
+
+    const now =
+        new Date();
+
+
+    const end =
+        new Date(
+            now.getTime() +
+            pack.duration *
+            HYQD_CONFIG.DAY_MS
+        );
+
+
+    const investment = {
+
+        id:
+            generateId(
+                "investment"
+            ),
+
+        packId:
+            pack.id,
+
+        packName:
+            pack.name,
+
+        amount:
+            pack.amount,
+
+        dailyIncome:
+            pack.dailyIncome,
+
+        totalIncome:
+            pack.totalIncome,
+
+        duration:
+            pack.duration,
+
+        creditedDays:
+            0,
+
+        totalIncomeCredited:
+            0,
+
+        lastPayoutAt:
+            null,
+
+        status:
+            "active",
+
+        startDate:
+            now.toISOString(),
+
+        endDate:
+            end.toISOString(),
+
         createdAt:
-            new Date().toISOString()
+            now.toISOString(),
+
+        completedAt:
+            null
+
+    };
+
+
+    user.balance =
+        safeNumber(
+            user.balance
+        ) -
+        amount;
+
+
+    user.totalInvested =
+        safeNumber(
+            user.totalInvested
+        ) +
+        amount;
+
+
+    if (
+        !Array.isArray(
+            user.investments
+        )
+    ) {
+        user.investments = [];
+    }
+
+
+    user.investments.unshift(
+        investment
+    );
+
+
+    if (
+        !Array.isArray(
+            user.transactions
+        )
+    ) {
+        user.transactions = [];
+    }
+
+
+    user.transactions.unshift({
+
+        id:
+            generateId(
+                "investment_tx"
+            ),
+
+        type:
+            "investment",
+
+        amount,
+
+        status:
+            "approved",
+
+        investmentId:
+            investment.id,
+
+        packId:
+            pack.id,
+
+        packName:
+            pack.name,
+
+        description:
+            "Activation du pack " +
+            pack.name,
+
+        createdAt:
+            now.toISOString(),
+
+        processedAt:
+            now.toISOString()
+
     });
+
+
+    users[userIndex] =
+        user;
+
+
+    saveUsers(users);
+
+
+    return {
+        success: true,
+        message:
+            "Investissement activé avec succès.",
+        investment:
+            cloneData(
+                investment
+            )
+    };
 }
 
 
@@ -448,11 +1489,169 @@ function addNotification(user, title, message) {
    DÉPÔTS
 ========================================================= */
 
+function requestDeposit(
+    amount,
+    method,
+    reference
+) {
+
+    const userId =
+        getCurrentUserId();
+
+
+    if (!userId) {
+
+        return {
+            success: false,
+            message:
+                "Vous devez être connecté."
+        };
+    }
+
+
+    const value =
+        Number(amount);
+
+
+    if (
+        !Number.isFinite(value) ||
+        value < 1000
+    ) {
+
+        return {
+            success: false,
+            message:
+                "Le montant minimum de dépôt est de 1 000 FCFA."
+        };
+    }
+
+
+    const paymentMethod =
+        String(method || "")
+            .trim();
+
+
+    if (!paymentMethod) {
+
+        return {
+            success: false,
+            message:
+                "Veuillez sélectionner le moyen de paiement."
+        };
+    }
+
+
+    const paymentReference =
+        String(reference || "")
+            .trim();
+
+
+    if (!paymentReference) {
+
+        return {
+            success: false,
+            message:
+                "Veuillez renseigner la référence de transaction."
+        };
+    }
+
+
+    const users =
+        getUsersRaw();
+
+
+    const userIndex =
+        users.findIndex(
+            user =>
+                user.id === userId
+        );
+
+
+    if (userIndex < 0) {
+
+        return {
+            success: false,
+            message:
+                "Utilisateur introuvable."
+        };
+    }
+
+
+    const user =
+        users[userIndex];
+
+
+    if (
+        !Array.isArray(
+            user.transactions
+        )
+    ) {
+        user.transactions = [];
+    }
+
+
+    const transaction = {
+
+        id:
+            generateId(
+                "deposit"
+            ),
+
+        type:
+            "deposit",
+
+        amount:
+            value,
+
+        method:
+            paymentMethod,
+
+        reference:
+            paymentReference,
+
+        status:
+            "pending",
+
+        createdAt:
+            new Date()
+                .toISOString(),
+
+        processedAt:
+            null
+
+    };
+
+
+    user.transactions.unshift(
+        transaction
+    );
+
+
+    users[userIndex] =
+        user;
+
+
+    saveUsers(users);
+
+
+    return {
+        success: true,
+        message:
+            "Votre demande de dépôt a été envoyée et attend la validation de l'administration.",
+        transaction:
+            cloneData(
+                transaction
+            )
+    };
+}
+
+
 function createDepositRequest(
     amount,
     method,
     reference
 ) {
+
     return requestDeposit(
         amount,
         method,
@@ -460,99 +1659,219 @@ function createDepositRequest(
     );
 }
 
-function requestDeposit(
+
+/* =========================================================
+   RETRAITS
+========================================================= */
+
+function requestWithdrawal(
     amount,
     method,
-    reference
+    phone
 ) {
-    const user = getCurrentUser();
 
-    if (!user) {
+    const userId =
+        getCurrentUserId();
+
+
+    if (!userId) {
+
         return {
             success: false,
             message:
-                "Votre session a expiré."
+                "Vous devez être connecté."
         };
     }
 
-    const value = Number(amount);
+
+    processInvestmentGainsForUser(
+        userId
+    );
+
+
+    const users =
+        getUsersRaw();
+
+
+    const userIndex =
+        users.findIndex(
+            user =>
+                user.id === userId
+        );
+
+
+    if (userIndex < 0) {
+
+        return {
+            success: false,
+            message:
+                "Utilisateur introuvable."
+        };
+    }
+
+
+    const user =
+        users[userIndex];
+
+
+    const value =
+        Number(amount);
+
 
     if (
         !Number.isFinite(value) ||
         value < 1000
     ) {
+
         return {
             success: false,
             message:
-                "Le montant minimum est de 1 000 FCFA."
+                "Le montant minimum de retrait est de 1 000 FCFA."
         };
     }
 
-    if (!method) {
+
+    const paymentMethod =
+        String(method || "")
+            .trim();
+
+
+    if (!paymentMethod) {
+
         return {
             success: false,
             message:
-                "Veuillez sélectionner la méthode de dépôt."
+                "Veuillez sélectionner le moyen de paiement."
         };
     }
 
-    if (!String(reference || "").trim()) {
+
+    const receivePhone =
+        normalizePhone(phone);
+
+
+    if (
+        receivePhone.length < 8
+    ) {
+
         return {
             success: false,
             message:
-                "Veuillez saisir la référence de transaction."
+                "Veuillez renseigner un numéro de réception valide."
         };
     }
+
+
+    if (
+        !Array.isArray(
+            user.transactions
+        )
+    ) {
+        user.transactions = [];
+    }
+
+
+    const pendingWithdrawals =
+        user.transactions
+            .filter(
+                transaction =>
+                    transaction.type ===
+                        "withdraw" &&
+                    transaction.status ===
+                        "pending"
+            )
+            .reduce(
+                (total, transaction) =>
+                    total +
+                    safeNumber(
+                        transaction.amount
+                    ),
+                0
+            );
+
+
+    const availableForWithdrawal =
+        safeNumber(
+            user.balance
+        ) -
+        pendingWithdrawals;
+
+
+    if (
+        value >
+        availableForWithdrawal
+    ) {
+
+        return {
+            success: false,
+            message:
+                "Solde disponible insuffisant en tenant compte de vos retraits déjà en attente."
+        };
+    }
+
 
     const transaction = {
-        id: generateId("DEP"),
-        type: "deposit",
-        amount: value,
-        method,
-        reference:
-            String(reference).trim(),
-        status: "pending",
+
+        id:
+            generateId(
+                "withdraw"
+            ),
+
+        type:
+            "withdraw",
+
+        amount:
+            value,
+
+        method:
+            paymentMethod,
+
+        phone:
+            receivePhone,
+
+        status:
+            "pending",
+
         createdAt:
-            new Date().toISOString()
+            new Date()
+                .toISOString(),
+
+        processedAt:
+            null
+
     };
 
-    user.transactions =
-        Array.isArray(user.transactions)
-            ? user.transactions
-            : [];
 
     user.transactions.unshift(
         transaction
     );
 
-    addNotification(
-        user,
-        "Demande de dépôt",
-        "Votre dépôt de " +
-        formatFCFA(value) +
-        " est en attente de validation."
-    );
 
-    updateUser(user);
+    users[userIndex] =
+        user;
+
+
+    saveUsers(users);
+
 
     return {
         success: true,
         message:
-            "Demande de dépôt envoyée. Elle doit maintenant être validée par l'administration.",
-        transaction
+            "Votre demande de retrait a été envoyée et attend la validation de l'administration.",
+        transaction:
+            cloneData(
+                transaction
+            )
     };
 }
 
-
-/* =========================================================
-   RETRAITS
-========================================================= */
 
 function createWithdrawRequest(
     amount,
     method,
     phone
 ) {
+
     return requestWithdrawal(
         amount,
         method,
@@ -560,256 +1879,203 @@ function createWithdrawRequest(
     );
 }
 
-function requestWithdrawal(
-    amount,
-    method,
-    phone
-) {
-    const user = getCurrentUser();
-
-    if (!user) {
-        return {
-            success: false,
-            message:
-                "Votre session a expiré."
-        };
-    }
-
-    const value = Number(amount);
-
-    if (
-        !Number.isFinite(value) ||
-        value < 1000
-    ) {
-        return {
-            success: false,
-            message:
-                "Veuillez saisir un montant valide."
-        };
-    }
-
-    if (value > Number(user.balance || 0)) {
-        return {
-            success: false,
-            message:
-                "Votre solde disponible est insuffisant."
-        };
-    }
-
-    if (!method) {
-        return {
-            success: false,
-            message:
-                "Veuillez sélectionner la méthode de retrait."
-        };
-    }
-
-    const transaction = {
-        id: generateId("WITHDRAW"),
-        type: "withdraw",
-        amount: value,
-        method,
-        phone: normalizePhone(
-            phone || user.phone
-        ),
-        status: "pending",
-        createdAt:
-            new Date().toISOString()
-    };
-
-    user.transactions =
-        Array.isArray(user.transactions)
-            ? user.transactions
-            : [];
-
-    user.transactions.unshift(
-        transaction
-    );
-
-    addNotification(
-        user,
-        "Demande de retrait",
-        "Votre retrait est en attente de validation."
-    );
-
-    updateUser(user);
-
-    return {
-        success: true,
-        message:
-            "Votre demande de retrait a été envoyée.",
-        transaction
-    };
-}
-
-
-/* =========================================================
-   INVESTISSEMENTS
-========================================================= */
-
-function investInPack(pack) {
-    const user = getCurrentUser();
-
-    if (!user) {
-        return {
-            success: false,
-            message:
-                "Veuillez vous reconnecter."
-        };
-    }
-
-    if (!pack || !pack.amount) {
-        return {
-            success: false,
-            message:
-                "Pack d'investissement invalide."
-        };
-    }
-
-    const amount = Number(pack.amount);
-
-    if (
-        Number(user.balance || 0) < amount
-    ) {
-        return {
-            success: false,
-            message:
-                "Votre solde est insuffisant pour ce pack."
-        };
-    }
-
-    const startDate = new Date();
-
-    const endDate = new Date(
-        startDate.getTime() +
-        HYQD_CONFIG.INVESTMENT_DURATION *
-        24 * 60 * 60 * 1000
-    );
-
-    const investment = {
-        id: generateId("INVEST"),
-        packId:
-            pack.id || generateId("PACK"),
-        packName:
-            pack.name || "Pack Housing's YQD",
-        amount,
-        duration:
-            HYQD_CONFIG.INVESTMENT_DURATION,
-        image:
-            pack.image || "",
-        status: "active",
-        createdAt:
-            startDate.toISOString(),
-        startDate:
-            startDate.toISOString(),
-        endDate:
-            endDate.toISOString()
-    };
-
-    user.balance =
-        Number(user.balance || 0) -
-        amount;
-
-    user.totalInvested =
-        Number(user.totalInvested || 0) +
-        amount;
-
-    user.investments =
-        Array.isArray(user.investments)
-            ? user.investments
-            : [];
-
-    user.investments.unshift(
-        investment
-    );
-
-    addNotification(
-        user,
-        "Investissement activé",
-        investment.packName +
-        " a été activé."
-    );
-
-    updateUser(user);
-
-    return {
-        success: true,
-        message:
-            "Votre investissement a été activé avec succès.",
-        investment
-    };
-}
-
 
 /* =========================================================
    ASSISTANCE
 ========================================================= */
 
+function createTicket(
+    subject,
+    message
+) {
+
+    const userId =
+        getCurrentUserId();
+
+
+    if (!userId) {
+
+        return {
+            success: false,
+            message:
+                "Vous devez être connecté."
+        };
+    }
+
+
+    const cleanSubject =
+        String(subject || "")
+            .trim();
+
+
+    const cleanMessage =
+        String(message || "")
+            .trim();
+
+
+    if (
+        cleanSubject.length < 2
+    ) {
+
+        return {
+            success: false,
+            message:
+                "Veuillez renseigner le sujet de votre demande."
+        };
+    }
+
+
+    if (
+        cleanMessage.length < 5
+    ) {
+
+        return {
+            success: false,
+            message:
+                "Veuillez détailler votre demande."
+        };
+    }
+
+
+    const users =
+        getUsersRaw();
+
+
+    const userIndex =
+        users.findIndex(
+            user =>
+                user.id === userId
+        );
+
+
+    if (userIndex < 0) {
+
+        return {
+            success: false,
+            message:
+                "Utilisateur introuvable."
+        };
+    }
+
+
+    const user =
+        users[userIndex];
+
+
+    if (
+        !Array.isArray(
+            user.tickets
+        )
+    ) {
+        user.tickets = [];
+    }
+
+
+    const ticket = {
+
+        id:
+            generateId(
+                "ticket"
+            ),
+
+        subject:
+            cleanSubject,
+
+        message:
+            cleanMessage,
+
+        status:
+            "open",
+
+        adminReply:
+            "",
+
+        createdAt:
+            new Date()
+                .toISOString(),
+
+        repliedAt:
+            null
+
+    };
+
+
+    user.tickets.unshift(
+        ticket
+    );
+
+
+    users[userIndex] =
+        user;
+
+
+    saveUsers(users);
+
+
+    return {
+        success: true,
+        message:
+            "Votre demande a été envoyée à l'assistance.",
+        ticket:
+            cloneData(ticket)
+    };
+}
+
+
 function createSupportTicket(
     subject,
     message
 ) {
+
     return createTicket(
         subject,
         message
     );
 }
 
-function createTicket(
-    subject,
-    message
-) {
-    const user = getCurrentUser();
 
-    if (!user) {
-        return {
-            success: false,
-            message:
-                "Veuillez vous reconnecter."
-        };
-    }
+/* =========================================================
+   MOT DE PASSE OUBLIÉ
+========================================================= */
 
-    const cleanSubject =
-        String(subject || "").trim();
+function requestPasswordReset(phone) {
 
-    const cleanMessage =
-        String(message || "").trim();
+    const normalized =
+        normalizePhone(phone);
+
 
     if (
-        cleanSubject.length < 3 ||
-        cleanMessage.length < 3
+        normalized.length < 8
     ) {
+
         return {
             success: false,
             message:
-                "Veuillez renseigner correctement votre demande."
+                "Veuillez renseigner un numéro valide."
         };
     }
 
-    const ticket = {
-        id: generateId("TICKET"),
-        subject: cleanSubject,
-        message: cleanMessage,
-        status: "open",
-        adminReply: "",
-        createdAt:
-            new Date().toISOString()
-    };
 
-    user.tickets =
-        Array.isArray(user.tickets)
-            ? user.tickets
-            : [];
+    const user =
+        findUserByPhone(
+            normalized
+        );
 
-    user.tickets.unshift(ticket);
 
-    updateUser(user);
+    if (!user) {
+
+        return {
+            success: false,
+            message:
+                "Aucun compte n'est associé à ce numéro."
+        };
+    }
+
 
     return {
         success: true,
         message:
-            "Votre demande d'assistance a été envoyée.",
-        ticket
+            "Compte identifié. La réinitialisation sécurisée du mot de passe sera reliée au service d'authentification."
     };
 }
 
@@ -818,15 +2084,28 @@ function createTicket(
    ADMIN
 ========================================================= */
 
-function authenticateAdmin(code) {
-    return adminLogin(code);
-}
-
 function adminLogin(code) {
+
+    const inputCode =
+        String(code || "")
+            .trim();
+
+
+    if (!inputCode) {
+
+        return {
+            success: false,
+            message:
+                "Veuillez saisir le code administrateur."
+        };
+    }
+
+
     if (
-        String(code || "").trim() !==
+        inputCode !==
         HYQD_CONFIG.ADMIN_CODE
     ) {
+
         return {
             success: false,
             message:
@@ -834,10 +2113,15 @@ function adminLogin(code) {
         };
     }
 
+
     sessionStorage.setItem(
         HYQD_KEYS.ADMIN_SESSION,
         "authenticated"
     );
+
+
+    processAllInvestmentGains();
+
 
     return {
         success: true,
@@ -846,7 +2130,15 @@ function adminLogin(code) {
     };
 }
 
+
+function authenticateAdmin(code) {
+
+    return adminLogin(code);
+}
+
+
 function isAdminAuthenticated() {
+
     return (
         sessionStorage.getItem(
             HYQD_KEYS.ADMIN_SESSION
@@ -854,38 +2146,89 @@ function isAdminAuthenticated() {
     );
 }
 
+
 function adminLogout() {
+
     sessionStorage.removeItem(
         HYQD_KEYS.ADMIN_SESSION
+    );
+
+    return true;
+}
+
+
+/* =========================================================
+   UTILISATEURS ADMIN
+========================================================= */
+
+function getUsers() {
+
+    if (
+        isAdminAuthenticated()
+    ) {
+        processAllInvestmentGains();
+    }
+
+
+    return cloneData(
+        getUsersRaw()
     );
 }
 
 
 /* =========================================================
-   VALIDATION ADMIN
+   VALIDATION DÉPÔT / RETRAIT
 ========================================================= */
 
 function adminProcessTransaction(
     userId,
     transactionId,
-    decision
+    status
 ) {
-    if (!isAdminAuthenticated()) {
+
+    if (
+        !isAdminAuthenticated()
+    ) {
+
         return {
             success: false,
             message:
-                "Session administrateur non autorisée."
+                "Accès administrateur requis."
         };
     }
 
-    const users = getUsers();
+
+    if (
+        status !== "approved" &&
+        status !== "rejected"
+    ) {
+
+        return {
+            success: false,
+            message:
+                "Statut de traitement invalide."
+        };
+    }
+
+
+    processInvestmentGainsForUser(
+        userId
+    );
+
+
+    const users =
+        getUsersRaw();
+
 
     const userIndex =
         users.findIndex(
-            user => user.id === userId
+            user =>
+                user.id === userId
         );
 
-    if (userIndex === -1) {
+
+    if (userIndex < 0) {
+
         return {
             success: false,
             message:
@@ -893,20 +2236,24 @@ function adminProcessTransaction(
         };
     }
 
-    const user = users[userIndex];
 
-    user.transactions =
-        Array.isArray(user.transactions)
-            ? user.transactions
-            : [];
+    const user =
+        users[userIndex];
 
-    const transaction =
-        user.transactions.find(
-            item =>
-                item.id === transactionId
-        );
 
-    if (!transaction) {
+    const transactionIndex =
+        (user.transactions || [])
+            .findIndex(
+                transaction =>
+                    transaction.id ===
+                    transactionId
+            );
+
+
+    if (
+        transactionIndex < 0
+    ) {
+
         return {
             success: false,
             message:
@@ -914,7 +2261,18 @@ function adminProcessTransaction(
         };
     }
 
-    if (transaction.status !== "pending") {
+
+    const transaction =
+        user.transactions[
+            transactionIndex
+        ];
+
+
+    if (
+        transaction.status !==
+        "pending"
+    ) {
+
         return {
             success: false,
             message:
@@ -922,73 +2280,45 @@ function adminProcessTransaction(
         };
     }
 
+
+    /* DÉPÔT */
+
     if (
-        decision !== "approved" &&
-        decision !== "rejected"
+        transaction.type ===
+            "deposit" &&
+        status === "approved"
     ) {
-        return {
-            success: false,
-            message:
-                "Décision administrative invalide."
-        };
-    }
 
-    if (decision === "rejected") {
-        transaction.status = "rejected";
-        transaction.processedAt =
-            new Date().toISOString();
+        const amount =
+            safeNumber(
+                transaction.amount
+            );
 
-        addNotification(
-            user,
-            "Transaction refusée",
-            transaction.type === "deposit"
-                ? "Votre demande de dépôt a été refusée."
-                : "Votre demande de retrait a été refusée."
-        );
-
-        users[userIndex] = user;
-        saveUsers(users);
-
-        return {
-            success: true,
-            message:
-                "Transaction refusée."
-        };
-    }
-
-
-    /* -------------------------
-       VALIDATION DÉPÔT
-    ------------------------- */
-
-    if (transaction.type === "deposit") {
-        transaction.status = "approved";
-        transaction.processedAt =
-            new Date().toISOString();
 
         user.balance =
-            Number(user.balance || 0) +
-            Number(transaction.amount || 0);
+            safeNumber(
+                user.balance
+            ) +
+            amount;
+
 
         user.totalDeposited =
-            Number(user.totalDeposited || 0) +
-            Number(transaction.amount || 0);
-
-        addNotification(
-            user,
-            "Dépôt validé",
-            "Votre dépôt de " +
-            formatFCFA(transaction.amount) +
-            " a été validé."
-        );
+            safeNumber(
+                user.totalDeposited
+            ) +
+            amount;
 
 
-        /* BONUS PREMIER DÉPÔT */
+        if (
+            !user.firstDepositCompleted
+        ) {
 
-        if (!user.firstDepositCompleted) {
-            user.firstDepositCompleted = true;
+            user.firstDepositCompleted =
+                true;
+
 
             if (user.sponsorId) {
+
                 const sponsorIndex =
                     users.findIndex(
                         item =>
@@ -996,62 +2326,131 @@ function adminProcessTransaction(
                             user.sponsorId
                     );
 
-                if (sponsorIndex !== -1) {
+
+                if (
+                    sponsorIndex >= 0 &&
+                    sponsorIndex !==
+                    userIndex
+                ) {
+
                     const sponsor =
-                        users[sponsorIndex];
+                        users[
+                            sponsorIndex
+                        ];
+
 
                     const bonus =
-                        Math.round(
-                            Number(
-                                transaction.amount
-                            ) *
+                        Math.floor(
+                            amount *
                             HYQD_CONFIG
                                 .REFERRAL_RATE
                         );
 
+
                     sponsor.balance =
-                        Number(
-                            sponsor.balance || 0
-                        ) + bonus;
+                        safeNumber(
+                            sponsor.balance
+                        ) +
+                        bonus;
+
 
                     sponsor.totalReferralBonus =
-                        Number(
-                            sponsor.totalReferralBonus ||
-                            0
-                        ) + bonus;
+                        safeNumber(
+                            sponsor
+                                .totalReferralBonus
+                        ) +
+                        bonus;
 
-                    sponsor.transactions =
-                        Array.isArray(
+
+                    if (
+                        !Array.isArray(
                             sponsor.transactions
                         )
-                            ? sponsor.transactions
-                            : [];
+                    ) {
+                        sponsor.transactions =
+                            [];
+                    }
+
 
                     sponsor.transactions.unshift({
+
                         id:
-                            generateId("BONUS"),
+                            generateId(
+                                "referral_bonus"
+                            ),
+
                         type:
                             "referral_bonus",
+
                         amount:
                             bonus,
+
                         status:
                             "approved",
+
                         sourceUserId:
                             user.id,
+
+                        sourceDepositId:
+                            transaction.id,
+
+                        description:
+                            "Bonus de parrainage",
+
+                        createdAt:
+                            new Date()
+                                .toISOString(),
+
+                        processedAt:
+                            new Date()
+                                .toISOString()
+
+                    });
+
+
+                    if (
+                        !Array.isArray(
+                            sponsor.notifications
+                        )
+                    ) {
+                        sponsor.notifications =
+                            [];
+                    }
+
+
+                    sponsor.notifications.unshift({
+
+                        id:
+                            generateId(
+                                "notification"
+                            ),
+
+                        type:
+                            "referral_bonus",
+
+                        title:
+                            "Bonus de parrainage",
+
+                        message:
+                            "Un bonus de " +
+                            formatFCFA(
+                                bonus
+                            ) +
+                            " a été ajouté à votre solde.",
+
+                        read:
+                            false,
+
                         createdAt:
                             new Date()
                                 .toISOString()
+
                     });
 
-                    addNotification(
-                        sponsor,
-                        "Bonus de parrainage",
-                        "Vous avez reçu " +
-                        formatFCFA(bonus) +
-                        " de bonus de parrainage."
-                    );
 
-                    users[sponsorIndex] =
+                    users[
+                        sponsorIndex
+                    ] =
                         sponsor;
                 }
             }
@@ -1059,60 +2458,152 @@ function adminProcessTransaction(
     }
 
 
-    /* -------------------------
-       VALIDATION RETRAIT
-    ------------------------- */
+    /* RETRAIT */
 
-    if (transaction.type === "withdraw") {
+    if (
+        transaction.type ===
+            "withdraw" &&
+        status === "approved"
+    ) {
+
         const amount =
-            Number(transaction.amount || 0);
+            safeNumber(
+                transaction.amount
+            );
+
 
         if (
-            Number(user.balance || 0) <
-            amount
+            safeNumber(
+                user.balance
+            ) < amount
         ) {
+
             return {
                 success: false,
                 message:
-                    "Le solde actuel de l'utilisateur est insuffisant."
+                    "Le solde actuel de l'utilisateur est insuffisant pour valider ce retrait."
             };
         }
 
-        transaction.status = "approved";
-        transaction.processedAt =
-            new Date().toISOString();
 
         user.balance =
-            Number(user.balance || 0) -
+            safeNumber(
+                user.balance
+            ) -
             amount;
+
 
         user.totalWithdrawn =
-            Number(user.totalWithdrawn || 0) +
+            safeNumber(
+                user.totalWithdrawn
+            ) +
             amount;
-
-        addNotification(
-            user,
-            "Retrait validé",
-            "Votre retrait de " +
-            formatFCFA(amount) +
-            " a été validé."
-        );
     }
 
-    users[userIndex] = user;
+
+    transaction.status =
+        status;
+
+
+    transaction.processedAt =
+        new Date()
+            .toISOString();
+
+
+    user.transactions[
+        transactionIndex
+    ] =
+        transaction;
+
+
+    if (
+        !Array.isArray(
+            user.notifications
+        )
+    ) {
+        user.notifications = [];
+    }
+
+
+    user.notifications.unshift({
+
+        id:
+            generateId(
+                "notification"
+            ),
+
+        type:
+            transaction.type,
+
+        title:
+            status === "approved"
+                ? "Opération validée"
+                : "Opération refusée",
+
+        message:
+            transaction.type === "deposit"
+
+                ? (
+                    status === "approved"
+
+                        ? "Votre dépôt de " +
+                          formatFCFA(
+                              transaction.amount
+                          ) +
+                          " a été validé."
+
+                        : "Votre demande de dépôt de " +
+                          formatFCFA(
+                              transaction.amount
+                          ) +
+                          " a été refusée."
+                )
+
+                : (
+                    status === "approved"
+
+                        ? "Votre retrait de " +
+                          formatFCFA(
+                              transaction.amount
+                          ) +
+                          " a été validé."
+
+                        : "Votre demande de retrait de " +
+                          formatFCFA(
+                              transaction.amount
+                          ) +
+                          " a été refusée."
+                ),
+
+        read:
+            false,
+
+        createdAt:
+            new Date()
+                .toISOString()
+
+    });
+
+
+    users[userIndex] =
+        user;
+
 
     saveUsers(users);
+
 
     return {
         success: true,
         message:
-            "Transaction validée avec succès."
+            status === "approved"
+                ? "Transaction validée avec succès."
+                : "Transaction refusée avec succès."
     };
 }
 
 
 /* =========================================================
-   RÉPONSE ADMINISTRATEUR
+   RÉPONSE ADMIN SUPPORT
 ========================================================= */
 
 function adminReplyToTicket(
@@ -1120,46 +2611,28 @@ function adminReplyToTicket(
     ticketId,
     reply
 ) {
-    if (!isAdminAuthenticated()) {
+
+    if (
+        !isAdminAuthenticated()
+    ) {
+
         return {
             success: false,
             message:
-                "Accès administrateur refusé."
+                "Accès administrateur requis."
         };
     }
 
-    const users = getUsers();
 
-    const index =
-        users.findIndex(
-            user => user.id === userId
-        );
+    const cleanReply =
+        String(reply || "")
+            .trim();
 
-    if (index === -1) {
-        return {
-            success: false,
-            message:
-                "Utilisateur introuvable."
-        };
-    }
 
-    const user = users[index];
+    if (
+        cleanReply.length < 2
+    ) {
 
-    const ticket =
-        (user.tickets || []).find(
-            item =>
-                item.id === ticketId
-        );
-
-    if (!ticket) {
-        return {
-            success: false,
-            message:
-                "Ticket introuvable."
-        };
-    }
-
-    if (!String(reply || "").trim()) {
         return {
             success: false,
             message:
@@ -1167,24 +2640,119 @@ function adminReplyToTicket(
         };
     }
 
-    ticket.adminReply =
-        String(reply).trim();
 
-    ticket.status =
+    const users =
+        getUsersRaw();
+
+
+    const userIndex =
+        users.findIndex(
+            user =>
+                user.id === userId
+        );
+
+
+    if (
+        userIndex < 0
+    ) {
+
+        return {
+            success: false,
+            message:
+                "Utilisateur introuvable."
+        };
+    }
+
+
+    const user =
+        users[userIndex];
+
+
+    const ticketIndex =
+        (user.tickets || [])
+            .findIndex(
+                ticket =>
+                    ticket.id ===
+                    ticketId
+            );
+
+
+    if (
+        ticketIndex < 0
+    ) {
+
+        return {
+            success: false,
+            message:
+                "Ticket introuvable."
+        };
+    }
+
+
+    user.tickets[
+        ticketIndex
+    ].adminReply =
+        cleanReply;
+
+
+    user.tickets[
+        ticketIndex
+    ].status =
         "answered";
 
-    ticket.answeredAt =
-        new Date().toISOString();
 
-    addNotification(
-        user,
-        "Assistance",
-        "L'administration a répondu à votre demande."
-    );
+    user.tickets[
+        ticketIndex
+    ].repliedAt =
+        new Date()
+            .toISOString();
 
-    users[index] = user;
+
+    if (
+        !Array.isArray(
+            user.notifications
+        )
+    ) {
+        user.notifications = [];
+    }
+
+
+    user.notifications.unshift({
+
+        id:
+            generateId(
+                "notification"
+            ),
+
+        type:
+            "support",
+
+        title:
+            "Réponse de l'assistance",
+
+        message:
+            "L'administration a répondu à votre demande « " +
+            user.tickets[
+                ticketIndex
+            ].subject +
+            " ».",
+
+        read:
+            false,
+
+        createdAt:
+            new Date()
+                .toISOString()
+
+    });
+
+
+    users[userIndex] =
+        user;
+
 
     saveUsers(users);
+
 
     return {
         success: true,
@@ -1195,49 +2763,10 @@ function adminReplyToTicket(
 
 
 /* =========================================================
-   MOT DE PASSE OUBLIÉ
-   VERSION LOCALE DE DÉMONSTRATION
+   NOTIFICATIONS
 ========================================================= */
 
-function requestPasswordReset(phone) {
+function getCurrentUserNotifications() {
+
     const user =
-        findUserByPhone(phone);
-
-    if (!user) {
-        return {
-            success: false,
-            message:
-                "Aucun compte trouvé avec ce numéro."
-        };
-    }
-
-    return {
-        success: true,
-        message:
-            "Compte identifié. La réinitialisation sécurisée sera reliée au service d'authentification."
-    };
-}
-
-
-/* =========================================================
-   INITIALISATION
-========================================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-        const page =
-            window.location.pathname
-                .split("/")
-                .pop()
-                .toLowerCase();
-
-        if (
-            page === "dashboard.html" &&
-            !getCurrentUser()
-        ) {
-            window.location.href =
-                "login.html";
-        }
-    }
-);
+        getCurrent
