@@ -1,8 +1,13 @@
 /* =========================================================
    HOUSING'S YQD
-   SCRIPT PRINCIPAL
-   VERSION : 1.0
-   ========================================================= */
+   SCRIPT GLOBAL
+   Version de démonstration locale
+
+   IMPORTANT :
+   Les données sont actuellement stockées dans localStorage.
+   Pour la version publique réelle, il faudra utiliser
+   Supabase ou un véritable serveur sécurisé.
+========================================================= */
 
 "use strict";
 
@@ -10,139 +15,41 @@
    CONFIGURATION
 ========================================================= */
 
-const YQD_CONFIG = {
-    platformName: "Housing's YQD",
-
-    currency: "FCFA",
-
-    investmentDurationDays: 180,
-
-    referralPercent: 10,
-
-    storage: {
-        users: "yqd_users",
-        currentUser: "yqd_current_user",
-        deposits: "yqd_deposits",
-        withdrawals: "yqd_withdrawals",
-        investments: "yqd_investments",
-        tickets: "yqd_tickets",
-        notifications: "yqd_notifications",
-        adminSession: "yqd_admin_session"
-    },
-
-    packs: [
-        {
-            id: "starter",
-            name: "Pack Starter",
-            amount: 3000,
-            dailyGain: 800,
-            duration: 180,
-            image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80",
-            description: "Une première opportunité accessible pour découvrir l'investissement immobilier."
-        },
-        {
-            id: "familial",
-            name: "Pack Familial",
-            amount: 10000,
-            dailyGain: 3000,
-            duration: 180,
-            image: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=900&q=80",
-            description: "Un pack conçu pour les investisseurs souhaitant évoluer progressivement."
-        },
-        {
-            id: "confort",
-            name: "Pack Confort",
-            amount: 20000,
-            dailyGain: 6000,
-            duration: 180,
-            image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=900&q=80",
-            description: "Une formule immobilière moderne offrant une opportunité d'investissement structurée."
-        },
-        {
-            id: "premium",
-            name: "Pack Premium",
-            amount: 45000,
-            dailyGain: 14000,
-            duration: 180,
-            image: "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=900&q=80",
-            description: "Une opportunité destinée aux investisseurs recherchant davantage de potentiel."
-        },
-        {
-            id: "prestige",
-            name: "Pack Prestige",
-            amount: 100000,
-            dailyGain: 30000,
-            duration: 180,
-            image: "https://images.unsplash.com/photo-1600585152915-d208bec867a1?auto=format&fit=crop&w=900&q=80",
-            description: "Un investissement immobilier de niveau supérieur avec une présentation prestigieuse."
-        },
-        {
-            id: "premium_plus",
-            name: "Pack Premium Plus",
-            amount: 200000,
-            dailyGain: 65000,
-            duration: 180,
-            image: "https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=900&q=80",
-            description: "Une formule premium pour les investisseurs souhaitant développer leur portefeuille."
-        },
-        {
-            id: "elite",
-            name: "Pack Elite",
-            amount: 400000,
-            dailyGain: 140000,
-            duration: 180,
-            image: "https://images.unsplash.com/photo-1600573472592-401b489a3cdc?auto=format&fit=crop&w=900&q=80",
-            description: "Une offre immobilière haut de gamme destinée aux investisseurs ambitieux."
-        },
-        {
-            id: "luxury",
-            name: "Pack Luxury",
-            amount: 800000,
-            dailyGain: 290000,
-            duration: 180,
-            image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=80",
-            description: "Notre pack immobilier le plus prestigieux avec une résidence exceptionnelle."
-        }
-    ]
+const HYQD_CONFIG = {
+    APP_NAME: "Housing's YQD",
+    USERS_KEY: "hyqd_users",
+    CURRENT_USER_KEY: "hyqd_current_user",
+    ADMIN_KEY: "hyqd_admin_authenticated",
+    ADMIN_CODE: "937854M",
+    DEPOSITS_KEY: "hyqd_deposits",
+    WITHDRAWALS_KEY: "hyqd_withdrawals",
+    INVESTMENTS_KEY: "hyqd_investments",
+    TICKETS_KEY: "hyqd_tickets",
+    NOTIFICATIONS_KEY: "hyqd_notifications",
+    REFERRAL_REWARDS_KEY: "hyqd_referral_rewards",
+    TRANSACTIONS_KEY: "hyqd_transactions"
 };
 
 
 /* =========================================================
-   CODE ADMINISTRATEUR
-   IMPORTANT :
-   POUR UNE VERSION PUBLIQUE, NE JAMAIS STOCKER
-   UN SECRET ADMINISTRATEUR DANS JAVASCRIPT.
+   OUTILS LOCAL STORAGE
 ========================================================= */
 
-const YQD_ADMIN_ACCESS_CODE = "937854M";
-
-
-/* =========================================================
-   OUTILS GENERAUX
-========================================================= */
-
-function getElement(id) {
-    return document.getElementById(id);
-}
-
-
-function getStoredData(key, fallback) {
+function hyqdGet(key, fallback = null) {
 
     try {
 
-        const data =
-            localStorage.getItem(key);
+        const value = localStorage.getItem(key);
 
-        return data
-            ? JSON.parse(data)
-            : fallback;
+        if (!value) {
+            return fallback;
+        }
+
+        return JSON.parse(value);
 
     } catch (error) {
 
-        console.error(
-            "Erreur de lecture localStorage :",
-            error
-        );
+        console.error("Erreur de lecture :", key, error);
 
         return fallback;
 
@@ -151,7 +58,7 @@ function getStoredData(key, fallback) {
 }
 
 
-function setStoredData(key, value) {
+function hyqdSet(key, value) {
 
     try {
 
@@ -164,10 +71,7 @@ function setStoredData(key, value) {
 
     } catch (error) {
 
-        console.error(
-            "Erreur d'enregistrement localStorage :",
-            error
-        );
+        console.error("Erreur d'enregistrement :", key, error);
 
         return false;
 
@@ -176,29 +80,28 @@ function setStoredData(key, value) {
 }
 
 
-function generateId(prefix = "YQD") {
+function hyqdRemove(key) {
 
-    return (
-        prefix +
-        "_" +
-        Date.now().toString(36) +
-        "_" +
-        Math.random()
-            .toString(36)
-            .substring(2, 9)
-    );
+    localStorage.removeItem(key);
 
 }
 
 
-function generateReferralCode() {
+/* =========================================================
+   UTILITAIRES
+========================================================= */
+
+function generateId(prefix = "HYQD") {
 
     return (
-        "YQD" +
-        Math.floor(
-            100000 +
-            Math.random() * 900000
-        )
+        prefix +
+        "-" +
+        Date.now() +
+        "-" +
+        Math.random()
+            .toString(36)
+            .substring(2, 8)
+            .toUpperCase()
     );
 
 }
@@ -206,233 +109,76 @@ function generateReferralCode() {
 
 function formatFCFA(amount) {
 
-    const value =
-        Number(amount) || 0;
+    const number = Number(amount || 0);
 
-    return (
-        new Intl.NumberFormat(
-            "fr-FR",
-            {
-                maximumFractionDigits: 0
-            }
-        ).format(value) +
-        " FCFA"
-    );
-
-}
-
-
-function formatDate(dateValue) {
-
-    if (!dateValue) {
-        return "-";
-    }
-
-    const date =
-        new Date(dateValue);
-
-    if (
-        Number.isNaN(
-            date.getTime()
-        )
-    ) {
-        return "-";
-    }
-
-    return new Intl.DateTimeFormat(
+    return number.toLocaleString(
         "fr-FR",
         {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit"
+            maximumFractionDigits: 0
         }
-    ).format(date);
+    ) + " FCFA";
 
 }
 
 
-function escapeHTML(value) {
+function getCurrentDate() {
 
-    const text =
-        String(value ?? "");
-
-    const map = {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#039;"
-    };
-
-    return text.replace(
-        /[&<>"']/g,
-        function (character) {
-            return map[character];
-        }
-    );
+    return new Date().toISOString();
 
 }
 
 
-function getInitials(name) {
+function formatDate(date) {
 
-    if (!name) {
-        return "U";
+    if (!date) {
+        return "-";
     }
 
-    const parts =
-        name.trim().split(/\s+/);
+    try {
 
-    return parts
-        .slice(0, 2)
-        .map(
-            part =>
-                part.charAt(0).toUpperCase()
-        )
-        .join("");
+        return new Date(date).toLocaleDateString(
+            "fr-FR",
+            {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
+            }
+        );
+
+    } catch (error) {
+
+        return "-";
+
+    }
 
 }
 
 
-/* =========================================================
-   TOAST
-========================================================= */
+function escapeHtml(value) {
 
-function showToast(
-    message,
-    type = "success"
-) {
-
-    const container =
-        getElement("toastContainer");
-
-    if (!container) {
-
-        alert(message);
-
-        return;
-
+    if (value === null || value === undefined) {
+        return "";
     }
 
-    const toast =
-        document.createElement("div");
+    const div = document.createElement("div");
 
-    toast.className =
-        "toast toast-" + type;
+    div.textContent = String(value);
 
-    let icon =
-        "fa-circle-check";
-
-    if (type === "error") {
-        icon =
-            "fa-circle-xmark";
-    }
-
-    if (type === "warning") {
-        icon =
-            "fa-triangle-exclamation";
-    }
-
-    if (type === "info") {
-        icon =
-            "fa-circle-info";
-    }
-
-    toast.innerHTML = `
-        <i class="fa-solid ${icon}"></i>
-        <span>${escapeHTML(message)}</span>
-    `;
-
-    container.appendChild(toast);
-
-    setTimeout(
-        function () {
-
-            toast.classList.add(
-                "show"
-            );
-
-        },
-        10
-    );
-
-    setTimeout(
-        function () {
-
-            toast.classList.remove(
-                "show"
-            );
-
-            setTimeout(
-                function () {
-
-                    toast.remove();
-
-                },
-                300
-            );
-
-        },
-        4500
-    );
+    return div.innerHTML;
 
 }
 
 
 /* =========================================================
-   LOADER
-========================================================= */
-
-function showLoader(
-    text = "Chargement..."
-) {
-
-    const loader =
-        getElement("pageLoader");
-
-    if (!loader) {
-        return;
-    }
-
-    const label =
-        loader.querySelector("span");
-
-    if (label) {
-        label.textContent =
-            text;
-    }
-
-    loader.style.display =
-        "flex";
-
-}
-
-
-function hideLoader() {
-
-    const loader =
-        getElement("pageLoader");
-
-    if (!loader) {
-        return;
-    }
-
-    loader.style.display =
-        "none";
-
-}
-
-
-/* =========================================================
-   UTILISATEURS
+   GESTION DES UTILISATEURS
 ========================================================= */
 
 function getUsers() {
 
-    return getStoredData(
-        YQD_CONFIG.storage.users,
+    return hyqdGet(
+        HYQD_CONFIG.USERS_KEY,
         []
     );
 
@@ -441,8 +187,8 @@ function getUsers() {
 
 function saveUsers(users) {
 
-    return setStoredData(
-        YQD_CONFIG.storage.users,
+    return hyqdSet(
+        HYQD_CONFIG.USERS_KEY,
         users
     );
 
@@ -451,8 +197,8 @@ function saveUsers(users) {
 
 function getCurrentUser() {
 
-    return getStoredData(
-        YQD_CONFIG.storage.currentUser,
+    return hyqdGet(
+        HYQD_CONFIG.CURRENT_USER_KEY,
         null
     );
 
@@ -461,18 +207,62 @@ function getCurrentUser() {
 
 function saveCurrentUser(user) {
 
-    return setStoredData(
-        YQD_CONFIG.storage.currentUser,
+    return hyqdSet(
+        HYQD_CONFIG.CURRENT_USER_KEY,
         user
     );
 
 }
 
 
+function findUserById(userId) {
+
+    const users = getUsers();
+
+    return users.find(
+        user => user.id === userId
+    ) || null;
+
+}
+
+
+function findUserByPhone(phone) {
+
+    const users = getUsers();
+
+    return users.find(
+        user => user.phone === phone
+    ) || null;
+
+}
+
+
+function findUserByReferralCode(code) {
+
+    if (!code) {
+        return null;
+    }
+
+    const users = getUsers();
+
+    const cleanCode =
+        String(code)
+            .trim()
+            .toUpperCase();
+
+    return users.find(
+        user =>
+            String(
+                user.referralCode || ""
+            ).toUpperCase() === cleanCode
+    ) || null;
+
+}
+
+
 function updateUser(updatedUser) {
 
-    const users =
-        getUsers();
+    const users = getUsers();
 
     const index =
         users.findIndex(
@@ -484,8 +274,7 @@ function updateUser(updatedUser) {
         return false;
     }
 
-    users[index] =
-        updatedUser;
+    users[index] = updatedUser;
 
     saveUsers(users);
 
@@ -497,9 +286,7 @@ function updateUser(updatedUser) {
         currentUser.id === updatedUser.id
     ) {
 
-        saveCurrentUser(
-            updatedUser
-        );
+        saveCurrentUser(updatedUser);
 
     }
 
@@ -508,115 +295,52 @@ function updateUser(updatedUser) {
 }
 
 
-function findUserById(userId) {
-
-    return getUsers().find(
-        user =>
-            user.id === userId
-    );
-
-}
-
-
-function findUserByReferralCode(code) {
-
-    if (!code) {
-        return null;
-    }
-
-    return getUsers().find(
-        user =>
-            String(
-                user.referralCode
-            ).toUpperCase() ===
-            String(code)
-                .trim()
-                .toUpperCase()
-    );
-
-}
-
-
 /* =========================================================
-   DONNEES FINANCIERES
+   CODE DE PARRAINAGE
 ========================================================= */
 
-function getDeposits() {
+function generateReferralCode(
+    fullName = ""
+) {
 
-    return getStoredData(
-        YQD_CONFIG.storage.deposits,
-        []
-    );
+    const cleanName =
+        String(fullName)
+            .replace(/[^a-zA-Z]/g, "")
+            .substring(0, 4)
+            .toUpperCase() || "YQD";
 
-}
+    const random =
+        Math.floor(
+            100000 +
+            Math.random() * 900000
+        );
 
-
-function saveDeposits(deposits) {
-
-    return setStoredData(
-        YQD_CONFIG.storage.deposits,
-        deposits
-    );
-
-}
-
-
-function getWithdrawals() {
-
-    return getStoredData(
-        YQD_CONFIG.storage.withdrawals,
-        []
-    );
+    return cleanName + random;
 
 }
 
 
-function saveWithdrawals(withdrawals) {
+function generateUniqueReferralCode(
+    fullName
+) {
 
-    return setStoredData(
-        YQD_CONFIG.storage.withdrawals,
-        withdrawals
-    );
+    let code =
+        generateReferralCode(fullName);
 
-}
+    let existing =
+        findUserByReferralCode(code);
 
+    while (existing) {
 
-function getInvestments() {
+        code =
+            generateReferralCode(fullName);
 
-    return getStoredData(
-        YQD_CONFIG.storage.investments,
-        []
-    );
+        existing =
+            findUserByReferralCode(code);
 
-}
+    }
 
-
-function saveInvestments(investments) {
-
-    return setStoredData(
-        YQD_CONFIG.storage.investments,
-        investments
-    );
-
-}
-
-
-function getTickets() {
-
-    return getStoredData(
-        YQD_CONFIG.storage.tickets,
-        []
-    );
-
-}
-
-
-function saveTickets(tickets) {
-
-    return setStoredData(
-        YQD_CONFIG.storage.tickets,
-        tickets
-    );
+    return code;
 
 }
 
@@ -625,388 +349,190 @@ function saveTickets(tickets) {
    INSCRIPTION
 ========================================================= */
 
-function initializeRegisterPage() {
+function registerUser({
+    fullName,
+    phone,
+    email = "",
+    password,
+    confirmPassword,
+    referralCode = ""
+}) {
 
-    const form =
-        getElement("registerForm");
+    const name =
+        String(fullName || "")
+            .trim();
 
-    if (!form) {
-        return;
+    const cleanPhone =
+        String(phone || "")
+            .trim();
+
+    const cleanEmail =
+        String(email || "")
+            .trim()
+            .toLowerCase();
+
+    const cleanPassword =
+        String(password || "");
+
+    const cleanConfirmPassword =
+        String(confirmPassword || "");
+
+
+    if (name.length < 3) {
+
+        return {
+            success: false,
+            message:
+                "Veuillez saisir votre nom complet."
+        };
+
     }
 
-    const referralInput =
-        getElement("referralCode");
 
-    const params =
-        new URLSearchParams(
-            window.location.search
-        );
+    if (
+        cleanPhone.length < 8
+    ) {
 
-    const referralCode =
-        params.get("ref");
+        return {
+            success: false,
+            message:
+                "Veuillez saisir un numéro de téléphone valide."
+        };
+
+    }
+
+
+    if (
+        cleanPassword.length < 6
+    ) {
+
+        return {
+            success: false,
+            message:
+                "Le mot de passe doit contenir au moins 6 caractères."
+        };
+
+    }
+
+
+    if (
+        cleanPassword !==
+        cleanConfirmPassword
+    ) {
+
+        return {
+            success: false,
+            message:
+                "Les mots de passe ne correspondent pas."
+        };
+
+    }
+
+
+    const existingUser =
+        findUserByPhone(cleanPhone);
+
+
+    if (existingUser) {
+
+        return {
+            success: false,
+            message:
+                "Ce numéro est déjà enregistré."
+        };
+
+    }
+
+
+    let referrer = null;
+
 
     if (
         referralCode &&
-        referralInput
+        String(referralCode).trim()
     ) {
 
-        referralInput.value =
-            referralCode
-                .trim()
-                .toUpperCase();
+        referrer =
+            findUserByReferralCode(
+                referralCode
+            );
 
     }
 
 
-    const passwordInput =
-        getElement("registerPassword");
+    const newUser = {
 
-    const confirmPasswordInput =
-        getElement("confirmPassword");
+        id:
+            generateId("USER"),
 
-    const togglePassword =
-        getElement("toggleRegisterPassword");
+        fullName:
+            name,
 
-    const toggleConfirm =
-        getElement("toggleConfirmPassword");
+        phone:
+            cleanPhone,
 
+        email:
+            cleanEmail,
 
-    if (
-        togglePassword &&
-        passwordInput
-    ) {
+        password:
+            cleanPassword,
 
-        togglePassword.addEventListener(
-            "click",
-            function () {
+        balance:
+            0,
 
-                const icon =
-                    togglePassword.querySelector("i");
+        totalDeposited:
+            0,
 
-                const hidden =
-                    passwordInput.type === "password";
+        totalWithdrawn:
+            0,
 
-                passwordInput.type =
-                    hidden
-                        ? "text"
-                        : "password";
+        totalInvested:
+            0,
 
-                if (icon) {
+        referralCode:
+            generateUniqueReferralCode(name),
 
-                    icon.className =
-                        hidden
-                            ? "fa-solid fa-eye-slash"
-                            : "fa-solid fa-eye";
+        referredBy:
+            referrer
+                ? referrer.id
+                : null,
 
-                }
+        referralRewardReceived:
+            false,
 
-            }
-        );
+        status:
+            "active",
 
-    }
+        createdAt:
+            getCurrentDate()
 
+    };
 
-    if (
-        toggleConfirm &&
-        confirmPasswordInput
-    ) {
 
-        toggleConfirm.addEventListener(
-            "click",
-            function () {
+    const users =
+        getUsers();
 
-                const icon =
-                    toggleConfirm.querySelector("i");
 
-                const hidden =
-                    confirmPasswordInput.type ===
-                    "password";
+    users.push(newUser);
 
-                confirmPasswordInput.type =
-                    hidden
-                        ? "text"
-                        : "password";
 
-                if (icon) {
+    saveUsers(users);
 
-                    icon.className =
-                        hidden
-                            ? "fa-solid fa-eye-slash"
-                            : "fa-solid fa-eye";
 
-                }
+    saveCurrentUser(newUser);
 
-            }
-        );
 
-    }
+    return {
 
+        success: true,
 
-    form.addEventListener(
-        "submit",
-        function (event) {
+        message:
+            "Inscription réussie. Bienvenue sur Housing's YQD !",
 
-            event.preventDefault();
+        user:
+            newUser
 
-
-            const fullName =
-                (
-                    getElement("registerFullName")
-                        ?.value ||
-                    getElement("fullName")
-                        ?.value ||
-                    ""
-                )
-                    .trim();
-
-
-            const email =
-                (
-                    getElement("registerEmail")
-                        ?.value ||
-                    getElement("email")
-                        ?.value ||
-                    ""
-                )
-                    .trim()
-                    .toLowerCase();
-
-
-            const phone =
-                (
-                    getElement("registerPhone")
-                        ?.value ||
-                    getElement("phone")
-                        ?.value ||
-                    ""
-                )
-                    .trim();
-
-
-            const password =
-                passwordInput
-                    ? passwordInput.value
-                    : "";
-
-
-            const confirmPassword =
-                confirmPasswordInput
-                    ? confirmPasswordInput.value
-                    : "";
-
-
-            const referralCodeValue =
-                referralInput
-                    ? referralInput.value
-                        .trim()
-                        .toUpperCase()
-                    : "";
-
-
-            if (
-                fullName.length < 3
-            ) {
-
-                showToast(
-                    "Veuillez saisir votre nom complet.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            if (
-                !email ||
-                !email.includes("@")
-            ) {
-
-                showToast(
-                    "Veuillez saisir une adresse e-mail valide.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            if (
-                phone.length < 8
-            ) {
-
-                showToast(
-                    "Veuillez saisir un numéro de téléphone valide.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            if (
-                password.length < 6
-            ) {
-
-                showToast(
-                    "Le mot de passe doit contenir au moins 6 caractères.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            if (
-                confirmPassword &&
-                password !== confirmPassword
-            ) {
-
-                showToast(
-                    "Les mots de passe ne correspondent pas.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            const users =
-                getUsers();
-
-
-            const existingUser =
-                users.find(
-                    user =>
-                        user.email === email ||
-                        user.phone === phone
-                );
-
-
-            if (
-                existingUser
-            ) {
-
-                showToast(
-                    "Un compte existe déjà avec cet e-mail ou ce numéro.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            let referrerId =
-                null;
-
-
-            if (
-                referralCodeValue
-            ) {
-
-                const referrer =
-                    findUserByReferralCode(
-                        referralCodeValue
-                    );
-
-
-                if (
-                    !referrer
-                ) {
-
-                    showToast(
-                        "Le code de parrainage est invalide.",
-                        "error"
-                    );
-
-                    return;
-
-                }
-
-
-                referrerId =
-                    referrer.id;
-
-            }
-
-
-            const newUser = {
-
-                id:
-                    generateId("USER"),
-
-                fullName,
-
-                email,
-
-                phone,
-
-                password,
-
-                referralCode:
-                    generateReferralCode(),
-
-                referrerId,
-
-                referralBonus:
-                    0,
-
-                referralRewarded:
-                    false,
-
-                balance:
-                    0,
-
-                invested:
-                    0,
-
-                earnings:
-                    0,
-
-                createdAt:
-                    new Date().toISOString()
-
-            };
-
-
-            users.push(
-                newUser
-            );
-
-
-            saveUsers(
-                users
-            );
-
-
-            saveCurrentUser(
-                newUser
-            );
-
-
-            showToast(
-                "Inscription réussie. Bienvenue sur Housing's YQD.",
-                "success"
-            );
-
-
-            setTimeout(
-                function () {
-
-                    window.location.href =
-                        "dashboard.html";
-
-                },
-                1000
-            );
-
-        }
-    );
+    };
 
 }
 
@@ -1015,278 +541,127 @@ function initializeRegisterPage() {
    CONNEXION
 ========================================================= */
 
-function initializeLoginPage() {
+function loginUser(
+    phone,
+    password
+) {
 
-    const form =
-        getElement("loginForm");
+    const cleanPhone =
+        String(phone || "")
+            .trim();
 
-    if (!form) {
-        return;
-    }
-
-
-    const passwordInput =
-        getElement("loginPassword") ||
-        getElement("password");
-
-
-    const togglePassword =
-        getElement("toggleLoginPassword");
+    const cleanPassword =
+        String(password || "");
 
 
     if (
-        togglePassword &&
-        passwordInput
+        !cleanPhone ||
+        !cleanPassword
     ) {
 
-        togglePassword.addEventListener(
-            "click",
-            function () {
+        return {
 
-                const icon =
-                    togglePassword.querySelector(
-                        "i"
-                    );
+            success: false,
 
-                const hidden =
-                    passwordInput.type ===
-                    "password";
+            message:
+                "Veuillez renseigner votre numéro et votre mot de passe."
+
+        };
+
+    }
 
 
-                passwordInput.type =
-                    hidden
-                        ? "text"
-                        : "password";
-
-
-                if (icon) {
-
-                    icon.className =
-                        hidden
-                            ? "fa-solid fa-eye-slash"
-                            : "fa-solid fa-eye";
-
-                }
-
-            }
+    const user =
+        findUserByPhone(
+            cleanPhone
         );
 
+
+    if (!user) {
+
+        return {
+
+            success: false,
+
+            message:
+                "Aucun compte ne correspond à ce numéro."
+
+        };
+
     }
 
-
-    form.addEventListener(
-        "submit",
-        function (event) {
-
-            event.preventDefault();
-
-
-            const identifier =
-                (
-                    getElement("loginIdentifier")
-                        ?.value ||
-                    getElement("loginEmail")
-                        ?.value ||
-                    getElement("email")
-                        ?.value ||
-                    ""
-                )
-                    .trim()
-                    .toLowerCase();
-
-
-            const password =
-                passwordInput
-                    ? passwordInput.value
-                    : "";
-
-
-            const users =
-                getUsers();
-
-
-            const user =
-                users.find(
-                    currentUser =>
-                        (
-                            currentUser.email
-                                ?.toLowerCase() ===
-                            identifier
-                        ) ||
-                        (
-                            currentUser.phone ===
-                            identifier
-                        )
-                );
-
-
-            if (
-                !user ||
-                user.password !== password
-            ) {
-
-                showToast(
-                    "Identifiants incorrects.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            saveCurrentUser(
-                user
-            );
-
-
-            showLoader(
-                "Connexion sécurisée..."
-            );
-
-
-            setTimeout(
-                function () {
-
-                    window.location.href =
-                        "dashboard.html";
-
-                },
-                700
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   MOT DE PASSE OUBLIE
-========================================================= */
-
-function initializeForgotPasswordPage() {
-
-    const form =
-        getElement("forgotPasswordForm");
-
-    if (!form) {
-        return;
-    }
-
-
-    form.addEventListener(
-        "submit",
-        function (event) {
-
-            event.preventDefault();
-
-
-            const email =
-                (
-                    getElement("forgotEmail")
-                        ?.value ||
-                    ""
-                )
-                    .trim()
-                    .toLowerCase();
-
-
-            const messageBox =
-                getElement(
-                    "forgotPasswordMessage"
-                );
-
-
-            if (
-                !email ||
-                !email.includes("@")
-            ) {
-
-                if (messageBox) {
-
-                    messageBox.style.display =
-                        "block";
-
-                    messageBox.style.background =
-                        "#fee2e2";
-
-                    messageBox.style.color =
-                        "#991b1b";
-
-                    messageBox.textContent =
-                        "Veuillez saisir une adresse e-mail valide.";
-
-                }
-
-                return;
-
-            }
-
-
-            const user =
-                getUsers().find(
-                    item =>
-                        item.email === email
-                );
-
-
-            if (messageBox) {
-
-                messageBox.style.display =
-                    "block";
-
-                messageBox.style.background =
-                    "#dcfce7";
-
-                messageBox.style.color =
-                    "#166534";
-
-                messageBox.textContent =
-                    "Si un compte correspond à cette adresse, les instructions de récupération seront traitées.";
-
-            }
-
-
-            /*
-               VERSION DEMO :
-
-               Aucun véritable e-mail ne peut être envoyé
-               uniquement avec JavaScript et localStorage.
-
-               Pour la production :
-               Supabase Auth / serveur sécurisé.
-            */
-
-            if (user) {
-
-                console.log(
-                    "Demande de récupération pour :",
-                    user.email
-                );
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   VERIFICATION CONNEXION UTILISATEUR
-========================================================= */
-
-function requireUserSession() {
 
     if (
-        !window.location.pathname.includes(
-            "dashboard.html"
-        )
+        user.password !==
+        cleanPassword
     ) {
-        return true;
+
+        return {
+
+            success: false,
+
+            message:
+                "Mot de passe incorrect."
+
+        };
+
     }
 
+
+    if (
+        user.status === "blocked"
+    ) {
+
+        return {
+
+            success: false,
+
+            message:
+                "Votre compte est actuellement suspendu."
+
+        };
+
+    }
+
+
+    saveCurrentUser(user);
+
+
+    return {
+
+        success: true,
+
+        message:
+            "Connexion réussie.",
+
+        user
+
+    };
+
+}
+
+
+/* =========================================================
+   DÉCONNEXION
+========================================================= */
+
+function logoutUser() {
+
+    hyqdRemove(
+        HYQD_CONFIG.CURRENT_USER_KEY
+    );
+
+    window.location.href =
+        "login.html";
+
+}
+
+
+/* =========================================================
+   PROTECTION DES PAGES
+========================================================= */
+
+function requireAuth() {
 
     const user =
         getCurrentUser();
@@ -1297,3225 +672,164 @@ function requireUserSession() {
         window.location.href =
             "login.html";
 
-        return false;
+        return null;
 
     }
 
 
-    return true;
-
-}
-
-
-/* =========================================================
-   CALCUL DES INVESTISSEMENTS
-========================================================= */
-
-function getUserInvestments(userId) {
-
-    return getInvestments().filter(
-        investment =>
-            investment.userId === userId
-    );
-
-}
-
-
-function calculateInvestmentEarnings(
-    investment
-) {
-
-    const now =
-        new Date();
-
-    const startDate =
-        new Date(
-            investment.startDate
-        );
-
-    const endDate =
-        new Date(
-            investment.endDate
-        );
-
-
-    if (
-        now < startDate
-    ) {
-        return 0;
-    }
-
-
-    const effectiveDate =
-        now > endDate
-            ? endDate
-            : now;
-
-
-    const milliseconds =
-        effectiveDate - startDate;
-
-
-    const elapsedDays =
-        Math.max(
-            0,
-            Math.floor(
-                milliseconds /
-                (1000 * 60 * 60 * 24)
-            )
-        );
-
-
-    return (
-        elapsedDays *
-        Number(
-            investment.dailyGain || 0
-        )
-    );
-
-}
-
-
-function refreshUserFinancials(user) {
-
-    const investments =
-        getUserInvestments(
+    const realUser =
+        findUserById(
             user.id
         );
 
 
-    let invested =
-        0;
+    if (!realUser) {
 
-    let earnings =
-        0;
+        hyqdRemove(
+            HYQD_CONFIG.CURRENT_USER_KEY
+        );
 
+        window.location.href =
+            "login.html";
 
-    investments.forEach(
-        investment => {
+        return null;
 
-            if (
-                investment.status === "active"
-            ) {
-
-                invested +=
-                    Number(
-                        investment.amount
-                    );
-
-            }
-
-
-            earnings +=
-                calculateInvestmentEarnings(
-                    investment
-                );
-
-        }
-    );
-
-
-    user.invested =
-        invested;
-
-
-    user.earnings =
-        earnings;
-
-
-    updateUser(
-        user
-    );
-
-
-    return user;
-
-}
-
-
-/* =========================================================
-   DASHBOARD UTILISATEUR
-========================================================= */
-
-function initializeDashboard() {
-
-    if (
-        !window.location.pathname.includes(
-            "dashboard.html"
-        )
-    ) {
-        return;
     }
 
 
     if (
-        !requireUserSession()
+        realUser.status === "blocked"
     ) {
-        return;
+
+        hyqdRemove(
+            HYQD_CONFIG.CURRENT_USER_KEY
+        );
+
+        window.location.href =
+            "login.html";
+
+        return null;
+
     }
 
 
-    let user =
-        getCurrentUser();
+    saveCurrentUser(realUser);
 
 
-    user =
-        refreshUserFinancials(
-            user
-        );
-
-
-    updateDashboardIdentity(
-        user
-    );
-
-
-    renderDashboardBalances(
-        user
-    );
-
-
-    renderPacks();
-
-
-    renderRecentActivity(
-        user
-    );
-
-
-    renderUserInvestments(
-        user
-    );
-
-
-    renderHistory(
-        user
-    );
-
-
-    renderReferral(
-        user
-    );
-
-
-    renderReferrals(
-        user
-    );
-
-
-    renderTickets(
-        user
-    );
-
-
-    renderProfile(
-        user
-    );
-
-
-    initializeDepositForm(
-        user
-    );
-
-
-    initializeWithdrawForm(
-        user
-    );
-
-
-    initializeSupportForm(
-        user
-    );
-
-
-    initializeProfileForm(
-        user
-    );
-
-
-    initializeReferralButtons();
-
-
-    initializeInvestmentModal();
-
-
-    initializeUserLogout();
+    return realUser;
 
 }
 
 
 /* =========================================================
-   IDENTITE UTILISATEUR
+   DÉPÔTS
 ========================================================= */
 
-function updateDashboardIdentity(user) {
-
-    const userName =
-        getElement("userName");
-
-    const userAvatar =
-        getElement("userAvatar");
-
-    const profileAvatar =
-        getElement("profileAvatar");
-
-    const welcomeMessage =
-        getElement("welcomeMessage");
-
-
-    if (userName) {
-
-        userName.textContent =
-            user.fullName;
-
-    }
-
-
-    if (userAvatar) {
-
-        userAvatar.textContent =
-            getInitials(
-                user.fullName
-            );
-
-    }
-
-
-    if (profileAvatar) {
-
-        profileAvatar.textContent =
-            getInitials(
-                user.fullName
-            );
-
-    }
-
-
-    if (welcomeMessage) {
-
-        const firstName =
-            user.fullName
-                .split(" ")[0];
-
-        welcomeMessage.textContent =
-            "Bienvenue " +
-            firstName +
-            " 👋";
-
-    }
-
-}
-
-
-/* =========================================================
-   SOLDES
-========================================================= */
-
-function renderDashboardBalances(user) {
-
-    const available =
-        getElement(
-            "availableBalance"
-        );
-
-    const invested =
-        getElement(
-            "investedBalance"
-        );
-
-    const earnings =
-        getElement(
-            "totalEarnings"
-        );
-
-    const referral =
-        getElement(
-            "referralBalance"
-        );
-
-
-    if (available) {
-
-        available.textContent =
-            formatFCFA(
-                user.balance
-            );
-
-    }
-
-
-    if (invested) {
-
-        invested.textContent =
-            formatFCFA(
-                user.invested
-            );
-
-    }
-
-
-    if (earnings) {
-
-        earnings.textContent =
-            formatFCFA(
-                user.earnings
-            );
-
-    }
-
-
-    if (referral) {
-
-        referral.textContent =
-            formatFCFA(
-                user.referralBonus
-            );
-
-    }
-
-}
-
-
-/* =========================================================
-   PACKS
-========================================================= */
-
-function renderPacks() {
-
-    const container =
-        getElement(
-            "packsContainer"
-        );
-
-    if (!container) {
-        return;
-    }
-
-
-    container.innerHTML =
-        YQD_CONFIG.packs
-            .map(
-                pack => {
-
-                    const totalPotential =
-                        pack.dailyGain *
-                        pack.duration;
-
-
-                    return `
-                        <article class="pack-card">
-
-                            <div class="pack-image">
-
-                                <img
-                                    src="${escapeHTML(pack.image)}"
-                                    alt="${escapeHTML(pack.name)}"
-                                    loading="lazy"
-                                >
-
-                            </div>
-
-                            <div class="pack-content">
-
-                                <h3>
-                                    ${escapeHTML(pack.name)}
-                                </h3>
-
-                                <p>
-                                    ${escapeHTML(pack.description)}
-                                </p>
-
-                                <div class="pack-price">
-                                    ${formatFCFA(pack.amount)}
-                                </div>
-
-                                <div class="pack-details">
-
-                                    <div>
-                                        <span>Durée</span>
-                                        <strong>
-                                            ${pack.duration} jours
-                                        </strong>
-                                    </div>
-
-                                    <div>
-                                        <span>Gain quotidien</span>
-                                        <strong>
-                                            ${formatFCFA(pack.dailyGain)}
-                                        </strong>
-                                    </div>
-
-                                    <div>
-                                        <span>Gain théorique maximal</span>
-                                        <strong>
-                                            ${formatFCFA(totalPotential)}
-                                        </strong>
-                                    </div>
-
-                                </div>
-
-                                <button
-                                    class="btn btn-primary invest-button"
-                                    type="button"
-                                    data-pack-id="${escapeHTML(pack.id)}"
-                                >
-
-                                    <i class="fa-solid fa-chart-line"></i>
-
-                                    Investir
-
-                                </button>
-
-                            </div>
-
-                        </article>
-                    `;
-
-                }
-            )
-            .join("");
-
-
-    document.querySelectorAll(
-        ".invest-button"
-    ).forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                function () {
-
-                    openInvestmentModal(
-                        button.dataset.packId
-                    );
-
-                }
-            );
-
-        }
+function getDeposits() {
+
+    return hyqdGet(
+        HYQD_CONFIG.DEPOSITS_KEY,
+        []
     );
 
 }
 
 
-/* =========================================================
-   MODAL INVESTISSEMENT
-========================================================= */
+function saveDeposits(deposits) {
 
-function initializeInvestmentModal() {
-
-    const modal =
-        getElement(
-            "investmentModal"
-        );
-
-    if (!modal) {
-        return;
-    }
+    return hyqdSet(
+        HYQD_CONFIG.DEPOSITS_KEY,
+        deposits
+    );
 
 }
 
 
-function openInvestmentModal(packId) {
+function requestDeposit({
+    userId,
+    amount,
+    method = "",
+    reference = ""
+}) {
 
-    const pack =
-        YQD_CONFIG.packs.find(
-            item =>
-                item.id === packId
-        );
-
-
-    if (!pack) {
-        return;
-    }
-
-
-    const content =
-        getElement(
-            "investmentModalContent"
-        );
-
-
-    const modal =
-        getElement(
-            "investmentModal"
-        );
+    const numericAmount =
+        Number(amount);
 
 
     if (
-        !content ||
-        !modal
-    ) {
-        return;
-    }
-
-
-    content.innerHTML = `
-
-        <div class="investment-confirmation">
-
-            <h4>
-                ${escapeHTML(pack.name)}
-            </h4>
-
-            <p>
-                Montant nécessaire :
-                <strong>
-                    ${formatFCFA(pack.amount)}
-                </strong>
-            </p>
-
-            <p>
-                Durée :
-                <strong>
-                    ${pack.duration} jours
-                </strong>
-            </p>
-
-            <p>
-                Gain quotidien affiché :
-                <strong>
-                    ${formatFCFA(pack.dailyGain)}
-                </strong>
-            </p>
-
-            <div class="modal-actions">
-
-                <button
-                    type="button"
-                    class="btn btn-primary"
-                    id="confirmInvestmentButton"
-                >
-
-                    Confirmer l'investissement
-
-                </button>
-
-            </div>
-
-        </div>
-
-    `;
-
-
-    modal.classList.add(
-        "active"
-    );
-
-
-    const confirmButton =
-        getElement(
-            "confirmInvestmentButton"
-        );
-
-
-    if (
-        confirmButton
+        !userId ||
+        !numericAmount ||
+        numericAmount <= 0
     ) {
 
-        confirmButton.addEventListener(
-            "click",
-            function () {
+        return {
 
-                createInvestment(
-                    pack
-                );
+            success: false,
 
-            }
-        );
+            message:
+                "Montant invalide."
 
-    }
-
-}
-
-
-/* =========================================================
-   CREATION INVESTISSEMENT
-========================================================= */
-
-function createInvestment(pack) {
-
-    const user =
-        getCurrentUser();
-
-
-    if (!user) {
-        return;
-    }
-
-
-    if (
-        Number(user.balance) <
-        Number(pack.amount)
-    ) {
-
-        showToast(
-            "Solde insuffisant pour effectuer cet investissement.",
-            "error"
-        );
-
-        return;
+        };
 
     }
 
 
-    user.balance =
-        Number(user.balance) -
-        Number(pack.amount);
-
-
-    const startDate =
-        new Date();
-
-
-    const endDate =
-        new Date(
-            startDate.getTime()
-        );
-
-
-    endDate.setDate(
-        endDate.getDate() +
-        Number(pack.duration)
-    );
-
-
-    const investment = {
+    const deposit = {
 
         id:
-            generateId(
-                "INV"
-            ),
+            generateId("DEP"),
 
-        userId:
-            user.id,
-
-        packId:
-            pack.id,
-
-        packName:
-            pack.name,
+        userId,
 
         amount:
-            Number(
-                pack.amount
-            ),
+            numericAmount,
 
-        dailyGain:
-            Number(
-                pack.dailyGain
-            ),
+        method:
+            method || "Non précisé",
 
-        duration:
-            Number(
-                pack.duration
-            ),
-
-        startDate:
-            startDate.toISOString(),
-
-        endDate:
-            endDate.toISOString(),
+        reference:
+            reference || "",
 
         status:
-            "active",
+            "pending",
 
         createdAt:
-            new Date().toISOString()
+            getCurrentDate(),
+
+        validatedAt:
+            null
 
     };
 
 
-    const investments =
-        getInvestments();
-
-
-    investments.push(
-        investment
-    );
-
-
-    saveInvestments(
-        investments
-    );
-
-
-    user.invested =
-        Number(
-            user.invested
-        ) +
-        Number(
-            pack.amount
-        );
-
-
-    updateUser(
-        user
-    );
-
-
-    const modal =
-        getElement(
-            "investmentModal"
-        );
-
-
-    if (modal) {
-
-        modal.classList.remove(
-            "active"
-        );
-
-    }
-
-
-    showToast(
-        "Votre investissement est maintenant actif.",
-        "success"
-    );
-
-
-    initializeDashboard();
-
-}
-
-
-/* =========================================================
-   DEPOT
-========================================================= */
-
-function initializeDepositForm() {
-
-    const form =
-        getElement(
-            "depositForm"
-        );
-
-    if (!form) {
-        return;
-    }
-
-
-    form.addEventListener(
-        "submit",
-        function (event) {
-
-            event.preventDefault();
-
-
-            const user =
-                getCurrentUser();
-
-
-            if (!user) {
-                return;
-            }
-
-
-            const amount =
-                Number(
-                    getElement(
-                        "depositAmount"
-                    ).value
-                );
-
-
-            const method =
-                getElement(
-                    "depositMethod"
-                ).value;
-
-
-            const reference =
-                getElement(
-                    "depositReference"
-                ).value
-                    .trim();
-
-
-            if (
-                !Number.isFinite(
-                    amount
-                ) ||
-                amount <= 0
-            ) {
-
-                showToast(
-                    "Veuillez saisir un montant valide.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            if (
-                !method ||
-                !reference
-            ) {
-
-                showToast(
-                    "Veuillez remplir toutes les informations.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            const deposits =
-                getDeposits();
-
-
-            deposits.push(
-                {
-
-                    id:
-                        generateId(
-                            "DEP"
-                        ),
-
-                    userId:
-                        user.id,
-
-                    amount,
-
-                    method,
-
-                    reference,
-
-                    status:
-                        "pending",
-
-                    createdAt:
-                        new Date().toISOString(),
-
-                    validatedAt:
-                        null,
-
-                    rejectedAt:
-                        null
-
-                }
-            );
-
-
-            saveDeposits(
-                deposits
-            );
-
-
-            form.reset();
-
-
-            showToast(
-                "Votre demande de dépôt a été envoyée à l'administration.",
-                "success"
-            );
-
-
-            renderRecentActivity(
-                user
-            );
-
-
-            renderHistory(
-                user
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   RETRAIT
-========================================================= */
-
-function initializeWithdrawForm() {
-
-    const form =
-        getElement(
-            "withdrawForm"
-        );
-
-    if (!form) {
-        return;
-    }
-
-
-    form.addEventListener(
-        "submit",
-        function (event) {
-
-            event.preventDefault();
-
-
-            const user =
-                getCurrentUser();
-
-
-            if (!user) {
-                return;
-            }
-
-
-            const amount =
-                Number(
-                    getElement(
-                        "withdrawAmount"
-                    ).value
-                );
-
-
-            const method =
-                getElement(
-                    "withdrawMethod"
-                ).value;
-
-
-            const account =
-                getElement(
-                    "withdrawAccount"
-                ).value
-                    .trim();
-
-
-            if (
-                !Number.isFinite(
-                    amount
-                ) ||
-                amount <= 0
-            ) {
-
-                showToast(
-                    "Veuillez saisir un montant valide.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            if (
-                amount >
-                Number(
-                    user.balance
-                )
-            ) {
-
-                showToast(
-                    "Votre solde disponible est insuffisant.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            const withdrawals =
-                getWithdrawals();
-
-
-            withdrawals.push(
-                {
-
-                    id:
-                        generateId(
-                            "WIT"
-                        ),
-
-                    userId:
-                        user.id,
-
-                    amount,
-
-                    method,
-
-                    account,
-
-                    status:
-                        "pending",
-
-                    createdAt:
-                        new Date().toISOString(),
-
-                    validatedAt:
-                        null,
-
-                    rejectedAt:
-                        null
-
-                }
-            );
-
-
-            saveWithdrawals(
-                withdrawals
-            );
-
-
-            form.reset();
-
-
-            showToast(
-                "Votre demande de retrait a été envoyée à l'administration.",
-                "success"
-            );
-
-
-            renderRecentActivity(
-                user
-            );
-
-
-            renderHistory(
-                user
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   ACTIVITE RECENTE
-========================================================= */
-
-function renderRecentActivity(user) {
-
-    const body =
-        getElement(
-            "recentActivityBody"
-        );
-
-    if (!body) {
-        return;
-    }
-
-
     const deposits =
-        getDeposits()
-            .filter(
-                deposit =>
-                    deposit.userId === user.id
-            )
-            .map(
-                deposit => ({
-                    type: "Dépôt",
-                    amount:
-                        deposit.amount,
-                    date:
-                        deposit.createdAt,
-                    status:
-                        deposit.status
-                })
-            );
+        getDeposits();
 
 
-    const withdrawals =
-        getWithdrawals()
-            .filter(
-                withdrawal =>
-                    withdrawal.userId === user.id
-            )
-            .map(
-                withdrawal => ({
-                    type: "Retrait",
-                    amount:
-                        withdrawal.amount,
-                    date:
-                        withdrawal.createdAt,
-                    status:
-                        withdrawal.status
-                })
-            );
+    deposits.unshift(deposit);
 
 
-    const operations =
-        [
-            ...deposits,
-            ...withdrawals
-        ]
-            .sort(
-                (a, b) =>
-                    new Date(
-                        b.date
-                    ) -
-                    new Date(
-                        a.date
-                    )
-            )
-            .slice(
-                0,
-                6
-            );
+    saveDeposits(deposits);
 
 
-    if (
-        operations.length === 0
-    ) {
+    return {
 
-        body.innerHTML = `
-            <tr>
-                <td colspan="4">
-                    Aucune opération pour le moment.
-                </td>
-            </tr>
-        `;
+        success: true,
 
-        return;
-
-    }
-
-
-    body.innerHTML =
-        operations
-            .map(
-                operation => `
-
-                    <tr>
-
-                        <td>
-                            ${escapeHTML(
-                                operation.type
-                            )}
-                        </td>
-
-                        <td>
-                            ${formatFCFA(
-                                operation.amount
-                            )}
-                        </td>
-
-                        <td>
-                            ${formatDate(
-                                operation.date
-                            )}
-                        </td>
-
-                        <td>
-                            ${renderStatus(
-                                operation.status
-                            )}
-                        </td>
-
-                    </tr>
-
-                `
-            )
-            .join("");
-
-}
-
-
-/* =========================================================
-   HISTORIQUE UTILISATEUR
-========================================================= */
-
-function renderHistory(user) {
-
-    const body =
-        getElement(
-            "historyBody"
-        );
-
-    if (!body) {
-        return;
-    }
-
-
-    const deposits =
-        getDeposits()
-            .filter(
-                deposit =>
-                    deposit.userId === user.id
-            )
-            .map(
-                deposit => ({
-                    type: "Dépôt",
-                    amount:
-                        deposit.amount,
-                    details:
-                        deposit.method +
-                        " - " +
-                        deposit.reference,
-                    date:
-                        deposit.createdAt,
-                    status:
-                        deposit.status
-                })
-            );
-
-
-    const withdrawals =
-        getWithdrawals()
-            .filter(
-                withdrawal =>
-                    withdrawal.userId === user.id
-            )
-            .map(
-                withdrawal => ({
-                    type: "Retrait",
-                    amount:
-                        withdrawal.amount,
-                    details:
-                        withdrawal.method +
-                        " - " +
-                        withdrawal.account,
-                    date:
-                        withdrawal.createdAt,
-                    status:
-                        withdrawal.status
-                })
-            );
-
-
-    const operations =
-        [
-            ...deposits,
-            ...withdrawals
-        ]
-            .sort(
-                (a, b) =>
-                    new Date(
-                        b.date
-                    ) -
-                    new Date(
-                        a.date
-                    )
-            );
-
-
-    if (
-        operations.length === 0
-    ) {
-
-        body.innerHTML = `
-            <tr>
-                <td colspan="5">
-                    Aucune opération enregistrée.
-                </td>
-            </tr>
-        `;
-
-        return;
-
-    }
-
-
-    body.innerHTML =
-        operations
-            .map(
-                operation => `
-
-                    <tr>
-
-                        <td>
-                            ${escapeHTML(
-                                operation.type
-                            )}
-                        </td>
-
-                        <td>
-                            ${formatFCFA(
-                                operation.amount
-                            )}
-                        </td>
-
-                        <td>
-                            ${escapeHTML(
-                                operation.details
-                            )}
-                        </td>
-
-                        <td>
-                            ${formatDate(
-                                operation.date
-                            )}
-                        </td>
-
-                        <td>
-                            ${renderStatus(
-                                operation.status
-                            )}
-                        </td>
-
-                    </tr>
-
-                `
-            )
-            .join("");
-
-}
-
-
-/* =========================================================
-   STATUT
-========================================================= */
-
-function renderStatus(status) {
-
-    const labels = {
-
-        pending:
-            "En attente",
-
-        approved:
-            "Validé",
-
-        rejected:
-            "Refusé",
-
-        active:
-            "Actif",
-
-        completed:
-            "Terminé",
-
-        open:
-            "Ouvert",
-
-        answered:
-            "Répondu",
-
-        closed:
-            "Fermé"
+        message:
+            "Votre demande de dépôt a été enregistrée et attend validation."
 
     };
 
-
-    return `
-        <span class="status status-${escapeHTML(status)}">
-            ${escapeHTML(
-                labels[status] ||
-                status
-            )}
-        </span>
-    `;
-
 }
 
 
 /* =========================================================
-   INVESTISSEMENTS UTILISATEUR
+   VALIDATION DÉPÔT ADMIN
 ========================================================= */
 
-function renderUserInvestments(user) {
-
-    const preview =
-        getElement(
-            "activeInvestmentsPreview"
-        );
-
-    const container =
-        getElement(
-            "activeInvestmentsContainer"
-        );
-
-
-    const investments =
-        getUserInvestments(
-            user.id
-        );
-
-
-    const activeInvestments =
-        investments.filter(
-            investment =>
-                investment.status === "active"
-        );
-
-
-    if (preview) {
-
-        if (
-            activeInvestments.length === 0
-        ) {
-
-            preview.innerHTML = `
-                <p class="text-muted">
-                    Aucun investissement actif.
-                </p>
-            `;
-
-        } else {
-
-            preview.innerHTML =
-                activeInvestments
-                    .slice(0, 3)
-                    .map(
-                        investment => `
-
-                            <div class="investment-item">
-
-                                <strong>
-                                    ${escapeHTML(
-                                        investment.packName
-                                    )}
-                                </strong>
-
-                                <span>
-                                    ${formatFCFA(
-                                        investment.amount
-                                    )}
-                                </span>
-
-                                <span>
-                                    Fin :
-                                    ${formatDate(
-                                        investment.endDate
-                                    )}
-                                </span>
-
-                            </div>
-
-                        `
-                    )
-                    .join("");
-
-        }
-
-    }
-
-
-    if (!container) {
-        return;
-    }
-
-
-    if (
-        investments.length === 0
-    ) {
-
-        container.innerHTML = `
-            <p class="text-muted">
-                Aucun investissement actif.
-            </p>
-        `;
-
-        return;
-
-    }
-
-
-    container.innerHTML =
-        investments
-            .map(
-                investment => {
-
-                    const now =
-                        new Date();
-
-                    const end =
-                        new Date(
-                            investment.endDate
-                        );
-
-                    const totalDuration =
-                        investment.duration;
-
-                    const elapsed =
-                        Math.min(
-                            totalDuration,
-                            Math.max(
-                                0,
-                                Math.floor(
-                                    (
-                                        now -
-                                        new Date(
-                                            investment.startDate
-                                        )
-                                    ) /
-                                    (
-                                        1000 *
-                                        60 *
-                                        60 *
-                                        24
-                                    )
-                                )
-                            )
-                        );
-
-                    const progress =
-                        Math.min(
-                            100,
-                            Math.round(
-                                (
-                                    elapsed /
-                                    totalDuration
-                                ) *
-                                100
-                            )
-                        );
-
-
-                    return `
-
-                        <div class="investment-card">
-
-                            <div class="investment-card-header">
-
-                                <div>
-
-                                    <h4>
-                                        ${escapeHTML(
-                                            investment.packName
-                                        )}
-                                    </h4>
-
-                                    <span>
-                                        ${renderStatus(
-                                            investment.status
-                                        )}
-                                    </span>
-
-                                </div>
-
-                                <strong>
-                                    ${formatFCFA(
-                                        investment.amount
-                                    )}
-                                </strong>
-
-                            </div>
-
-                            <div class="investment-progress">
-
-                                <div class="progress-info">
-
-                                    <span>
-                                        Progression
-                                    </span>
-
-                                    <strong>
-                                        ${elapsed}/${totalDuration} jours
-                                    </strong>
-
-                                </div>
-
-                                <div class="progress-bar">
-
-                                    <span
-                                        style="width: ${progress}%"
-                                    ></span>
-
-                                </div>
-
-                            </div>
-
-                            <div class="investment-meta">
-
-                                <span>
-                                    Début :
-                                    ${formatDate(
-                                        investment.startDate
-                                    )}
-                                </span>
-
-                                <span>
-                                    Fin :
-                                    ${formatDate(
-                                        investment.endDate
-                                    )}
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                    `;
-
-                }
-            )
-            .join("");
-
-}
-
-
-/* =========================================================
-   PARRAINAGE
-========================================================= */
-
-function renderReferral(user) {
-
-    const code =
-        getElement(
-            "userReferralCode"
-        );
-
-    const link =
-        getElement(
-            "referralLink"
-        );
-
-
-    if (code) {
-
-        code.textContent =
-            user.referralCode;
-
-    }
-
-
-    if (link) {
-
-        const baseURL =
-            window.location.origin +
-            window.location.pathname
-                .replace(
-                    /dashboard\.html.*$/,
-                    ""
-                );
-
-        link.textContent =
-            baseURL +
-            "register.html?ref=" +
-            encodeURIComponent(
-                user.referralCode
-            );
-
-    }
-
-}
-
-
-function renderReferrals(user) {
-
-    const body =
-        getElement(
-            "referralsBody"
-        );
-
-    if (!body) {
-        return;
-    }
-
-
-    const referrals =
-        getUsers().filter(
-            item =>
-                item.referrerId === user.id
-        );
-
-
-    if (
-        referrals.length === 0
-    ) {
-
-        body.innerHTML = `
-            <tr>
-                <td colspan="3">
-                    Aucun filleul enregistré.
-                </td>
-            </tr>
-        `;
-
-        return;
-
-    }
-
-
-    body.innerHTML =
-        referrals
-            .map(
-                referral => `
-
-                    <tr>
-
-                        <td>
-                            ${escapeHTML(
-                                referral.fullName
-                            )}
-                        </td>
-
-                        <td>
-                            ${formatDate(
-                                referral.createdAt
-                            )}
-                        </td>
-
-                        <td>
-                            ${formatFCFA(
-                                referral.referralRewarded
-                                    ? referral.referralRewardAmount || 0
-                                    : 0
-                            )}
-                        </td>
-
-                    </tr>
-
-                `
-            )
-            .join("");
-
-}
-
-
-function initializeReferralButtons() {
-
-    const copyCode =
-        getElement(
-            "copyReferralCode"
-        );
-
-    const copyLink =
-        getElement(
-            "copyReferralLink"
-        );
-
-
-    if (copyCode) {
-
-        copyCode.addEventListener(
-            "click",
-            function () {
-
-                const user =
-                    getCurrentUser();
-
-                if (!user) {
-                    return;
-                }
-
-                copyToClipboard(
-                    user.referralCode
-                );
-
-            }
-        );
-
-    }
-
-
-    if (copyLink) {
-
-        copyLink.addEventListener(
-            "click",
-            function () {
-
-                const link =
-                    getElement(
-                        "referralLink"
-                    );
-
-                if (!link) {
-                    return;
-                }
-
-                copyToClipboard(
-                    link.textContent
-                );
-
-            }
-        );
-
-    }
-
-}
-
-
-function copyToClipboard(text) {
-
-    if (
-        navigator.clipboard &&
-        window.isSecureContext
-    ) {
-
-        navigator.clipboard
-            .writeText(text)
-            .then(
-                function () {
-
-                    showToast(
-                        "Copié avec succès.",
-                        "success"
-                    );
-
-                }
-            )
-            .catch(
-                function () {
-
-                    showToast(
-                        "Impossible de copier automatiquement.",
-                        "error"
-                    );
-
-                }
-            );
-
-    } else {
-
-        const textarea =
-            document.createElement(
-                "textarea"
-            );
-
-        textarea.value =
-            text;
-
-        document.body.appendChild(
-            textarea
-        );
-
-        textarea.select();
-
-        try {
-
-            document.execCommand(
-                "copy"
-            );
-
-            showToast(
-                "Copié avec succès.",
-                "success"
-            );
-
-        } catch (error) {
-
-            showToast(
-                "Impossible de copier.",
-                "error"
-            );
-
-        }
-
-        textarea.remove();
-
-    }
-
-}
-
-
-/* =========================================================
-   ASSISTANCE UTILISATEUR
-========================================================= */
-
-function initializeSupportForm(user) {
-
-    const form =
-        getElement(
-            "supportForm"
-        );
-
-    if (!form) {
-        return;
-    }
-
-
-    form.addEventListener(
-        "submit",
-        function (event) {
-
-            event.preventDefault();
-
-
-            const subject =
-                getElement(
-                    "ticketSubject"
-                ).value.trim();
-
-
-            const message =
-                getElement(
-                    "ticketMessage"
-                ).value.trim();
-
-
-            if (
-                subject.length < 3 ||
-                message.length < 5
-            ) {
-
-                showToast(
-                    "Veuillez fournir davantage de détails.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            const tickets =
-                getTickets();
-
-
-            tickets.push(
-                {
-
-                    id:
-                        generateId(
-                            "TICKET"
-                        ),
-
-                    userId:
-                        user.id,
-
-                    subject,
-
-                    message,
-
-                    reply:
-                        "",
-
-                    status:
-                        "open",
-
-                    createdAt:
-                        new Date().toISOString(),
-
-                    repliedAt:
-                        null
-
-                }
-            );
-
-
-            saveTickets(
-                tickets
-            );
-
-
-            form.reset();
-
-
-            renderTickets(
-                user
-            );
-
-
-            showToast(
-                "Votre ticket a été envoyé.",
-                "success"
-            );
-
-        }
-    );
-
-}
-
-
-function renderTickets(user) {
-
-    const container =
-        getElement(
-            "ticketsContainer"
-        );
-
-    if (!container) {
-        return;
-    }
-
-
-    const tickets =
-        getTickets()
-            .filter(
-                ticket =>
-                    ticket.userId === user.id
-            )
-            .sort(
-                (a, b) =>
-                    new Date(
-                        b.createdAt
-                    ) -
-                    new Date(
-                        a.createdAt
-                    )
-            );
-
-
-    if (
-        tickets.length === 0
-    ) {
-
-        container.innerHTML = `
-            <p class="text-muted">
-                Aucun ticket pour le moment.
-            </p>
-        `;
-
-        return;
-
-    }
-
-
-    container.innerHTML =
-        tickets
-            .map(
-                ticket => `
-
-                    <article class="ticket-item">
-
-                        <div class="ticket-header">
-
-                            <strong>
-                                ${escapeHTML(
-                                    ticket.subject
-                                )}
-                            </strong>
-
-                            ${renderStatus(
-                                ticket.status
-                            )}
-
-                        </div>
-
-                        <p>
-                            ${escapeHTML(
-                                ticket.message
-                            )}
-                        </p>
-
-                        ${
-                            ticket.reply
-                                ? `
-                                    <div class="ticket-reply">
-
-                                        <strong>
-                                            Réponse de l'administration :
-                                        </strong>
-
-                                        <p>
-                                            ${escapeHTML(
-                                                ticket.reply
-                                            )}
-                                        </p>
-
-                                    </div>
-                                `
-                                : ""
-                        }
-
-                        <small>
-                            ${formatDate(
-                                ticket.createdAt
-                            )}
-                        </small>
-
-                    </article>
-
-                `
-            )
-            .join("");
-
-}
-
-
-/* =========================================================
-   PROFIL
-========================================================= */
-
-function renderProfile(user) {
-
-    const profileName =
-        getElement(
-            "profileName"
-        );
-
-    const profileEmail =
-        getElement(
-            "profileEmail"
-        );
-
-    const profilePhone =
-        getElement(
-            "profilePhone"
-        );
-
-    const fullNameInput =
-        getElement(
-            "profileFullName"
-        );
-
-    const emailInput =
-        getElement(
-            "profileEmailInput"
-        );
-
-    const phoneInput =
-        getElement(
-            "profilePhoneInput"
-        );
-
-
-    if (profileName) {
-
-        profileName.textContent =
-            user.fullName;
-
-    }
-
-
-    if (profileEmail) {
-
-        profileEmail.textContent =
-            user.email;
-
-    }
-
-
-    if (profilePhone) {
-
-        profilePhone.textContent =
-            user.phone;
-
-    }
-
-
-    if (fullNameInput) {
-
-        fullNameInput.value =
-            user.fullName;
-
-    }
-
-
-    if (emailInput) {
-
-        emailInput.value =
-            user.email;
-
-    }
-
-
-    if (phoneInput) {
-
-        phoneInput.value =
-            user.phone;
-
-    }
-
-}
-
-
-function initializeProfileForm() {
-
-    const form =
-        getElement(
-            "profileForm"
-        );
-
-    if (!form) {
-        return;
-    }
-
-
-    form.addEventListener(
-        "submit",
-        function (event) {
-
-            event.preventDefault();
-
-
-            const user =
-                getCurrentUser();
-
-            if (!user) {
-                return;
-            }
-
-
-            const fullName =
-                getElement(
-                    "profileFullName"
-                ).value.trim();
-
-
-            const email =
-                getElement(
-                    "profileEmailInput"
-                ).value
-                    .trim()
-                    .toLowerCase();
-
-
-            const phone =
-                getElement(
-                    "profilePhoneInput"
-                ).value.trim();
-
-
-            if (
-                fullName.length < 3 ||
-                !email.includes("@") ||
-                phone.length < 8
-            ) {
-
-                showToast(
-                    "Veuillez vérifier vos informations.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            const users =
-                getUsers();
-
-
-            const duplicate =
-                users.find(
-                    item =>
-                        item.id !== user.id &&
-                        (
-                            item.email === email ||
-                            item.phone === phone
-                        )
-                );
-
-
-            if (duplicate) {
-
-                showToast(
-                    "Cet e-mail ou ce numéro appartient déjà à un autre compte.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            user.fullName =
-                fullName;
-
-            user.email =
-                email;
-
-            user.phone =
-                phone;
-
-
-            updateUser(
-                user
-            );
-
-
-            updateDashboardIdentity(
-                user
-            );
-
-
-            renderProfile(
-                user
-            );
-
-
-            showToast(
-                "Profil mis à jour avec succès.",
-                "success"
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   DECONNEXION UTILISATEUR
-========================================================= */
-
-function initializeUserLogout() {
-
-    const button =
-        getElement(
-            "logoutButton"
-        );
-
-    if (!button) {
-        return;
-    }
-
-
-    button.addEventListener(
-        "click",
-        function () {
-
-            localStorage.removeItem(
-                YQD_CONFIG.storage.currentUser
-            );
-
-
-            window.location.href =
-                "login.html";
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   ADMIN SESSION
-========================================================= */
-
-function getAdminSession() {
-
-    return getStoredData(
-        YQD_CONFIG.storage.adminSession,
-        null
-    );
-
-}
-
-
-function saveAdminSession(session) {
-
-    return setStoredData(
-        YQD_CONFIG.storage.adminSession,
-        session
-    );
-
-}
-
-
-function clearAdminSession() {
-
-    localStorage.removeItem(
-        YQD_CONFIG.storage.adminSession
-    );
-
-}
-
-
-/* =========================================================
-   INITIALISATION ADMIN
-========================================================= */
-
-function initializeAdmin() {
-
-    if (
-        !window.location.pathname.includes(
-            "admin.html"
-        )
-    ) {
-        return;
-    }
-
-
-    const authScreen =
-        getElement(
-            "adminAuthScreen"
-        );
-
-    const panel =
-        getElement(
-            "adminPanel"
-        );
-
-
-    const session =
-        getAdminSession();
-
-
-    if (
-        session &&
-        session.authenticated === true
-    ) {
-
-        if (authScreen) {
-
-            authScreen.style.display =
-                "none";
-
-        }
-
-        if (panel) {
-
-            panel.style.display =
-                "block";
-
-        }
-
-
-        initializeAdminPanel();
-
-    } else {
-
-        if (authScreen) {
-
-            authScreen.style.display =
-                "flex";
-
-        }
-
-        if (panel) {
-
-            panel.style.display =
-                "none";
-
-        }
-
-
-        initializeAdminAuth();
-
-    }
-
-}
-
-
-/* =========================================================
-   AUTH ADMIN
-========================================================= */
-
-function initializeAdminAuth() {
-
-    const form =
-        getElement(
-            "adminCodeForm"
-        );
-
-    if (!form) {
-        return;
-    }
-
-
-    form.addEventListener(
-        "submit",
-        function (event) {
-
-            event.preventDefault();
-
-
-            const input =
-                getElement(
-                    "adminAccessCode"
-                );
-
-
-            const message =
-                getElement(
-                    "adminAuthMessage"
-                );
-
-
-            const code =
-                input.value.trim();
-
-
-            if (
-                code !==
-                YQD_ADMIN_ACCESS_CODE
-            ) {
-
-                if (message) {
-
-                    message.style.display =
-                        "block";
-
-                    message.style.background =
-                        "#fee2e2";
-
-                    message.style.color =
-                        "#991b1b";
-
-                    message.textContent =
-                        "Code administrateur incorrect.";
-
-                }
-
-                return;
-
-            }
-
-
-            saveAdminSession(
-                {
-                    authenticated: true,
-                    createdAt:
-                        new Date().toISOString()
-                }
-            );
-
-
-            if (message) {
-
-                message.style.display =
-                    "block";
-
-                message.style.background =
-                    "#dcfce7";
-
-                message.style.color =
-                    "#166534";
-
-                message.textContent =
-                    "Vérification réussie. Chargement...";
-
-            }
-
-
-            setTimeout(
-                function () {
-
-                    initializeAdmin();
-
-                },
-                500
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   PANEL ADMIN
-========================================================= */
-
-function initializeAdminPanel() {
-
-    renderAdminOverview();
-
-    renderAdminUsers();
-
-    renderAdminDeposits();
-
-    renderAdminWithdrawals();
-
-    renderAdminInvestments();
-
-    renderAdminTickets();
-
-    renderAdminTransactions();
-
-    initializeAdminFilters();
-
-    initializeAdminLogout();
-
-    initializeTicketReplyForm();
-
-}
-
-
-/* =========================================================
-   ADMIN OVERVIEW
-========================================================= */
-
-function renderAdminOverview() {
-
-    const users =
-        getUsers();
-
-    const deposits =
-        getDeposits();
-
-    const withdrawals =
-        getWithdrawals();
-
-    const investments =
-        getInvestments();
-
-
-    const pendingDeposits =
-        deposits.filter(
-            deposit =>
-                deposit.status ===
-                "pending"
-        );
-
-
-    const pendingWithdrawals =
-        withdrawals.filter(
-            withdrawal =>
-                withdrawal.status ===
-                "pending"
-        );
-
-
-    const activeInvestments =
-        investments.filter(
-            investment =>
-                investment.status ===
-                "active"
-        );
-
-
-    setText(
-        "adminTotalUsers",
-        users.length
-    );
-
-
-    setText(
-        "adminPendingDeposits",
-        pendingDeposits.length
-    );
-
-
-    setText(
-        "adminPendingWithdrawals",
-        pendingWithdrawals.length
-    );
-
-
-    setText(
-        "adminActiveInvestments",
-        activeInvestments.length
-    );
-
-
-    setText(
-        "pendingDepositsCount",
-        pendingDeposits.length
-    );
-
-
-    setText(
-        "pendingWithdrawalsCount",
-        pendingWithdrawals.length
-    );
-
-
-    const openTickets =
-        getTickets().filter(
-            ticket =>
-                ticket.status ===
-                "open"
-        );
-
-
-    setText(
-        "pendingTicketsCount",
-        openTickets.length
-    );
-
-
-    renderAdminRecentActivity();
-
-    renderAdminRecentTickets();
-
-}
-
-
-function setText(id, value) {
-
-    const element =
-        getElement(id);
-
-    if (element) {
-
-        element.textContent =
-            value;
-
-    }
-
-}
-
-
-/* =========================================================
-   ADMIN UTILISATEURS
-========================================================= */
-
-function renderAdminUsers() {
-
-    const body =
-        getElement(
-            "adminUsersBody"
-        );
-
-    if (!body) {
-        return;
-    }
-
-
-    const users =
-        getUsers();
-
-
-    if (
-        users.length === 0
-    ) {
-
-        body.innerHTML = `
-            <tr>
-                <td colspan="6">
-                    Aucun utilisateur enregistré.
-                </td>
-            </tr>
-        `;
-
-        return;
-
-    }
-
-
-    body.innerHTML =
-        users
-            .map(
-                user => `
-
-                    <tr>
-
-                        <td>
-
-                            <strong>
-                                ${escapeHTML(
-                                    user.fullName
-                                )}
-                            </strong>
-
-                            <br>
-
-                            <small>
-                                ${escapeHTML(
-                                    user.email
-                                )}
-                            </small>
-
-                        </td>
-
-                        <td>
-                            ${escapeHTML(
-                                user.phone
-                            )}
-                        </td>
-
-                        <td>
-                            ${formatFCFA(
-                                user.balance
-                            )}
-                        </td>
-
-                        <td>
-                            ${formatFCFA(
-                                user.invested
-                            )}
-                        </td>
-
-                        <td>
-                            ${formatDate(
-                                user.createdAt
-                            )}
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="btn btn-small admin-user-details"
-                                type="button"
-                                data-user-id="${escapeHTML(user.id)}"
-                            >
-
-                                Voir
-
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-                `
-            )
-            .join("");
-
-
-    document.querySelectorAll(
-        ".admin-user-details"
-    ).forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                function () {
-
-                    openUserDetails(
-                        button.dataset.userId
-                    );
-
-                }
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   DETAILS UTILISATEUR
-========================================================= */
-
-function openUserDetails(userId) {
-
-    const user =
-        findUserById(
-            userId
-        );
-
-
-    if (!user) {
-        return;
-    }
-
-
-    const content =
-        getElement(
-            "userDetailsContent"
-        );
-
-
-    const modal =
-        getElement(
-            "userDetailsModal"
-        );
-
-
-    if (
-        !content ||
-        !modal
-    ) {
-        return;
-    }
-
-
-    const investments =
-        getUserInvestments(
-            user.id
-        );
-
-
-    content.innerHTML = `
-
-        <div class="user-details-grid">
-
-            <div>
-
-                <span>Nom</span>
-
-                <strong>
-                    ${escapeHTML(
-                        user.fullName
-                    )}
-                </strong>
-
-            </div>
-
-            <div>
-
-                <span>E-mail</span>
-
-                <strong>
-                    ${escapeHTML(
-                        user.email
-                    )}
-                </strong>
-
-            </div>
-
-            <div>
-
-                <span>Téléphone</span>
-
-                <strong>
-                    ${escapeHTML(
-                        user.phone
-                    )}
-                </strong>
-
-            </div>
-
-            <div>
-
-                <span>Solde</span>
-
-                <strong>
-                    ${formatFCFA(
-                        user.balance
-                    )}
-                </strong>
-
-            </div>
-
-            <div>
-
-                <span>Capital investi</span>
-
-                <strong>
-                    ${formatFCFA(
-                        user.invested
-                    )}
-                </strong>
-
-            </div>
-
-            <div>
-
-                <span>Code de parrainage</span>
-
-                <strong>
-                    ${escapeHTML(
-                        user.referralCode
-                    )}
-                </strong>
-
-            </div>
-
-            <div>
-
-                <span>Inscription</span>
-
-                <strong>
-                    ${formatDate(
-                        user.createdAt
-                    )}
-                </strong>
-
-            </div>
-
-        </div>
-
-        <hr>
-
-        <h4>
-            Investissements
-        </h4>
-
-        <p>
-            Nombre :
-            <strong>
-                ${investments.length}
-            </strong>
-        </p>
-
-    `;
-
-
-    modal.classList.add(
-        "active"
-    );
-
-}
-
-
-/* =========================================================
-   ADMIN DEPOTS
-========================================================= */
-
-function renderAdminDeposits() {
-
-    const body =
-        getElement(
-            "adminDepositsBody"
-        );
-
-    if (!body) {
-        return;
-    }
-
-
-    const filter =
-        getElement(
-            "depositStatusFilter"
-        )?.value ||
-        "all";
-
-
-    let deposits =
-        getDeposits();
-
-
-    if (
-        filter !== "all"
-    ) {
-
-        deposits =
-            deposits.filter(
-                deposit =>
-                    deposit.status ===
-                    filter
-            );
-
-    }
-
-
-    deposits =
-        deposits.sort(
-            (a, b) =>
-                new Date(
-                    b.createdAt
-                ) -
-                new Date(
-                    a.createdAt
-                )
-        );
-
-
-    if (
-        deposits.length === 0
-    ) {
-
-        body.innerHTML = `
-            <tr>
-                <td colspan="7">
-                    Aucune demande de dépôt.
-                </td>
-            </tr>
-        `;
-
-        return;
-
-    }
-
-
-    body.innerHTML =
-        deposits
-            .map(
-                deposit => {
-
-                    const user =
-                        findUserById(
-                            deposit.userId
-                        );
-
-
-                    return `
-
-                        <tr>
-
-                            <td>
-                                ${escapeHTML(
-                                    user?.fullName ||
-                                    "Utilisateur supprimé"
-                                )}
-                            </td>
-
-                            <td>
-                                ${formatFCFA(
-                                    deposit.amount
-                                )}
-                            </td>
-
-                            <td>
-                                ${escapeHTML(
-                                    deposit.method
-                                )}
-                            </td>
-
-                            <td>
-                                ${escapeHTML(
-                                    deposit.reference
-                                )}
-                            </td>
-
-                            <td>
-                                ${formatDate(
-                                    deposit.createdAt
-                                )}
-                            </td>
-
-                            <td>
-                                ${renderStatus(
-                                    deposit.status
-                                )}
-                            </td>
-
-                            <td>
-
-                                ${
-                                    deposit.status ===
-                                    "pending"
-                                        ? `
-
-                                            <button
-                                                class="btn btn-small approve-deposit"
-                                                data-deposit-id="${escapeHTML(deposit.id)}"
-                                            >
-                                                Valider
-                                            </button>
-
-                                            <button
-                                                class="btn btn-small reject-deposit"
-                                                data-deposit-id="${escapeHTML(deposit.id)}"
-                                            >
-                                                Refuser
-                                            </button>
-
-                                        `
-                                        : "-"
-                                }
-
-                            </td>
-
-                        </tr>
-
-                    `;
-
-                }
-            )
-            .join("");
-
-
-    bindDepositActions();
-
-}
-
-
-/* =========================================================
-   ACTIONS DEPOT
-========================================================= */
-
-function bindDepositActions() {
-
-    document.querySelectorAll(
-        ".approve-deposit"
-    ).forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                function () {
-
-                    processDeposit(
-                        button.dataset.depositId,
-                        "approved"
-                    );
-
-                }
-            );
-
-        }
-    );
-
-
-    document.querySelectorAll(
-        ".reject-deposit"
-    ).forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                function () {
-
-                    processDeposit(
-                        button.dataset.depositId,
-                        "rejected"
-                    );
-
-                }
-            );
-
-        }
-    );
-
-}
-
-
-function processDeposit(
-    depositId,
-    decision
+function validateDeposit(
+    depositId
 ) {
 
     const deposits =
@@ -4525,376 +839,339 @@ function processDeposit(
     const deposit =
         deposits.find(
             item =>
-                item.id ===
-                depositId
+                item.id === depositId
         );
 
 
+    if (!deposit) {
+
+        return {
+
+            success: false,
+
+            message:
+                "Dépôt introuvable."
+
+        };
+
+    }
+
+
     if (
-        !deposit ||
         deposit.status !==
         "pending"
     ) {
-        return;
+
+        return {
+
+            success: false,
+
+            message:
+                "Cette demande a déjà été traitée."
+
+        };
+
+    }
+
+
+    const user =
+        findUserById(
+            deposit.userId
+        );
+
+
+    if (!user) {
+
+        return {
+
+            success: false,
+
+            message:
+                "Utilisateur introuvable."
+
+        };
+
     }
 
 
     deposit.status =
-        decision;
+        "approved";
 
 
-    if (
-        decision ===
-        "approved"
-    ) {
-
-        deposit.validatedAt =
-            new Date().toISOString();
+    deposit.validatedAt =
+        getCurrentDate();
 
 
-        const user =
-            findUserById(
-                deposit.userId
-            );
+    saveDeposits(deposits);
 
 
-        if (user) {
-
-            user.balance =
-                Number(
-                    user.balance
-                ) +
-                Number(
-                    deposit.amount
-                );
+    user.balance =
+        Number(user.balance || 0) +
+        Number(deposit.amount);
 
 
-            updateUser(
-                user
-            );
+    user.totalDeposited =
+        Number(user.totalDeposited || 0) +
+        Number(deposit.amount);
 
 
-            processReferralReward(
-                user,
-                deposit.amount
-            );
-
-        }
+    updateUser(user);
 
 
-        showToast(
-            "Dépôt validé avec succès.",
-            "success"
-        );
-
-    } else {
-
-        deposit.rejectedAt =
-            new Date().toISOString();
-
-
-        showToast(
-            "Dépôt refusé.",
-            "warning"
-        );
-
-    }
-
-
-    saveDeposits(
-        deposits
+    processReferralReward(
+        user,
+        deposit.amount
     );
 
 
-    refreshAdminData();
+    addTransaction({
+
+        userId:
+            user.id,
+
+        type:
+            "deposit",
+
+        amount:
+            deposit.amount,
+
+        status:
+            "approved",
+
+        description:
+            "Dépôt validé"
+
+    });
+
+
+    return {
+
+        success: true,
+
+        message:
+            "Dépôt validé avec succès."
+
+    };
 
 }
 
 
-/* =========================================================
-   BONUS PARRAINAGE
-========================================================= */
-
-function processReferralReward(
-    referredUser,
-    firstDepositAmount
+function rejectDeposit(
+    depositId
 ) {
 
+    const deposits =
+        getDeposits();
+
+
+    const deposit =
+        deposits.find(
+            item =>
+                item.id === depositId
+        );
+
+
+    if (!deposit) {
+
+        return {
+
+            success: false,
+
+            message:
+                "Dépôt introuvable."
+
+        };
+
+    }
+
+
     if (
-        !referredUser.referrerId ||
-        referredUser.referralRewarded
+        deposit.status !==
+        "pending"
     ) {
-        return;
+
+        return {
+
+            success: false,
+
+            message:
+                "Cette demande a déjà été traitée."
+
+        };
+
     }
 
 
-    const referrer =
-        findUserById(
-            referredUser.referrerId
-        );
+    deposit.status =
+        "rejected";
 
 
-    if (!referrer) {
-        return;
-    }
+    deposit.validatedAt =
+        getCurrentDate();
 
 
-    const reward =
-        Number(
-            firstDepositAmount
-        ) *
-        (
-            YQD_CONFIG.referralPercent /
-            100
-        );
+    saveDeposits(deposits);
 
 
-    referrer.balance =
-        Number(
-            referrer.balance
-        ) +
-        reward;
+    return {
 
+        success: true,
 
-    referrer.referralBonus =
-        Number(
-            referrer.referralBonus
-        ) +
-        reward;
+        message:
+            "Dépôt refusé."
 
-
-    referredUser.referralRewarded =
-        true;
-
-
-    referredUser.referralRewardAmount =
-        reward;
-
-
-    updateUser(
-        referrer
-    );
-
-
-    updateUser(
-        referredUser
-    );
+    };
 
 }
 
 
 /* =========================================================
-   ADMIN RETRAITS
+   RETRAITS
 ========================================================= */
 
-function renderAdminWithdrawals() {
+function getWithdrawals() {
 
-    const body =
-        getElement(
-            "adminWithdrawalsBody"
-        );
+    return hyqdGet(
+        HYQD_CONFIG.WITHDRAWALS_KEY,
+        []
+    );
 
-    if (!body) {
-        return;
+}
+
+
+function saveWithdrawals(
+    withdrawals
+) {
+
+    return hyqdSet(
+        HYQD_CONFIG.WITHDRAWALS_KEY,
+        withdrawals
+    );
+
+}
+
+
+function requestWithdrawal({
+    userId,
+    amount,
+    method = ""
+}) {
+
+    const user =
+        findUserById(userId);
+
+
+    const numericAmount =
+        Number(amount);
+
+
+    if (!user) {
+
+        return {
+
+            success: false,
+
+            message:
+                "Utilisateur introuvable."
+
+        };
+
     }
 
 
-    const filter =
-        getElement(
-            "withdrawalStatusFilter"
-        )?.value ||
-        "all";
+    if (
+        !numericAmount ||
+        numericAmount <= 0
+    ) {
+
+        return {
+
+            success: false,
+
+            message:
+                "Montant invalide."
+
+        };
+
+    }
 
 
-    let withdrawals =
+    if (
+        numericAmount >
+        Number(user.balance || 0)
+    ) {
+
+        return {
+
+            success: false,
+
+            message:
+                "Solde insuffisant."
+
+        };
+
+    }
+
+
+    const withdrawals =
         getWithdrawals();
 
 
-    if (
-        filter !== "all"
-    ) {
+    const withdrawal = {
 
-        withdrawals =
-            withdrawals.filter(
-                withdrawal =>
-                    withdrawal.status ===
-                    filter
-            );
+        id:
+            generateId("WIT"),
 
-    }
+        userId,
 
+        amount:
+            numericAmount,
 
-    withdrawals =
-        withdrawals.sort(
-            (a, b) =>
-                new Date(
-                    b.createdAt
-                ) -
-                new Date(
-                    a.createdAt
-                )
-        );
+        fee:
+            0,
 
+        netAmount:
+            numericAmount,
 
-    if (
-        withdrawals.length === 0
-    ) {
+        method:
+            method || "Non précisé",
 
-        body.innerHTML = `
-            <tr>
-                <td colspan="7">
-                    Aucune demande de retrait.
-                </td>
-            </tr>
-        `;
+        status:
+            "pending",
 
-        return;
+        createdAt:
+            getCurrentDate(),
 
-    }
+        validatedAt:
+            null
+
+    };
 
 
-    body.innerHTML =
+    withdrawals.unshift(
+        withdrawal
+    );
+
+
+    saveWithdrawals(
         withdrawals
-            .map(
-                withdrawal => {
-
-                    const user =
-                        findUserById(
-                            withdrawal.userId
-                        );
+    );
 
 
-                    return `
+    return {
 
-                        <tr>
+        success: true,
 
-                            <td>
-                                ${escapeHTML(
-                                    user?.fullName ||
-                                    "Utilisateur supprimé"
-                                )}
-                            </td>
+        message:
+            "Votre demande de retrait attend validation."
 
-                            <td>
-                                ${formatFCFA(
-                                    withdrawal.amount
-                                )}
-                            </td>
-
-                            <td>
-                                ${escapeHTML(
-                                    withdrawal.method
-                                )}
-                            </td>
-
-                            <td>
-                                ${escapeHTML(
-                                    withdrawal.account
-                                )}
-                            </td>
-
-                            <td>
-                                ${formatDate(
-                                    withdrawal.createdAt
-                                )}
-                            </td>
-
-                            <td>
-                                ${renderStatus(
-                                    withdrawal.status
-                                )}
-                            </td>
-
-                            <td>
-
-                                ${
-                                    withdrawal.status ===
-                                    "pending"
-                                        ? `
-
-                                            <button
-                                                class="btn btn-small approve-withdrawal"
-                                                data-withdrawal-id="${escapeHTML(withdrawal.id)}"
-                                            >
-                                                Valider
-                                            </button>
-
-                                            <button
-                                                class="btn btn-small reject-withdrawal"
-                                                data-withdrawal-id="${escapeHTML(withdrawal.id)}"
-                                            >
-                                                Refuser
-                                            </button>
-
-                                        `
-                                        : "-"
-                                }
-
-                            </td>
-
-                        </tr>
-
-                    `;
-
-                }
-            )
-            .join("");
-
-
-    bindWithdrawalActions();
+    };
 
 }
 
 
-function bindWithdrawalActions() {
-
-    document.querySelectorAll(
-        ".approve-withdrawal"
-    ).forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                function () {
-
-                    processWithdrawal(
-                        button.dataset.withdrawalId,
-                        "approved"
-                    );
-
-                }
-            );
-
-        }
-    );
-
-
-    document.querySelectorAll(
-        ".reject-withdrawal"
-    ).forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                function () {
-
-                    processWithdrawal(
-                        button.dataset.withdrawalId,
-                        "rejected"
-                    );
-
-                }
-            );
-
-        }
-    );
-
-}
-
-
-function processWithdrawal(
-    withdrawalId,
-    decision
+function validateWithdrawal(
+    withdrawalId
 ) {
 
     const withdrawals =
@@ -4904,17 +1181,38 @@ function processWithdrawal(
     const withdrawal =
         withdrawals.find(
             item =>
-                item.id ===
-                withdrawalId
+                item.id === withdrawalId
         );
 
 
+    if (!withdrawal) {
+
+        return {
+
+            success: false,
+
+            message:
+                "Retrait introuvable."
+
+        };
+
+    }
+
+
     if (
-        !withdrawal ||
         withdrawal.status !==
         "pending"
     ) {
-        return;
+
+        return {
+
+            success: false,
+
+            message:
+                "Cette demande a déjà été traitée."
+
+        };
+
     }
 
 
@@ -4925,77 +1223,55 @@ function processWithdrawal(
 
 
     if (!user) {
-        return;
+
+        return {
+
+            success: false,
+
+            message:
+                "Utilisateur introuvable."
+
+        };
+
     }
 
 
     if (
-        decision ===
-        "approved"
+        Number(user.balance || 0) <
+        Number(withdrawal.amount)
     ) {
 
-        if (
-            Number(
-                user.balance
-            ) <
-            Number(
-                withdrawal.amount
-            )
-        ) {
+        return {
 
-            showToast(
-                "Solde utilisateur insuffisant.",
-                "error"
-            );
+            success: false,
 
-            return;
+            message:
+                "Solde utilisateur insuffisant."
 
-        }
-
-
-        user.balance =
-            Number(
-                user.balance
-            ) -
-            Number(
-                withdrawal.amount
-            );
-
-
-        updateUser(
-            user
-        );
-
-
-        withdrawal.status =
-            "approved";
-
-
-        withdrawal.validatedAt =
-            new Date().toISOString();
-
-
-        showToast(
-            "Retrait validé.",
-            "success"
-        );
-
-    } else {
-
-        withdrawal.status =
-            "rejected";
-
-
-        withdrawal.rejectedAt =
-            new Date().toISOString();
-
-
-        showToast(
-            "Retrait refusé.",
-            "warning"
-        );
+        };
 
     }
+
+
+    user.balance =
+        Number(user.balance || 0) -
+        Number(withdrawal.amount);
+
+
+    user.totalWithdrawn =
+        Number(user.totalWithdrawn || 0) +
+        Number(withdrawal.amount);
+
+
+    updateUser(user);
+
+
+    withdrawal.status =
+        "approved";
+
+
+    withdrawal.validatedAt =
+        getCurrentDate();
 
 
     saveWithdrawals(
@@ -5003,1195 +1279,835 @@ function processWithdrawal(
     );
 
 
-    refreshAdminData();
+    addTransaction({
+
+        userId:
+            user.id,
+
+        type:
+            "withdrawal",
+
+        amount:
+            withdrawal.amount,
+
+        status:
+            "approved",
+
+        description:
+            "Retrait validé"
+
+    });
+
+
+    return {
+
+        success: true,
+
+        message:
+            "Retrait validé avec succès."
+
+    };
+
+}
+
+
+function rejectWithdrawal(
+    withdrawalId
+) {
+
+    const withdrawals =
+        getWithdrawals();
+
+
+    const withdrawal =
+        withdrawals.find(
+            item =>
+                item.id === withdrawalId
+        );
+
+
+    if (!withdrawal) {
+
+        return {
+
+            success: false,
+
+            message:
+                "Retrait introuvable."
+
+        };
+
+    }
+
+
+    if (
+        withdrawal.status !==
+        "pending"
+    ) {
+
+        return {
+
+            success: false,
+
+            message:
+                "Cette demande a déjà été traitée."
+
+        };
+
+    }
+
+
+    withdrawal.status =
+        "rejected";
+
+
+    withdrawal.validatedAt =
+        getCurrentDate();
+
+
+    saveWithdrawals(
+        withdrawals
+    );
+
+
+    return {
+
+        success: true,
+
+        message:
+            "Retrait refusé."
+
+    };
 
 }
 
 
 /* =========================================================
-   ADMIN INVESTISSEMENTS
+   INVESTISSEMENTS
 ========================================================= */
 
-function renderAdminInvestments() {
+function getInvestments() {
 
-    const body =
-        getElement(
-            "adminInvestmentsBody"
-        );
-
-    if (!body) {
-        return;
-    }
-
-
-    const investments =
-        getInvestments()
-            .sort(
-                (a, b) =>
-                    new Date(
-                        b.createdAt
-                    ) -
-                    new Date(
-                        a.createdAt
-                    )
-            );
-
-
-    if (
-        investments.length === 0
-    ) {
-
-        body.innerHTML = `
-            <tr>
-                <td colspan="7">
-                    Aucun investissement enregistré.
-                </td>
-            </tr>
-        `;
-
-        return;
-
-    }
-
-
-    body.innerHTML =
-        investments
-            .map(
-                investment => {
-
-                    const user =
-                        findUserById(
-                            investment.userId
-                        );
-
-
-                    return `
-
-                        <tr>
-
-                            <td>
-                                ${escapeHTML(
-                                    user?.fullName ||
-                                    "-"
-                                )}
-                            </td>
-
-                            <td>
-                                ${escapeHTML(
-                                    investment.packName
-                                )}
-                            </td>
-
-                            <td>
-                                ${formatFCFA(
-                                    investment.amount
-                                )}
-                            </td>
-
-                            <td>
-                                ${formatDate(
-                                    investment.startDate
-                                )}
-                            </td>
-
-                            <td>
-                                ${formatDate(
-                                    investment.endDate
-                                )}
-                            </td>
-
-                            <td>
-                                ${renderStatus(
-                                    investment.status
-                                )}
-                            </td>
-
-                            <td>
-
-                                <button
-                                    class="btn btn-small investment-details-button"
-                                    data-investment-id="${escapeHTML(investment.id)}"
-                                >
-
-                                    Voir
-
-                                </button>
-
-                            </td>
-
-                        </tr>
-
-                    `;
-
-                }
-            )
-            .join("");
-
-
-    document.querySelectorAll(
-        ".investment-details-button"
-    ).forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                function () {
-
-                    openAdminInvestmentDetails(
-                        button.dataset.investmentId
-                    );
-
-                }
-            );
-
-        }
+    return hyqdGet(
+        HYQD_CONFIG.INVESTMENTS_KEY,
+        []
     );
 
 }
 
 
-function openAdminInvestmentDetails(
-    investmentId
+function saveInvestments(
+    investments
 ) {
 
-    const investment =
-        getInvestments().find(
-            item =>
-                item.id ===
-                investmentId
-        );
+    return hyqdSet(
+        HYQD_CONFIG.INVESTMENTS_KEY,
+        investments
+    );
+
+}
 
 
-    if (!investment) {
-        return;
+function createInvestment({
+    userId,
+    packName,
+    amount,
+    dailyReturn = 0,
+    duration = 180,
+    houseImage = ""
+}) {
+
+    const user =
+        findUserById(userId);
+
+
+    const numericAmount =
+        Number(amount);
+
+
+    if (!user) {
+
+        return {
+
+            success: false,
+
+            message:
+                "Utilisateur introuvable."
+
+        };
+
     }
 
 
-    const content =
-        getElement(
-            "adminInvestmentModalContent"
-        );
+    if (
+        numericAmount <= 0
+    ) {
 
+        return {
 
-    const modal =
-        getElement(
-            "adminInvestmentModal"
-        );
+            success: false,
+
+            message:
+                "Montant invalide."
+
+        };
+
+    }
 
 
     if (
-        !content ||
-        !modal
+        Number(user.balance || 0) <
+        numericAmount
+    ) {
+
+        return {
+
+            success: false,
+
+            message:
+                "Solde insuffisant pour cet investissement."
+
+        };
+
+    }
+
+
+    user.balance =
+        Number(user.balance || 0) -
+        numericAmount;
+
+
+    user.totalInvested =
+        Number(user.totalInvested || 0) +
+        numericAmount;
+
+
+    updateUser(user);
+
+
+    const investment = {
+
+        id:
+            generateId("INV"),
+
+        userId,
+
+        packName,
+
+        amount:
+            numericAmount,
+
+        dailyReturn:
+            Number(dailyReturn || 0),
+
+        duration:
+            Number(duration || 180),
+
+        daysCompleted:
+            0,
+
+        status:
+            "active",
+
+        houseImage,
+
+        createdAt:
+            getCurrentDate(),
+
+        endDate:
+            new Date(
+                Date.now() +
+                Number(duration || 180) *
+                24 *
+                60 *
+                60 *
+                1000
+            ).toISOString()
+
+    };
+
+
+    const investments =
+        getInvestments();
+
+
+    investments.unshift(
+        investment
+    );
+
+
+    saveInvestments(
+        investments
+    );
+
+
+    addTransaction({
+
+        userId,
+
+        type:
+            "investment",
+
+        amount:
+            numericAmount,
+
+        status:
+            "approved",
+
+        description:
+            "Investissement " +
+            packName
+
+    });
+
+
+    return {
+
+        success: true,
+
+        message:
+            "Investissement créé avec succès."
+
+    };
+
+}
+
+
+/* =========================================================
+   PARRAINAGE
+========================================================= */
+
+function processReferralReward(
+    user,
+    firstDepositAmount
+) {
+
+    if (
+        !user.referredBy
     ) {
         return;
     }
 
 
-    content.innerHTML = `
+    if (
+        user.referralRewardReceived
+    ) {
+        return;
+    }
 
-        <div class="investment-details">
 
-            <p>
-                <strong>Pack :</strong>
-                ${escapeHTML(
-                    investment.packName
-                )}
-            </p>
+    const referrer =
+        findUserById(
+            user.referredBy
+        );
 
-            <p>
-                <strong>Montant :</strong>
-                ${formatFCFA(
-                    investment.amount
-                )}
-            </p>
 
-            <p>
-                <strong>Gain quotidien affiché :</strong>
-                ${formatFCFA(
-                    investment.dailyGain
-                )}
-            </p>
+    if (!referrer) {
+        return;
+    }
 
-            <p>
-                <strong>Durée :</strong>
-                ${investment.duration} jours
-            </p>
 
-            <p>
-                <strong>Date de début :</strong>
-                ${formatDate(
-                    investment.startDate
-                )}
-            </p>
+    const reward =
+        Number(firstDepositAmount) *
+        0.10;
 
-            <p>
-                <strong>Date de fin :</strong>
-                ${formatDate(
-                    investment.endDate
-                )}
-            </p>
+
+    referrer.balance =
+        Number(referrer.balance || 0) +
+        reward;
+
+
+    updateUser(referrer);
+
+
+    user.referralRewardReceived =
+        true;
+
+
+    updateUser(user);
+
+
+    const rewards =
+        hyqdGet(
+            HYQD_CONFIG.REFERRAL_REWARDS_KEY,
+            []
+        );
+
+
+    rewards.unshift({
+
+        id:
+            generateId("REF"),
+
+        referrerId:
+            referrer.id,
+
+        referredUserId:
+            user.id,
+
+        amount:
+            reward,
+
+        createdAt:
+            getCurrentDate()
+
+    });
+
+
+    hyqdSet(
+        HYQD_CONFIG.REFERRAL_REWARDS_KEY,
+        rewards
+    );
+
+
+    addTransaction({
+
+        userId:
+            referrer.id,
+
+        type:
+            "referral",
+
+        amount:
+            reward,
+
+        status:
+            "approved",
+
+        description:
+            "Bonus de parrainage"
+
+    });
+
+}
+
+
+/* =========================================================
+   TRANSACTIONS
+========================================================= */
+
+function getTransactions() {
+
+    return hyqdGet(
+        HYQD_CONFIG.TRANSACTIONS_KEY,
+        []
+    );
+
+}
+
+
+function addTransaction({
+
+    userId,
+    type,
+    amount,
+    status,
+    description
+
+}) {
+
+    const transactions =
+        getTransactions();
+
+
+    transactions.unshift({
+
+        id:
+            generateId("TRX"),
+
+        userId,
+
+        type,
+
+        amount:
+            Number(amount || 0),
+
+        status,
+
+        description:
+            description || "",
+
+        createdAt:
+            getCurrentDate()
+
+    });
+
+
+    hyqdSet(
+        HYQD_CONFIG.TRANSACTIONS_KEY,
+        transactions
+    );
+
+}
+
+
+/* =========================================================
+   TICKETS ASSISTANCE
+========================================================= */
+
+function getTickets() {
+
+    return hyqdGet(
+        HYQD_CONFIG.TICKETS_KEY,
+        []
+    );
+
+}
+
+
+function saveTickets(
+    tickets
+) {
+
+    return hyqdSet(
+        HYQD_CONFIG.TICKETS_KEY,
+        tickets
+    );
+
+}
+
+
+function createTicket({
+
+    userId,
+
+    subject,
+
+    message
+
+}) {
+
+    if (
+        !subject ||
+        !message
+    ) {
+
+        return {
+
+            success: false,
+
+            message:
+                "Veuillez remplir tous les champs."
+
+        };
+
+    }
+
+
+    const tickets =
+        getTickets();
+
+
+    tickets.unshift({
+
+        id:
+            generateId("TICKET"),
+
+        userId,
+
+        subject,
+
+        message,
+
+        reply:
+            "",
+
+        status:
+            "open",
+
+        createdAt:
+            getCurrentDate(),
+
+        updatedAt:
+            getCurrentDate()
+
+    });
+
+
+    saveTickets(
+        tickets
+    );
+
+
+    return {
+
+        success: true,
+
+        message:
+            "Votre demande a été envoyée."
+
+    };
+
+}
+
+
+function replyTicket(
+    ticketId,
+    reply
+) {
+
+    const tickets =
+        getTickets();
+
+
+    const ticket =
+        tickets.find(
+            item =>
+                item.id === ticketId
+        );
+
+
+    if (!ticket) {
+
+        return {
+
+            success: false,
+
+            message:
+                "Ticket introuvable."
+
+        };
+
+    }
+
+
+    ticket.reply =
+        reply;
+
+
+    ticket.status =
+        "answered";
+
+
+    ticket.updatedAt =
+        getCurrentDate();
+
+
+    saveTickets(
+        tickets
+    );
+
+
+    return {
+
+        success: true,
+
+        message:
+            "Réponse envoyée."
+
+    };
+
+}
+
+
+/* =========================================================
+   ADMINISTRATION
+========================================================= */
+
+function adminLogin(
+    code
+) {
+
+    if (
+        String(code).trim() ===
+        HYQD_CONFIG.ADMIN_CODE
+    ) {
+
+        sessionStorage.setItem(
+            HYQD_CONFIG.ADMIN_KEY,
+            "true"
+        );
+
+
+        return {
+
+            success: true,
+
+            message:
+                "Code administrateur accepté."
+
+        };
+
+    }
+
+
+    return {
+
+        success: false,
+
+        message:
+            "Code administrateur incorrect."
+
+    };
+
+}
+
+
+function isAdminAuthenticated() {
+
+    return (
+        sessionStorage.getItem(
+            HYQD_CONFIG.ADMIN_KEY
+        ) === "true"
+    );
+
+}
+
+
+function requireAdminAuth() {
+
+    if (
+        !isAdminAuthenticated()
+    ) {
+
+        return false;
+
+    }
+
+    return true;
+
+}
+
+
+function adminLogout() {
+
+    sessionStorage.removeItem(
+        HYQD_CONFIG.ADMIN_KEY
+    );
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* =========================================================
+   NOTIFICATIONS
+========================================================= */
+
+function showToast(
+    message,
+    type = "info"
+) {
+
+    const oldToast =
+        document.querySelector(
+            ".hyqd-toast"
+        );
+
+
+    if (oldToast) {
+
+        oldToast.remove();
+
+    }
+
+
+    const toast =
+        document.createElement("div");
+
+
+    toast.className =
+        "hyqd-toast hyqd-toast-" +
+        type;
+
+
+    toast.innerHTML = `
+
+        <div class="hyqd-toast-content">
+
+            <span>${escapeHtml(message)}</span>
 
         </div>
 
     `;
 
 
-    modal.classList.add(
-        "active"
+    document.body.appendChild(
+        toast
+    );
+
+
+    setTimeout(
+        () => {
+
+            toast.classList.add(
+                "show"
+            );
+
+        },
+        50
+    );
+
+
+    setTimeout(
+        () => {
+
+            toast.classList.remove(
+                "show"
+            );
+
+
+            setTimeout(
+                () => {
+
+                    toast.remove();
+
+                },
+                300
+            );
+
+        },
+        4000
     );
 
 }
 
 
 /* =========================================================
-   ADMIN TICKETS
+   AFFICHAGE NUMÉRO MASQUÉ
 ========================================================= */
 
-function renderAdminTickets() {
-
-    const container =
-        getElement(
-            "adminTicketsContainer"
-        );
-
-    if (!container) {
-        return;
-    }
-
-
-    const tickets =
-        getTickets()
-            .sort(
-                (a, b) =>
-                    new Date(
-                        b.createdAt
-                    ) -
-                    new Date(
-                        a.createdAt
-                    )
-            );
-
-
-    if (
-        tickets.length === 0
-    ) {
-
-        container.innerHTML = `
-            <p class="text-muted">
-                Aucun ticket utilisateur.
-            </p>
-        `;
-
-        return;
-
-    }
-
-
-    container.innerHTML =
-        tickets
-            .map(
-                ticket => {
-
-                    const user =
-                        findUserById(
-                            ticket.userId
-                        );
-
-
-                    return `
-
-                        <article class="admin-ticket-item">
-
-                            <div class="ticket-header">
-
-                                <div>
-
-                                    <strong>
-                                        ${escapeHTML(
-                                            ticket.subject
-                                        )}
-                                    </strong>
-
-                                    <small>
-                                        ${escapeHTML(
-                                            user?.fullName ||
-                                            "Utilisateur"
-                                        )}
-                                    </small>
-
-                                </div>
-
-                                ${renderStatus(
-                                    ticket.status
-                                )}
-
-                            </div>
-
-                            <p>
-                                ${escapeHTML(
-                                    ticket.message
-                                )}
-                            </p>
-
-                            ${
-                                ticket.reply
-                                    ? `
-
-                                        <div class="ticket-reply">
-
-                                            <strong>
-                                                Réponse envoyée :
-                                            </strong>
-
-                                            <p>
-                                                ${escapeHTML(
-                                                    ticket.reply
-                                                )}
-                                            </p>
-
-                                        </div>
-
-                                    `
-                                    : ""
-                            }
-
-                            <div class="ticket-actions">
-
-                                <button
-                                    class="btn btn-small reply-ticket-button"
-                                    data-ticket-id="${escapeHTML(ticket.id)}"
-                                >
-
-                                    Répondre
-
-                                </button>
-
-                            </div>
-
-                        </article>
-
-                    `;
-
-                }
-            )
-            .join("");
-
-
-    document.querySelectorAll(
-        ".reply-ticket-button"
-    ).forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                function () {
-
-                    const ticketId =
-                        button.dataset.ticketId;
-
-
-                    getElement(
-                        "replyTicketId"
-                    ).value =
-                        ticketId;
-
-
-                    const modal =
-                        getElement(
-                            "ticketReplyModal"
-                        );
-
-
-                    if (modal) {
-
-                        modal.classList.add(
-                            "active"
-                        );
-
-                    }
-
-                }
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   REPONSE TICKET
-========================================================= */
-
-function initializeTicketReplyForm() {
-
-    const form =
-        getElement(
-            "ticketReplyForm"
-        );
-
-    if (!form) {
-        return;
-    }
-
-
-    form.addEventListener(
-        "submit",
-        function (event) {
-
-            event.preventDefault();
-
-
-            const ticketId =
-                getElement(
-                    "replyTicketId"
-                ).value;
-
-
-            const reply =
-                getElement(
-                    "ticketReplyMessage"
-                ).value.trim();
-
-
-            if (
-                !ticketId ||
-                reply.length < 2
-            ) {
-
-                showToast(
-                    "Veuillez écrire une réponse.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            const tickets =
-                getTickets();
-
-
-            const ticket =
-                tickets.find(
-                    item =>
-                        item.id ===
-                        ticketId
-                );
-
-
-            if (!ticket) {
-                return;
-            }
-
-
-            ticket.reply =
-                reply;
-
-
-            ticket.status =
-                "answered";
-
-
-            ticket.repliedAt =
-                new Date().toISOString();
-
-
-            saveTickets(
-                tickets
-            );
-
-
-            form.reset();
-
-
-            const modal =
-                getElement(
-                    "ticketReplyModal"
-                );
-
-
-            if (modal) {
-
-                modal.classList.remove(
-                    "active"
-                );
-
-            }
-
-
-            showToast(
-                "Réponse envoyée à l'utilisateur.",
-                "success"
-            );
-
-
-            refreshAdminData();
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   TRANSACTIONS ADMIN
-========================================================= */
-
-function renderAdminTransactions() {
-
-    const body =
-        getElement(
-            "adminTransactionsBody"
-        );
-
-    if (!body) {
-        return;
-    }
-
-
-    const deposits =
-        getDeposits()
-            .map(
-                deposit => {
-
-                    const user =
-                        findUserById(
-                            deposit.userId
-                        );
-
-
-                    return {
-
-                        user:
-                            user?.fullName ||
-                            "Utilisateur",
-
-                        type:
-                            "Dépôt",
-
-                        amount:
-                            deposit.amount,
-
-                        details:
-                            deposit.reference,
-
-                        date:
-                            deposit.createdAt,
-
-                        status:
-                            deposit.status
-
-                    };
-
-                }
-            );
-
-
-    const withdrawals =
-        getWithdrawals()
-            .map(
-                withdrawal => {
-
-                    const user =
-                        findUserById(
-                            withdrawal.userId
-                        );
-
-
-                    return {
-
-                        user:
-                            user?.fullName ||
-                            "Utilisateur",
-
-                        type:
-                            "Retrait",
-
-                        amount:
-                            withdrawal.amount,
-
-                        details:
-                            withdrawal.account,
-
-                        date:
-                            withdrawal.createdAt,
-
-                        status:
-                            withdrawal.status
-
-                    };
-
-                }
-            );
-
-
-    const transactions =
-        [
-            ...deposits,
-            ...withdrawals
-        ]
-            .sort(
-                (a, b) =>
-                    new Date(
-                        b.date
-                    ) -
-                    new Date(
-                        a.date
-                    )
-            );
-
-
-    if (
-        transactions.length === 0
-    ) {
-
-        body.innerHTML = `
-            <tr>
-                <td colspan="6">
-                    Aucune transaction enregistrée.
-                </td>
-            </tr>
-        `;
-
-        return;
-
-    }
-
-
-    body.innerHTML =
-        transactions
-            .map(
-                transaction => `
-
-                    <tr>
-
-                        <td>
-                            ${escapeHTML(
-                                transaction.user
-                            )}
-                        </td>
-
-                        <td>
-                            ${escapeHTML(
-                                transaction.type
-                            )}
-                        </td>
-
-                        <td>
-                            ${formatFCFA(
-                                transaction.amount
-                            )}
-                        </td>
-
-                        <td>
-                            ${escapeHTML(
-                                transaction.details
-                            )}
-                        </td>
-
-                        <td>
-                            ${formatDate(
-                                transaction.date
-                            )}
-                        </td>
-
-                        <td>
-                            ${renderStatus(
-                                transaction.status
-                            )}
-                        </td>
-
-                    </tr>
-
-                `
-            )
-            .join("");
-
-}
-
-
-/* =========================================================
-   ACTIVITE ADMIN RECENTE
-========================================================= */
-
-function renderAdminRecentActivity() {
-
-    const body =
-        getElement(
-            "adminRecentActivityBody"
-        );
-
-    if (!body) {
-        return;
-    }
-
-
-    const transactions =
-        [
-            ...getDeposits().map(
-                item => ({
-                    userId:
-                        item.userId,
-                    type:
-                        "Dépôt",
-                    amount:
-                        item.amount,
-                    status:
-                        item.status,
-                    date:
-                        item.createdAt
-                })
-            ),
-
-            ...getWithdrawals().map(
-                item => ({
-                    userId:
-                        item.userId,
-                    type:
-                        "Retrait",
-                    amount:
-                        item.amount,
-                    status:
-                        item.status,
-                    date:
-                        item.createdAt
-                })
-            )
-        ]
-            .sort(
-                (a, b) =>
-                    new Date(
-                        b.date
-                    ) -
-                    new Date(
-                        a.date
-                    )
-            )
-            .slice(
-                0,
-                6
-            );
-
-
-    if (
-        transactions.length === 0
-    ) {
-
-        body.innerHTML = `
-            <tr>
-                <td colspan="4">
-                    Aucune activité récente.
-                </td>
-            </tr>
-        `;
-
-        return;
-
-    }
-
-
-    body.innerHTML =
-        transactions
-            .map(
-                transaction => {
-
-                    const user =
-                        findUserById(
-                            transaction.userId
-                        );
-
-
-                    return `
-
-                        <tr>
-
-                            <td>
-                                ${escapeHTML(
-                                    user?.fullName ||
-                                    "Utilisateur"
-                                )}
-                            </td>
-
-                            <td>
-                                ${escapeHTML(
-                                    transaction.type
-                                )}
-                            </td>
-
-                            <td>
-                                ${formatFCFA(
-                                    transaction.amount
-                                )}
-                            </td>
-
-                            <td>
-                                ${renderStatus(
-                                    transaction.status
-                                )}
-                            </td>
-
-                        </tr>
-
-                    `;
-
-                }
-            )
-            .join("");
-
-}
-
-
-/* =========================================================
-   TICKETS RECENTS ADMIN
-========================================================= */
-
-function renderAdminRecentTickets() {
-
-    const container =
-        getElement(
-            "adminRecentTickets"
-        );
-
-    if (!container) {
-        return;
-    }
-
-
-    const tickets =
-        getTickets()
-            .filter(
-                ticket =>
-                    ticket.status ===
-                    "open"
-            )
-            .slice(
-                0,
-                5
-            );
-
-
-    if (
-        tickets.length === 0
-    ) {
-
-        container.innerHTML = `
-            <p class="text-muted">
-                Aucune demande.
-            </p>
-        `;
-
-        return;
-
-    }
-
-
-    container.innerHTML =
-        tickets
-            .map(
-                ticket => {
-
-                    const user =
-                        findUserById(
-                            ticket.userId
-                        );
-
-
-                    return `
-
-                        <div class="recent-ticket">
-
-                            <strong>
-                                ${escapeHTML(
-                                    ticket.subject
-                                )}
-                            </strong>
-
-                            <span>
-                                ${escapeHTML(
-                                    user?.fullName ||
-                                    "Utilisateur"
-                                )}
-                            </span>
-
-                        </div>
-
-                    `;
-
-                }
-            )
-            .join("");
-
-}
-
-
-/* =========================================================
-   FILTRES ADMIN
-========================================================= */
-
-function initializeAdminFilters() {
-
-    const depositFilter =
-        getElement(
-            "depositStatusFilter"
-        );
-
-
-    const withdrawalFilter =
-        getElement(
-            "withdrawalStatusFilter"
-        );
-
-
-    const searchInput =
-        getElement(
-            "userSearchInput"
-        );
-
-
-    if (depositFilter) {
-
-        depositFilter.addEventListener(
-            "change",
-            renderAdminDeposits
-        );
-
-    }
-
-
-    if (withdrawalFilter) {
-
-        withdrawalFilter.addEventListener(
-            "change",
-            renderAdminWithdrawals
-        );
-
-    }
-
-
-    if (searchInput) {
-
-        searchInput.addEventListener(
-            "input",
-            function () {
-
-                filterAdminUsers(
-                    searchInput.value
-                );
-
-            }
-        );
-
-    }
-
-}
-
-
-function filterAdminUsers(query) {
-
-    const body =
-        getElement(
-            "adminUsersBody"
-        );
-
-    if (!body) {
-        return;
-    }
-
+function maskPhone(
+    phone
+) {
 
     const value =
-        query
-            .trim()
-            .toLowerCase();
-
-
-    const users =
-        getUsers().filter(
-            user =>
-                user.fullName
-                    .toLowerCase()
-                    .includes(
-                        value
-                    ) ||
-                user.email
-                    .toLowerCase()
-                    .includes(
-                        value
-                    ) ||
-                user.phone
-                    .toLowerCase()
-                    .includes(
-                        value
-                    )
-        );
+        String(phone || "");
 
 
     if (
-        users.length === 0
+        value.length <= 4
     ) {
 
-        body.innerHTML = `
-            <tr>
-                <td colspan="6">
-                    Aucun utilisateur trouvé.
-                </td>
-            </tr>
-        `;
-
-        return;
+        return "*****";
 
     }
 
 
-    body.innerHTML =
-        users
-            .map(
-                user => `
-
-                    <tr>
-
-                        <td>
-                            ${escapeHTML(
-                                user.fullName
-                            )}
-                        </td>
-
-                        <td>
-                            ${escapeHTML(
-                                user.phone
-                            )}
-                        </td>
-
-                        <td>
-                            ${formatFCFA(
-                                user.balance
-                            )}
-                        </td>
-
-                        <td>
-                            ${formatFCFA(
-                                user.invested
-                            )}
-                        </td>
-
-                        <td>
-                            ${formatDate(
-                                user.createdAt
-                            )}
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="btn btn-small admin-user-details"
-                                data-user-id="${escapeHTML(user.id)}"
-                            >
-                                Voir
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-                `
-            )
-            .join("");
+    const lastFour =
+        value.slice(-4);
 
 
-    document.querySelectorAll(
-        ".admin-user-details"
-    ).forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                function () {
-
-                    openUserDetails(
-                        button.dataset.userId
-                    );
-
-                }
-            );
-
-        }
+    return (
+        "*****" +
+        lastFour
     );
 
 }
 
 
 /* =========================================================
-   DECONNEXION ADMIN
-========================================================= */
-
-function initializeAdminLogout() {
-
-    const button =
-        getElement(
-            "adminLogoutButton"
-        );
-
-    if (!button) {
-        return;
-    }
-
-
-    button.addEventListener(
-        "click",
-        function () {
-
-            clearAdminSession();
-
-
-            window.location.reload();
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   RAFRAICHISSEMENT ADMIN
-========================================================= */
-
-function refreshAdminData() {
-
-    renderAdminOverview();
-
-    renderAdminUsers();
-
-    renderAdminDeposits();
-
-    renderAdminWithdrawals();
-
-    renderAdminInvestments();
-
-    renderAdminTickets();
-
-    renderAdminTransactions();
-
-}
-
-
-/* =========================================================
-   INITIALISATION GENERALE
+   INITIALISATION
 ========================================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
     function () {
 
-        initializeRegisterPage();
-
-        initializeLoginPage();
-
-        initializeForgotPasswordPage();
-
-        initializeDashboard();
-
-        initializeAdmin();
+        console.log(
+            "Housing's YQD initialisé."
+        );
 
     }
 );
