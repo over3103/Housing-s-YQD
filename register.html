@@ -1,246 +1,187 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
+
     <meta charset="UTF-8">
 
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
     <meta name="description"
-          content="Créer un compte Housing's YQD.">
+          content="Créer un compte Housing's YQD">
 
-    <title>Créer un compte | Housing's YQD</title>
+    <title>
+        Créer un compte | Housing's YQD
+    </title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet"
+          href="style.css">
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
 </head>
 
-<body>
 
-<div class="auth-page">
-
-    <!-- PARTIE VISUELLE -->
-    <div class="auth-visual"
-         style="
-         background-image:
-         linear-gradient(
-             rgba(5, 35, 26, 0.88),
-             rgba(5, 35, 26, 0.75)
-         ),
-         url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85');
-         ">
-
-        <div>
-
-            <a href="index.html" class="brand">
-
-                <div class="brand-logo">
-                    <i class="fa-solid fa-building"></i>
-                </div>
-
-                <div class="brand-text">
-
-                    <strong style="color:white;">
-                        Housing's YQD
-                    </strong>
-
-                    <span>IMMOBILIER</span>
-
-                </div>
-
-            </a>
+<body class="auth-page">
 
 
-            <br><br>
+<div class="auth-wrapper">
 
 
-            <h1 style="
-            font-size:42px;
-            max-width:520px;
-            color:white;
-            ">
+    <section class="auth-visual">
 
-                Commencez votre expérience
-                immobilière avec nous.
+        <a href="index.html"
+           class="brand">
 
+            <div class="brand-logo">
+                <i class="fa-solid fa-building"></i>
+            </div>
+
+            <div class="brand-text">
+                <strong>Housing's YQD</strong>
+                <span>IMMOBILIER</span>
+            </div>
+
+        </a>
+
+
+        <div class="auth-visual-content">
+
+            <span class="auth-kicker">
+                BIENVENUE
+            </span>
+
+            <h1>
+                Créez votre espace personnel.
             </h1>
 
-
-            <p style="
-            max-width:500px;
-            margin-top:18px;
-            color:rgba(255,255,255,0.82);
-            ">
-
-                Créez votre compte personnel et accédez
-                à votre espace Housing's YQD.
-
+            <p>
+                Accédez à votre tableau de bord,
+                aux investissements, à l'historique,
+                au parrainage et à l'assistance.
             </p>
 
         </div>
 
-    </div>
+    </section>
 
 
-    <!-- FORMULAIRE -->
+    <section class="auth-form-section">
 
-    <div class="auth-form-container">
 
-        <div class="auth-form-box">
+        <div class="auth-form-container">
+
 
             <a href="index.html"
-               style="
-               display:inline-flex;
-               align-items:center;
-               gap:8px;
-               color:var(--primary);
-               font-size:14px;
-               margin-bottom:25px;
-               ">
+               class="auth-back">
 
                 <i class="fa-solid fa-arrow-left"></i>
-
-                Retour à l'accueil
+                Accueil
 
             </a>
 
 
-            <h1 style="
-            font-size:30px;
-            color:var(--dark);
-            margin-bottom:8px;
-            ">
+            <span class="page-eyebrow">
+                INSCRIPTION
+            </span>
 
+
+            <h2>
                 Créer un compte
+            </h2>
 
-            </h1>
 
-
-            <p style="
-            color:var(--text-light);
-            margin-bottom:28px;
-            ">
-
-                Rejoignez Housing's YQD en quelques instants.
-
+            <p class="auth-description">
+                Remplissez les informations ci-dessous.
             </p>
 
 
-            <!-- MESSAGE -->
-
-            <div id="formMessage"
+            <div id="registerMessage"
                  class="form-message">
-
             </div>
 
 
-            <!-- FORMULAIRE -->
+            <form id="registerForm"
+                  autocomplete="on">
 
-            <form id="registerForm">
-
-
-                <!-- NOM COMPLET -->
 
                 <div class="form-group">
 
                     <label for="fullName">
-
-                        Nom et prénom
-
+                        Nom complet
                     </label>
 
+                    <div class="input-icon-wrapper">
 
-                    <input
-                        type="text"
-                        id="fullName"
-                        class="form-control"
-                        placeholder="Entrez votre nom complet"
-                        autocomplete="name"
-                        required
-                    >
+                        <i class="fa-regular fa-user"></i>
+
+                        <input
+                            type="text"
+                            id="fullName"
+                            name="fullName"
+                            class="form-control"
+                            placeholder="Nom et prénom"
+                            autocomplete="name"
+                            required>
+
+                    </div>
 
                 </div>
 
-
-                <!-- TELEPHONE -->
 
                 <div class="form-group">
 
                     <label for="phone">
-
                         Numéro de téléphone
-
                     </label>
 
+                    <div class="phone-input">
 
-                    <div style="
-                    display:flex;
-                    align-items:center;
-                    gap:8px;
-                    ">
-
-                        <div style="
-                        padding:14px 12px;
-                        border:1px solid #ddd;
-                        border-radius:12px;
-                        background:#f7f7f7;
-                        font-weight:700;
-                        white-space:nowrap;
-                        ">
-
+                        <span class="phone-prefix">
                             +225
-
-                        </div>
-
+                        </span>
 
                         <input
                             type="tel"
                             id="phone"
+                            name="phone"
                             class="form-control"
                             placeholder="0700000000"
                             autocomplete="tel"
-                            required
-                        >
+                            inputmode="numeric"
+                            required>
 
                     </div>
 
                 </div>
 
-
-                <!-- MOT DE PASSE -->
 
                 <div class="form-group">
 
                     <label for="password">
-
                         Mot de passe
-
                     </label>
 
-
-                    <div class="password-wrapper">
+                    <div class="password-input-wrapper">
 
                         <input
                             type="password"
                             id="password"
+                            name="password"
                             class="form-control"
                             placeholder="Minimum 6 caractères"
                             autocomplete="new-password"
-                            minlength="6"
-                            required
-                        >
-
+                            required>
 
                         <button
                             type="button"
                             class="password-toggle"
-                            id="togglePassword"
-                            aria-label="Afficher ou masquer le mot de passe"
-                        >
+                            data-password-target="password"
+                            aria-label="Afficher le mot de passe">
 
-                            <i class="fa-solid fa-eye"></i>
+                            <i class="fa-regular fa-eye"></i>
 
                         </button>
 
@@ -248,39 +189,31 @@
 
                 </div>
 
-
-                <!-- CONFIRMATION -->
 
                 <div class="form-group">
 
                     <label for="confirmPassword">
-
                         Confirmer le mot de passe
-
                     </label>
 
-
-                    <div class="password-wrapper">
+                    <div class="password-input-wrapper">
 
                         <input
                             type="password"
                             id="confirmPassword"
+                            name="confirmPassword"
                             class="form-control"
                             placeholder="Confirmez votre mot de passe"
                             autocomplete="new-password"
-                            minlength="6"
-                            required
-                        >
-
+                            required>
 
                         <button
                             type="button"
                             class="password-toggle"
-                            id="toggleConfirmPassword"
-                            aria-label="Afficher ou masquer le mot de passe"
-                        >
+                            data-password-target="confirmPassword"
+                            aria-label="Afficher le mot de passe">
 
-                            <i class="fa-solid fa-eye"></i>
+                            <i class="fa-regular fa-eye"></i>
 
                         </button>
 
@@ -289,80 +222,41 @@
                 </div>
 
 
-                <!-- CODE PARRAINAGE -->
-
                 <div class="form-group">
 
                     <label for="referralCode">
-
-                        Code de parrainage
-                        <span style="
-                        font-weight:400;
-                        color:var(--text-light);
-                        ">
-
+                        Code d'invitation
+                        <span class="optional-text">
                             (facultatif)
-
                         </span>
-
                     </label>
 
+                    <div class="input-icon-wrapper">
 
-                    <input
-                        type="text"
-                        id="referralCode"
-                        class="form-control"
-                        placeholder="Entrez votre code si vous en avez un"
-                    >
+                        <i class="fa-solid fa-user-group"></i>
+
+                        <input
+                            type="text"
+                            id="referralCode"
+                            name="referralCode"
+                            class="form-control"
+                            placeholder="Exemple : YQDABC123">
+
+                    </div>
 
                 </div>
 
-
-                <!-- CONDITIONS -->
-
-                <div style="
-                display:flex;
-                align-items:flex-start;
-                gap:10px;
-                margin-bottom:22px;
-                font-size:13px;
-                color:var(--text-light);
-                ">
-
-                    <input
-                        type="checkbox"
-                        id="terms"
-                        required
-                        style="
-                        margin-top:3px;
-                        width:16px;
-                        height:16px;
-                        "
-                    >
-
-
-                    <label for="terms"
-                           style="cursor:pointer;">
-
-                        Je confirme avoir pris connaissance
-                        des conditions applicables à la plateforme.
-
-                    </label>
-
-                </div>
-
-
-                <!-- BOUTON -->
 
                 <button
                     type="submit"
                     class="form-submit"
-                    id="registerButton"
-                >
+                    id="registerButton">
 
-                    <i class="fa-solid fa-user-plus"></i>
+                    <span>
+                        Créer mon compte
+                    </span>
 
-                    Créer mon compte
+                    <i class="fa-solid fa-arrow-right"></i>
 
                 </button>
 
@@ -370,31 +264,21 @@
             </form>
 
 
-            <p style="
-            text-align:center;
-            margin-top:25px;
-            color:var(--text-light);
-            font-size:14px;
-            ">
+            <div class="auth-switch">
 
                 Vous avez déjà un compte ?
 
-
-                <a href="login.html"
-                   style="
-                   color:var(--primary);
-                   font-weight:700;
-                   ">
-
+                <a href="login.html">
                     Se connecter
-
                 </a>
 
-            </p>
+            </div>
+
 
         </div>
 
-    </div>
+    </section>
+
 
 </div>
 
@@ -408,307 +292,164 @@ document.addEventListener(
     "DOMContentLoaded",
     function () {
 
+        /* Préremplissage du code de parrainage */
 
-        /* =========================================
-           UTILISATEUR DÉJÀ CONNECTÉ
-        ========================================= */
-
-        const currentUser =
-            getCurrentUser();
-
-
-        if (currentUser) {
-
-            window.location.href =
-                "dashboard.html";
-
-            return;
-
-        }
-
-
-        /* =========================================
-           ELEMENTS
-        ========================================= */
-
-        const form =
-            document.getElementById(
-                "registerForm"
+        const params =
+            new URLSearchParams(
+                window.location.search
             );
 
+        const referralFromUrl =
+            params.get("ref");
 
-        const fullName =
-            document.getElementById(
-                "fullName"
-            );
-
-
-        const phone =
-            document.getElementById(
-                "phone"
-            );
-
-
-        const password =
-            document.getElementById(
-                "password"
-            );
-
-
-        const confirmPassword =
-            document.getElementById(
-                "confirmPassword"
-            );
-
-
-        const referralCode =
+        if (referralFromUrl) {
             document.getElementById(
                 "referralCode"
-            );
-
-
-        const messageBox =
-            document.getElementById(
-                "formMessage"
-            );
-
-
-        const registerButton =
-            document.getElementById(
-                "registerButton"
-            );
-
-
-        /* =========================================
-           AFFICHER MESSAGE
-        ========================================= */
-
-        function showMessage(
-            message,
-            type
-        ) {
-
-            messageBox.textContent =
-                message;
-
-
-            messageBox.className =
-                "form-message " +
-                type;
-
+            ).value =
+                referralFromUrl;
         }
 
 
-        /* =========================================
-           AFFICHER / MASQUER MOT DE PASSE
-        ========================================= */
-
-        function setupPasswordToggle(
-            inputId,
-            buttonId
-        ) {
-
-            const input =
-                document.getElementById(
-                    inputId
-                );
-
-
-            const button =
-                document.getElementById(
-                    buttonId
-                );
-
-
-            button.addEventListener(
-                "click",
-                function () {
-
-                    const isPassword =
-                        input.type ===
-                        "password";
-
-
-                    input.type =
-                        isPassword
-                            ? "text"
-                            : "password";
-
-
-                    button.innerHTML =
-                        isPassword
-                            ? '<i class="fa-solid fa-eye-slash"></i>'
-                            : '<i class="fa-solid fa-eye"></i>';
-
-                }
-            );
-
-        }
-
-
-        setupPasswordToggle(
-            "password",
-            "togglePassword"
-        );
-
-
-        setupPasswordToggle(
-            "confirmPassword",
-            "toggleConfirmPassword"
-        );
-
-
-        /* =========================================
-           INSCRIPTION
-        ========================================= */
-
-        form.addEventListener(
-            "submit",
-            function (
-                event
-            ) {
-
-                event.preventDefault();
-
-
-                const name =
-                    fullName.value.trim();
-
-
-                const phoneNumber =
-                    phone.value.trim();
-
-
-                const passwordValue =
-                    password.value;
-
-
-                const confirmPasswordValue =
-                    confirmPassword.value;
-
-
-                const referral =
-                    referralCode.value
-                        .trim()
-                        .toUpperCase();
-
-
-                /* Vérifications */
-
-                if (
-                    name.length < 3
-                ) {
-
-                    showMessage(
-                        "Veuillez entrer votre nom complet.",
-                        "error"
-                    );
-
-                    return;
-
-                }
-
-
-                if (
-                    phoneNumber.length < 8
-                ) {
-
-                    showMessage(
-                        "Veuillez entrer un numéro de téléphone valide.",
-                        "error"
-                    );
-
-                    return;
-
-                }
-
-
-                if (
-                    passwordValue.length < 6
-                ) {
-
-                    showMessage(
-                        "Le mot de passe doit contenir au moins 6 caractères.",
-                        "error"
-                    );
-
-                    return;
-
-                }
-
-
-                if (
-                    passwordValue !==
-                    confirmPasswordValue
-                ) {
-
-                    showMessage(
-                        "Les mots de passe ne correspondent pas.",
-                        "error"
-                    );
-
-                    return;
-
-                }
-
-
-                /* Création */
-
-                const result =
-                    registerUser(
-                        name,
-                        phoneNumber,
-                        passwordValue,
-                        referral
-                    );
-
-
-                if (
-                    !result.success
-                ) {
-
-                    showMessage(
-                        result.message,
-                        "error"
-                    );
-
-                    return;
-
-                }
-
-
-                showMessage(
-                    "Compte créé avec succès. Redirection vers votre espace...",
-                    "success"
-                );
-
-
-                registerButton.disabled =
-                    true;
-
-
-                registerButton.innerHTML =
-                    '<i class="fa-solid fa-spinner fa-spin"></i> Création...';
-
-
-                setTimeout(
+        /* Afficher / masquer mot de passe */
+
+        document.querySelectorAll(
+            "[data-password-target]"
+        ).forEach(
+            function (button) {
+
+                button.addEventListener(
+                    "click",
                     function () {
 
-                        window.location.href =
-                            "dashboard.html";
+                        const input =
+                            document.getElementById(
+                                button.dataset
+                                    .passwordTarget
+                            );
 
-                    },
-                    900
+                        const icon =
+                            button.querySelector("i");
+
+                        if (
+                            input.type ===
+                            "password"
+                        ) {
+                            input.type = "text";
+                            icon.className =
+                                "fa-regular fa-eye-slash";
+                        } else {
+                            input.type =
+                                "password";
+                            icon.className =
+                                "fa-regular fa-eye";
+                        }
+                    }
                 );
-
             }
         );
 
+
+        /* INSCRIPTION */
+
+        document.getElementById(
+            "registerForm"
+        ).addEventListener(
+            "submit",
+            function (event) {
+
+                event.preventDefault();
+
+                const fullName =
+                    document.getElementById(
+                        "fullName"
+                    ).value.trim();
+
+                const phone =
+                    document.getElementById(
+                        "phone"
+                    ).value.trim();
+
+                const password =
+                    document.getElementById(
+                        "password"
+                    ).value;
+
+                const confirmPassword =
+                    document.getElementById(
+                        "confirmPassword"
+                    ).value;
+
+                const referralCode =
+                    document.getElementById(
+                        "referralCode"
+                    ).value.trim();
+
+                const messageBox =
+                    document.getElementById(
+                        "registerMessage"
+                    );
+
+                const button =
+                    document.getElementById(
+                        "registerButton"
+                    );
+
+                button.disabled = true;
+
+                const result =
+                    registerUser({
+                        fullName:
+                            fullName,
+
+                        phone:
+                            phone,
+
+                        password:
+                            password,
+
+                        confirmPassword:
+                            confirmPassword,
+
+                        referralCode:
+                            referralCode
+                    });
+
+                messageBox.textContent =
+                    result.message;
+
+                messageBox.className =
+                    "form-message " +
+                    (
+                        result.success
+                            ? "success"
+                            : "error"
+                    );
+
+                if (!result.success) {
+                    button.disabled =
+                        false;
+
+                    return;
+                }
+
+                button.innerHTML =
+                    '<i class="fa-solid fa-check"></i> Compte créé';
+
+                setTimeout(
+                    function () {
+                        window.location.href =
+                            "dashboard.html";
+                    },
+                    700
+                );
+            }
+        );
 
     }
 );
 
 </script>
+
 
 </body>
 </html>
