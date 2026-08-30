@@ -1,455 +1,1855 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <meta name="description"
-          content="Créer un compte Housing's YQD">
+    <meta
+        name="description"
+        content="Créer un compte Housing's YQD"
+    >
 
-    <title>
-        Créer un compte | Housing's YQD
-    </title>
+    <title>Créer un compte | Housing's YQD</title>
 
-    <link rel="stylesheet"
-          href="style.css">
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
 
+    <style>
+        .hyqd-register-page {
+            min-height: 100vh;
+            background:
+                radial-gradient(
+                    circle at 15% 20%,
+                    rgba(37, 99, 235, 0.22),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 85% 80%,
+                    rgba(14, 165, 233, 0.18),
+                    transparent 35%
+                ),
+                linear-gradient(
+                    135deg,
+                    #020617 0%,
+                    #071b3d 48%,
+                    #0b3a82 100%
+                );
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 30px 18px;
+
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hyqd-register-page::before,
+        .hyqd-register-page::after {
+            content: "";
+            position: absolute;
+            border-radius: 999px;
+            filter: blur(2px);
+            pointer-events: none;
+        }
+
+        .hyqd-register-page::before {
+            width: 330px;
+            height: 330px;
+            top: -130px;
+            right: -100px;
+            background: rgba(56, 189, 248, 0.10);
+        }
+
+        .hyqd-register-page::after {
+            width: 280px;
+            height: 280px;
+            bottom: -120px;
+            left: -90px;
+            background: rgba(37, 99, 235, 0.13);
+        }
+
+        .hyqd-register-shell {
+            width: 100%;
+            max-width: 1120px;
+
+            display: grid;
+            grid-template-columns:
+                minmax(0, 1fr)
+                minmax(400px, 500px);
+
+            border: 1px solid rgba(255,255,255,0.10);
+
+            border-radius: 32px;
+
+            overflow: hidden;
+
+            background:
+                rgba(255,255,255,0.06);
+
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+
+            box-shadow:
+                0 30px 90px rgba(0,0,0,0.32);
+
+            position: relative;
+            z-index: 2;
+        }
+
+        .hyqd-register-brand {
+            padding: 60px;
+
+            color: #ffffff;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            min-height: 700px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(37,99,235,0.20),
+                    rgba(2,6,23,0.20)
+                );
+        }
+
+        .hyqd-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 13px;
+
+            color: #ffffff;
+
+            text-decoration: none;
+
+            font-size: 23px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+        }
+
+        .hyqd-logo-icon {
+            width: 48px;
+            height: 48px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 15px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #38bdf8,
+                    #2563eb
+                );
+
+            box-shadow:
+                0 12px 30px
+                rgba(37,99,235,0.35);
+        }
+
+        .hyqd-register-presentation {
+            max-width: 520px;
+        }
+
+        .hyqd-register-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 8px 13px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(255,255,255,0.08);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.10);
+
+            font-size: 13px;
+            font-weight: 800;
+
+            color: #bae6fd;
+
+            margin-bottom: 22px;
+        }
+
+        .hyqd-register-presentation h1 {
+            margin: 0;
+
+            font-size:
+                clamp(36px, 5vw, 62px);
+
+            line-height: 1.03;
+
+            letter-spacing: -2px;
+
+            color: #ffffff;
+        }
+
+        .hyqd-register-presentation h1 span {
+            color: #38bdf8;
+        }
+
+        .hyqd-register-presentation p {
+            margin:
+                22px 0 0;
+
+            max-width: 500px;
+
+            font-size: 16px;
+            line-height: 1.75;
+
+            color: #cbd5e1;
+        }
+
+        .hyqd-register-benefits {
+            display: grid;
+            gap: 13px;
+
+            margin-top: 30px;
+        }
+
+        .hyqd-register-benefit {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            color: #e2e8f0;
+
+            font-size: 14px;
+            font-weight: 650;
+        }
+
+        .hyqd-register-benefit i {
+            width: 31px;
+            height: 31px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            flex-shrink: 0;
+
+            border-radius: 10px;
+
+            color: #7dd3fc;
+
+            background:
+                rgba(56,189,248,0.10);
+        }
+
+        .hyqd-register-security {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+
+            padding: 16px;
+
+            border-radius: 17px;
+
+            background:
+                rgba(15,23,42,0.36);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.08);
+
+            color: #94a3b8;
+
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .hyqd-register-security i {
+            color: #38bdf8;
+            margin-top: 3px;
+        }
+
+        .hyqd-register-form-area {
+            background: #ffffff;
+
+            padding:
+                48px 42px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hyqd-register-mobile-logo {
+            display: none;
+
+            margin-bottom: 28px;
+
+            color: #0f172a;
+        }
+
+        .hyqd-register-form-header {
+            margin-bottom: 28px;
+        }
+
+        .hyqd-register-form-header h2 {
+            margin: 0;
+
+            color: #0f172a;
+
+            font-size: 30px;
+            line-height: 1.15;
+
+            letter-spacing: -0.7px;
+        }
+
+        .hyqd-register-form-header p {
+            margin:
+                10px 0 0;
+
+            color: #64748b;
+
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .hyqd-register-form {
+            display: grid;
+            gap: 18px;
+        }
+
+        .hyqd-field {
+            display: grid;
+            gap: 8px;
+        }
+
+        .hyqd-field label {
+            color: #334155;
+
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .hyqd-input-wrap {
+            position: relative;
+        }
+
+        .hyqd-input-icon {
+            position: absolute;
+
+            left: 16px;
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            color: #94a3b8;
+
+            pointer-events: none;
+        }
+
+        .hyqd-input-wrap input {
+            width: 100%;
+            min-height: 52px;
+
+            padding:
+                0 46px 0 45px;
+
+            border-radius: 14px;
+
+            border:
+                1px solid #dbe4f0;
+
+            outline: none;
+
+            background: #f8fafc;
+
+            color: #0f172a;
+
+            font-size: 15px;
+
+            transition:
+                border-color .2s ease,
+                box-shadow .2s ease,
+                background .2s ease;
+        }
+
+        .hyqd-input-wrap input:focus {
+            background: #ffffff;
+
+            border-color: #2563eb;
+
+            box-shadow:
+                0 0 0 4px
+                rgba(37,99,235,0.10);
+        }
+
+        .hyqd-input-wrap input::placeholder {
+            color: #94a3b8;
+        }
+
+        .hyqd-password-toggle {
+            position: absolute;
+
+            right: 8px;
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            width: 38px;
+            height: 38px;
+
+            border: 0;
+
+            border-radius: 10px;
+
+            background: transparent;
+
+            color: #64748b;
+
+            cursor: pointer;
+        }
+
+        .hyqd-password-toggle:hover {
+            background: #eef2ff;
+            color: #2563eb;
+        }
+
+        .hyqd-phone-wrap {
+            display: flex;
+            align-items: stretch;
+
+            border:
+                1px solid #dbe4f0;
+
+            border-radius: 14px;
+
+            background: #f8fafc;
+
+            overflow: hidden;
+
+            transition:
+                border-color .2s ease,
+                box-shadow .2s ease,
+                background .2s ease;
+        }
+
+        .hyqd-phone-wrap:focus-within {
+            background: #ffffff;
+
+            border-color: #2563eb;
+
+            box-shadow:
+                0 0 0 4px
+                rgba(37,99,235,0.10);
+        }
+
+        .hyqd-country-code {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+
+            padding:
+                0 14px;
+
+            border-right:
+                1px solid #dbe4f0;
+
+            color: #334155;
+
+            font-weight: 850;
+
+            font-size: 14px;
+
+            white-space: nowrap;
+        }
+
+        .hyqd-country-code span:first-child {
+            font-size: 20px;
+        }
+
+        .hyqd-phone-wrap input {
+            width: 100%;
+            min-width: 0;
+
+            min-height: 52px;
+
+            border: 0;
+            outline: 0;
+
+            background: transparent;
+
+            padding:
+                0 15px;
+
+            font-size: 15px;
+
+            color: #0f172a;
+        }
+
+        .hyqd-helper {
+            margin: 0;
+
+            color: #94a3b8;
+
+            font-size: 11px;
+            line-height: 1.45;
+        }
+
+        .hyqd-password-strength {
+            display: none;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 5px;
+
+            margin-top: 3px;
+        }
+
+        .hyqd-password-strength span {
+            height: 4px;
+
+            border-radius: 999px;
+
+            background: #e2e8f0;
+        }
+
+        .hyqd-password-strength.level-1 span:nth-child(1),
+        .hyqd-password-strength.level-2 span:nth-child(-n+2),
+        .hyqd-password-strength.level-3 span:nth-child(-n+3),
+        .hyqd-password-strength.level-4 span:nth-child(-n+4) {
+            background: #2563eb;
+        }
+
+        .hyqd-register-message {
+            display: none;
+
+            padding: 13px 14px;
+
+            border-radius: 13px;
+
+            font-size: 13px;
+            line-height: 1.55;
+
+            font-weight: 650;
+        }
+
+        .hyqd-register-message.show {
+            display: block;
+        }
+
+        .hyqd-register-message.error {
+            color: #991b1b;
+
+            background: #fef2f2;
+
+            border:
+                1px solid #fecaca;
+        }
+
+        .hyqd-register-message.success {
+            color: #166534;
+
+            background: #f0fdf4;
+
+            border:
+                1px solid #bbf7d0;
+        }
+
+        .hyqd-register-message.info {
+            color: #1e40af;
+
+            background: #eff6ff;
+
+            border:
+                1px solid #bfdbfe;
+        }
+
+        .hyqd-terms {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+
+            color: #64748b;
+
+            font-size: 12px;
+            line-height: 1.55;
+        }
+
+        .hyqd-terms input {
+            margin-top: 3px;
+            accent-color: #2563eb;
+        }
+
+        .hyqd-terms a {
+            color: #2563eb;
+
+            font-weight: 800;
+
+            text-decoration: none;
+        }
+
+        .hyqd-register-submit {
+            width: 100%;
+            min-height: 54px;
+
+            border: 0;
+
+            border-radius: 14px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #0284c7
+                );
+
+            color: #ffffff;
+
+            font-size: 15px;
+            font-weight: 900;
+
+            cursor: pointer;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+
+            box-shadow:
+                0 14px 30px
+                rgba(37,99,235,0.22);
+
+            transition:
+                transform .2s ease,
+                box-shadow .2s ease,
+                opacity .2s ease;
+        }
+
+        .hyqd-register-submit:hover:not(:disabled) {
+            transform:
+                translateY(-1px);
+
+            box-shadow:
+                0 18px 36px
+                rgba(37,99,235,0.30);
+        }
+
+        .hyqd-register-submit:disabled {
+            cursor: not-allowed;
+            opacity: .65;
+        }
+
+        .hyqd-register-login {
+            margin:
+                6px 0 0;
+
+            text-align: center;
+
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+        .hyqd-register-login a {
+            color: #2563eb;
+
+            font-weight: 900;
+
+            text-decoration: none;
+        }
+
+        .hyqd-back-home {
+            text-align: center;
+
+            margin-top: 18px;
+        }
+
+        .hyqd-back-home a {
+            color: #64748b;
+
+            font-size: 12px;
+
+            text-decoration: none;
+
+            font-weight: 700;
+        }
+
+        .hyqd-back-home a:hover {
+            color: #2563eb;
+        }
+
+        @media (max-width: 900px) {
+
+            .hyqd-register-shell {
+                max-width: 560px;
+
+                grid-template-columns: 1fr;
+            }
+
+            .hyqd-register-brand {
+                display: none;
+            }
+
+            .hyqd-register-mobile-logo {
+                display: inline-flex;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .hyqd-register-page {
+                padding: 0;
+
+                align-items: stretch;
+
+                background: #ffffff;
+            }
+
+            .hyqd-register-shell {
+                border: 0;
+                border-radius: 0;
+
+                box-shadow: none;
+
+                min-height: 100vh;
+            }
+
+            .hyqd-register-form-area {
+                padding:
+                    30px 20px 36px;
+            }
+
+            .hyqd-register-form-header h2 {
+                font-size: 27px;
+            }
+        }
+
+        @media (max-width: 390px) {
+
+            .hyqd-register-form-area {
+                padding:
+                    25px 15px 30px;
+            }
+
+            .hyqd-country-code {
+                padding:
+                    0 10px;
+            }
+        }
+    </style>
 </head>
 
+<body>
 
-<body class="auth-page">
+<main class="hyqd-register-page">
 
+    <section class="hyqd-register-shell">
 
-<div class="auth-wrapper">
+        <!-- =========================================
+             PRESENTATION DESKTOP
+        ========================================== -->
 
+        <div class="hyqd-register-brand">
 
-    <section class="auth-visual">
+            <a
+                href="index.html"
+                class="hyqd-logo"
+            >
+                <span class="hyqd-logo-icon">
+                    <i class="fa-solid fa-building"></i>
+                </span>
 
-        <a href="index.html"
-           class="brand">
-
-            <div class="brand-logo">
-                <i class="fa-solid fa-building"></i>
-            </div>
-
-            <div class="brand-text">
-                <strong>Housing's YQD</strong>
-                <span>IMMOBILIER</span>
-            </div>
-
-        </a>
-
-
-        <div class="auth-visual-content">
-
-            <span class="auth-kicker">
-                BIENVENUE
-            </span>
-
-            <h1>
-                Créez votre espace personnel.
-            </h1>
-
-            <p>
-                Accédez à votre tableau de bord,
-                aux investissements, à l'historique,
-                au parrainage et à l'assistance.
-            </p>
-
-        </div>
-
-    </section>
-
-
-    <section class="auth-form-section">
-
-
-        <div class="auth-form-container">
-
-
-            <a href="index.html"
-               class="auth-back">
-
-                <i class="fa-solid fa-arrow-left"></i>
-                Accueil
-
+                <span>
+                    Housing's YQD
+                </span>
             </a>
 
 
-            <span class="page-eyebrow">
-                INSCRIPTION
-            </span>
+            <div class="hyqd-register-presentation">
+
+                <div class="hyqd-register-eyebrow">
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                    Nouvelle infrastructure sécurisée
+                </div>
+
+                <h1>
+                    Créez votre
+                    <span>espace personnel.</span>
+                </h1>
+
+                <p>
+                    Inscrivez-vous pour accéder à votre
+                    tableau de bord Housing's YQD, suivre
+                    vos opérations et gérer votre compte
+                    depuis une interface moderne.
+                </p>
 
 
-            <h2>
-                Créer un compte
-            </h2>
+                <div class="hyqd-register-benefits">
 
+                    <div class="hyqd-register-benefit">
+                        <i class="fa-solid fa-user-shield"></i>
 
-            <p class="auth-description">
-                Remplissez les informations ci-dessous.
-            </p>
+                        <span>
+                            Authentification gérée par Supabase
+                        </span>
+                    </div>
 
+                    <div class="hyqd-register-benefit">
+                        <i class="fa-solid fa-envelope-circle-check"></i>
 
-            <div id="registerMessage"
-                 class="form-message">
+                        <span>
+                            Vérification de l'adresse email
+                        </span>
+                    </div>
+
+                    <div class="hyqd-register-benefit">
+                        <i class="fa-solid fa-mobile-screen-button"></i>
+
+                        <span>
+                            Interface adaptée aux smartphones
+                        </span>
+                    </div>
+
+                    <div class="hyqd-register-benefit">
+                        <i class="fa-solid fa-database"></i>
+
+                        <span>
+                            Profil enregistré dans la base sécurisée
+                        </span>
+                    </div>
+
+                </div>
+
             </div>
 
 
-            <form id="registerForm"
-                  autocomplete="on">
+            <div class="hyqd-register-security">
+
+                <i class="fa-solid fa-lock"></i>
+
+                <span>
+                    Votre mot de passe est traité par
+                    Supabase Auth et n'est pas enregistré
+                    directement dans le code du site.
+                </span>
+
+            </div>
+
+        </div>
 
 
-                <div class="form-group">
+        <!-- =========================================
+             FORMULAIRE
+        ========================================== -->
+
+        <div class="hyqd-register-form-area">
+
+            <a
+                href="index.html"
+                class="hyqd-logo hyqd-register-mobile-logo"
+            >
+                <span class="hyqd-logo-icon">
+                    <i class="fa-solid fa-building"></i>
+                </span>
+
+                <span>
+                    Housing's YQD
+                </span>
+            </a>
+
+
+            <div class="hyqd-register-form-header">
+
+                <h2>
+                    Créer un compte
+                </h2>
+
+                <p>
+                    Complétez vos informations pour
+                    rejoindre Housing's YQD.
+                </p>
+
+            </div>
+
+
+            <form
+                id="registerForm"
+                class="hyqd-register-form"
+                novalidate
+            >
+
+                <!-- NOM -->
+
+                <div class="hyqd-field">
 
                     <label for="fullName">
                         Nom complet
                     </label>
 
-                    <div class="input-icon-wrapper">
+                    <div class="hyqd-input-wrap">
 
-                        <i class="fa-regular fa-user"></i>
+                        <i
+                            class="fa-regular fa-user hyqd-input-icon"
+                        ></i>
 
                         <input
                             type="text"
                             id="fullName"
                             name="fullName"
-                            class="form-control"
-                            placeholder="Nom et prénom"
                             autocomplete="name"
-                            required>
+                            placeholder="Ex. Jean Kouassi"
+                            maxlength="100"
+                            required
+                        >
 
                     </div>
 
                 </div>
 
 
-                <div class="form-group">
+                <!-- EMAIL -->
+
+                <div class="hyqd-field">
+
+                    <label for="email">
+                        Adresse email
+                    </label>
+
+                    <div class="hyqd-input-wrap">
+
+                        <i
+                            class="fa-regular fa-envelope hyqd-input-icon"
+                        ></i>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            autocomplete="email"
+                            inputmode="email"
+                            placeholder="votre@email.com"
+                            maxlength="160"
+                            required
+                        >
+
+                    </div>
+
+                    <p class="hyqd-helper">
+                        Un email de confirmation peut vous être envoyé.
+                    </p>
+
+                </div>
+
+
+                <!-- TELEPHONE -->
+
+                <div class="hyqd-field">
 
                     <label for="phone">
                         Numéro de téléphone
                     </label>
 
-                    <div class="phone-input">
+                    <div class="hyqd-phone-wrap">
 
-                        <span class="phone-prefix">
-                            +225
-                        </span>
+                        <div class="hyqd-country-code">
+
+                            <span>🇨🇮</span>
+
+                            <span>+225</span>
+
+                        </div>
 
                         <input
                             type="tel"
                             id="phone"
                             name="phone"
-                            class="form-control"
-                            placeholder="0700000000"
                             autocomplete="tel"
                             inputmode="numeric"
-                            required>
+                            placeholder="0700000000"
+                            maxlength="14"
+                            required
+                        >
 
                     </div>
+
+                    <p class="hyqd-helper">
+                        Entrez votre numéro sans répéter +225.
+                    </p>
 
                 </div>
 
 
-                <div class="form-group">
+                <!-- CODE PARRAINAGE -->
 
-                    <label for="password">
-                        Mot de passe
-                    </label>
-
-                    <div class="password-input-wrapper">
-
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            class="form-control"
-                            placeholder="Minimum 6 caractères"
-                            autocomplete="new-password"
-                            required>
-
-                        <button
-                            type="button"
-                            class="password-toggle"
-                            data-password-target="password"
-                            aria-label="Afficher le mot de passe">
-
-                            <i class="fa-regular fa-eye"></i>
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="confirmPassword">
-                        Confirmer le mot de passe
-                    </label>
-
-                    <div class="password-input-wrapper">
-
-                        <input
-                            type="password"
-                            id="confirmPassword"
-                            name="confirmPassword"
-                            class="form-control"
-                            placeholder="Confirmez votre mot de passe"
-                            autocomplete="new-password"
-                            required>
-
-                        <button
-                            type="button"
-                            class="password-toggle"
-                            data-password-target="confirmPassword"
-                            aria-label="Afficher le mot de passe">
-
-                            <i class="fa-regular fa-eye"></i>
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <div class="form-group">
+                <div class="hyqd-field">
 
                     <label for="referralCode">
                         Code d'invitation
-                        <span class="optional-text">
+                        <span
+                            style="
+                                color:#94a3b8;
+                                font-weight:600;
+                            "
+                        >
                             (facultatif)
                         </span>
                     </label>
 
-                    <div class="input-icon-wrapper">
+                    <div class="hyqd-input-wrap">
 
-                        <i class="fa-solid fa-user-group"></i>
+                        <i
+                            class="fa-solid fa-user-group hyqd-input-icon"
+                        ></i>
 
                         <input
                             type="text"
                             id="referralCode"
                             name="referralCode"
-                            class="form-control"
-                            placeholder="Exemple : YQDABC123">
+                            autocomplete="off"
+                            placeholder="Code de parrainage"
+                            maxlength="30"
+                        >
 
                     </div>
 
                 </div>
 
 
+                <!-- MOT DE PASSE -->
+
+                <div class="hyqd-field">
+
+                    <label for="password">
+                        Mot de passe
+                    </label>
+
+                    <div class="hyqd-input-wrap">
+
+                        <i
+                            class="fa-solid fa-lock hyqd-input-icon"
+                        ></i>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            autocomplete="new-password"
+                            placeholder="Au moins 8 caractères"
+                            minlength="8"
+                            maxlength="100"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="hyqd-password-toggle"
+                            data-password-target="password"
+                            aria-label="Afficher le mot de passe"
+                        >
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        id="passwordStrength"
+                        class="hyqd-password-strength"
+                    >
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                </div>
+
+
+                <!-- CONFIRMATION -->
+
+                <div class="hyqd-field">
+
+                    <label for="confirmPassword">
+                        Confirmer le mot de passe
+                    </label>
+
+                    <div class="hyqd-input-wrap">
+
+                        <i
+                            class="fa-solid fa-shield-halved hyqd-input-icon"
+                        ></i>
+
+                        <input
+                            type="password"
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            autocomplete="new-password"
+                            placeholder="Retapez votre mot de passe"
+                            minlength="8"
+                            maxlength="100"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="hyqd-password-toggle"
+                            data-password-target="confirmPassword"
+                            aria-label="Afficher la confirmation"
+                        >
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- MESSAGE -->
+
+                <div
+                    id="registerMessage"
+                    class="hyqd-register-message"
+                    role="alert"
+                    aria-live="polite"
+                ></div>
+
+
+                <!-- CONDITIONS -->
+
+                <label class="hyqd-terms">
+
+                    <input
+                        type="checkbox"
+                        id="acceptTerms"
+                        required
+                    >
+
+                    <span>
+                        Je confirme avoir lu et accepté les
+                        conditions d'utilisation et reconnais
+                        que toute opération financière comporte
+                        des conditions et des risques qui doivent
+                        être examinés avant utilisation.
+                    </span>
+
+                </label>
+
+
+                <!-- SUBMIT -->
+
                 <button
                     type="submit"
-                    class="form-submit"
-                    id="registerButton">
+                    id="registerButton"
+                    class="hyqd-register-submit"
+                >
+
+                    <i class="fa-solid fa-user-plus"></i>
 
                     <span>
                         Créer mon compte
                     </span>
 
-                    <i class="fa-solid fa-arrow-right"></i>
-
                 </button>
 
+
+                <p class="hyqd-register-login">
+
+                    Vous avez déjà un compte ?
+
+                    <a href="login.html">
+                        Se connecter
+                    </a>
+
+                </p>
 
             </form>
 
 
-            <div class="auth-switch">
+            <div class="hyqd-back-home">
 
-                Vous avez déjà un compte ?
-
-                <a href="login.html">
-                    Se connecter
+                <a href="index.html">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Retour à l'accueil
                 </a>
 
             </div>
-
 
         </div>
 
     </section>
 
+</main>
 
-</div>
 
+<!-- =========================================================
+     SUPABASE JS V2
+========================================================== -->
 
-<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- NOTRE CLIENT SUPABASE -->
+
+<script src="supabase.js"></script>
 
 
 <script>
+"use strict";
 
-document.addEventListener(
-    "DOMContentLoaded",
+
+/* ============================================================
+   ELEMENTS
+============================================================ */
+
+const registerForm =
+    document.getElementById("registerForm");
+
+const registerButton =
+    document.getElementById("registerButton");
+
+const registerMessage =
+    document.getElementById("registerMessage");
+
+const fullNameInput =
+    document.getElementById("fullName");
+
+const emailInput =
+    document.getElementById("email");
+
+const phoneInput =
+    document.getElementById("phone");
+
+const referralCodeInput =
+    document.getElementById("referralCode");
+
+const passwordInput =
+    document.getElementById("password");
+
+const confirmPasswordInput =
+    document.getElementById("confirmPassword");
+
+const acceptTerms =
+    document.getElementById("acceptTerms");
+
+const passwordStrength =
+    document.getElementById("passwordStrength");
+
+
+/* ============================================================
+   MESSAGE
+============================================================ */
+
+function showRegisterMessage(
+    message,
+    type = "error"
+) {
+
+    registerMessage.textContent =
+        String(message || "");
+
+    registerMessage.className =
+        "hyqd-register-message show " +
+        type;
+}
+
+
+function clearRegisterMessage() {
+
+    registerMessage.textContent = "";
+
+    registerMessage.className =
+        "hyqd-register-message";
+}
+
+
+/* ============================================================
+   BOUTON
+============================================================ */
+
+function setRegisterLoading(
+    loading
+) {
+
+    registerButton.disabled =
+        Boolean(loading);
+
+
+    if (loading) {
+
+        registerButton.innerHTML = `
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+            <span>Création du compte...</span>
+        `;
+
+    } else {
+
+        registerButton.innerHTML = `
+            <i class="fa-solid fa-user-plus"></i>
+            <span>Créer mon compte</span>
+        `;
+    }
+}
+
+
+/* ============================================================
+   TELEPHONE
+============================================================ */
+
+phoneInput.addEventListener(
+    "input",
     function () {
 
-        /* Préremplissage du code de parrainage */
+        let value =
+            this.value.replace(/\D/g, "");
+
+
+        /*
+         * Si l'utilisateur tape accidentellement 225,
+         * on évite de dupliquer le préfixe.
+         */
+
+        if (
+            value.startsWith("225") &&
+            value.length > 10
+        ) {
+
+            value =
+                value.substring(3);
+        }
+
+
+        this.value =
+            value.substring(0, 10);
+    }
+);
+
+
+/* ============================================================
+   CODE PARRAINAGE
+============================================================ */
+
+referralCodeInput.addEventListener(
+    "input",
+    function () {
+
+        this.value =
+            this.value
+                .toUpperCase()
+                .replace(
+                    /[^A-Z0-9_-]/g,
+                    ""
+                );
+    }
+);
+
+
+/* ============================================================
+   RECUPERATION CODE DANS URL
+============================================================ */
+
+(function loadReferralCodeFromUrl() {
+
+    try {
 
         const params =
             new URLSearchParams(
                 window.location.search
             );
 
-        const referralFromUrl =
-            params.get("ref");
 
-        if (referralFromUrl) {
-            document.getElementById(
-                "referralCode"
-            ).value =
-                referralFromUrl;
+        const referral =
+            params.get("ref") ||
+            params.get("referral") ||
+            params.get("code");
+
+
+        if (referral) {
+
+            referralCodeInput.value =
+                String(referral)
+                    .trim()
+                    .toUpperCase();
+
         }
 
+    } catch (error) {
 
-        /* Afficher / masquer mot de passe */
-
-        document.querySelectorAll(
-            "[data-password-target]"
-        ).forEach(
-            function (button) {
-
-                button.addEventListener(
-                    "click",
-                    function () {
-
-                        const input =
-                            document.getElementById(
-                                button.dataset
-                                    .passwordTarget
-                            );
-
-                        const icon =
-                            button.querySelector("i");
-
-                        if (
-                            input.type ===
-                            "password"
-                        ) {
-                            input.type = "text";
-                            icon.className =
-                                "fa-regular fa-eye-slash";
-                        } else {
-                            input.type =
-                                "password";
-                            icon.className =
-                                "fa-regular fa-eye";
-                        }
-                    }
-                );
-            }
+        console.warn(
+            "Impossible de lire le code de parrainage.",
+            error
         );
+    }
+
+})();
 
 
-        /* INSCRIPTION */
+/* ============================================================
+   AFFICHER / MASQUER MOT DE PASSE
+============================================================ */
 
-        document.getElementById(
-            "registerForm"
-        ).addEventListener(
-            "submit",
-            function (event) {
+document
+    .querySelectorAll(
+        "[data-password-target]"
+    )
+    .forEach(button => {
 
-                event.preventDefault();
+        button.addEventListener(
+            "click",
+            function () {
 
-                const fullName =
+                const targetId =
+                    this.dataset.passwordTarget;
+
+                const input =
                     document.getElementById(
-                        "fullName"
-                    ).value.trim();
-
-                const phone =
-                    document.getElementById(
-                        "phone"
-                    ).value.trim();
-
-                const password =
-                    document.getElementById(
-                        "password"
-                    ).value;
-
-                const confirmPassword =
-                    document.getElementById(
-                        "confirmPassword"
-                    ).value;
-
-                const referralCode =
-                    document.getElementById(
-                        "referralCode"
-                    ).value.trim();
-
-                const messageBox =
-                    document.getElementById(
-                        "registerMessage"
+                        targetId
                     );
 
-                const button =
-                    document.getElementById(
-                        "registerButton"
-                    );
 
-                button.disabled = true;
-
-                const result =
-                    registerUser({
-                        fullName:
-                            fullName,
-
-                        phone:
-                            phone,
-
-                        password:
-                            password,
-
-                        confirmPassword:
-                            confirmPassword,
-
-                        referralCode:
-                            referralCode
-                    });
-
-                messageBox.textContent =
-                    result.message;
-
-                messageBox.className =
-                    "form-message " +
-                    (
-                        result.success
-                            ? "success"
-                            : "error"
-                    );
-
-                if (!result.success) {
-                    button.disabled =
-                        false;
+                if (!input) {
 
                     return;
                 }
 
-                button.innerHTML =
-                    '<i class="fa-solid fa-check"></i> Compte créé';
+
+                const show =
+                    input.type === "password";
+
+
+                input.type =
+                    show
+                        ? "text"
+                        : "password";
+
+
+                const icon =
+                    this.querySelector("i");
+
+
+                if (icon) {
+
+                    icon.className =
+                        show
+                            ?
+                            "fa-regular fa-eye-slash"
+                            :
+                            "fa-regular fa-eye";
+                }
+
+            }
+        );
+
+    });
+
+
+/* ============================================================
+   FORCE MOT DE PASSE
+============================================================ */
+
+passwordInput.addEventListener(
+    "input",
+    function () {
+
+        const value =
+            this.value;
+
+
+        passwordStrength.style.display =
+            value
+                ? "grid"
+                : "none";
+
+
+        let score = 0;
+
+
+        if (
+            value.length >= 8
+        ) {
+            score++;
+        }
+
+
+        if (
+            /[A-Z]/.test(value) &&
+            /[a-z]/.test(value)
+        ) {
+            score++;
+        }
+
+
+        if (
+            /\d/.test(value)
+        ) {
+            score++;
+        }
+
+
+        if (
+            /[^A-Za-z0-9]/.test(value)
+        ) {
+            score++;
+        }
+
+
+        passwordStrength.className =
+            "hyqd-password-strength" +
+            (
+                score
+                    ?
+                    " level-" + score
+                    :
+                    ""
+            );
+    }
+);
+
+
+/* ============================================================
+   FORMULAIRE
+============================================================ */
+
+registerForm.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+        clearRegisterMessage();
+
+
+        /* --------------------------------------------
+           Vérification Supabase
+        --------------------------------------------- */
+
+        if (
+            typeof registerSupabaseUser !==
+            "function"
+        ) {
+
+            showRegisterMessage(
+                "Le service d'inscription sécurisé n'est pas disponible. Vérifiez supabase.js.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        /* --------------------------------------------
+           Valeurs
+        --------------------------------------------- */
+
+        const fullName =
+            fullNameInput.value.trim();
+
+        const email =
+            emailInput.value
+                .trim()
+                .toLowerCase();
+
+        const localPhone =
+            phoneInput.value
+                .replace(/\D/g, "");
+
+        const phone =
+            "+225" + localPhone;
+
+        const referralCode =
+            referralCodeInput.value
+                .trim()
+                .toUpperCase();
+
+        const password =
+            passwordInput.value;
+
+        const confirmPassword =
+            confirmPasswordInput.value;
+
+
+        /* --------------------------------------------
+           Validation
+        --------------------------------------------- */
+
+        if (
+            fullName.length < 2
+        ) {
+
+            showRegisterMessage(
+                "Veuillez saisir votre nom complet."
+            );
+
+            fullNameInput.focus();
+
+            return;
+        }
+
+
+        if (
+            !email ||
+            !email.includes("@")
+        ) {
+
+            showRegisterMessage(
+                "Veuillez saisir une adresse email valide."
+            );
+
+            emailInput.focus();
+
+            return;
+        }
+
+
+        if (
+            localPhone.length !== 10
+        ) {
+
+            showRegisterMessage(
+                "Votre numéro doit contenir 10 chiffres après +225."
+            );
+
+            phoneInput.focus();
+
+            return;
+        }
+
+
+        if (
+            password.length < 8
+        ) {
+
+            showRegisterMessage(
+                "Votre mot de passe doit contenir au moins 8 caractères."
+            );
+
+            passwordInput.focus();
+
+            return;
+        }
+
+
+        if (
+            password !==
+            confirmPassword
+        ) {
+
+            showRegisterMessage(
+                "Les deux mots de passe ne correspondent pas."
+            );
+
+            confirmPasswordInput.focus();
+
+            return;
+        }
+
+
+        if (
+            !acceptTerms.checked
+        ) {
+
+            showRegisterMessage(
+                "Veuillez accepter les conditions avant de créer votre compte."
+            );
+
+            return;
+        }
+
+
+        /* --------------------------------------------
+           INSCRIPTION SUPABASE
+        --------------------------------------------- */
+
+        setRegisterLoading(true);
+
+
+        try {
+
+            const result =
+                await registerSupabaseUser({
+
+                    fullName,
+
+                    email,
+
+                    phone,
+
+                    password,
+
+                    referralCode
+
+                });
+
+
+            if (
+                !result ||
+                !result.success
+            ) {
+
+                showRegisterMessage(
+                    result?.message ||
+                    "Impossible de créer votre compte.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            /* ----------------------------------------
+               EMAIL A CONFIRMER
+            ----------------------------------------- */
+
+            if (
+                result.emailConfirmationRequired
+            ) {
+
+                showRegisterMessage(
+                    "Compte créé avec succès. Un email de confirmation a été envoyé à " +
+                    email +
+                    ". Ouvrez cet email et confirmez votre compte avant de vous connecter.",
+                    "success"
+                );
+
+
+                registerForm.reset();
+
+                passwordStrength.style.display =
+                    "none";
+
+
+                /*
+                 * On ne redirige pas immédiatement,
+                 * afin que l'utilisateur lise bien
+                 * le message de confirmation.
+                 */
 
                 setTimeout(
                     function () {
+
                         window.location.href =
-                            "dashboard.html";
+                            "login.html?registered=1";
+
                     },
-                    700
+                    4500
                 );
+
+
+                return;
             }
-        );
+
+
+            /* ----------------------------------------
+               SESSION DEJA ACTIVE
+            ----------------------------------------- */
+
+            showRegisterMessage(
+                "Compte créé avec succès. Ouverture de votre espace...",
+                "success"
+            );
+
+
+            setTimeout(
+                function () {
+
+                    window.location.replace(
+                        "dashboard.html"
+                    );
+
+                },
+                1000
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Erreur inscription Housing's YQD :",
+                error
+            );
+
+
+            showRegisterMessage(
+                "Une erreur inattendue est survenue pendant la création du compte.",
+                "error"
+            );
+
+        } finally {
+
+            setRegisterLoading(false);
+
+        }
 
     }
 );
 
-</script>
 
+/* ============================================================
+   SI DEJA CONNECTE
+============================================================ */
+
+(async function checkExistingSession() {
+
+    try {
+
+        if (
+            typeof getSupabaseSession !==
+            "function"
+        ) {
+
+            return;
+        }
+
+
+        const result =
+            await getSupabaseSession();
+
+
+        if (
+            result.success &&
+            result.session
+        ) {
+
+            /*
+             * Un utilisateur déjà connecté
+             * n'a normalement pas besoin
+             * de créer un second compte.
+             */
+
+            console.info(
+                "[Housing's YQD] Session Supabase déjà active."
+            );
+
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Vérification session impossible.",
+            error
+        );
+    }
+
+})();
+</script>
 
 </body>
 </html>
