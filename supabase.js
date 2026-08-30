@@ -1,67 +1,100 @@
 "use strict";
 
 /* ============================================================
-   HOUSING'S YQD
-   SUPABASE.JS
-   VERSION SECURISEE
-   ============================================================ */
-
-
-/* ============================================================
-   1. CONFIGURATION
+   HOUSING'S YQD - SUPABASE
+   Version sécurisée
 ============================================================ */
 
 const HYQD_SUPABASE_CONFIG = Object.freeze({
+    URL: "https://qcvagkialoztluqxpmcq.supabase.co",
+    PUBLISHABLE_KEY: "sb_publishable_J_fhucIX6-Fdals6lVQvvA_yCmUkwVy",
 
-    URL:
-        "https://qcvagkialoztluqxpmcq.supabase.co",
+    APP_NAME: "Housing's YQD",
 
-    PUBLISHABLE_KEY:
-        "sb_publishable_J_fhucIX6-Fdals6lVQvvA_yCmUkwVy",
-
-    APP_NAME:
-        "Housing's YQD",
-
-    HOME_PAGE:
-        "index.html",
-
-    LOGIN_PAGE:
-        "login.html",
-
-    REGISTER_PAGE:
-        "register.html",
-
-    DASHBOARD_PAGE:
-        "dashboard.html",
-
-    ADMIN_PAGE:
-        "admin.html"
-
+    HOME_PAGE: "index.html",
+    LOGIN_PAGE: "login.html",
+    REGISTER_PAGE: "register.html",
+    DASHBOARD_PAGE: "dashboard.html",
+    ADMIN_PAGE: "admin.html"
 });
 
 
-let HYQD_SUPABASE_CLIENT = null;
+/* ============================================================
+   INITIALISATION
+============================================================ */
+
+function initializeHousingSupabase() {
+
+    if (!window.supabase) {
+        throw new Error(
+            "La bibliothèque Supabase n'est pas chargée."
+        );
+    }
+
+    const key =
+        String(
+            HYQD_SUPABASE_CONFIG.PUBLISHABLE_KEY || ""
+        );
+
+    if (
+        key.includes("service_role") ||
+        key.startsWith("sb_secret_")
+    ) {
+        throw new Error(
+            "Une clé secrète Supabase ne doit jamais être utilisée dans le navigateur."
+        );
+    }
+
+    return window.supabase.createClient(
+        HYQD_SUPABASE_CONFIG.URL,
+        HYQD_SUPABASE_CONFIG.PUBLISHABLE_KEY,
+        {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: true
+            }
+        }
+    );
+}
+
+
+const HYQD_SUPABASE_CLIENT =
+    initializeHousingSupabase();
+
+
+window.HYQD_SUPABASE_CLIENT =
+    HYQD_SUPABASE_CLIENT;
+
+window.hyqdSupabase =
+    HYQD_SUPABASE_CLIENT;
+
+window.housingSupabase =
+    HYQD_SUPABASE_CLIENT;
+
+
+function getHousingSupabaseClient() {
+    return HYQD_SUPABASE_CLIENT;
+}
 
 
 /* ============================================================
-   2. OUTILS
+   UTILITAIRES
 ============================================================ */
 
 function hyqdCleanText(value) {
 
     return String(
         value ?? ""
-    )
-        .trim();
+    ).trim();
 
 }
 
 
 function hyqdNormalizeEmail(value) {
 
-    return hyqdCleanText(
-        value
-    ).toLowerCase();
+    return hyqdCleanText(value)
+        .toLowerCase();
 
 }
 
@@ -69,394 +102,125 @@ function hyqdNormalizeEmail(value) {
 function hyqdNormalizePhone(value) {
 
     let phone =
-        hyqdCleanText(
-            value
-        )
-            .replace(
-                /\s+/g,
-                ""
-            );
+        hyqdCleanText(value)
+            .replace(/\s+/g, "");
 
-
-    if (
-        phone &&
-        !phone.startsWith("+")
-    ) {
-
-        phone =
-            "+225" +
-            phone.replace(
-                /^0+/,
-                ""
-            );
-
+    if (!phone) {
+        return "";
     }
 
+    if (phone.startsWith("+225")) {
+        return phone;
+    }
 
-    return phone;
+    phone =
+        phone.replace(/^0+/, "");
 
+    return "+225" + phone;
 }
 
 
 function hyqdSafeMessage(
     error,
-    fallback =
-        "Une erreur est survenue."
+    fallback = "Une erreur est survenue."
 ) {
 
     if (!error) {
-
         return fallback;
-
     }
 
-
-    const message =
-        error.message ||
-        error.error_description ||
-        error.details ||
-        error.hint ||
-        fallback;
-
-
-    const lower =
-        String(
-            message
-        ).toLowerCase();
-
-
-    if (
-        lower.includes(
-            "invalid login credentials"
-        )
-    ) {
-
-        return "Adresse email ou mot de passe incorrect.";
-
+    if (typeof error === "string") {
+        return error;
     }
 
-
-    if (
-        lower.includes(
-            "email not confirmed"
-        )
-    ) {
-
-        return "Votre adresse email n'a pas encore été confirmée.";
-
+    if (error.message) {
+        return error.message;
     }
 
-
-    if (
-        lower.includes(
-            "user already registered"
-        )
-    ) {
-
-        return "Un compte existe déjà avec cette adresse email.";
-
-    }
+    return fallback;
+}
 
 
-    if (
-        lower.includes(
-            "rate limit"
-        )
-    ) {
+function hyqdFormatNumber(value) {
 
-        return "Trop de tentatives. Veuillez réessayer plus tard.";
-
-    }
-
-
-    return String(
-        message
+    return new Intl.NumberFormat(
+        "fr-FR"
+    ).format(
+        Number(value || 0)
     );
 
 }
 
 
-function hyqdFormatNumber(
-    value
-) {
-
-    const number =
-        Number(
-            value || 0
-        );
-
-
-    return Number.isFinite(
-        number
-    )
-        ? number
-        : 0;
-
-}
-
-
 /* ============================================================
-   3. INITIALISATION SUPABASE
-============================================================ */
-
-function initializeHousingSupabase() {
-
-    if (
-        HYQD_SUPABASE_CLIENT
-    ) {
-
-        return HYQD_SUPABASE_CLIENT;
-
-    }
-
-
-    const url =
-        hyqdCleanText(
-            HYQD_SUPABASE_CONFIG.URL
-        );
-
-
-    const key =
-        hyqdCleanText(
-            HYQD_SUPABASE_CONFIG.PUBLISHABLE_KEY
-        );
-
-
-    if (
-        !url ||
-        !key
-    ) {
-
-        throw new Error(
-            "Configuration Supabase incomplète."
-        );
-
-    }
-
-
-    if (
-        key.includes(
-            "service_role"
-        ) ||
-        key.startsWith(
-            "sb_secret_"
-        )
-    ) {
-
-        throw new Error(
-            "Une clé secrète Supabase ne doit jamais être utilisée dans le navigateur."
-        );
-
-    }
-
-
-    if (
-        typeof window.supabase ===
-        "undefined"
-    ) {
-
-        throw new Error(
-            "La bibliothèque Supabase n'est pas chargée."
-        );
-
-    }
-
-
-    if (
-        typeof window.supabase.createClient !==
-        "function"
-    ) {
-
-        throw new Error(
-            "Supabase createClient est indisponible."
-        );
-
-    }
-
-
-    HYQD_SUPABASE_CLIENT =
-        window.supabase.createClient(
-            url,
-            key,
-            {
-
-                auth: {
-
-                    persistSession:
-                        true,
-
-                    autoRefreshToken:
-                        true,
-
-                    detectSessionInUrl:
-                        true
-
-                }
-
-            }
-        );
-
-
-    window.HYQD_SUPABASE_CLIENT =
-        HYQD_SUPABASE_CLIENT;
-
-
-    window.hyqdSupabase =
-        HYQD_SUPABASE_CLIENT;
-
-
-    window.housingSupabase =
-        HYQD_SUPABASE_CLIENT;
-
-
-    return HYQD_SUPABASE_CLIENT;
-
-}
-
-
-/* ============================================================
-   4. CLIENT
-============================================================ */
-
-function getHousingSupabaseClient() {
-
-    return initializeHousingSupabase();
-
-}
-
-
-/* ============================================================
-   5. SESSION
+   AUTHENTIFICATION
 ============================================================ */
 
 async function getSupabaseSession() {
 
     try {
 
-        const client =
-            initializeHousingSupabase();
-
-
         const {
             data,
             error
         } =
-            await client.auth.getSession();
-
+            await HYQD_SUPABASE_CLIENT
+                .auth
+                .getSession();
 
         if (error) {
-
             throw error;
-
         }
 
-
         return {
-
-            success:
-                true,
-
+            success: true,
             session:
-                data?.session ||
-                null,
-
-            user:
-                data?.session?.user ||
-                null
-
+                data?.session || null
         };
-
 
     } catch (error) {
 
-        console.error(
-            "getSupabaseSession:",
-            error
-        );
-
-
         return {
-
-            success:
-                false,
-
-            session:
-                null,
-
-            user:
-                null,
-
-            error,
-
+            success: false,
+            session: null,
             message:
-                hyqdSafeMessage(
-                    error,
-                    "Impossible de vérifier la session."
-                )
-
+                hyqdSafeMessage(error)
         };
 
     }
 
 }
 
-
-/* ============================================================
-   6. UTILISATEUR AUTH
-============================================================ */
 
 async function getSupabaseUser() {
 
     try {
 
-        const client =
-            initializeHousingSupabase();
-
-
         const {
             data,
             error
         } =
-            await client.auth.getUser();
-
+            await HYQD_SUPABASE_CLIENT
+                .auth
+                .getUser();
 
         if (error) {
-
             throw error;
-
         }
 
-
         return {
-
-            success:
-                true,
-
+            success: true,
             user:
-                data?.user ||
-                null
-
+                data?.user || null
         };
-
 
     } catch (error) {
 
         return {
-
-            success:
-                false,
-
-            user:
-                null,
-
-            error,
-
+            success: false,
+            user: null,
             message:
-                hyqdSafeMessage(
-                    error,
-                    "Impossible de récupérer l'utilisateur."
-                )
-
+                hyqdSafeMessage(error)
         };
 
     }
@@ -464,175 +228,106 @@ async function getSupabaseUser() {
 }
 
 
-/* ============================================================
-   7. INSCRIPTION
-============================================================ */
-
 async function registerSupabaseUser({
-
     fullName,
     email,
     phone,
     password,
     referralCode
-
 }) {
 
     try {
 
-        const client =
-            initializeHousingSupabase();
-
-
         const cleanName =
-            hyqdCleanText(
-                fullName
-            );
-
+            hyqdCleanText(fullName);
 
         const cleanEmail =
-            hyqdNormalizeEmail(
-                email
-            );
-
+            hyqdNormalizeEmail(email);
 
         const cleanPhone =
-            hyqdNormalizePhone(
-                phone
-            );
-
+            hyqdNormalizePhone(phone);
 
         const cleanReferral =
-            hyqdCleanText(
-                referralCode
-            ).toUpperCase();
+            hyqdCleanText(referralCode)
+                .toUpperCase();
 
-
-        if (
-            cleanName.length < 2
-        ) {
-
+        if (!cleanName) {
             throw new Error(
-                "Veuillez saisir votre nom complet."
+                "Entrez votre nom complet."
             );
-
         }
-
 
         if (!cleanEmail) {
-
             throw new Error(
-                "Veuillez saisir votre adresse email."
+                "Entrez une adresse e-mail."
             );
-
         }
 
-
-        if (
-            !password ||
-            password.length < 6
-        ) {
-
+        if (!password || password.length < 6) {
             throw new Error(
                 "Le mot de passe doit contenir au moins 6 caractères."
             );
-
         }
-
 
         const {
             data,
             error
         } =
-            await client.auth.signUp({
+            await HYQD_SUPABASE_CLIENT
+                .auth
+                .signUp({
+                    email:
+                        cleanEmail,
 
-                email:
-                    cleanEmail,
+                    password,
 
-                password,
+                    options: {
+                        data: {
+                            full_name:
+                                cleanName,
 
-                options: {
+                            phone:
+                                cleanPhone,
 
-                    data: {
-
-                        full_name:
-                            cleanName,
-
-                        phone:
-                            cleanPhone,
-
-                        referral_code_entered:
-                            cleanReferral || null
-
+                            referral_code_entered:
+                                cleanReferral || null
+                        }
                     }
-
-                }
-
-            });
-
+                });
 
         if (error) {
-
             throw error;
-
         }
 
-
         return {
-
-            success:
-                true,
-
+            success: true,
             user:
-                data?.user ||
-                null,
-
+                data?.user || null,
             session:
-                data?.session ||
-                null,
-
+                data?.session || null,
             requiresEmailConfirmation:
                 !data?.session,
-
             message:
                 data?.session
-                    ? "Compte créé avec succès."
-                    : "Compte créé. Vérifiez votre adresse email."
-
+                    ? "Inscription réussie."
+                    : "Inscription réussie. Vérifiez votre e-mail pour confirmer votre compte."
         };
-
 
     } catch (error) {
 
-        console.error(
-            "registerSupabaseUser:",
-            error
-        );
-
-
         return {
-
-            success:
-                false,
-
-            error,
-
+            success: false,
             message:
                 hyqdSafeMessage(
                     error,
-                    "Impossible de créer le compte."
+                    "Inscription impossible."
                 )
-
         };
 
     }
 
 }
 
-
-/* ============================================================
-   8. CONNEXION
-============================================================ */
 
 async function loginSupabaseUser(
     email,
@@ -641,157 +336,73 @@ async function loginSupabaseUser(
 
     try {
 
-        const client =
-            initializeHousingSupabase();
-
-
-        const cleanEmail =
-            hyqdNormalizeEmail(
-                email
-            );
-
-
-        if (
-            !cleanEmail ||
-            !password
-        ) {
-
-            throw new Error(
-                "Veuillez saisir votre email et votre mot de passe."
-            );
-
-        }
-
-
         const {
             data,
             error
         } =
-            await client.auth.signInWithPassword({
-
-                email:
-                    cleanEmail,
-
-                password
-
-            });
-
+            await HYQD_SUPABASE_CLIENT
+                .auth
+                .signInWithPassword({
+                    email:
+                        hyqdNormalizeEmail(email),
+                    password
+                });
 
         if (error) {
-
             throw error;
-
         }
-
-
-        if (
-            !data?.session ||
-            !data?.user
-        ) {
-
-            throw new Error(
-                "La connexion n'a pas pu être établie."
-            );
-
-        }
-
 
         return {
-
-            success:
-                true,
-
-            session:
-                data.session,
-
+            success: true,
             user:
-                data.user,
-
+                data?.user || null,
+            session:
+                data?.session || null,
             message:
                 "Connexion réussie."
-
         };
-
 
     } catch (error) {
 
-        console.error(
-            "loginSupabaseUser:",
-            error
-        );
-
-
         return {
-
-            success:
-                false,
-
-            error,
-
+            success: false,
             message:
                 hyqdSafeMessage(
                     error,
-                    "Impossible de vous connecter."
+                    "Connexion impossible."
                 )
-
         };
 
     }
 
 }
 
-
-/* ============================================================
-   9. DECONNEXION
-============================================================ */
 
 async function logoutSupabaseUser() {
 
     try {
 
-        const client =
-            initializeHousingSupabase();
-
-
         const {
             error
         } =
-            await client.auth.signOut();
-
+            await HYQD_SUPABASE_CLIENT
+                .auth
+                .signOut();
 
         if (error) {
-
             throw error;
-
         }
 
-
         return {
-
-            success:
-                true,
-
-            message:
-                "Déconnexion réussie."
-
+            success: true
         };
-
 
     } catch (error) {
 
         return {
-
-            success:
-                false,
-
-            error,
-
+            success: false,
             message:
-                hyqdSafeMessage(
-                    error,
-                    "Impossible de vous déconnecter."
-                )
-
+                hyqdSafeMessage(error)
         };
 
     }
@@ -799,402 +410,130 @@ async function logoutSupabaseUser() {
 }
 
 
-/* ============================================================
-   10. PROFIL
-============================================================ */
+async function requireSupabaseAuth() {
 
-async function getSupabaseProfile(
-    userId = null
-) {
+    const result =
+        await getSupabaseUser();
 
-    try {
-
-        const client =
-            initializeHousingSupabase();
-
-
-        let targetUserId =
-            userId;
-
-
-        if (!targetUserId) {
-
-            const authResult =
-                await getSupabaseUser();
-
-
-            targetUserId =
-                authResult?.user?.id;
-
-        }
-
-
-        if (!targetUserId) {
-
-            throw new Error(
-                "Utilisateur non authentifié."
-            );
-
-        }
-
-
-        const {
-            data,
-            error
-        } =
-            await client
-                .from(
-                    "profiles"
-                )
-                .select(
-                    "*"
-                )
-                .eq(
-                    "id",
-                    targetUserId
-                )
-                .single();
-
-
-        if (error) {
-
-            throw error;
-
-        }
-
-
+    if (
+        !result.success ||
+        !result.user
+    ) {
         return {
-
-            success:
-                true,
-
-            profile:
-                data,
-
-            data
-
+            authorized: false,
+            reason:
+                "not_authenticated",
+            user: null
         };
-
-
-    } catch (error) {
-
-        return {
-
-            success:
-                false,
-
-            profile:
-                null,
-
-            error,
-
-            message:
-                hyqdSafeMessage(
-                    error,
-                    "Impossible de récupérer votre profil."
-                )
-
-        };
-
     }
+
+    return {
+        authorized: true,
+        user:
+            result.user
+    };
 
 }
 
-
-/* ============================================================
-   11. MODIFIER PROFIL VIA RPC
-============================================================ */
-
-async function updateSupabaseProfile({
-
-    fullName,
-    phone
-
-}) {
-
-    try {
-
-        const client =
-            initializeHousingSupabase();
-
-
-        const {
-            data,
-            error
-        } =
-            await client.rpc(
-                "update_my_profile",
-                {
-
-                    p_full_name:
-                        hyqdCleanText(
-                            fullName
-                        ),
-
-                    p_phone:
-                        hyqdNormalizePhone(
-                            phone
-                        )
-
-                }
-            );
-
-
-        if (error) {
-
-            throw error;
-
-        }
-
-
-        return {
-
-            success:
-                true,
-
-            data,
-
-            message:
-                data?.message ||
-                "Profil mis à jour."
-
-        };
-
-
-    } catch (error) {
-
-        return {
-
-            success:
-                false,
-
-            error,
-
-            message:
-                hyqdSafeMessage(
-                    error,
-                    "Impossible de modifier votre profil."
-                )
-
-        };
-
-    }
-
-}
-
-
-/* ============================================================
-   12. ROLE
-============================================================ */
 
 async function getSupabaseCurrentUserRole() {
 
     try {
 
-        const client =
-            initializeHousingSupabase();
+        const auth =
+            await requireSupabaseAuth();
 
+        if (!auth.authorized) {
 
-        const userResult =
-            await getSupabaseUser();
-
-
-        const userId =
-            userResult?.user?.id;
-
-
-        if (!userId) {
-
-            throw new Error(
-                "Utilisateur non authentifié."
-            );
+            return {
+                success: false,
+                role: null,
+                message:
+                    "Utilisateur non connecté."
+            };
 
         }
-
 
         const {
             data,
             error
         } =
-            await client
-                .from(
-                    "user_roles"
-                )
-                .select(
-                    "role"
-                )
+            await HYQD_SUPABASE_CLIENT
+                .from("user_roles")
+                .select("role")
                 .eq(
                     "user_id",
-                    userId
+                    auth.user.id
                 )
-                .single();
-
+                .maybeSingle();
 
         if (error) {
-
             throw error;
-
         }
 
-
         return {
-
-            success:
-                true,
-
+            success: true,
             role:
-                data?.role ||
-                "user"
-
+                data?.role || "user"
         };
-
 
     } catch (error) {
 
         return {
-
-            success:
-                false,
-
-            role:
-                null,
-
-            error,
-
+            success: false,
+            role: null,
             message:
-                hyqdSafeMessage(
-                    error
-                )
-
+                hyqdSafeMessage(error)
         };
 
     }
 
 }
 
-
-/* ============================================================
-   13. PROTECTION PAGE AUTHENTIFIEE
-============================================================ */
-
-async function requireSupabaseAuth() {
-
-    const sessionResult =
-        await getSupabaseSession();
-
-
-    if (
-        !sessionResult.success ||
-        !sessionResult.session ||
-        !sessionResult.user
-    ) {
-
-        return {
-
-            success:
-                false,
-
-            authenticated:
-                false,
-
-            session:
-                null,
-
-            user:
-                null
-
-        };
-
-    }
-
-
-    return {
-
-        success:
-            true,
-
-        authenticated:
-            true,
-
-        session:
-            sessionResult.session,
-
-        user:
-            sessionResult.user
-
-    };
-
-}
-
-
-/* ============================================================
-   14. PROTECTION ADMIN
-============================================================ */
 
 async function requireSupabaseAdmin() {
 
-    const authResult =
+    const auth =
         await requireSupabaseAuth();
 
-
-    if (!authResult.success) {
+    if (!auth.authorized) {
 
         return {
-
-            success:
-                false,
-
-            authorized:
-                false,
-
+            authorized: false,
             reason:
-                "not_authenticated"
-
+                "not_authenticated",
+            user: null,
+            role: null
         };
 
     }
-
 
     const roleResult =
         await getSupabaseCurrentUserRole();
 
-
     const role =
-        roleResult?.role;
-
+        roleResult?.role || "user";
 
     const authorized =
         role === "admin" ||
         role === "super_admin";
 
-
     return {
-
-        success:
-            authorized,
-
         authorized,
-
-        role,
-
-        user:
-            authResult.user,
-
-        session:
-            authResult.session,
-
         reason:
             authorized
                 ? null
-                : "not_admin"
-
+                : "not_admin",
+        user:
+            auth.user,
+        role
     };
 
 }
 
 
 /* ============================================================
-   15. RESET MOT DE PASSE
+   MOT DE PASSE
 ============================================================ */
 
 async function requestSupabasePasswordReset(
@@ -1203,75 +542,46 @@ async function requestSupabasePasswordReset(
 
     try {
 
-        const client =
-            initializeHousingSupabase();
-
-
-        const redirectUrl =
+        const redirectTo =
             new URL(
                 "forgot-password.html",
                 window.location.href
             ).href;
 
-
         const {
             error
         } =
-            await client.auth.resetPasswordForEmail(
-                hyqdNormalizeEmail(
-                    email
-                ),
-                {
-
-                    redirectTo:
-                        redirectUrl
-
-                }
-            );
-
+            await HYQD_SUPABASE_CLIENT
+                .auth
+                .resetPasswordForEmail(
+                    hyqdNormalizeEmail(email),
+                    {
+                        redirectTo
+                    }
+                );
 
         if (error) {
-
             throw error;
-
         }
 
-
         return {
-
-            success:
-                true,
-
+            success: true,
             message:
-                "Un email de réinitialisation vous a été envoyé."
-
+                "E-mail de réinitialisation envoyé."
         };
-
 
     } catch (error) {
 
         return {
-
-            success:
-                false,
-
-            error,
-
+            success: false,
             message:
-                hyqdSafeMessage(
-                    error
-                )
-
+                hyqdSafeMessage(error)
         };
 
     }
 
 }
 
-
-/* ============================================================
-   16. CHANGER MOT DE PASSE
-============================================================ */
 
 async function updateSupabasePassword(
     newPassword
@@ -1283,65 +593,37 @@ async function updateSupabasePassword(
             !newPassword ||
             newPassword.length < 6
         ) {
-
             throw new Error(
                 "Le nouveau mot de passe doit contenir au moins 6 caractères."
             );
-
         }
-
-
-        const client =
-            initializeHousingSupabase();
-
 
         const {
-            data,
             error
         } =
-            await client.auth.updateUser({
-
-                password:
-                    newPassword
-
-            });
-
+            await HYQD_SUPABASE_CLIENT
+                .auth
+                .updateUser({
+                    password:
+                        newPassword
+                });
 
         if (error) {
-
             throw error;
-
         }
 
-
         return {
-
-            success:
-                true,
-
-            user:
-                data?.user,
-
+            success: true,
             message:
-                "Mot de passe modifié avec succès."
-
+                "Mot de passe mis à jour."
         };
-
 
     } catch (error) {
 
         return {
-
-            success:
-                false,
-
-            error,
-
+            success: false,
             message:
-                hyqdSafeMessage(
-                    error
-                )
-
+                hyqdSafeMessage(error)
         };
 
     }
@@ -1350,28 +632,138 @@ async function updateSupabasePassword(
 
 
 /* ============================================================
-   17. PACKS
+   PROFIL
+============================================================ */
+
+async function getSupabaseProfile(
+    userId = null
+) {
+
+    try {
+
+        let targetUserId =
+            userId;
+
+        if (!targetUserId) {
+
+            const auth =
+                await requireSupabaseAuth();
+
+            if (!auth.authorized) {
+
+                throw new Error(
+                    "Utilisateur non connecté."
+                );
+            }
+
+            targetUserId =
+                auth.user.id;
+        }
+
+        const {
+            data,
+            error
+        } =
+            await HYQD_SUPABASE_CLIENT
+                .from("profiles")
+                .select("*")
+                .eq(
+                    "id",
+                    targetUserId
+                )
+                .maybeSingle();
+
+        if (error) {
+            throw error;
+        }
+
+        return {
+            success: true,
+            profile:
+                data || null,
+            data:
+                data || null
+        };
+
+    } catch (error) {
+
+        return {
+            success: false,
+            profile: null,
+            message:
+                hyqdSafeMessage(error)
+        };
+
+    }
+
+}
+
+
+async function updateSupabaseProfile({
+    fullName,
+    phone
+}) {
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await HYQD_SUPABASE_CLIENT
+                .rpc(
+                    "update_my_profile",
+                    {
+                        p_full_name:
+                            hyqdCleanText(fullName),
+
+                        p_phone:
+                            hyqdNormalizePhone(phone)
+                    }
+                );
+
+        if (error) {
+            throw error;
+        }
+
+        return {
+            success: true,
+            data,
+            message:
+                data?.message ||
+                "Profil mis à jour."
+        };
+
+    } catch (error) {
+
+        return {
+            success: false,
+            message:
+                hyqdSafeMessage(error)
+        };
+
+    }
+
+}
+
+
+/* ============================================================
+   PACKS
 ============================================================ */
 
 async function getSupabaseInvestmentPacks() {
 
     try {
 
-        const client =
-            initializeHousingSupabase();
-
-
         const {
             data,
             error
         } =
-            await client
+            await HYQD_SUPABASE_CLIENT
                 .from(
                     "investment_packs"
                 )
-                .select(
-                    "*"
-                )
+                .select("*")
                 .eq(
                     "is_active",
                     true
@@ -1379,52 +771,27 @@ async function getSupabaseInvestmentPacks() {
                 .order(
                     "sort_order",
                     {
-
-                        ascending:
-                            true
-
+                        ascending: true
                     }
                 );
 
-
         if (error) {
-
             throw error;
-
         }
 
-
         return {
-
-            success:
-                true,
-
+            success: true,
             packs:
-                data || [],
-
-            data:
                 data || []
-
         };
-
 
     } catch (error) {
 
         return {
-
-            success:
-                false,
-
-            packs:
-                [],
-
-            error,
-
+            success: false,
+            packs: [],
             message:
-                hyqdSafeMessage(
-                    error
-                )
-
+                hyqdSafeMessage(error)
         };
 
     }
@@ -1433,104 +800,55 @@ async function getSupabaseInvestmentPacks() {
 
 
 /* ============================================================
-   18. DEPOT SECURISE
+   DEMANDES FINANCIERES
 ============================================================ */
 
 async function requestSupabaseDeposit({
-
     amount,
     method,
-    reference = ""
-
+    reference
 }) {
 
     try {
-
-        const client =
-            initializeHousingSupabase();
-
-
-        const cleanAmount =
-            hyqdFormatNumber(
-                amount
-            );
-
-
-        if (
-            cleanAmount < 1000
-        ) {
-
-            throw new Error(
-                "Le dépôt minimum est de 1 000 FCFA."
-            );
-
-        }
-
 
         const {
             data,
             error
         } =
-            await client.rpc(
-                "request_deposit",
-                {
+            await HYQD_SUPABASE_CLIENT
+                .rpc(
+                    "request_deposit",
+                    {
+                        p_amount:
+                            Number(amount),
 
-                    p_amount:
-                        cleanAmount,
+                        p_method:
+                            hyqdCleanText(method),
 
-                    p_method:
-                        hyqdCleanText(
-                            method
-                        ),
-
-                    p_reference:
-                        hyqdCleanText(
-                            reference
-                        ) || null
-
-                }
-            );
-
+                        p_reference:
+                            hyqdCleanText(reference) ||
+                            null
+                    }
+                );
 
         if (error) {
-
             throw error;
-
         }
 
-
         return {
-
-            success:
-                true,
-
+            success: true,
             data,
-
-            deposit:
-                data,
-
             message:
                 data?.message ||
                 "Demande de dépôt enregistrée."
-
         };
-
 
     } catch (error) {
 
         return {
-
-            success:
-                false,
-
-            error,
-
+            success: false,
             message:
-                hyqdSafeMessage(
-                    error,
-                    "Impossible d'enregistrer le dépôt."
-                )
-
+                hyqdSafeMessage(error)
         };
 
     }
@@ -1538,115 +856,59 @@ async function requestSupabaseDeposit({
 }
 
 
-/* ============================================================
-   19. RETRAIT SECURISE
-============================================================ */
-
 async function requestSupabaseWithdrawal({
-
     amount,
     method,
     destinationPhone
-
 }) {
 
     try {
-
-        const client =
-            initializeHousingSupabase();
-
-
-        const cleanAmount =
-            hyqdFormatNumber(
-                amount
-            );
-
-
-        if (
-            cleanAmount < 1000
-        ) {
-
-            throw new Error(
-                "Le retrait minimum est de 1 000 FCFA."
-            );
-
-        }
-
 
         const {
             data,
             error
         } =
-            await client.rpc(
-                "request_withdrawal",
-                {
+            await HYQD_SUPABASE_CLIENT
+                .rpc(
+                    "request_withdrawal",
+                    {
+                        p_amount:
+                            Number(amount),
 
-                    p_amount:
-                        cleanAmount,
+                        p_method:
+                            hyqdCleanText(method),
 
-                    p_method:
-                        hyqdCleanText(
-                            method
-                        ),
-
-                    p_destination_phone:
-                        hyqdNormalizePhone(
-                            destinationPhone
-                        )
-
-                }
-            );
-
+                        p_destination_phone:
+                            hyqdNormalizePhone(
+                                destinationPhone
+                            )
+                    }
+                );
 
         if (error) {
-
             throw error;
-
         }
 
-
         return {
-
-            success:
-                true,
-
+            success: true,
             data,
-
-            withdrawal:
-                data,
-
             message:
                 data?.message ||
                 "Demande de retrait enregistrée."
-
         };
-
 
     } catch (error) {
 
         return {
-
-            success:
-                false,
-
-            error,
-
+            success: false,
             message:
-                hyqdSafeMessage(
-                    error,
-                    "Impossible d'enregistrer le retrait."
-                )
-
+                hyqdSafeMessage(error)
         };
 
     }
 
 }
 
-
-/* ============================================================
-   20. INVESTIR
-============================================================ */
 
 async function investSupabasePack(
     packId
@@ -1654,79 +916,37 @@ async function investSupabasePack(
 
     try {
 
-        const client =
-            initializeHousingSupabase();
-
-
-        const cleanPackId =
-            hyqdCleanText(
-                packId
-            );
-
-
-        if (!cleanPackId) {
-
-            throw new Error(
-                "Pack invalide."
-            );
-
-        }
-
-
         const {
             data,
             error
         } =
-            await client.rpc(
-                "invest_in_pack",
-                {
-
-                    p_pack_id:
-                        cleanPackId
-
-                }
-            );
-
+            await HYQD_SUPABASE_CLIENT
+                .rpc(
+                    "invest_in_pack",
+                    {
+                        p_pack_id:
+                            packId
+                    }
+                );
 
         if (error) {
-
             throw error;
-
         }
 
-
         return {
-
-            success:
-                true,
-
+            success: true,
             data,
-
-            investment:
-                data,
-
             message:
                 data?.message ||
-                "Investissement activé."
-
+                "Investissement enregistré."
         };
-
 
     } catch (error) {
 
         return {
-
-            success:
-                false,
-
-            error,
-
+            success: false,
             message:
-                hyqdSafeMessage(
-                    error,
-                    "Impossible d'effectuer cet investissement."
-                )
-
+                hyqdSafeMessage(error)
         };
 
     }
@@ -1735,7 +955,7 @@ async function investSupabasePack(
 
 
 /* ============================================================
-   21. MES DEPOTS
+   DONNEES UTILISATEUR
 ============================================================ */
 
 async function getSupabaseDeposits(
@@ -1744,101 +964,44 @@ async function getSupabaseDeposits(
 
     try {
 
-        const client =
-            initializeHousingSupabase();
-
-
-        const userResult =
-            await getSupabaseUser();
-
-
-        const userId =
-            userResult?.user?.id;
-
-
-        if (!userId) {
-
-            throw new Error(
-                "Utilisateur non authentifié."
-            );
-
-        }
-
-
         const {
             data,
             error
         } =
-            await client
-                .from(
-                    "deposits"
-                )
-                .select(
-                    "*"
-                )
-                .eq(
-                    "user_id",
-                    userId
-                )
+            await HYQD_SUPABASE_CLIENT
+                .from("deposits")
+                .select("*")
                 .order(
                     "created_at",
                     {
-
-                        ascending:
-                            false
-
+                        ascending: false
                     }
                 )
-                .limit(
-                    limit
-                );
-
+                .limit(limit);
 
         if (error) {
-
             throw error;
-
         }
 
-
         return {
-
-            success:
-                true,
-
+            success: true,
             deposits:
                 data || []
-
         };
-
 
     } catch (error) {
 
         return {
-
-            success:
-                false,
-
-            deposits:
-                [],
-
-            error,
-
+            success: false,
+            deposits: [],
             message:
-                hyqdSafeMessage(
-                    error
-                )
-
+                hyqdSafeMessage(error)
         };
 
     }
 
 }
 
-
-/* ============================================================
-   22. MES RETRAITS
-============================================================ */
 
 async function getSupabaseWithdrawals(
     limit = 100
@@ -1846,101 +1009,44 @@ async function getSupabaseWithdrawals(
 
     try {
 
-        const client =
-            initializeHousingSupabase();
-
-
-        const userResult =
-            await getSupabaseUser();
-
-
-        const userId =
-            userResult?.user?.id;
-
-
-        if (!userId) {
-
-            throw new Error(
-                "Utilisateur non authentifié."
-            );
-
-        }
-
-
         const {
             data,
             error
         } =
-            await client
-                .from(
-                    "withdrawals"
-                )
-                .select(
-                    "*"
-                )
-                .eq(
-                    "user_id",
-                    userId
-                )
+            await HYQD_SUPABASE_CLIENT
+                .from("withdrawals")
+                .select("*")
                 .order(
                     "created_at",
                     {
-
-                        ascending:
-                            false
-
+                        ascending: false
                     }
                 )
-                .limit(
-                    limit
-                );
-
+                .limit(limit);
 
         if (error) {
-
             throw error;
-
         }
 
-
         return {
-
-            success:
-                true,
-
+            success: true,
             withdrawals:
                 data || []
-
         };
-
 
     } catch (error) {
 
         return {
-
-            success:
-                false,
-
-            withdrawals:
-                [],
-
-            error,
-
+            success: false,
+            withdrawals: [],
             message:
-                hyqdSafeMessage(
-                    error
-                )
-
+                hyqdSafeMessage(error)
         };
 
     }
 
 }
 
-
-/* ============================================================
-   23. MES INVESTISSEMENTS
-============================================================ */
 
 async function getSupabaseInvestments(
     limit = 100
@@ -1948,101 +1054,44 @@ async function getSupabaseInvestments(
 
     try {
 
-        const client =
-            initializeHousingSupabase();
-
-
-        const userResult =
-            await getSupabaseUser();
-
-
-        const userId =
-            userResult?.user?.id;
-
-
-        if (!userId) {
-
-            throw new Error(
-                "Utilisateur non authentifié."
-            );
-
-        }
-
-
         const {
             data,
             error
         } =
-            await client
-                .from(
-                    "investments"
-                )
-                .select(
-                    "*"
-                )
-                .eq(
-                    "user_id",
-                    userId
-                )
+            await HYQD_SUPABASE_CLIENT
+                .from("investments")
+                .select("*")
                 .order(
                     "created_at",
                     {
-
-                        ascending:
-                            false
-
+                        ascending: false
                     }
                 )
-                .limit(
-                    limit
-                );
-
+                .limit(limit);
 
         if (error) {
-
             throw error;
-
         }
 
-
         return {
-
-            success:
-                true,
-
+            success: true,
             investments:
                 data || []
-
         };
-
 
     } catch (error) {
 
         return {
-
-            success:
-                false,
-
-            investments:
-                [],
-
-            error,
-
+            success: false,
+            investments: [],
             message:
-                hyqdSafeMessage(
-                    error
-                )
-
+                hyqdSafeMessage(error)
         };
 
     }
 
 }
 
-
-/* ============================================================
-   24. BONUS DE PARRAINAGE
-============================================================ */
 
 async function getSupabaseReferralRewards(
     limit = 100
@@ -2050,91 +1099,40 @@ async function getSupabaseReferralRewards(
 
     try {
 
-        const client =
-            initializeHousingSupabase();
-
-
-        const userResult =
-            await getSupabaseUser();
-
-
-        const userId =
-            userResult?.user?.id;
-
-
-        if (!userId) {
-
-            throw new Error(
-                "Utilisateur non authentifié."
-            );
-
-        }
-
-
         const {
             data,
             error
         } =
-            await client
+            await HYQD_SUPABASE_CLIENT
                 .from(
                     "referral_rewards"
                 )
-                .select(
-                    "*"
-                )
-                .eq(
-                    "sponsor_id",
-                    userId
-                )
+                .select("*")
                 .order(
                     "created_at",
                     {
-
-                        ascending:
-                            false
-
+                        ascending: false
                     }
                 )
-                .limit(
-                    limit
-                );
-
+                .limit(limit);
 
         if (error) {
-
             throw error;
-
         }
 
-
         return {
-
-            success:
-                true,
-
+            success: true,
             rewards:
                 data || []
-
         };
-
 
     } catch (error) {
 
         return {
-
-            success:
-                false,
-
-            rewards:
-                [],
-
-            error,
-
+            success: false,
+            rewards: [],
             message:
-                hyqdSafeMessage(
-                    error
-                )
-
+                hyqdSafeMessage(error)
         };
 
     }
@@ -2143,90 +1141,56 @@ async function getSupabaseReferralRewards(
 
 
 /* ============================================================
-   25. CREER TICKET ASSISTANCE
+   SUPPORT
 ============================================================ */
 
 async function createSupabaseSupportTicket({
-
     subject,
     message
-
 }) {
 
     try {
 
-        const client =
-            initializeHousingSupabase();
-
-
         const {
             data,
             error
         } =
-            await client.rpc(
-                "create_support_ticket",
-                {
+            await HYQD_SUPABASE_CLIENT
+                .rpc(
+                    "create_support_ticket",
+                    {
+                        p_subject:
+                            hyqdCleanText(subject),
 
-                    p_subject:
-                        hyqdCleanText(
-                            subject
-                        ),
-
-                    p_message:
-                        hyqdCleanText(
-                            message
-                        )
-
-                }
-            );
-
+                        p_message:
+                            hyqdCleanText(message)
+                    }
+                );
 
         if (error) {
-
             throw error;
-
         }
 
-
         return {
-
-            success:
-                true,
-
+            success: true,
             data,
-
             message:
                 data?.message ||
-                "Votre demande a été envoyée."
-
+                "Ticket envoyé."
         };
-
 
     } catch (error) {
 
         return {
-
-            success:
-                false,
-
-            error,
-
+            success: false,
             message:
-                hyqdSafeMessage(
-                    error,
-                    "Impossible d'envoyer votre demande."
-                )
-
+                hyqdSafeMessage(error)
         };
 
     }
 
 }
 
-
-/* ============================================================
-   26. MES TICKETS
-============================================================ */
 
 async function getSupabaseSupportTickets(
     limit = 100
@@ -2234,91 +1198,40 @@ async function getSupabaseSupportTickets(
 
     try {
 
-        const client =
-            initializeHousingSupabase();
-
-
-        const userResult =
-            await getSupabaseUser();
-
-
-        const userId =
-            userResult?.user?.id;
-
-
-        if (!userId) {
-
-            throw new Error(
-                "Utilisateur non authentifié."
-            );
-
-        }
-
-
         const {
             data,
             error
         } =
-            await client
+            await HYQD_SUPABASE_CLIENT
                 .from(
                     "support_tickets"
                 )
-                .select(
-                    "*"
-                )
-                .eq(
-                    "user_id",
-                    userId
-                )
+                .select("*")
                 .order(
                     "created_at",
                     {
-
-                        ascending:
-                            false
-
+                        ascending: false
                     }
                 )
-                .limit(
-                    limit
-                );
-
+                .limit(limit);
 
         if (error) {
-
             throw error;
-
         }
 
-
         return {
-
-            success:
-                true,
-
+            success: true,
             tickets:
                 data || []
-
         };
-
 
     } catch (error) {
 
         return {
-
-            success:
-                false,
-
-            tickets:
-                [],
-
-            error,
-
+            success: false,
+            tickets: [],
             message:
-                hyqdSafeMessage(
-                    error
-                )
-
+                hyqdSafeMessage(error)
         };
 
     }
@@ -2327,7 +1240,7 @@ async function getSupabaseSupportTickets(
 
 
 /* ============================================================
-   27. NOTIFICATIONS
+   NOTIFICATIONS
 ============================================================ */
 
 async function getSupabaseNotifications(
@@ -2336,101 +1249,46 @@ async function getSupabaseNotifications(
 
     try {
 
-        const client =
-            initializeHousingSupabase();
-
-
-        const userResult =
-            await getSupabaseUser();
-
-
-        const userId =
-            userResult?.user?.id;
-
-
-        if (!userId) {
-
-            throw new Error(
-                "Utilisateur non authentifié."
-            );
-
-        }
-
-
         const {
             data,
             error
         } =
-            await client
+            await HYQD_SUPABASE_CLIENT
                 .from(
                     "notifications"
                 )
-                .select(
-                    "*"
-                )
-                .eq(
-                    "user_id",
-                    userId
-                )
+                .select("*")
                 .order(
                     "created_at",
                     {
-
-                        ascending:
-                            false
-
+                        ascending: false
                     }
                 )
-                .limit(
-                    limit
-                );
-
+                .limit(limit);
 
         if (error) {
-
             throw error;
-
         }
 
-
         return {
-
-            success:
-                true,
-
+            success: true,
             notifications:
                 data || []
-
         };
-
 
     } catch (error) {
 
         return {
-
-            success:
-                false,
-
-            notifications:
-                [],
-
-            error,
-
+            success: false,
+            notifications: [],
             message:
-                hyqdSafeMessage(
-                    error
-                )
-
+                hyqdSafeMessage(error)
         };
 
     }
 
 }
 
-
-/* ============================================================
-   28. NOTIFICATION LUE
-============================================================ */
 
 async function markSupabaseNotificationRead(
     notificationId
@@ -2438,115 +1296,73 @@ async function markSupabaseNotificationRead(
 
     try {
 
-        const client =
-            initializeHousingSupabase();
-
-
         const {
             data,
             error
         } =
-            await client.rpc(
-                "mark_notification_read",
-                {
-
-                    p_notification_id:
-                        notificationId
-
-                }
-            );
-
+            await HYQD_SUPABASE_CLIENT
+                .rpc(
+                    "mark_notification_read",
+                    {
+                        p_notification_id:
+                            notificationId
+                    }
+                );
 
         if (error) {
-
             throw error;
-
         }
 
-
         return {
-
-            success:
-                true,
-
-            data
-
+            success: true,
+            data,
+            message:
+                "Notification lue."
         };
-
 
     } catch (error) {
 
         return {
-
-            success:
-                false,
-
-            error,
-
+            success: false,
             message:
-                hyqdSafeMessage(
-                    error
-                )
-
+                hyqdSafeMessage(error)
         };
 
     }
 
 }
 
-
-/* ============================================================
-   29. TOUT LIRE
-============================================================ */
 
 async function markAllSupabaseNotificationsRead() {
 
     try {
 
-        const client =
-            initializeHousingSupabase();
-
-
         const {
             data,
             error
         } =
-            await client.rpc(
-                "mark_all_notifications_read"
-            );
-
+            await HYQD_SUPABASE_CLIENT
+                .rpc(
+                    "mark_all_notifications_read"
+                );
 
         if (error) {
-
             throw error;
-
         }
 
-
         return {
-
-            success:
-                true,
-
-            data
-
+            success: true,
+            data,
+            message:
+                "Notifications mises à jour."
         };
-
 
     } catch (error) {
 
         return {
-
-            success:
-                false,
-
-            error,
-
+            success: false,
             message:
-                hyqdSafeMessage(
-                    error
-                )
-
+                hyqdSafeMessage(error)
         };
 
     }
@@ -2555,7 +1371,7 @@ async function markAllSupabaseNotificationsRead() {
 
 
 /* ============================================================
-   30. TICKER DEPOTS VALIDES
+   TICKER DES DEPOTS APPROUVES
 ============================================================ */
 
 async function getApprovedDepositTicker(
@@ -2564,348 +1380,127 @@ async function getApprovedDepositTicker(
 
     try {
 
-        const client =
-            initializeHousingSupabase();
-
-
-        const safeLimit =
-            Math.min(
-                Math.max(
-                    Number(
-                        limit
-                    ) || 20,
-                    1
-                ),
-                50
-            );
-
-
         const {
             data,
             error
         } =
-            await client.rpc(
-                "get_approved_deposit_ticker",
-                {
-
-                    p_limit:
-                        safeLimit
-
-                }
-            );
-
+            await HYQD_SUPABASE_CLIENT
+                .rpc(
+                    "get_approved_deposit_ticker",
+                    {
+                        p_limit:
+                            Number(limit)
+                    }
+                );
 
         if (error) {
-
             throw error;
-
         }
 
-
         return {
-
-            success:
-                true,
-
+            success: true,
             deposits:
                 data || [],
-
             ticker:
                 data || []
-
         };
-
 
     } catch (error) {
 
+        return {
+            success: false,
+            deposits: [],
+            ticker: [],
+            message:
+                hyqdSafeMessage(error)
+        };
+
+    }
+
+}
+
+
+/* ============================================================
+   ADMIN - AIDE POUR RATTACHER LES PROFILS
+============================================================ */
+
+async function adminAttachProfiles(
+    rows
+) {
+
+    if (
+        !Array.isArray(rows) ||
+        !rows.length
+    ) {
+        return rows || [];
+    }
+
+    const userIds =
+        [
+            ...new Set(
+                rows
+                    .map(
+                        item =>
+                            item.user_id
+                    )
+                    .filter(Boolean)
+            )
+        ];
+
+    if (!userIds.length) {
+        return rows;
+    }
+
+    const {
+        data: profileRows,
+        error
+    } =
+        await HYQD_SUPABASE_CLIENT
+            .from("profiles")
+            .select(
+                "id, full_name, phone, referral_code"
+            )
+            .in(
+                "id",
+                userIds
+            );
+
+    if (error) {
+
         console.warn(
-            "getApprovedDepositTicker:",
+            "Impossible de rattacher les profils :",
             error
         );
 
-
-        return {
-
-            success:
-                false,
-
-            deposits:
-                [],
-
-            ticker:
-                [],
-
-            error,
-
-            message:
-                hyqdSafeMessage(
-                    error
-                )
-
-        };
-
+        return rows;
     }
 
+    const profileMap =
+        new Map(
+            (profileRows || [])
+                .map(
+                    profile => [
+                        profile.id,
+                        profile
+                    ]
+                )
+        );
+
+    return rows.map(
+        row => ({
+            ...row,
+
+            profiles:
+                profileMap.get(
+                    row.user_id
+                ) || null
+        })
+    );
 }
 
 
 /* ============================================================
-   31. VALIDATION DEPOT ADMIN
-============================================================ */
-
-async function adminReviewSupabaseDeposit({
-
-    depositId,
-    approve,
-    note = ""
-
-}) {
-
-    try {
-
-        const client =
-            initializeHousingSupabase();
-
-
-        const {
-            data,
-            error
-        } =
-            await client.rpc(
-                "admin_review_deposit",
-                {
-
-                    p_deposit_id:
-                        depositId,
-
-                    p_approve:
-                        Boolean(
-                            approve
-                        ),
-
-                    p_note:
-                        hyqdCleanText(
-                            note
-                        ) || null
-
-                }
-            );
-
-
-        if (error) {
-
-            throw error;
-
-        }
-
-
-        return {
-
-            success:
-                true,
-
-            data,
-
-            message:
-                data?.message ||
-                "Dépôt traité."
-
-        };
-
-
-    } catch (error) {
-
-        return {
-
-            success:
-                false,
-
-            error,
-
-            message:
-                hyqdSafeMessage(
-                    error
-                )
-
-        };
-
-    }
-
-}
-
-
-/* ============================================================
-   32. VALIDATION RETRAIT ADMIN
-============================================================ */
-
-async function adminReviewSupabaseWithdrawal({
-
-    withdrawalId,
-    approve,
-    note = ""
-
-}) {
-
-    try {
-
-        const client =
-            initializeHousingSupabase();
-
-
-        const {
-            data,
-            error
-        } =
-            await client.rpc(
-                "admin_review_withdrawal",
-                {
-
-                    p_withdrawal_id:
-                        withdrawalId,
-
-                    p_approve:
-                        Boolean(
-                            approve
-                        ),
-
-                    p_note:
-                        hyqdCleanText(
-                            note
-                        ) || null
-
-                }
-            );
-
-
-        if (error) {
-
-            throw error;
-
-        }
-
-
-        return {
-
-            success:
-                true,
-
-            data,
-
-            message:
-                data?.message ||
-                "Retrait traité."
-
-        };
-
-
-    } catch (error) {
-
-        return {
-
-            success:
-                false,
-
-            error,
-
-            message:
-                hyqdSafeMessage(
-                    error
-                )
-
-        };
-
-    }
-
-}
-
-
-/* ============================================================
-   33. REPONSE ASSISTANCE ADMIN
-============================================================ */
-
-async function adminReplySupabaseSupportTicket({
-
-    ticketId,
-    reply,
-    close = false
-
-}) {
-
-    try {
-
-        const client =
-            initializeHousingSupabase();
-
-
-        const {
-            data,
-            error
-        } =
-            await client.rpc(
-                "admin_reply_support_ticket",
-                {
-
-                    p_ticket_id:
-                        ticketId,
-
-                    p_reply:
-                        hyqdCleanText(
-                            reply
-                        ),
-
-                    p_close:
-                        Boolean(
-                            close
-                        )
-
-                }
-            );
-
-
-        if (error) {
-
-            throw error;
-
-        }
-
-
-        return {
-
-            success:
-                true,
-
-            data,
-
-            message:
-                data?.message ||
-                "Réponse enregistrée."
-
-        };
-
-
-    } catch (error) {
-
-        return {
-
-            success:
-                false,
-
-            error,
-
-            message:
-                hyqdSafeMessage(
-                    error
-                )
-
-        };
-
-    }
-
-}
-
-
-/* ============================================================
-   34. ADMIN : PROFILS
+   ADMIN - UTILISATEURS
 ============================================================ */
 
 async function adminGetSupabaseProfiles(
@@ -2914,70 +1509,43 @@ async function adminGetSupabaseProfiles(
 
     try {
 
-        const client =
-            initializeHousingSupabase();
-
-
         const {
             data,
             error
         } =
-            await client
-                .from(
-                    "profiles"
-                )
-                .select(
-                    "*"
-                )
+            await HYQD_SUPABASE_CLIENT
+                .from("profiles")
+                .select("*")
                 .order(
                     "created_at",
                     {
-
-                        ascending:
-                            false
-
+                        ascending: false
                     }
                 )
-                .limit(
-                    limit
-                );
-
+                .limit(limit);
 
         if (error) {
-
             throw error;
-
         }
 
-
         return {
-
-            success:
-                true,
-
+            success: true,
             profiles:
                 data || []
-
         };
-
 
     } catch (error) {
 
+        console.error(
+            "adminGetSupabaseProfiles:",
+            error
+        );
+
         return {
-
-            success:
-                false,
-
-            profiles:
-                [],
-
-            error,
-
+            success: false,
+            profiles: [],
             message:
-                hyqdSafeMessage(
-                    error
-                )
-
+                hyqdSafeMessage(error)
         };
 
     }
@@ -2986,7 +1554,7 @@ async function adminGetSupabaseProfiles(
 
 
 /* ============================================================
-   35. ADMIN : DEPOTS
+   ADMIN - DEPOTS
 ============================================================ */
 
 async function adminGetSupabaseDeposits(
@@ -2995,78 +1563,56 @@ async function adminGetSupabaseDeposits(
 
     try {
 
-        const client =
-            initializeHousingSupabase();
-
+        /*
+         * IMPORTANT :
+         * On ne fait plus de jointure automatique
+         * profiles(...) ici.
+         *
+         * On lit d'abord les dépôts.
+         * Ensuite on rattache les profils.
+         */
 
         const {
             data,
             error
         } =
-            await client
-                .from(
-                    "deposits"
-                )
-                .select(
-                    `
-                    *,
-                    profiles:user_id (
-                        id,
-                        full_name,
-                        phone,
-                        referral_code
-                    )
-                    `
-                )
+            await HYQD_SUPABASE_CLIENT
+                .from("deposits")
+                .select("*")
                 .order(
                     "created_at",
                     {
-
-                        ascending:
-                            false
-
+                        ascending: false
                     }
                 )
-                .limit(
-                    limit
-                );
-
+                .limit(limit);
 
         if (error) {
-
             throw error;
-
         }
 
+        const deposits =
+            await adminAttachProfiles(
+                data || []
+            );
 
         return {
-
-            success:
-                true,
-
-            deposits:
-                data || []
-
+            success: true,
+            deposits
         };
-
 
     } catch (error) {
 
+        console.error(
+            "adminGetSupabaseDeposits:",
+            error
+        );
+
         return {
-
-            success:
-                false,
-
-            deposits:
-                [],
-
-            error,
-
+            success: false,
+            deposits: [],
             message:
-                hyqdSafeMessage(
-                    error
-                )
-
+                hyqdSafeMessage(error)
         };
 
     }
@@ -3075,7 +1621,7 @@ async function adminGetSupabaseDeposits(
 
 
 /* ============================================================
-   36. ADMIN : RETRAITS
+   ADMIN - RETRAITS
 ============================================================ */
 
 async function adminGetSupabaseWithdrawals(
@@ -3084,77 +1630,47 @@ async function adminGetSupabaseWithdrawals(
 
     try {
 
-        const client =
-            initializeHousingSupabase();
-
-
         const {
             data,
             error
         } =
-            await client
-                .from(
-                    "withdrawals"
-                )
-                .select(
-                    `
-                    *,
-                    profiles:user_id (
-                        id,
-                        full_name,
-                        phone
-                    )
-                    `
-                )
+            await HYQD_SUPABASE_CLIENT
+                .from("withdrawals")
+                .select("*")
                 .order(
                     "created_at",
                     {
-
-                        ascending:
-                            false
-
+                        ascending: false
                     }
                 )
-                .limit(
-                    limit
-                );
-
+                .limit(limit);
 
         if (error) {
-
             throw error;
-
         }
 
+        const withdrawals =
+            await adminAttachProfiles(
+                data || []
+            );
 
         return {
-
-            success:
-                true,
-
-            withdrawals:
-                data || []
-
+            success: true,
+            withdrawals
         };
-
 
     } catch (error) {
 
+        console.error(
+            "adminGetSupabaseWithdrawals:",
+            error
+        );
+
         return {
-
-            success:
-                false,
-
-            withdrawals:
-                [],
-
-            error,
-
+            success: false,
+            withdrawals: [],
             message:
-                hyqdSafeMessage(
-                    error
-                )
-
+                hyqdSafeMessage(error)
         };
 
     }
@@ -3163,7 +1679,7 @@ async function adminGetSupabaseWithdrawals(
 
 
 /* ============================================================
-   37. ADMIN : INVESTISSEMENTS
+   ADMIN - INVESTISSEMENTS
 ============================================================ */
 
 async function adminGetSupabaseInvestments(
@@ -3172,77 +1688,47 @@ async function adminGetSupabaseInvestments(
 
     try {
 
-        const client =
-            initializeHousingSupabase();
-
-
         const {
             data,
             error
         } =
-            await client
-                .from(
-                    "investments"
-                )
-                .select(
-                    `
-                    *,
-                    profiles:user_id (
-                        id,
-                        full_name,
-                        phone
-                    )
-                    `
-                )
+            await HYQD_SUPABASE_CLIENT
+                .from("investments")
+                .select("*")
                 .order(
                     "created_at",
                     {
-
-                        ascending:
-                            false
-
+                        ascending: false
                     }
                 )
-                .limit(
-                    limit
-                );
-
+                .limit(limit);
 
         if (error) {
-
             throw error;
-
         }
 
+        const investments =
+            await adminAttachProfiles(
+                data || []
+            );
 
         return {
-
-            success:
-                true,
-
-            investments:
-                data || []
-
+            success: true,
+            investments
         };
-
 
     } catch (error) {
 
+        console.error(
+            "adminGetSupabaseInvestments:",
+            error
+        );
+
         return {
-
-            success:
-                false,
-
-            investments:
-                [],
-
-            error,
-
+            success: false,
+            investments: [],
             message:
-                hyqdSafeMessage(
-                    error
-                )
-
+                hyqdSafeMessage(error)
         };
 
     }
@@ -3251,7 +1737,7 @@ async function adminGetSupabaseInvestments(
 
 
 /* ============================================================
-   38. ADMIN : ASSISTANCE
+   ADMIN - SUPPORT
 ============================================================ */
 
 async function adminGetSupabaseSupportTickets(
@@ -3260,77 +1746,47 @@ async function adminGetSupabaseSupportTickets(
 
     try {
 
-        const client =
-            initializeHousingSupabase();
-
-
         const {
             data,
             error
         } =
-            await client
-                .from(
-                    "support_tickets"
-                )
-                .select(
-                    `
-                    *,
-                    profiles:user_id (
-                        id,
-                        full_name,
-                        phone
-                    )
-                    `
-                )
+            await HYQD_SUPABASE_CLIENT
+                .from("support_tickets")
+                .select("*")
                 .order(
                     "created_at",
                     {
-
-                        ascending:
-                            false
-
+                        ascending: false
                     }
                 )
-                .limit(
-                    limit
-                );
-
+                .limit(limit);
 
         if (error) {
-
             throw error;
-
         }
 
+        const tickets =
+            await adminAttachProfiles(
+                data || []
+            );
 
         return {
-
-            success:
-                true,
-
-            tickets:
-                data || []
-
+            success: true,
+            tickets
         };
-
 
     } catch (error) {
 
+        console.error(
+            "adminGetSupabaseSupportTickets:",
+            error
+        );
+
         return {
-
-            success:
-                false,
-
-            tickets:
-                [],
-
-            error,
-
+            success: false,
+            tickets: [],
             message:
-                hyqdSafeMessage(
-                    error
-                )
-
+                hyqdSafeMessage(error)
         };
 
     }
@@ -3339,22 +1795,194 @@ async function adminGetSupabaseSupportTickets(
 
 
 /* ============================================================
-   39. AUTH STATE
+   ADMIN - TRAITEMENT DEPOT
+============================================================ */
+
+async function adminReviewSupabaseDeposit({
+    depositId,
+    approve,
+    note
+}) {
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await HYQD_SUPABASE_CLIENT
+                .rpc(
+                    "admin_review_deposit",
+                    {
+                        p_deposit_id:
+                            depositId,
+
+                        p_approve:
+                            Boolean(approve),
+
+                        p_note:
+                            hyqdCleanText(note) ||
+                            null
+                    }
+                );
+
+        if (error) {
+            throw error;
+        }
+
+        return {
+            success: true,
+            data,
+            message:
+                data?.message ||
+                (
+                    approve
+                        ? "Dépôt approuvé."
+                        : "Dépôt refusé."
+                )
+        };
+
+    } catch (error) {
+
+        return {
+            success: false,
+            message:
+                hyqdSafeMessage(error)
+        };
+
+    }
+
+}
+
+
+/* ============================================================
+   ADMIN - TRAITEMENT RETRAIT
+============================================================ */
+
+async function adminReviewSupabaseWithdrawal({
+    withdrawalId,
+    approve,
+    note
+}) {
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await HYQD_SUPABASE_CLIENT
+                .rpc(
+                    "admin_review_withdrawal",
+                    {
+                        p_withdrawal_id:
+                            withdrawalId,
+
+                        p_approve:
+                            Boolean(approve),
+
+                        p_note:
+                            hyqdCleanText(note) ||
+                            null
+                    }
+                );
+
+        if (error) {
+            throw error;
+        }
+
+        return {
+            success: true,
+            data,
+            message:
+                data?.message ||
+                (
+                    approve
+                        ? "Retrait approuvé."
+                        : "Retrait refusé."
+                )
+        };
+
+    } catch (error) {
+
+        return {
+            success: false,
+            message:
+                hyqdSafeMessage(error)
+        };
+
+    }
+
+}
+
+
+/* ============================================================
+   ADMIN - REPONSE SUPPORT
+============================================================ */
+
+async function adminReplySupabaseSupportTicket({
+    ticketId,
+    reply,
+    close = false
+}) {
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await HYQD_SUPABASE_CLIENT
+                .rpc(
+                    "admin_reply_support_ticket",
+                    {
+                        p_ticket_id:
+                            ticketId,
+
+                        p_reply:
+                            hyqdCleanText(reply),
+
+                        p_close:
+                            Boolean(close)
+                    }
+                );
+
+        if (error) {
+            throw error;
+        }
+
+        return {
+            success: true,
+            data,
+            message:
+                data?.message ||
+                "Réponse envoyée."
+        };
+
+    } catch (error) {
+
+        return {
+            success: false,
+            message:
+                hyqdSafeMessage(error)
+        };
+
+    }
+
+}
+
+
+/* ============================================================
+   ECOUTE AUTH
 ============================================================ */
 
 function onHousingAuthStateChange(
     callback
 ) {
 
-    const client =
-        initializeHousingSupabase();
-
-
-    const {
-        data
-    } =
-        client.auth.onAuthStateChange(
-
+    return HYQD_SUPABASE_CLIENT
+        .auth
+        .onAuthStateChange(
             (
                 event,
                 session
@@ -3369,270 +1997,52 @@ function onHousingAuthStateChange(
                         event,
                         session
                     );
-
                 }
 
             }
-
         );
-
-
-    return data?.subscription ||
-        null;
 
 }
 
 
 /* ============================================================
-   40. TEST CONNEXION
+   TEST CONNEXION
 ============================================================ */
 
 async function testHousingSupabaseConnection() {
 
     try {
 
-        const client =
-            initializeHousingSupabase();
-
-
         const {
             data,
             error
         } =
-            await client
+            await HYQD_SUPABASE_CLIENT
                 .from(
                     "investment_packs"
                 )
                 .select(
-                    "id"
+                    "id,name"
                 )
-                .limit(
-                    1
-                );
-
+                .limit(1);
 
         if (error) {
-
             throw error;
-
         }
 
-
         return {
-
-            success:
-                true,
-
-            connected:
-                true,
-
+            success: true,
             data
-
         };
-
 
     } catch (error) {
 
         return {
-
-            success:
-                false,
-
-            connected:
-                false,
-
-            error,
-
+            success: false,
             message:
-                hyqdSafeMessage(
-                    error,
-                    "Connexion Supabase impossible."
-                )
-
+                hyqdSafeMessage(error)
         };
 
     }
-
-}
-
-
-/* ============================================================
-   41. EXPOSITION DES FONCTIONS
-============================================================ */
-
-window.HYQD_SUPABASE_CONFIG =
-    HYQD_SUPABASE_CONFIG;
-
-
-window.initializeHousingSupabase =
-    initializeHousingSupabase;
-
-
-window.getHousingSupabaseClient =
-    getHousingSupabaseClient;
-
-
-window.getSupabaseSession =
-    getSupabaseSession;
-
-
-window.getSupabaseUser =
-    getSupabaseUser;
-
-
-window.registerSupabaseUser =
-    registerSupabaseUser;
-
-
-window.loginSupabaseUser =
-    loginSupabaseUser;
-
-
-window.logoutSupabaseUser =
-    logoutSupabaseUser;
-
-
-window.getSupabaseProfile =
-    getSupabaseProfile;
-
-
-window.updateSupabaseProfile =
-    updateSupabaseProfile;
-
-
-window.getSupabaseCurrentUserRole =
-    getSupabaseCurrentUserRole;
-
-
-window.requireSupabaseAuth =
-    requireSupabaseAuth;
-
-
-window.requireSupabaseAdmin =
-    requireSupabaseAdmin;
-
-
-window.requestSupabasePasswordReset =
-    requestSupabasePasswordReset;
-
-
-window.updateSupabasePassword =
-    updateSupabasePassword;
-
-
-window.getSupabaseInvestmentPacks =
-    getSupabaseInvestmentPacks;
-
-
-window.requestSupabaseDeposit =
-    requestSupabaseDeposit;
-
-
-window.requestSupabaseWithdrawal =
-    requestSupabaseWithdrawal;
-
-
-window.investSupabasePack =
-    investSupabasePack;
-
-
-window.getSupabaseDeposits =
-    getSupabaseDeposits;
-
-
-window.getSupabaseWithdrawals =
-    getSupabaseWithdrawals;
-
-
-window.getSupabaseInvestments =
-    getSupabaseInvestments;
-
-
-window.getSupabaseReferralRewards =
-    getSupabaseReferralRewards;
-
-
-window.createSupabaseSupportTicket =
-    createSupabaseSupportTicket;
-
-
-window.getSupabaseSupportTickets =
-    getSupabaseSupportTickets;
-
-
-window.getSupabaseNotifications =
-    getSupabaseNotifications;
-
-
-window.markSupabaseNotificationRead =
-    markSupabaseNotificationRead;
-
-
-window.markAllSupabaseNotificationsRead =
-    markAllSupabaseNotificationsRead;
-
-
-window.getApprovedDepositTicker =
-    getApprovedDepositTicker;
-
-
-window.adminReviewSupabaseDeposit =
-    adminReviewSupabaseDeposit;
-
-
-window.adminReviewSupabaseWithdrawal =
-    adminReviewSupabaseWithdrawal;
-
-
-window.adminReplySupabaseSupportTicket =
-    adminReplySupabaseSupportTicket;
-
-
-window.adminGetSupabaseProfiles =
-    adminGetSupabaseProfiles;
-
-
-window.adminGetSupabaseDeposits =
-    adminGetSupabaseDeposits;
-
-
-window.adminGetSupabaseWithdrawals =
-    adminGetSupabaseWithdrawals;
-
-
-window.adminGetSupabaseInvestments =
-    adminGetSupabaseInvestments;
-
-
-window.adminGetSupabaseSupportTickets =
-    adminGetSupabaseSupportTickets;
-
-
-window.onHousingAuthStateChange =
-    onHousingAuthStateChange;
-
-
-window.testHousingSupabaseConnection =
-    testHousingSupabaseConnection;
-
-
-/* ============================================================
-   42. INITIALISATION AUTOMATIQUE
-============================================================ */
-
-try {
-
-    initializeHousingSupabase();
-
-    console.info(
-        "Housing's YQD : Supabase initialisé."
-    );
-
-} catch (error) {
-
-    console.error(
-        "Housing's YQD : erreur Supabase.",
-        error
-    );
 
 }
