@@ -1,36 +1,35 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
+
     <meta charset="UTF-8">
 
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
     <meta name="description"
-          content="Tableau de bord utilisateur Housing's YQD">
+          content="Tableau de bord Housing's YQD">
 
-    <title>Mon Dashboard | Housing's YQD</title>
+    <title>
+        Tableau de bord | Housing's YQD
+    </title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet"
+          href="style.css">
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
 </head>
+
 
 <body class="dashboard-body">
 
 
-<!-- =========================================
-     OVERLAY MOBILE
-========================================= -->
-
-<div class="dashboard-overlay"
-     id="dashboardOverlay"></div>
-
-
-<!-- =========================================
+<!-- =====================================================
      SIDEBAR
-========================================= -->
+===================================================== -->
 
 <aside class="dashboard-sidebar"
        id="dashboardSidebar">
@@ -38,22 +37,16 @@
 
     <div class="sidebar-brand">
 
-        <a href="index.html"
+        <a href="dashboard.html"
            class="brand">
 
             <div class="brand-logo">
-
                 <i class="fa-solid fa-building"></i>
-
             </div>
 
-
             <div class="brand-text">
-
                 <strong>Housing's YQD</strong>
-
-                <span>IMMOBILIER</span>
-
+                <span>ESPACE CLIENT</span>
             </div>
 
         </a>
@@ -61,31 +54,21 @@
     </div>
 
 
-    <!-- UTILISATEUR -->
-
     <div class="sidebar-user">
 
         <div class="sidebar-avatar"
              id="sidebarAvatar">
-
-            U
-
+            HY
         </div>
-
 
         <div>
 
             <strong id="sidebarUserName">
-
                 Utilisateur
-
             </strong>
 
-
-            <span>
-
-                Espace personnel
-
+            <span id="sidebarUserPhone">
+                ---
             </span>
 
         </div>
@@ -93,97 +76,131 @@
     </div>
 
 
-    <!-- NAVIGATION -->
-
     <nav class="sidebar-nav">
 
 
-        <button class="sidebar-link active"
-                data-section="overview">
-
-            <i class="fa-solid fa-table-columns"></i>
-
-            <span>Tableau de bord</span>
-
-        </button>
-
-
-        <button class="sidebar-link"
-                data-section="deposit">
-
-            <i class="fa-solid fa-arrow-down"></i>
-
-            <span>Dépôt</span>
-
-        </button>
-
-
-        <button class="sidebar-link"
-                data-section="withdraw">
-
-            <i class="fa-solid fa-arrow-up"></i>
-
-            <span>Retrait</span>
-
-        </button>
-
-
-        <button class="sidebar-link"
-                data-section="packs">
+        <button
+            type="button"
+            class="sidebar-link active"
+            data-section="overview">
 
             <i class="fa-solid fa-house"></i>
 
-            <span>Packs immobiliers</span>
+            <span>
+                Tableau de bord
+            </span>
 
         </button>
 
 
-        <button class="sidebar-link"
-                data-section="investments">
+        <button
+            type="button"
+            class="sidebar-link"
+            data-section="packs">
+
+            <i class="fa-solid fa-building-circle-check"></i>
+
+            <span>
+                Investir
+            </span>
+
+        </button>
+
+
+        <button
+            type="button"
+            class="sidebar-link"
+            data-section="investments">
 
             <i class="fa-solid fa-chart-line"></i>
 
-            <span>Mes investissements</span>
+            <span>
+                Mes investissements
+            </span>
 
         </button>
 
 
-        <button class="sidebar-link"
-                data-section="history">
+        <button
+            type="button"
+            class="sidebar-link"
+            data-section="deposit">
+
+            <i class="fa-solid fa-circle-plus"></i>
+
+            <span>
+                Dépôt
+            </span>
+
+        </button>
+
+
+        <button
+            type="button"
+            class="sidebar-link"
+            data-section="withdraw">
+
+            <i class="fa-solid fa-money-bill-transfer"></i>
+
+            <span>
+                Retrait
+            </span>
+
+        </button>
+
+
+        <button
+            type="button"
+            class="sidebar-link"
+            data-section="history">
 
             <i class="fa-solid fa-clock-rotate-left"></i>
 
-            <span>Historique</span>
+            <span>
+                Historique
+            </span>
 
         </button>
 
 
-        <button class="sidebar-link"
-                data-section="referral">
+        <button
+            type="button"
+            class="sidebar-link"
+            data-section="referral">
 
-            <i class="fa-solid fa-users"></i>
+            <i class="fa-solid fa-user-group"></i>
 
-            <span>Parrainage</span>
+            <span>
+                Parrainage
+            </span>
 
         </button>
 
 
-        <button class="sidebar-link"
-                data-section="support">
+        <button
+            type="button"
+            class="sidebar-link"
+            data-section="support">
 
             <i class="fa-solid fa-headset"></i>
 
-            <span>Assistance</span>
+            <span>
+                Assistance
+            </span>
 
         </button>
 
 
-        <button class="sidebar-link"
-                data-section="profile">
+        <button
+            type="button"
+            class="sidebar-link"
+            data-section="profile">
 
             <i class="fa-solid fa-user"></i>
 
-            <span>Mon profil</span>
+            <span>
+                Mon profil
+            </span>
 
         </button>
 
@@ -191,16 +208,18 @@
     </nav>
 
 
-    <!-- FOOTER SIDEBAR -->
-
     <div class="sidebar-footer">
 
-        <button class="sidebar-link logout-link"
-                id="logoutButton">
+        <button
+            type="button"
+            class="sidebar-link logout-link"
+            id="logoutButton">
 
             <i class="fa-solid fa-right-from-bracket"></i>
 
-            <span>Déconnexion</span>
+            <span>
+                Déconnexion
+            </span>
 
         </button>
 
@@ -210,1318 +229,1042 @@
 </aside>
 
 
-<!-- =========================================
+<div class="dashboard-overlay"
+     id="dashboardOverlay">
+</div>
+
+
+<!-- =====================================================
      CONTENU PRINCIPAL
-========================================= -->
+===================================================== -->
 
 <main class="dashboard-main">
 
 
-    <!-- TOPBAR -->
+<!-- TOP BAR -->
 
-    <header class="dashboard-topbar">
-
-
-        <div class="topbar-left">
+<header class="dashboard-topbar">
 
 
-            <button class="mobile-dashboard-menu"
-                    id="mobileDashboardMenu">
+    <div class="topbar-left">
 
-                <i class="fa-solid fa-bars"></i>
+        <button
+            type="button"
+            class="mobile-dashboard-menu"
+            id="mobileDashboardMenu">
+
+            <i class="fa-solid fa-bars"></i>
+
+        </button>
+
+
+        <div>
+
+            <span class="page-eyebrow">
+                HOUSING'S YQD
+            </span>
+
+            <h1 id="pageTitle">
+                Tableau de bord
+            </h1>
+
+        </div>
+
+    </div>
+
+
+    <div class="topbar-right">
+
+        <a href="index.html"
+           class="topbar-home">
+
+            <i class="fa-solid fa-house"></i>
+
+            <span>
+                Accueil
+            </span>
+
+        </a>
+
+
+        <button
+            type="button"
+            class="topbar-profile"
+            data-section="profile">
+
+            <div id="topbarAvatar">
+                HY
+            </div>
+
+        </button>
+
+    </div>
+
+
+</header>
+
+
+<!-- =====================================================
+     OVERVIEW
+===================================================== -->
+
+<section
+    class="dashboard-section active"
+    id="section-overview">
+
+
+    <div class="welcome-banner">
+
+        <div>
+
+            <span class="panel-eyebrow">
+                BIENVENUE
+            </span>
+
+            <h2 id="welcomeName">
+                Bienvenue
+            </h2>
+
+            <p>
+                Retrouvez votre solde, vos opérations,
+                vos investissements et l'ensemble de
+                votre activité Housing's YQD.
+            </p>
+
+        </div>
+
+
+        <div class="welcome-icon">
+            <i class="fa-solid fa-building-columns"></i>
+        </div>
+
+    </div>
+
+
+    <!-- SOLDE -->
+
+    <div class="balance-card">
+
+        <div class="balance-info">
+
+            <span>
+                Solde disponible
+            </span>
+
+            <h2 id="mainBalance">
+                0 FCFA
+            </h2>
+
+            <p>
+                Solde actuellement disponible sur votre compte.
+            </p>
+
+        </div>
+
+
+        <div class="balance-actions">
+
+            <button
+                type="button"
+                class="dashboard-action-btn"
+                data-section="deposit">
+
+                <i class="fa-solid fa-plus"></i>
+
+                Recharger
 
             </button>
 
 
-            <div>
+            <button
+                type="button"
+                class="dashboard-action-btn withdraw-action"
+                data-section="withdraw">
 
-                <span class="page-eyebrow">
+                <i class="fa-solid fa-arrow-up"></i>
 
-                    ESPACE UTILISATEUR
-
-                </span>
-
-
-                <h1 id="pageTitle">
-
-                    Tableau de bord
-
-                </h1>
-
-            </div>
-
-        </div>
-
-
-        <div class="topbar-right">
-
-
-            <a href="index.html"
-               class="topbar-home">
-
-                <i class="fa-solid fa-house"></i>
-
-                <span>Accueil</span>
-
-            </a>
-
-
-            <button class="topbar-profile"
-                    id="profileShortcut">
-
-                <div id="topbarAvatar">
-
-                    U
-
-                </div>
+                Retirer
 
             </button>
 
         </div>
 
-
-    </header>
-
-
-    <!-- =====================================
-         SECTION TABLEAU DE BORD
-    ====================================== -->
-
-    <section class="dashboard-section active"
-             id="overviewSection">
+    </div>
 
 
-        <!-- BIENVENUE -->
+    <!-- STATISTIQUES -->
 
-        <div class="welcome-banner">
+    <div class="dashboard-stats">
 
+
+        <article class="dashboard-stat-card">
+
+            <div class="stat-icon">
+                <i class="fa-solid fa-wallet"></i>
+            </div>
 
             <div>
 
                 <span>
-
-                    Bienvenue sur votre espace
-
+                    Total déposé
                 </span>
 
-
-                <h2>
-
-                    Bonjour,
-                    <strong id="welcomeUserName">
-
-                        Utilisateur
-
-                    </strong> 👋
-
-                </h2>
-
-
-                <p>
-
-                    Suivez vos activités et vos investissements
-                    depuis votre tableau de bord personnel.
-
-                </p>
-
-            </div>
-
-
-            <div class="welcome-icon">
-
-                <i class="fa-solid fa-building-circle-check"></i>
-
-            </div>
-
-        </div>
-
-
-        <!-- SOLDE -->
-
-        <div class="balance-card">
-
-            <div class="balance-info">
-
-                <span>
-
-                    Solde disponible
-
-                </span>
-
-
-                <h2 id="userBalance">
-
+                <strong id="totalDeposited">
                     0 FCFA
-
-                </h2>
-
-
-                <p>
-
-                    Montant disponible sur votre compte.
-
-                </p>
+                </strong>
 
             </div>
 
-
-            <div class="balance-actions">
-
-                <button class="dashboard-action-btn deposit-action"
-                        data-go="deposit">
-
-                    <i class="fa-solid fa-plus"></i>
-
-                    Dépôt
-
-                </button>
+        </article>
 
 
-                <button class="dashboard-action-btn withdraw-action"
-                        data-go="withdraw">
+        <article class="dashboard-stat-card">
 
-                    <i class="fa-solid fa-arrow-up"></i>
-
-                    Retrait
-
-                </button>
-
+            <div class="stat-icon orange">
+                <i class="fa-solid fa-arrow-up-from-bracket"></i>
             </div>
-
-        </div>
-
-
-        <!-- STATISTIQUES -->
-
-        <div class="dashboard-stats">
-
-
-            <article class="dashboard-stat-card">
-
-                <div class="stat-icon green">
-
-                    <i class="fa-solid fa-wallet"></i>
-
-                </div>
-
-
-                <div>
-
-                    <span>
-
-                        Total des dépôts
-
-                    </span>
-
-
-                    <strong id="totalDeposits">
-
-                        0 FCFA
-
-                    </strong>
-
-                </div>
-
-            </article>
-
-
-            <article class="dashboard-stat-card">
-
-                <div class="stat-icon blue">
-
-                    <i class="fa-solid fa-chart-line"></i>
-
-                </div>
-
-
-                <div>
-
-                    <span>
-
-                        Investissements actifs
-
-                    </span>
-
-
-                    <strong id="activeInvestmentsCount">
-
-                        0
-
-                    </strong>
-
-                </div>
-
-            </article>
-
-
-            <article class="dashboard-stat-card">
-
-                <div class="stat-icon orange">
-
-                    <i class="fa-solid fa-money-bill-transfer"></i>
-
-                </div>
-
-
-                <div>
-
-                    <span>
-
-                        Total des retraits
-
-                    </span>
-
-
-                    <strong id="totalWithdrawals">
-
-                        0 FCFA
-
-                    </strong>
-
-                </div>
-
-            </article>
-
-
-            <article class="dashboard-stat-card">
-
-                <div class="stat-icon purple">
-
-                    <i class="fa-solid fa-users"></i>
-
-                </div>
-
-
-                <div>
-
-                    <span>
-
-                        Parrainages
-
-                    </span>
-
-
-                    <strong id="referralCount">
-
-                        0
-
-                    </strong>
-
-                </div>
-
-            </article>
-
-
-        </div>
-
-
-        <!-- INVESTISSEMENTS ACTIFS -->
-
-        <div class="dashboard-panel">
-
-
-            <div class="panel-header">
-
-                <div>
-
-                    <span class="panel-eyebrow">
-
-                        PORTEFEUILLE
-
-                    </span>
-
-
-                    <h3>
-
-                        Mes investissements actifs
-
-                    </h3>
-
-                </div>
-
-
-                <button class="panel-link"
-                        data-go="investments">
-
-                    Voir tout
-
-                    <i class="fa-solid fa-arrow-right"></i>
-
-                </button>
-
-            </div>
-
-
-            <div id="overviewInvestments"
-                 class="overview-investments">
-
-            </div>
-
-
-        </div>
-
-
-        <!-- TRANSACTIONS PUBLIQUES -->
-
-        <div class="dashboard-panel">
-
-
-            <div class="panel-header">
-
-                <div>
-
-                    <span class="panel-eyebrow">
-
-                        ACTIVITÉ
-
-                    </span>
-
-
-                    <h3>
-
-                        Derniers dépôts sur la plateforme
-
-                    </h3>
-
-                </div>
-
-            </div>
-
-
-            <div class="public-transactions-ticker"
-                 id="publicTransactionsTicker">
-
-                <div class="ticker-content"
-                     id="tickerContent">
-
-                    Chargement des activités...
-
-                </div>
-
-            </div>
-
-
-        </div>
-
-
-    </section>
-
-
-    <!-- =====================================
-         DEPOT
-    ====================================== -->
-
-    <section class="dashboard-section"
-             id="depositSection">
-
-
-        <div class="section-intro">
 
             <div>
-
-                <span class="page-eyebrow">
-
-                    FINANCEMENT DU COMPTE
-
-                </span>
-
-
-                <h2>
-
-                    Effectuer un dépôt
-
-                </h2>
-
-
-                <p>
-
-                    Soumettez votre demande de dépôt.
-                    Elle restera en attente jusqu'à validation
-                    par l'administration.
-
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="dashboard-form-layout">
-
-
-            <div class="dashboard-form-card">
-
-
-                <h3>
-
-                    Nouvelle demande de dépôt
-
-                </h3>
-
-
-                <div id="depositMessage"
-                     class="form-message">
-
-                </div>
-
-
-                <form id="depositForm">
-
-
-                    <div class="form-group">
-
-                        <label for="depositAmount">
-
-                            Montant du dépôt
-
-                        </label>
-
-
-                        <input type="number"
-                               id="depositAmount"
-                               class="form-control"
-                               placeholder="Exemple : 10000"
-                               min="1000"
-                               required>
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label for="depositMethod">
-
-                            Méthode de dépôt
-
-                        </label>
-
-
-                        <select id="depositMethod"
-                                class="form-control"
-                                required>
-
-                            <option value="">
-
-                                Sélectionnez une méthode
-
-                            </option>
-
-                            <option value="Mobile Money">
-
-                                Mobile Money
-
-                            </option>
-
-                            <option value="Orange Money">
-
-                                Orange Money
-
-                            </option>
-
-                            <option value="MTN Money">
-
-                                MTN Money
-
-                            </option>
-
-                            <option value="Moov Money">
-
-                                Moov Money
-
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label for="depositReference">
-
-                            Référence de transaction
-
-                        </label>
-
-
-                        <input type="text"
-                               id="depositReference"
-                               class="form-control"
-                               placeholder="Référence de votre paiement"
-                               required>
-
-                    </div>
-
-
-                    <button type="submit"
-                            class="form-submit">
-
-                        <i class="fa-solid fa-paper-plane"></i>
-
-                        Envoyer la demande
-
-                    </button>
-
-                </form>
-
-            </div>
-
-
-            <div class="dashboard-info-card">
-
-
-                <div class="info-card-icon">
-
-                    <i class="fa-solid fa-circle-info"></i>
-
-                </div>
-
-
-                <h3>
-
-                    Validation administrative
-
-                </h3>
-
-
-                <p>
-
-                    Votre dépôt apparaît comme
-                    <strong>en attente</strong>
-                    jusqu'à validation par l'administrateur.
-
-                </p>
-
-
-                <ul>
-
-                    <li>
-
-                        <i class="fa-solid fa-check"></i>
-
-                        Vérification de la demande
-
-                    </li>
-
-
-                    <li>
-
-                        <i class="fa-solid fa-check"></i>
-
-                        Validation administrative
-
-                    </li>
-
-
-                    <li>
-
-                        <i class="fa-solid fa-check"></i>
-
-                        Mise à jour automatique du solde
-
-                    </li>
-
-                </ul>
-
-            </div>
-
-
-        </div>
-
-
-    </section>
-
-
-    <!-- =====================================
-         RETRAIT
-    ====================================== -->
-
-    <section class="dashboard-section"
-             id="withdrawSection">
-
-
-        <div class="section-intro">
-
-            <div>
-
-                <span class="page-eyebrow">
-
-                    RETRAIT
-
-                </span>
-
-
-                <h2>
-
-                    Demander un retrait
-
-                </h2>
-
-
-                <p>
-
-                    Votre demande sera transmise à
-                    l'administration pour validation.
-
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="dashboard-form-layout">
-
-
-            <div class="dashboard-form-card">
-
-
-                <div class="withdraw-balance">
-
-                    <span>
-
-                        Solde actuellement disponible
-
-                    </span>
-
-
-                    <strong id="withdrawAvailableBalance">
-
-                        0 FCFA
-
-                    </strong>
-
-                </div>
-
-
-                <div id="withdrawMessage"
-                     class="form-message">
-
-                </div>
-
-
-                <form id="withdrawForm">
-
-
-                    <div class="form-group">
-
-                        <label for="withdrawAmount">
-
-                            Montant à retirer
-
-                        </label>
-
-
-                        <input type="number"
-                               id="withdrawAmount"
-                               class="form-control"
-                               placeholder="Exemple : 10000"
-                               min="1000"
-                               required>
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label for="withdrawMethod">
-
-                            Méthode de réception
-
-                        </label>
-
-
-                        <select id="withdrawMethod"
-                                class="form-control"
-                                required>
-
-                            <option value="">
-
-                                Sélectionnez une méthode
-
-                            </option>
-
-                            <option value="Mobile Money">
-
-                                Mobile Money
-
-                            </option>
-
-                            <option value="Orange Money">
-
-                                Orange Money
-
-                            </option>
-
-                            <option value="MTN Money">
-
-                                MTN Money
-
-                            </option>
-
-                            <option value="Moov Money">
-
-                                Moov Money
-
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label for="withdrawPhone">
-
-                            Numéro de réception
-
-                        </label>
-
-
-                        <input type="tel"
-                               id="withdrawPhone"
-                               class="form-control"
-                               placeholder="0700000000"
-                               required>
-
-                    </div>
-
-
-                    <button type="submit"
-                            class="form-submit withdraw-submit">
-
-                        <i class="fa-solid fa-paper-plane"></i>
-
-                        Envoyer la demande de retrait
-
-                    </button>
-
-                </form>
-
-            </div>
-
-
-            <div class="dashboard-info-card">
-
-
-                <div class="info-card-icon orange-icon">
-
-                    <i class="fa-solid fa-shield-halved"></i>
-
-                </div>
-
-
-                <h3>
-
-                    Retrait sécurisé
-
-                </h3>
-
-
-                <p>
-
-                    Les demandes de retrait sont soumises
-                    à une validation administrative.
-
-                </p>
-
-
-                <p class="small-note">
-
-                    Les éventuels frais applicables sont affichés
-                    selon les paramètres de la plateforme.
-
-                </p>
-
-            </div>
-
-
-        </div>
-
-
-    </section>
-
-
-    <!-- =====================================
-         PACKS
-    ====================================== -->
-
-    <section class="dashboard-section"
-             id="packsSection">
-
-
-        <div class="section-intro">
-
-            <div>
-
-                <span class="page-eyebrow">
-
-                    INVESTISSEMENTS
-
-                </span>
-
-
-                <h2>
-
-                    Packs immobiliers
-
-                </h2>
-
-
-                <p>
-
-                    Découvrez les différents packs disponibles.
-                    Chaque investissement possède une durée
-                    totale de 180 jours.
-
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="dashboard-pack-grid"
-             id="dashboardPackGrid">
-
-        </div>
-
-
-    </section>
-
-
-    <!-- =====================================
-         MES INVESTISSEMENTS
-    ====================================== -->
-
-    <section class="dashboard-section"
-             id="investmentsSection">
-
-
-        <div class="section-intro">
-
-            <div>
-
-                <span class="page-eyebrow">
-
-                    PORTEFEUILLE
-
-                </span>
-
-
-                <h2>
-
-                    Mes investissements
-
-                </h2>
-
-
-                <p>
-
-                    Retrouvez les détails et la progression
-                    de vos investissements actifs.
-
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div id="investmentsList"
-             class="investment-list">
-
-        </div>
-
-
-    </section>
-
-
-    <!-- =====================================
-         HISTORIQUE
-    ====================================== -->
-
-    <section class="dashboard-section"
-             id="historySection">
-
-
-        <div class="section-intro">
-
-            <div>
-
-                <span class="page-eyebrow">
-
-                    TRANSACTIONS
-
-                </span>
-
-
-                <h2>
-
-                    Historique
-
-                </h2>
-
-
-                <p>
-
-                    Consultez vos dépôts et retraits.
-
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="history-tabs">
-
-
-            <button class="history-tab active"
-                    data-history="all">
-
-                Tout
-
-            </button>
-
-
-            <button class="history-tab"
-                    data-history="deposit">
-
-                Dépôts
-
-            </button>
-
-
-            <button class="history-tab"
-                    data-history="withdraw">
-
-                Retraits
-
-            </button>
-
-        </div>
-
-
-        <div class="history-list"
-             id="historyList">
-
-        </div>
-
-
-    </section>
-
-
-    <!-- =====================================
-         PARRAINAGE
-    ====================================== -->
-
-    <section class="dashboard-section"
-             id="referralSection">
-
-
-        <div class="referral-hero">
-
-
-            <div>
-
-                <span class="page-eyebrow">
-
-                    PROGRAMME D'INVITATION
-
-                </span>
-
-
-                <h2>
-
-                    Invitez et développez votre réseau.
-
-                </h2>
-
-
-                <p>
-
-                    Lorsqu'une personne utilise votre code ou lien
-                    pour s'inscrire, son compte est associé au vôtre.
-
-                </p>
-
-            </div>
-
-
-            <div class="referral-icon">
-
-                <i class="fa-solid fa-users"></i>
-
-            </div>
-
-        </div>
-
-
-        <div class="referral-grid">
-
-
-            <div class="referral-card">
-
 
                 <span>
-
-                    Mon code de parrainage
-
+                    Total retiré
                 </span>
 
-
-                <div class="referral-code-box">
-
-                    <strong id="userReferralCode">
-
-                        ------
-
-                    </strong>
-
-
-                    <button id="copyReferralCode">
-
-                        <i class="fa-regular fa-copy"></i>
-
-                    </button>
-
-                </div>
+                <strong id="totalWithdrawn">
+                    0 FCFA
+                </strong>
 
             </div>
 
+        </article>
 
-            <div class="referral-card">
 
+        <article class="dashboard-stat-card">
+
+            <div class="stat-icon blue">
+                <i class="fa-solid fa-chart-line"></i>
+            </div>
+
+            <div>
 
                 <span>
-
-                    Mon lien de parrainage
-
+                    Total investi
                 </span>
 
-
-                <div class="referral-link-box">
-
-                    <input type="text"
-                           id="referralLink"
-                           readonly>
-
-
-                    <button id="copyReferralLink">
-
-                        Copier
-
-                    </button>
-
-                </div>
+                <strong id="totalInvested">
+                    0 FCFA
+                </strong>
 
             </div>
 
-
-        </div>
-
-
-        <div class="referral-info-box">
+        </article>
 
 
-            <div class="referral-info-icon">
+        <article class="dashboard-stat-card">
 
-                <i class="fa-solid fa-gift"></i>
-
+            <div class="stat-icon purple">
+                <i class="fa-solid fa-building"></i>
             </div>
-
 
             <div>
 
-                <h3>
+                <span>
+                    Investissements actifs
+                </span>
 
-                    Bonus de parrainage
-
-                </h3>
-
-
-                <p>
-
-                    Le système global prévoit l'attribution
-                    automatique du bonus de 10 % sur le premier
-                    dépôt validé d'un utilisateur parrainé,
-                    conformément aux règles configurées dans
-                    la plateforme.
-
-                </p>
+                <strong id="activeInvestmentCount">
+                    0
+                </strong>
 
             </div>
 
-        </div>
+        </article>
 
 
-        <div class="dashboard-panel">
+    </div>
 
 
-            <div class="panel-header">
+    <!-- RECHARGEMENTS DÉFILANTS -->
 
-                <div>
+    <div class="dashboard-panel">
 
-                    <span class="panel-eyebrow">
-
-                        MON RÉSEAU
-
-                    </span>
-
-
-                    <h3>
-
-                        Utilisateurs parrainés
-
-                    </h3>
-
-                </div>
-
-            </div>
-
-
-            <div id="referralsList"
-                 class="referrals-list">
-
-            </div>
-
-
-        </div>
-
-
-    </section>
-
-
-    <!-- =====================================
-         ASSISTANCE
-    ====================================== -->
-
-    <section class="dashboard-section"
-             id="supportSection">
-
-
-        <div class="section-intro">
+        <div class="panel-header">
 
             <div>
 
-                <span class="page-eyebrow">
-
-                    SUPPORT
-
+                <span class="panel-eyebrow">
+                    ACTIVITÉ
                 </span>
 
-
-                <h2>
-
-                    Assistance
-
-                </h2>
-
-
-                <p>
-
-                    Envoyez votre demande directement
-                    à l'administration.
-
-                </p>
+                <h3>
+                    Rechargements récents
+                </h3>
 
             </div>
 
         </div>
 
 
-        <div class="support-layout">
+        <div class="public-transactions-ticker">
 
+            <div class="ticker-content">
 
-            <div class="dashboard-form-card">
-
-
-                <h3>
-
-                    Créer une demande
-
-                </h3>
-
-
-                <div id="supportMessage"
-                     class="form-message">
-
+                <div class="ticker-item">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <strong>*****2056</strong>
+                    a rechargé
+                    <strong>800 000 FCFA</strong>
                 </div>
 
+                <div class="ticker-item">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <strong>*****4821</strong>
+                    a rechargé
+                    <strong>200 000 FCFA</strong>
+                </div>
 
-                <form id="supportForm">
+                <div class="ticker-item">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <strong>*****7412</strong>
+                    a rechargé
+                    <strong>100 000 FCFA</strong>
+                </div>
 
+            </div>
 
-                    <div class="form-group">
+        </div>
 
-                        <label for="ticketSubject">
-
-                            Objet
-
-                        </label>
-
-
-                        <input type="text"
-                               id="ticketSubject"
-                               class="form-control"
-                               placeholder="Objet de votre demande"
-                               required>
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label for="ticketMessage">
-
-                            Votre message
-
-                        </label>
+    </div>
 
 
-                        <textarea id="ticketMessage"
-                                  class="form-control"
-                                  rows="6"
-                                  placeholder="Expliquez votre demande..."
-                                  required></textarea>
+    <!-- DERNIÈRES OPÉRATIONS -->
 
-                    </div>
+    <div class="dashboard-panel">
 
+        <div class="panel-header">
 
-                    <button type="submit"
-                            class="form-submit">
+            <div>
 
-                        <i class="fa-solid fa-paper-plane"></i>
+                <span class="panel-eyebrow">
+                    ACTIVITÉ DU COMPTE
+                </span>
 
-                        Envoyer la demande
-
-                    </button>
-
-                </form>
+                <h3>
+                    Dernières opérations
+                </h3>
 
             </div>
 
 
-            <div class="dashboard-panel support-history-panel">
+            <button
+                type="button"
+                class="panel-link"
+                data-section="history">
 
+                Voir tout
+
+            </button>
+
+        </div>
+
+
+        <div id="recentTransactions">
+        </div>
+
+    </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     PACKS
+===================================================== -->
+
+<section
+    class="dashboard-section"
+    id="section-packs">
+
+
+    <div class="section-intro">
+
+        <span class="page-eyebrow">
+            INVESTISSEMENT
+        </span>
+
+        <h2>
+            Choisissez votre pack
+        </h2>
+
+        <p>
+            Sélectionnez l'offre correspondant à votre
+            budget. La durée de chaque investissement
+            est de 180 jours.
+        </p>
+
+    </div>
+
+
+    <div class="dashboard-pack-grid"
+         id="packsGrid">
+    </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     INVESTISSEMENTS
+===================================================== -->
+
+<section
+    class="dashboard-section"
+    id="section-investments">
+
+
+    <div class="section-intro">
+
+        <span class="page-eyebrow">
+            PORTEFEUILLE
+        </span>
+
+        <h2>
+            Mes investissements
+        </h2>
+
+        <p>
+            Consultez les investissements actuellement
+            enregistrés sur votre compte.
+        </p>
+
+    </div>
+
+
+    <div class="investment-list"
+         id="investmentList">
+    </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     DEPOT
+===================================================== -->
+
+<section
+    class="dashboard-section"
+    id="section-deposit">
+
+
+    <div class="section-intro">
+
+        <span class="page-eyebrow">
+            RECHARGEMENT
+        </span>
+
+        <h2>
+            Effectuer un dépôt
+        </h2>
+
+        <p>
+            Envoyez une demande de dépôt.
+            Elle apparaîtra ensuite dans l'espace
+            administrateur pour validation.
+        </p>
+
+    </div>
+
+
+    <div class="dashboard-form-layout">
+
+
+        <div class="dashboard-form-card">
+
+            <h3>
+                Nouvelle demande
+            </h3>
+
+
+            <div id="depositMessage"
+                 class="form-message">
+            </div>
+
+
+            <form id="depositForm">
+
+
+                <div class="form-group">
+
+                    <label for="depositAmount">
+                        Montant
+                    </label>
+
+                    <input
+                        type="number"
+                        id="depositAmount"
+                        class="form-control"
+                        min="1000"
+                        placeholder="Exemple : 10000"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="depositMethod">
+                        Moyen de paiement
+                    </label>
+
+                    <select
+                        id="depositMethod"
+                        class="form-control"
+                        required>
+
+                        <option value="">
+                            Sélectionner
+                        </option>
+
+                        <option value="Orange Money">
+                            Orange Money
+                        </option>
+
+                        <option value="MTN Money">
+                            MTN Money
+                        </option>
+
+                        <option value="Moov Money">
+                            Moov Money
+                        </option>
+
+                        <option value="Wave">
+                            Wave
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="depositReference">
+                        Référence de transaction
+                    </label>
+
+                    <input
+                        type="text"
+                        id="depositReference"
+                        class="form-control"
+                        placeholder="Référence du paiement"
+                        required>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="form-submit">
+
+                    <i class="fa-solid fa-paper-plane"></i>
+
+                    Envoyer la demande
+
+                </button>
+
+
+            </form>
+
+        </div>
+
+
+        <div class="dashboard-info-card">
+
+            <span class="page-eyebrow">
+                INFORMATION
+            </span>
+
+            <h3>
+                Validation administrative
+            </h3>
+
+            <p>
+                La demande reste en attente tant qu'elle
+                n'a pas été traitée dans l'espace
+                administrateur.
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     RETRAIT
+===================================================== -->
+
+<section
+    class="dashboard-section"
+    id="section-withdraw">
+
+
+    <div class="section-intro">
+
+        <span class="page-eyebrow">
+            RETRAIT
+        </span>
+
+        <h2>
+            Demander un retrait
+        </h2>
+
+        <p>
+            Votre demande apparaîtra dans l'espace
+            administrateur avant traitement.
+        </p>
+
+    </div>
+
+
+    <div class="dashboard-form-layout">
+
+
+        <div class="dashboard-form-card">
+
+            <h3>
+                Nouvelle demande
+            </h3>
+
+
+            <div id="withdrawMessage"
+                 class="form-message">
+            </div>
+
+
+            <form id="withdrawForm">
+
+
+                <div class="form-group">
+
+                    <label for="withdrawAmount">
+                        Montant
+                    </label>
+
+                    <input
+                        type="number"
+                        id="withdrawAmount"
+                        class="form-control"
+                        min="1000"
+                        placeholder="Montant du retrait"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="withdrawMethod">
+                        Moyen de paiement
+                    </label>
+
+                    <select
+                        id="withdrawMethod"
+                        class="form-control"
+                        required>
+
+                        <option value="">
+                            Sélectionner
+                        </option>
+
+                        <option value="Orange Money">
+                            Orange Money
+                        </option>
+
+                        <option value="MTN Money">
+                            MTN Money
+                        </option>
+
+                        <option value="Moov Money">
+                            Moov Money
+                        </option>
+
+                        <option value="Wave">
+                            Wave
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="withdrawPhone">
+                        Numéro de réception
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="withdrawPhone"
+                        class="form-control"
+                        placeholder="0700000000"
+                        required>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="form-submit">
+
+                    <i class="fa-solid fa-paper-plane"></i>
+
+                    Envoyer la demande
+
+                </button>
+
+
+            </form>
+
+        </div>
+
+
+        <div class="dashboard-info-card">
+
+            <span class="page-eyebrow">
+                SOLDE
+            </span>
+
+            <h3>
+                Disponible
+            </h3>
+
+            <h2 id="withdrawAvailableBalance">
+                0 FCFA
+            </h2>
+
+            <p>
+                Vérifiez votre numéro avant d'envoyer
+                votre demande.
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     HISTORIQUE
+===================================================== -->
+
+<section
+    class="dashboard-section"
+    id="section-history">
+
+
+    <div class="section-intro">
+
+        <span class="page-eyebrow">
+            HISTORIQUE
+        </span>
+
+        <h2>
+            Mes opérations
+        </h2>
+
+        <p>
+            Retrouvez les dépôts, retraits et autres
+            opérations enregistrés sur votre compte.
+        </p>
+
+    </div>
+
+
+    <div class="history-tabs">
+
+        <button
+            type="button"
+            class="history-tab active"
+            data-history-filter="all">
+
+            Toutes
+
+        </button>
+
+        <button
+            type="button"
+            class="history-tab"
+            data-history-filter="deposit">
+
+            Dépôts
+
+        </button>
+
+        <button
+            type="button"
+            class="history-tab"
+            data-history-filter="withdraw">
+
+            Retraits
+
+        </button>
+
+    </div>
+
+
+    <div class="history-list"
+         id="historyList">
+    </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     PARRAINAGE
+===================================================== -->
+
+<section
+    class="dashboard-section"
+    id="section-referral">
+
+
+    <div class="referral-hero">
+
+        <div>
+
+            <span class="page-eyebrow">
+                PARRAINAGE
+            </span>
+
+            <h2>
+                Invitez vos proches
+            </h2>
+
+            <p>
+                Partagez votre code ou votre lien
+                personnel d'invitation.
+            </p>
+
+        </div>
+
+
+        <div class="referral-icon">
+            <i class="fa-solid fa-users"></i>
+        </div>
+
+    </div>
+
+
+    <div class="referral-grid">
+
+
+        <div class="referral-card">
+
+            <span class="page-eyebrow">
+                MON CODE
+            </span>
+
+            <h3>
+                Code d'invitation
+            </h3>
+
+
+            <div class="referral-code-box">
+
+                <strong id="referralCode">
+                    ---
+                </strong>
+
+                <button
+                    type="button"
+                    id="copyReferralCode">
+
+                    <i class="fa-regular fa-copy"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="referral-card">
+
+            <span class="page-eyebrow">
+                MON LIEN
+            </span>
+
+            <h3>
+                Lien de parrainage
+            </h3>
+
+
+            <div class="referral-link-box">
+
+                <input
+                    id="referralLink"
+                    readonly>
+
+                <button
+                    type="button"
+                    id="copyReferralLink">
+
+                    <i class="fa-regular fa-copy"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <div class="referral-info-box">
+
+        <div class="referral-info-icon">
+            <i class="fa-solid fa-circle-info"></i>
+        </div>
+
+        <div>
+
+            <strong>
+                Bonus de parrainage
+            </strong>
+
+            <p>
+                Lors du premier dépôt validé d'un
+                utilisateur invité, le système applique
+                automatiquement le bonus prévu au parrain.
+            </p>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     ASSISTANCE
+===================================================== -->
+
+<section
+    class="dashboard-section"
+    id="section-support">
+
+
+    <div class="section-intro">
+
+        <span class="page-eyebrow">
+            ASSISTANCE
+        </span>
+
+        <h2>
+            Besoin d'aide ?
+        </h2>
+
+        <p>
+            Envoyez votre demande à l'administration
+            et consultez ensuite son état.
+        </p>
+
+    </div>
+
+
+    <div class="support-layout">
+
+
+        <div class="dashboard-form-card">
+
+            <h3>
+                Nouvelle demande
+            </h3>
+
+
+            <div id="supportMessage"
+                 class="form-message">
+            </div>
+
+
+            <form id="supportForm">
+
+
+                <div class="form-group">
+
+                    <label for="supportSubject">
+                        Sujet
+                    </label>
+
+                    <input
+                        type="text"
+                        id="supportSubject"
+                        class="form-control"
+                        placeholder="Objet de votre demande"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="supportText">
+                        Message
+                    </label>
+
+                    <textarea
+                        id="supportText"
+                        class="form-control"
+                        rows="7"
+                        placeholder="Expliquez votre demande..."
+                        required></textarea>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="form-submit">
+
+                    <i class="fa-solid fa-paper-plane"></i>
+
+                    Envoyer
+
+                </button>
+
+
+            </form>
+
+        </div>
+
+
+        <div>
+
+            <div class="dashboard-panel"
+                 style="margin-top:0;">
 
                 <div class="panel-header">
 
                     <div>
 
                         <span class="panel-eyebrow">
-
                             MES DEMANDES
-
                         </span>
 
-
                         <h3>
-
-                            Historique des tickets
-
+                            Historique assistance
                         </h3>
 
                     </div>
@@ -1529,207 +1272,177 @@
                 </div>
 
 
-                <div id="ticketsList"
-                     class="tickets-list">
-
+                <div class="tickets-list"
+                     id="ticketsList">
                 </div>
 
             </div>
 
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     PROFIL
+===================================================== -->
+
+<section
+    class="dashboard-section"
+    id="section-profile">
+
+
+    <div class="section-intro">
+
+        <span class="page-eyebrow">
+            COMPTE
+        </span>
+
+        <h2>
+            Mon profil
+        </h2>
+
+        <p>
+            Consultez les principales informations
+            enregistrées sur votre compte.
+        </p>
+
+    </div>
+
+
+    <div class="profile-layout">
+
+
+        <div class="profile-card">
+
+            <div class="profile-large-avatar"
+                 id="profileAvatar">
+                HY
+            </div>
+
+            <h2 id="profileName">
+                Utilisateur
+            </h2>
+
+            <p id="profilePhone">
+                ---
+            </p>
+
+            <span class="profile-status">
+                Compte actif
+            </span>
 
         </div>
 
 
-    </section>
+        <div class="profile-details-card">
+
+            <h3>
+                Informations du compte
+            </h3>
 
 
-    <!-- =====================================
-         PROFIL
-    ====================================== -->
+            <div class="profile-detail-row">
 
-    <section class="dashboard-section"
-             id="profileSection">
-
-
-        <div class="section-intro">
-
-            <div>
-
-                <span class="page-eyebrow">
-
-                    COMPTE
-
+                <span>
+                    Nom complet
                 </span>
 
-
-                <h2>
-
-                    Mon profil
-
-                </h2>
-
-
-                <p>
-
-                    Consultez les informations associées
-                    à votre compte.
-
-                </p>
+                <strong id="profileFullName">
+                    ---
+                </strong>
 
             </div>
 
-        </div>
 
+            <div class="profile-detail-row">
 
-        <div class="profile-layout">
-
-
-            <div class="profile-card">
-
-
-                <div class="profile-large-avatar"
-                     id="profileLargeAvatar">
-
-                    U
-
-                </div>
-
-
-                <h3 id="profileName">
-
-                    Utilisateur
-
-                </h3>
-
-
-                <p id="profilePhone">
-
-                    +225 ---------
-
-                </p>
-
-
-                <span class="profile-status">
-
-                    <i class="fa-solid fa-circle-check"></i>
-
-                    Compte actif
-
+                <span>
+                    Téléphone
                 </span>
 
+                <strong id="profileDetailPhone">
+                    ---
+                </strong>
+
+            </div>
+
+
+            <div class="profile-detail-row">
+
+                <span>
+                    Code de parrainage
+                </span>
+
+                <strong id="profileReferralCode">
+                    ---
+                </strong>
+
             </div>
 
 
-            <div class="profile-details-card">
+            <div class="profile-detail-row">
 
+                <span>
+                    Date de création
+                </span>
 
-                <h3>
-
-                    Informations personnelles
-
-                </h3>
-
-
-                <div class="profile-detail-row">
-
-                    <span>
-
-                        Nom complet
-
-                    </span>
-
-
-                    <strong id="profileFullName">
-
-                        -
-
-                    </strong>
-
-                </div>
-
-
-                <div class="profile-detail-row">
-
-                    <span>
-
-                        Téléphone
-
-                    </span>
-
-
-                    <strong id="profilePhoneDetail">
-
-                        -
-
-                    </strong>
-
-                </div>
-
-
-                <div class="profile-detail-row">
-
-                    <span>
-
-                        Code de parrainage
-
-                    </span>
-
-
-                    <strong id="profileReferralCode">
-
-                        -
-
-                    </strong>
-
-                </div>
-
-
-                <div class="profile-detail-row">
-
-                    <span>
-
-                        Date d'inscription
-
-                    </span>
-
-
-                    <strong id="profileJoinDate">
-
-                        -
-
-                    </strong>
-
-                </div>
+                <strong id="profileCreationDate">
+                    ---
+                </strong>
 
             </div>
+
+
+            <button
+                type="button"
+                class="form-submit"
+                id="profileLogoutButton"
+                style="margin-top:25px;background:#b73535;">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                Se déconnecter
+
+            </button>
 
 
         </div>
 
 
-    </section>
+    </div>
+
+
+</section>
 
 
 </main>
 
 
-<!-- =========================================
+<!-- =====================================================
      MODAL INVESTISSEMENT
-========================================= -->
+===================================================== -->
 
 <div class="dashboard-modal"
      id="investmentModal">
 
 
     <div class="modal-backdrop"
-         id="investmentModalBackdrop"></div>
+         data-close-modal>
+    </div>
 
 
     <div class="modal-box">
 
 
-        <button class="modal-close"
-                id="closeInvestmentModal">
+        <button
+            type="button"
+            class="modal-close"
+            data-close-modal>
 
             <i class="fa-solid fa-xmark"></i>
 
@@ -1737,78 +1450,66 @@
 
 
         <div class="modal-icon">
-
-            <i class="fa-solid fa-house"></i>
-
+            <i class="fa-solid fa-building-circle-check"></i>
         </div>
 
 
-        <h2 id="modalPackName">
+        <span class="page-eyebrow">
+            CONFIRMATION
+        </span>
 
+
+        <h2 id="investmentModalTitle">
             Investissement
-
         </h2>
 
 
-        <p id="modalPackDescription">
-
+        <p>
+            Vérifiez les informations avant de confirmer.
         </p>
 
 
         <div class="modal-investment-info">
 
             <div>
-
                 <span>
-
-                    Montant du pack
-
+                    Montant
                 </span>
 
-
-                <strong id="modalPackAmount">
-
+                <strong id="investmentModalAmount">
                     0 FCFA
-
                 </strong>
-
             </div>
-
 
             <div>
-
                 <span>
-
                     Durée
-
                 </span>
 
-
                 <strong>
-
                     180 jours
-
                 </strong>
-
             </div>
 
         </div>
 
 
-        <div id="investmentModalMessage"
+        <div id="investmentMessage"
              class="form-message">
-
         </div>
 
 
-        <button class="form-submit"
-                id="confirmInvestmentButton">
+        <button
+            type="button"
+            class="form-submit"
+            id="confirmInvestment">
 
-            <i class="fa-solid fa-check"></i>
+            <i class="fa-solid fa-circle-check"></i>
 
             Confirmer l'investissement
 
         </button>
+
 
     </div>
 
@@ -1816,2232 +1517,1812 @@
 </div>
 
 
+<!-- =====================================================
+     SCRIPT GLOBAL
+===================================================== -->
+
 <script src="script.js"></script>
 
 
 <script>
 
-document.addEventListener(
-    "DOMContentLoaded",
+"use strict";
+
+
+/* =====================================================
+   UTILISATEUR CONNECTÉ
+===================================================== */
+
+let currentUser = requireAuth();
+
+if (!currentUser) {
+    throw new Error("Utilisateur non connecté");
+}
+
+
+/* =====================================================
+   PACKS
+===================================================== */
+
+const HYQD_PACKS = [
+
+    {
+        id: "starter",
+        name: "Starter",
+        amount: 3000,
+        image:
+            "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: "familial",
+        name: "Familial",
+        amount: 10000,
+        image:
+            "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: "confort",
+        name: "Confort",
+        amount: 20000,
+        image:
+            "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: "premium",
+        name: "Premium",
+        amount: 45000,
+        image:
+            "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: "prestige",
+        name: "Prestige",
+        amount: 100000,
+        image:
+            "https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: "premium-plus",
+        name: "Premium Plus",
+        amount: 200000,
+        image:
+            "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: "elite",
+        name: "Elite",
+        amount: 400000,
+        image:
+            "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: "luxury",
+        name: "Luxury",
+        amount: 800000,
+        image:
+            "https://images.unsplash.com/photo-1600607688960-e095ff83135c?auto=format&fit=crop&w=900&q=80"
+    }
+
+];
+
+
+let selectedPack = null;
+let historyFilter = "all";
+
+
+/* =====================================================
+   OUTILS
+===================================================== */
+
+function refreshCurrentUser() {
+
+    const refreshed =
+        getCurrentUser();
+
+    if (!refreshed) {
+
+        window.location.replace(
+            "login.html"
+        );
+
+        return null;
+    }
+
+    currentUser = refreshed;
+
+    return refreshed;
+}
+
+
+function formatDateSafe(date) {
+
+    if (!date) {
+        return "---";
+    }
+
+    try {
+
+        return new Date(date)
+            .toLocaleDateString(
+                "fr-FR",
+                {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric"
+                }
+            );
+
+    } catch (error) {
+
+        return "---";
+    }
+}
+
+
+function getInitials(name) {
+
+    const words =
+        String(name || "")
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean);
+
+    if (!words.length) {
+        return "HY";
+    }
+
+    return words
+        .slice(0, 2)
+        .map(word => word[0])
+        .join("")
+        .toUpperCase();
+}
+
+
+function transactionLabel(type) {
+
+    if (type === "deposit") {
+        return "Dépôt";
+    }
+
+    if (type === "withdraw") {
+        return "Retrait";
+    }
+
+    if (type === "referral_bonus") {
+        return "Bonus de parrainage";
+    }
+
+    return "Opération";
+}
+
+
+function statusLabel(status) {
+
+    if (status === "approved") {
+        return "Validé";
+    }
+
+    if (status === "rejected") {
+        return "Refusé";
+    }
+
+    return "En attente";
+}
+
+
+/* =====================================================
+   NAVIGATION DASHBOARD
+===================================================== */
+
+const sectionTitles = {
+
+    overview:
+        "Tableau de bord",
+
+    packs:
+        "Investir",
+
+    investments:
+        "Mes investissements",
+
+    deposit:
+        "Dépôt",
+
+    withdraw:
+        "Retrait",
+
+    history:
+        "Historique",
+
+    referral:
+        "Parrainage",
+
+    support:
+        "Assistance",
+
+    profile:
+        "Mon profil"
+};
+
+
+function openSection(sectionName) {
+
+    document
+        .querySelectorAll(
+            ".dashboard-section"
+        )
+        .forEach(
+            section =>
+                section.classList.remove(
+                    "active"
+                )
+        );
+
+
+    document
+        .querySelectorAll(
+            ".sidebar-link[data-section]"
+        )
+        .forEach(
+            button =>
+                button.classList.remove(
+                    "active"
+                )
+        );
+
+
+    const section =
+        document.getElementById(
+            "section-" + sectionName
+        );
+
+
+    if (section) {
+
+        section.classList.add(
+            "active"
+        );
+    }
+
+
+    document
+        .querySelectorAll(
+            '[data-section="' +
+            sectionName +
+            '"]'
+        )
+        .forEach(
+            button => {
+
+                if (
+                    button.classList.contains(
+                        "sidebar-link"
+                    )
+                ) {
+
+                    button.classList.add(
+                        "active"
+                    );
+                }
+
+            }
+        );
+
+
+    document.getElementById(
+        "pageTitle"
+    ).textContent =
+        sectionTitles[
+            sectionName
+        ] || "Dashboard";
+
+
+    closeMobileSidebar();
+
+
+    if (
+        sectionName === "overview"
+    ) {
+        renderOverview();
+    }
+
+    if (
+        sectionName === "investments"
+    ) {
+        renderInvestments();
+    }
+
+    if (
+        sectionName === "history"
+    ) {
+        renderHistory();
+    }
+
+    if (
+        sectionName === "support"
+    ) {
+        renderTickets();
+    }
+
+    if (
+        sectionName === "profile"
+    ) {
+        renderProfile();
+    }
+
+    if (
+        sectionName === "referral"
+    ) {
+        renderReferral();
+    }
+
+}
+
+
+document
+    .querySelectorAll(
+        "[data-section]"
+    )
+    .forEach(
+        element => {
+
+            element.addEventListener(
+                "click",
+                function () {
+
+                    const section =
+                        this.dataset.section;
+
+                    if (section) {
+                        openSection(section);
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+/* =====================================================
+   MENU MOBILE
+===================================================== */
+
+const sidebar =
+    document.getElementById(
+        "dashboardSidebar"
+    );
+
+const overlay =
+    document.getElementById(
+        "dashboardOverlay"
+    );
+
+
+function closeMobileSidebar() {
+
+    sidebar.classList.remove(
+        "mobile-open"
+    );
+
+    overlay.classList.remove(
+        "active"
+    );
+}
+
+
+document.getElementById(
+    "mobileDashboardMenu"
+).addEventListener(
+    "click",
     function () {
 
+        sidebar.classList.toggle(
+            "mobile-open"
+        );
 
-        /* =========================================
-           PROTECTION PAGE
-        ========================================= */
+        overlay.classList.toggle(
+            "active"
+        );
+    }
+);
 
-        const currentUser =
-            getCurrentUser();
 
+overlay.addEventListener(
+    "click",
+    closeMobileSidebar
+);
 
-        if (!currentUser) {
 
-            window.location.href =
-                "login.html";
+/* =====================================================
+   AFFICHAGE UTILISATEUR
+===================================================== */
 
-            return;
+function renderUserIdentity() {
 
-        }
+    refreshCurrentUser();
 
-
-        /* =========================================
-           DONNEES PACKS
-        ========================================= */
-
-        const packs = [
-
-            {
-                id: "starter",
-                name: "Pack Starter",
-                amount: 3000,
-                duration: 180,
-                image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=85",
-                description: "Votre première expérience dans l'univers immobilier."
-            },
-
-            {
-                id: "familial",
-                name: "Pack Familial",
-                amount: 10000,
-                duration: 180,
-                image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=85",
-                description: "Une approche immobilière adaptée à une évolution progressive."
-            },
-
-            {
-                id: "confort",
-                name: "Pack Confort",
-                amount: 20000,
-                duration: 180,
-                image: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=800&q=85",
-                description: "Un univers résidentiel moderne et confortable."
-            },
-
-            {
-                id: "premium",
-                name: "Pack Premium",
-                amount: 45000,
-                duration: 180,
-                image: "https://images.unsplash.com/photo-1600585152915-d208bec867a1?auto=format&fit=crop&w=800&q=85",
-                description: "Une résidence moderne et élégante."
-            },
-
-            {
-                id: "prestige",
-                name: "Pack Prestige",
-                amount: 100000,
-                duration: 180,
-                image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=85",
-                description: "Une sélection immobilière haut de gamme."
-            },
-
-            {
-                id: "premiumplus",
-                name: "Pack Premium Plus",
-                amount: 200000,
-                duration: 180,
-                image: "https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=800&q=85",
-                description: "Une expérience immobilière avancée."
-            },
-
-            {
-                id: "elite",
-                name: "Pack Elite",
-                amount: 400000,
-                duration: 180,
-                image: "https://images.unsplash.com/photo-1600573472550-8090b5e0745e?auto=format&fit=crop&w=800&q=85",
-                description: "Une résidence pensée pour l'excellence."
-            },
-
-            {
-                id: "luxury",
-                name: "Pack Luxury",
-                amount: 800000,
-                duration: 180,
-                image: "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=800&q=85",
-                description: "L'univers immobilier le plus prestigieux."
-            }
-
-        ];
-
-
-        let selectedPack = null;
-
-
-        /* =========================================
-           MENU / SECTIONS
-        ========================================= */
-
-        const sectionMap = {
-
-            overview: "overviewSection",
-            deposit: "depositSection",
-            withdraw: "withdrawSection",
-            packs: "packsSection",
-            investments: "investmentsSection",
-            history: "historySection",
-            referral: "referralSection",
-            support: "supportSection",
-            profile: "profileSection"
-
-        };
-
-
-        const pageTitles = {
-
-            overview: "Tableau de bord",
-            deposit: "Dépôt",
-            withdraw: "Retrait",
-            packs: "Packs immobiliers",
-            investments: "Mes investissements",
-            history: "Historique",
-            referral: "Parrainage",
-            support: "Assistance",
-            profile: "Mon profil"
-
-        };
-
-
-        function showSection(sectionName) {
-
-            document.querySelectorAll(
-                ".dashboard-section"
-            ).forEach(
-                function (section) {
-
-                    section.classList.remove(
-                        "active"
-                    );
-
-                }
-            );
-
-
-            const target =
-                document.getElementById(
-                    sectionMap[sectionName]
-                );
-
-
-            if (target) {
-
-                target.classList.add(
-                    "active"
-                );
-
-            }
-
-
-            document.querySelectorAll(
-                ".sidebar-link"
-            ).forEach(
-                function (link) {
-
-                    link.classList.remove(
-                        "active"
-                    );
-
-                }
-            );
-
-
-            const activeLink =
-                document.querySelector(
-                    '.sidebar-link[data-section="' +
-                    sectionName +
-                    '"]'
-                );
-
-
-            if (activeLink) {
-
-                activeLink.classList.add(
-                    "active"
-                );
-
-            }
-
-
-            document.getElementById(
-                "pageTitle"
-            ).textContent =
-                pageTitles[sectionName] ||
-                "Housing's YQD";
-
-
-            closeMobileMenu();
-
-
-            window.scrollTo(
-                {
-                    top: 0,
-                    behavior: "smooth"
-                }
-            );
-
-        }
-
-
-        document.querySelectorAll(
-            ".sidebar-link[data-section]"
-        ).forEach(
-            function (button) {
-
-                button.addEventListener(
-                    "click",
-                    function () {
-
-                        showSection(
-                            button.dataset.section
-                        );
-
-                    }
-                );
-
-            }
+    const initials =
+        getInitials(
+            currentUser.fullName ||
+            currentUser.name
         );
 
 
-        document.querySelectorAll(
-            "[data-go]"
-        ).forEach(
-            function (button) {
+    document.getElementById(
+        "sidebarAvatar"
+    ).textContent =
+        initials;
 
-                button.addEventListener(
-                    "click",
-                    function () {
 
-                        showSection(
-                            button.dataset.go
-                        );
+    document.getElementById(
+        "topbarAvatar"
+    ).textContent =
+        initials;
 
-                    }
-                );
 
-            }
+    document.getElementById(
+        "sidebarUserName"
+    ).textContent =
+        currentUser.fullName ||
+        currentUser.name ||
+        "Utilisateur";
+
+
+    document.getElementById(
+        "sidebarUserPhone"
+    ).textContent =
+        currentUser.phone || "---";
+
+
+    document.getElementById(
+        "welcomeName"
+    ).textContent =
+        "Bienvenue, " +
+        (
+            currentUser.fullName ||
+            currentUser.name ||
+            ""
+        );
+
+}
+
+
+/* =====================================================
+   OVERVIEW
+===================================================== */
+
+function renderOverview() {
+
+    refreshCurrentUser();
+
+
+    document.getElementById(
+        "mainBalance"
+    ).textContent =
+        formatFCFA(
+            currentUser.balance || 0
         );
 
 
-        /* =========================================
-           MOBILE MENU
-        ========================================= */
-
-        const sidebar =
-            document.getElementById(
-                "dashboardSidebar"
-            );
+    document.getElementById(
+        "withdrawAvailableBalance"
+    ).textContent =
+        formatFCFA(
+            currentUser.balance || 0
+        );
 
 
-        const overlay =
-            document.getElementById(
-                "dashboardOverlay"
-            );
+    document.getElementById(
+        "totalDeposited"
+    ).textContent =
+        formatFCFA(
+            currentUser.totalDeposited ||
+            0
+        );
 
 
-        function closeMobileMenu() {
+    document.getElementById(
+        "totalWithdrawn"
+    ).textContent =
+        formatFCFA(
+            currentUser.totalWithdrawn ||
+            0
+        );
 
-            sidebar.classList.remove(
-                "mobile-open"
-            );
+
+    document.getElementById(
+        "totalInvested"
+    ).textContent =
+        formatFCFA(
+            currentUser.totalInvested ||
+            0
+        );
 
 
-            overlay.classList.remove(
+    const investments =
+        Array.isArray(
+            currentUser.investments
+        )
+            ? currentUser.investments
+            : [];
+
+
+    document.getElementById(
+        "activeInvestmentCount"
+    ).textContent =
+        investments.filter(
+            investment =>
+                investment.status ===
                 "active"
-            );
-
-        }
+        ).length;
 
 
+    renderRecentTransactions();
+}
+
+
+/* =====================================================
+   DERNIERES TRANSACTIONS
+===================================================== */
+
+function renderRecentTransactions() {
+
+    const container =
         document.getElementById(
-            "mobileDashboardMenu"
-        ).addEventListener(
-            "click",
-            function () {
-
-                sidebar.classList.toggle(
-                    "mobile-open"
-                );
-
-
-                overlay.classList.toggle(
-                    "active"
-                );
-
-            }
+            "recentTransactions"
         );
 
 
-        overlay.addEventListener(
-            "click",
-            closeMobileMenu
-        );
+    const transactions =
+        Array.isArray(
+            currentUser.transactions
+        )
+            ? currentUser.transactions
+            : [];
 
 
-        /* =========================================
-           PROFIL
-        ========================================= */
+    const recent =
+        transactions.slice(0, 5);
 
-        function formatDate(value) {
 
-            if (!value) {
+    if (!recent.length) {
 
-                return "-";
+        container.innerHTML = `
 
-            }
+            <div class="empty-state">
 
+                <i class="fa-solid fa-receipt"></i>
 
-            try {
+                <h3>
+                    Aucune opération
+                </h3>
 
-                return new Date(value)
-                    .toLocaleDateString(
-                        "fr-FR"
-                    );
+                <p>
+                    Vos prochaines opérations
+                    apparaîtront ici.
+                </p>
 
-            }
+            </div>
+        `;
 
-            catch (error) {
+        return;
+    }
 
-                return "-";
 
-            }
+    container.innerHTML =
+        recent.map(
+            transaction =>
+                createTransactionHtml(
+                    transaction
+                )
+        ).join("");
 
-        }
+}
 
 
-        function setUserInformation() {
+/* =====================================================
+   PACKS
+===================================================== */
 
-            const user =
-                getCurrentUser();
+function renderPacks() {
 
-
-            if (!user) {
-
-                return;
-
-            }
-
-
-            const name =
-                user.name ||
-                user.fullName ||
-                "Utilisateur";
-
-
-            const firstLetter =
-                name.charAt(0)
-                    .toUpperCase();
-
-
-            const phone =
-                user.phone
-                    ? "+225 " + user.phone
-                    : "-";
-
-
-            document.getElementById(
-                "sidebarUserName"
-            ).textContent =
-                name;
-
-
-            document.getElementById(
-                "welcomeUserName"
-            ).textContent =
-                name;
-
-
-            document.getElementById(
-                "sidebarAvatar"
-            ).textContent =
-                firstLetter;
-
-
-            document.getElementById(
-                "topbarAvatar"
-            ).textContent =
-                firstLetter;
-
-
-            document.getElementById(
-                "profileLargeAvatar"
-            ).textContent =
-                firstLetter;
-
-
-            document.getElementById(
-                "profileName"
-            ).textContent =
-                name;
-
-
-            document.getElementById(
-                "profilePhone"
-            ).textContent =
-                phone;
-
-
-            document.getElementById(
-                "profileFullName"
-            ).textContent =
-                name;
-
-
-            document.getElementById(
-                "profilePhoneDetail"
-            ).textContent =
-                phone;
-
-
-            document.getElementById(
-                "profileReferralCode"
-            ).textContent =
-                user.referralCode ||
-                "-";
-
-
-            document.getElementById(
-                "profileJoinDate"
-            ).textContent =
-                formatDate(
-                    user.createdAt
-                );
-
-
-            document.getElementById(
-                "userReferralCode"
-            ).textContent =
-                user.referralCode ||
-                "------";
-
-
-            const referralLink =
-                window.location.origin +
-                window.location.pathname
-                    .replace(
-                        "dashboard.html",
-                        "register.html"
-                    ) +
-                "?ref=" +
-                (
-                    user.referralCode ||
-                    ""
-                );
-
-
-            document.getElementById(
-                "referralLink"
-            ).value =
-                referralLink;
-
-        }
-
-
-        /* =========================================
-           AFFICHAGE DES PACKS
-        ========================================= */
-
-        function renderPacks() {
-
-            const container =
-                document.getElementById(
-                    "dashboardPackGrid"
-                );
-
-
-            container.innerHTML =
-                "";
-
-
-            packs.forEach(
-                function (pack) {
-
-                    const card =
-                        document.createElement(
-                            "article"
-                        );
-
-
-                    card.className =
-                        "dashboard-pack-card";
-
-
-                    card.innerHTML =
-                        `
-
-                        <div class="dashboard-pack-image">
-
-                            <img
-                                src="${pack.image}"
-                                alt="${pack.name}">
-
-                        </div>
-
-
-                        <div class="dashboard-pack-content">
-
-                            <span class="pack-small-label">
-
-                                IMMOBILIER
-
-                            </span>
-
-
-                            <h3>
-
-                                ${pack.name}
-
-                            </h3>
-
-
-                            <p>
-
-                                ${pack.description}
-
-                            </p>
-
-
-                            <div class="dashboard-pack-price">
-
-                                ${formatFCFA(pack.amount)}
-
-                            </div>
-
-
-                            <div class="dashboard-pack-duration">
-
-                                <i class="fa-solid fa-calendar-days"></i>
-
-                                Durée totale :
-                                ${pack.duration} jours
-
-                            </div>
-
-
-                            <button
-                                class="dashboard-invest-button"
-                                data-pack="${pack.id}">
-
-                                Investir
-
-                                <i class="fa-solid fa-arrow-right"></i>
-
-                            </button>
-
-                        </div>
-
-                    `;
-
-
-                    container.appendChild(
-                        card
-                    );
-
-                }
-            );
-
-
-            document.querySelectorAll(
-                ".dashboard-invest-button"
-            ).forEach(
-                function (button) {
-
-                    button.addEventListener(
-                        "click",
-                        function () {
-
-                            const pack =
-                                packs.find(
-                                    function (item) {
-
-                                        return item.id ===
-                                            button.dataset.pack;
-
-                                    }
-                                );
-
-
-                            if (pack) {
-
-                                openInvestmentModal(
-                                    pack
-                                );
-
-                            }
-
-                        }
-                    );
-
-                }
-            );
-
-        }
-
-
-        /* =========================================
-           MODAL INVESTISSEMENT
-        ========================================= */
-
-        const investmentModal =
-            document.getElementById(
-                "investmentModal"
-            );
-
-
-        function openInvestmentModal(pack) {
-
-            selectedPack =
-                pack;
-
-
-            document.getElementById(
-                "modalPackName"
-            ).textContent =
-                pack.name;
-
-
-            document.getElementById(
-                "modalPackDescription"
-            ).textContent =
-                pack.description;
-
-
-            document.getElementById(
-                "modalPackAmount"
-            ).textContent =
-                formatFCFA(
-                    pack.amount
-                );
-
-
-            document.getElementById(
-                "investmentModalMessage"
-            ).className =
-                "form-message";
-
-
-            investmentModal.classList.add(
-                "active"
-            );
-
-        }
-
-
-        function closeInvestmentModal() {
-
-            investmentModal.classList.remove(
-                "active"
-            );
-
-
-            selectedPack =
-                null;
-
-        }
-
-
+    const grid =
         document.getElementById(
-            "closeInvestmentModal"
-        ).addEventListener(
-            "click",
-            closeInvestmentModal
+            "packsGrid"
         );
 
 
-        document.getElementById(
-            "investmentModalBackdrop"
-        ).addEventListener(
-            "click",
-            closeInvestmentModal
-        );
+    grid.innerHTML =
+        HYQD_PACKS.map(
+            pack => `
 
+                <article class="dashboard-pack-card">
 
-        /* =========================================
-           CONFIRMATION INVESTISSEMENT
+                    <div class="dashboard-pack-image">
 
-           La fonction globale investInPack()
-           sera fournie dans script.js.
-        ========================================= */
+                        <img
+                            src="${pack.image}"
+                            alt="${escapeHtml(pack.name)}"
+                            loading="lazy">
 
-        document.getElementById(
-            "confirmInvestmentButton"
-        ).addEventListener(
-            "click",
-            function () {
+                    </div>
 
-                if (!selectedPack) {
 
-                    return;
+                    <div class="dashboard-pack-content">
 
-                }
-
-
-                const messageBox =
-                    document.getElementById(
-                        "investmentModalMessage"
-                    );
-
-
-                const result =
-                    investInPack(
-                        selectedPack
-                    );
-
-
-                if (!result.success) {
-
-                    messageBox.textContent =
-                        result.message;
-
-
-                    messageBox.className =
-                        "form-message error";
-
-                    return;
-
-                }
-
-
-                messageBox.textContent =
-                    result.message;
-
-
-                messageBox.className =
-                    "form-message success";
-
-
-                setTimeout(
-                    function () {
-
-                        closeInvestmentModal();
-
-
-                        refreshDashboard();
-
-                    },
-                    1000
-                );
-
-            }
-        );
-
-
-        /* =========================================
-           DEPOT
-        ========================================= */
-
-        document.getElementById(
-            "depositForm"
-        ).addEventListener(
-            "submit",
-            function (event) {
-
-                event.preventDefault();
-
-
-                const amount =
-                    Number(
-                        document.getElementById(
-                            "depositAmount"
-                        ).value
-                    );
-
-
-                const method =
-                    document.getElementById(
-                        "depositMethod"
-                    ).value;
-
-
-                const reference =
-                    document.getElementById(
-                        "depositReference"
-                    ).value
-                        .trim();
-
-
-                const result =
-                    createDepositRequest(
-                        amount,
-                        method,
-                        reference
-                    );
-
-
-                const messageBox =
-                    document.getElementById(
-                        "depositMessage"
-                    );
-
-
-                messageBox.textContent =
-                    result.message;
-
-
-                messageBox.className =
-                    "form-message " +
-                    (
-                        result.success
-                            ? "success"
-                            : "error"
-                    );
-
-
-                if (result.success) {
-
-                    document.getElementById(
-                        "depositForm"
-                    ).reset();
-
-
-                    refreshDashboard();
-
-                }
-
-            }
-        );
-
-
-        /* =========================================
-           RETRAIT
-        ========================================= */
-
-        document.getElementById(
-            "withdrawForm"
-        ).addEventListener(
-            "submit",
-            function (event) {
-
-                event.preventDefault();
-
-
-                const amount =
-                    Number(
-                        document.getElementById(
-                            "withdrawAmount"
-                        ).value
-                    );
-
-
-                const method =
-                    document.getElementById(
-                        "withdrawMethod"
-                    ).value;
-
-
-                const phone =
-                    document.getElementById(
-                        "withdrawPhone"
-                    ).value
-                        .trim();
-
-
-                const result =
-                    createWithdrawRequest(
-                        amount,
-                        method,
-                        phone
-                    );
-
-
-                const messageBox =
-                    document.getElementById(
-                        "withdrawMessage"
-                    );
-
-
-                messageBox.textContent =
-                    result.message;
-
-
-                messageBox.className =
-                    "form-message " +
-                    (
-                        result.success
-                            ? "success"
-                            : "error"
-                    );
-
-
-                if (result.success) {
-
-                    document.getElementById(
-                        "withdrawForm"
-                    ).reset();
-
-
-                    refreshDashboard();
-
-                }
-
-            }
-        );
-
-
-        /* =========================================
-           INVESTISSEMENTS
-        ========================================= */
-
-        function renderInvestments() {
-
-            const user =
-                getCurrentUser();
-
-
-            const container =
-                document.getElementById(
-                    "investmentsList"
-                );
-
-
-            const overview =
-                document.getElementById(
-                    "overviewInvestments"
-                );
-
-
-            const investments =
-                user.investments ||
-                [];
-
-
-            document.getElementById(
-                "activeInvestmentsCount"
-            ).textContent =
-                investments.filter(
-                    function (investment) {
-
-                        return investment.status ===
-                            "active";
-
-                    }
-                ).length;
-
-
-            if (
-                investments.length === 0
-            ) {
-
-                const empty =
-                    `
-
-                    <div class="empty-state">
-
-                        <i class="fa-solid fa-house-circle-xmark"></i>
+                        <span class="pack-small-label">
+                            PACK IMMOBILIER
+                        </span>
 
                         <h3>
-
-                            Aucun investissement actif
-
+                            ${escapeHtml(pack.name)}
                         </h3>
 
                         <p>
-
-                            Découvrez nos packs immobiliers
-                            pour commencer.
-
+                            Investissement immobilier
+                            d'une durée totale de
+                            180 jours.
                         </p>
 
-                        <button
-                            class="dashboard-action-btn"
-                            data-go="packs">
 
-                            Voir les packs
+                        <div class="dashboard-pack-price">
+                            ${formatFCFA(pack.amount)}
+                        </div>
+
+
+                        <div class="dashboard-pack-duration">
+
+                            <i class="fa-regular fa-clock"></i>
+
+                            Durée : 180 jours
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            class="dashboard-invest-button"
+                            data-pack-id="${pack.id}">
+
+                            Investir
+
+                            <i class="fa-solid fa-arrow-right"></i>
 
                         </button>
 
                     </div>
 
-                    `;
-
-
-                container.innerHTML =
-                    empty;
-
-
-                overview.innerHTML =
-                    empty;
-
-
-                return;
-
-            }
-
-
-            container.innerHTML =
-                investments.map(
-                    function (investment) {
-
-                        const daysPassed =
-                            Math.max(
-                                0,
-                                Math.min(
-                                    180,
-                                    Math.floor(
-                                        (
-                                            Date.now() -
-                                            new Date(
-                                                investment.createdAt
-                                            ).getTime()
-                                        ) /
-                                        (
-                                            1000 *
-                                            60 *
-                                            60 *
-                                            24
-                                        )
-                                    )
-                                )
-                            );
-
-
-                        const progress =
-                            (
-                                daysPassed /
-                                180
-                            ) *
-                            100;
-
-
-                        return `
-
-                        <article class="investment-item">
-
-                            <div class="investment-item-header">
-
-                                <div>
-
-                                    <span>
-
-                                        INVESTISSEMENT ACTIF
-
-                                    </span>
-
-
-                                    <h3>
-
-                                        ${investment.packName}
-
-                                    </h3>
-
-                                </div>
-
-
-                                <strong>
-
-                                    ${formatFCFA(
-                                        investment.amount
-                                    )}
-
-                                </strong>
-
-                            </div>
-
-
-                            <div class="investment-progress">
-
-                                <div class="progress-info">
-
-                                    <span>
-
-                                        Progression
-
-                                    </span>
-
-
-                                    <span>
-
-                                        ${daysPassed}
-                                        / 180 jours
-
-                                    </span>
-
-                                </div>
-
-
-                                <div class="progress-bar">
-
-                                    <div
-                                        class="progress-fill"
-                                        style="
-                                        width:${progress}%;
-                                        ">
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="investment-meta">
-
-                                <span>
-
-                                    <i class="fa-solid fa-calendar"></i>
-
-                                    Début :
-                                    ${formatDate(
-                                        investment.createdAt
-                                    )}
-
-                                </span>
-
-
-                                <span>
-
-                                    <i class="fa-solid fa-clock"></i>
-
-                                    Durée :
-                                    180 jours
-
-                                </span>
-
-                            </div>
-
-                        </article>
-
-                        `;
-
-                    }
-                ).join(
-                    ""
-                );
-
-
-            overview.innerHTML =
-                investments.slice(
-                    0,
-                    3
-                ).map(
-                    function (investment) {
-
-                        return `
-
-                        <article class="mini-investment-card">
-
-                            <div class="mini-investment-icon">
-
-                                <i class="fa-solid fa-house"></i>
-
-                            </div>
-
-
-                            <div>
-
-                                <strong>
-
-                                    ${investment.packName}
-
-                                </strong>
-
-
-                                <span>
-
-                                    ${formatFCFA(
-                                        investment.amount
-                                    )}
-
-                                </span>
-
-                            </div>
-
-
-                            <span class="active-badge">
-
-                                Actif
-
-                            </span>
-
-                        </article>
-
-                        `;
-
-                    }
-                ).join(
-                    ""
-                );
-
-        }
-
-
-        /* =========================================
-           HISTORIQUE
-        ========================================= */
-
-        let currentHistoryFilter =
-            "all";
-
-
-        function renderHistory() {
-
-            const user =
-                getCurrentUser();
-
-
-            const container =
-                document.getElementById(
-                    "historyList"
-                );
-
-
-            const transactions =
-                user.transactions ||
-                [];
-
-
-            let filtered =
-                transactions;
-
-
-            if (
-                currentHistoryFilter !==
-                "all"
-            ) {
-
-                filtered =
-                    transactions.filter(
-                        function (transaction) {
-
-                            return transaction.type ===
-                                currentHistoryFilter;
-
-                        }
-                    );
-
-            }
-
-
-            if (
-                filtered.length === 0
-            ) {
-
-                container.innerHTML =
-                    `
-
-                    <div class="empty-state">
-
-                        <i class="fa-solid fa-receipt"></i>
-
-                        <h3>
-
-                            Aucun historique
-
-                        </h3>
-
-                        <p>
-
-                            Vos transactions apparaîtront ici.
-
-                        </p>
-
-                    </div>
-
-                    `;
-
-
-                return;
-
-            }
-
-
-            container.innerHTML =
-                filtered.slice()
-                    .reverse()
-                    .map(
-                        function (transaction) {
-
-                            const isDeposit =
-                                transaction.type ===
-                                "deposit";
-
-
-                            return `
-
-                            <article class="history-item">
-
-                                <div class="
-                                history-icon
-                                ${
-                                    isDeposit
-                                        ? "deposit-history"
-                                        : "withdraw-history"
-                                }
-                                ">
-
-                                    <i class="
-                                    fa-solid
-                                    ${
-                                        isDeposit
-                                            ? "fa-arrow-down"
-                                            : "fa-arrow-up"
-                                    }
-                                    "></i>
-
-                                </div>
-
-
-                                <div class="history-main">
-
-                                    <strong>
-
-                                        ${
-                                            isDeposit
-                                                ? "Dépôt"
-                                                : "Retrait"
-                                        }
-
-                                    </strong>
-
-
-                                    <span>
-
-                                        ${
-                                            transaction.method ||
-                                            "Transaction"
-                                        }
-
-                                        ·
-
-                                        ${formatDate(
-                                            transaction.createdAt
-                                        )}
-
-                                    </span>
-
-                                </div>
-
-
-                                <div class="history-right">
-
-                                    <strong>
-
-                                        ${
-                                            isDeposit
-                                                ? "+"
-                                                : "-"
-                                        }
-
-                                        ${formatFCFA(
-                                            transaction.amount
-                                        )}
-
-                                    </strong>
-
-
-                                    <span class="
-                                    transaction-status
-                                    ${
-                                        transaction.status ||
-                                        "pending"
-                                    }
-                                    ">
-
-                                        ${
-                                            transaction.status ===
-                                            "approved"
-                                                ? "Validé"
-                                                : transaction.status ===
-                                                "rejected"
-                                                    ? "Refusé"
-                                                    : "En attente"
-                                        }
-
-                                    </span>
-
-                                </div>
-
-                            </article>
-
-                            `;
-
-                        }
-                    ).join(
-                        ""
-                    );
-
-        }
-
-
-        document.querySelectorAll(
-            ".history-tab"
-        ).forEach(
-            function (button) {
+                </article>
+            `
+        ).join("");
+
+
+    document
+        .querySelectorAll(
+            "[data-pack-id]"
+        )
+        .forEach(
+            button => {
 
                 button.addEventListener(
                     "click",
                     function () {
 
-                        currentHistoryFilter =
-                            button.dataset.history;
-
-
-                        document.querySelectorAll(
-                            ".history-tab"
-                        ).forEach(
-                            function (item) {
-
-                                item.classList.remove(
-                                    "active"
-                                );
-
-                            }
-                        );
-
-
-                        button.classList.add(
-                            "active"
-                        );
-
-
-                        renderHistory();
-
-                    }
-                );
-
-            }
-        );
-
-
-        /* =========================================
-           STATISTIQUES
-        ========================================= */
-
-        function updateStatistics() {
-
-            const user =
-                getCurrentUser();
-
-
-            const balance =
-                Number(
-                    user.balance ||
-                    0
-                );
-
-
-            document.getElementById(
-                "userBalance"
-            ).textContent =
-                formatFCFA(
-                    balance
-                );
-
-
-            document.getElementById(
-                "withdrawAvailableBalance"
-            ).textContent =
-                formatFCFA(
-                    balance
-                );
-
-
-            const transactions =
-                user.transactions ||
-                [];
-
-
-            const totalDeposits =
-                transactions
-                    .filter(
-                        function (item) {
-
-                            return (
-                                item.type ===
-                                "deposit"
-                            ) &&
-                            (
-                                item.status ===
-                                "approved"
+                        const pack =
+                            HYQD_PACKS.find(
+                                item =>
+                                    item.id ===
+                                    this.dataset.packId
                             );
 
+                        if (pack) {
+
+                            openInvestmentModal(
+                                pack
+                            );
                         }
-                    )
-                    .reduce(
-                        function (
-                            total,
-                            item
-                        ) {
-
-                            return (
-                                total +
-                                Number(
-                                    item.amount ||
-                                    0
-                                )
-                            );
-
-                        },
-                        0
-                    );
-
-
-            const totalWithdrawals =
-                transactions
-                    .filter(
-                        function (item) {
-
-                            return (
-                                item.type ===
-                                "withdraw"
-                            ) &&
-                            (
-                                item.status ===
-                                "approved"
-                            );
-
-                        }
-                    )
-                    .reduce(
-                        function (
-                            total,
-                            item
-                        ) {
-
-                            return (
-                                total +
-                                Number(
-                                    item.amount ||
-                                    0
-                                )
-                            );
-
-                        },
-                        0
-                    );
-
-
-            document.getElementById(
-                "totalDeposits"
-            ).textContent =
-                formatFCFA(
-                    totalDeposits
-                );
-
-
-            document.getElementById(
-                "totalWithdrawals"
-            ).textContent =
-                formatFCFA(
-                    totalWithdrawals
-                );
-
-
-            const users =
-                getUsers();
-
-
-            const referrals =
-                users.filter(
-                    function (item) {
-
-                        return (
-                            item.referredBy ===
-                            user.referralCode
-                        );
 
                     }
-                );
-
-
-            document.getElementById(
-                "referralCount"
-            ).textContent =
-                referrals.length;
-
-        }
-
-
-        /* =========================================
-           LISTE PARRAINAGES
-        ========================================= */
-
-        function renderReferrals() {
-
-            const user =
-                getCurrentUser();
-
-
-            const users =
-                getUsers();
-
-
-            const referrals =
-                users.filter(
-                    function (item) {
-
-                        return (
-                            item.referredBy ===
-                            user.referralCode
-                        );
-
-                    }
-                );
-
-
-            const container =
-                document.getElementById(
-                    "referralsList"
-                );
-
-
-            if (
-                referrals.length ===
-                0
-            ) {
-
-                container.innerHTML =
-                    `
-
-                    <div class="empty-state">
-
-                        <i class="fa-solid fa-users"></i>
-
-                        <h3>
-
-                            Aucun parrainage pour le moment
-
-                        </h3>
-
-                        <p>
-
-                            Partagez votre code ou votre lien
-                            pour inviter des utilisateurs.
-
-                        </p>
-
-                    </div>
-
-                    `;
-
-
-                return;
-
-            }
-
-
-            container.innerHTML =
-                referrals.map(
-                    function (referral) {
-
-                        return `
-
-                        <div class="referral-user-item">
-
-                            <div class="referral-user-avatar">
-
-                                ${
-                                    (
-                                        referral.name ||
-                                        "U"
-                                    )
-                                    .charAt(0)
-                                    .toUpperCase()
-                                }
-
-                            </div>
-
-
-                            <div>
-
-                                <strong>
-
-                                    ${
-                                        referral.name ||
-                                        "Utilisateur"
-                                    }
-
-                                </strong>
-
-
-                                <span>
-
-                                    Inscrit le
-                                    ${formatDate(
-                                        referral.createdAt
-                                    )}
-
-                                </span>
-
-                            </div>
-
-
-                        </div>
-
-                        `;
-
-                    }
-                ).join(
-                    ""
-                );
-
-        }
-
-
-        /* =========================================
-           COPIE PARRAINAGE
-        ========================================= */
-
-        function copyText(value) {
-
-            if (
-                navigator.clipboard
-            ) {
-
-                navigator.clipboard.writeText(
-                    value
-                );
-
-            }
-
-        }
-
-
-        document.getElementById(
-            "copyReferralCode"
-        ).addEventListener(
-            "click",
-            function () {
-
-                copyText(
-                    document.getElementById(
-                        "userReferralCode"
-                    ).textContent
-                );
-
-
-                this.innerHTML =
-                    '<i class="fa-solid fa-check"></i>';
-
-
-                setTimeout(
-                    () => {
-
-                        this.innerHTML =
-                            '<i class="fa-regular fa-copy"></i>';
-
-                    },
-                    1500
                 );
 
             }
         );
 
-
-        document.getElementById(
-            "copyReferralLink"
-        ).addEventListener(
-            "click",
-            function () {
-
-                const link =
-                    document.getElementById(
-                        "referralLink"
-                    ).value;
+}
 
 
-                copyText(
-                    link
-                );
+/* =====================================================
+   MODAL INVESTISSEMENT
+===================================================== */
+
+function openInvestmentModal(
+    pack
+) {
+
+    selectedPack = pack;
 
 
-                this.textContent =
-                    "Copié";
+    document.getElementById(
+        "investmentModalTitle"
+    ).textContent =
+        pack.name;
 
 
-                setTimeout(
-                    () => {
-
-                        this.textContent =
-                            "Copier";
-
-                    },
-                    1500
-                );
-
-            }
+    document.getElementById(
+        "investmentModalAmount"
+    ).textContent =
+        formatFCFA(
+            pack.amount
         );
 
 
-        /* =========================================
-           ASSISTANCE
-        ========================================= */
+    document.getElementById(
+        "investmentMessage"
+    ).className =
+        "form-message";
 
+
+    document.getElementById(
+        "investmentMessage"
+    ).textContent = "";
+
+
+    document.getElementById(
+        "investmentModal"
+    ).classList.add(
+        "active"
+    );
+}
+
+
+function closeInvestmentModal() {
+
+    document.getElementById(
+        "investmentModal"
+    ).classList.remove(
+        "active"
+    );
+
+    selectedPack = null;
+}
+
+
+document
+    .querySelectorAll(
+        "[data-close-modal]"
+    )
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                closeInvestmentModal
+            );
+
+        }
+    );
+
+
+document.getElementById(
+    "confirmInvestment"
+).addEventListener(
+    "click",
+    function () {
+
+        if (!selectedPack) {
+            return;
+        }
+
+
+        const messageBox =
+            document.getElementById(
+                "investmentMessage"
+            );
+
+
+        const result =
+            investInPack(
+                selectedPack
+            );
+
+
+        messageBox.textContent =
+            result.message;
+
+
+        messageBox.className =
+            "form-message " +
+            (
+                result.success
+                    ? "success"
+                    : "error"
+            );
+
+
+        if (result.success) {
+
+            refreshCurrentUser();
+
+            renderOverview();
+
+            renderInvestments();
+
+
+            setTimeout(
+                function () {
+
+                    closeInvestmentModal();
+
+                    openSection(
+                        "investments"
+                    );
+
+                },
+                800
+            );
+        }
+
+    }
+);
+
+
+/* =====================================================
+   INVESTISSEMENTS
+===================================================== */
+
+function renderInvestments() {
+
+    refreshCurrentUser();
+
+
+    const container =
         document.getElementById(
-            "supportForm"
-        ).addEventListener(
-            "submit",
-            function (event) {
-
-                event.preventDefault();
+            "investmentList"
+        );
 
 
-                const subject =
-                    document.getElementById(
-                        "ticketSubject"
-                    ).value
-                        .trim();
+    const investments =
+        Array.isArray(
+            currentUser.investments
+        )
+            ? currentUser.investments
+            : [];
 
 
-                const message =
-                    document.getElementById(
-                        "ticketMessage"
-                    ).value
-                        .trim();
+    if (!investments.length) {
+
+        container.innerHTML = `
+
+            <div class="empty-state">
+
+                <i class="fa-solid fa-building-circle-xmark"></i>
+
+                <h3>
+                    Aucun investissement
+                </h3>
+
+                <p>
+                    Vous n'avez pas encore
+                    activé de pack.
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
 
 
-                const result =
-                    createSupportTicket(
-                        subject,
-                        message
-                    );
+    container.innerHTML =
+        investments.map(
+            investment => {
 
-
-                const messageBox =
-                    document.getElementById(
-                        "supportMessage"
-                    );
-
-
-                messageBox.textContent =
-                    result.message;
-
-
-                messageBox.className =
-                    "form-message " +
-                    (
-                        result.success
-                            ? "success"
-                            : "error"
-                    );
+                let progress = 0;
 
 
                 if (
-                    result.success
+                    investment.startDate &&
+                    investment.endDate
                 ) {
 
-                    document.getElementById(
-                        "supportForm"
-                    ).reset();
+                    const start =
+                        new Date(
+                            investment.startDate
+                        ).getTime();
+
+                    const end =
+                        new Date(
+                            investment.endDate
+                        ).getTime();
+
+                    const now =
+                        Date.now();
 
 
-                    renderTickets();
+                    progress =
+                        ((now - start) /
+                            (end - start)) *
+                        100;
 
+
+                    progress =
+                        Math.max(
+                            0,
+                            Math.min(
+                                100,
+                                progress
+                            )
+                        );
                 }
 
+
+                return `
+
+                    <article class="investment-item">
+
+                        <div class="investment-item-header">
+
+                            <div>
+
+                                <span>
+                                    INVESTISSEMENT
+                                </span>
+
+                                <h3>
+                                    ${escapeHtml(
+                                        investment.packName
+                                    )}
+                                </h3>
+
+                            </div>
+
+
+                            <span class="active-badge">
+                                ${investment.status === "active"
+                                    ? "Actif"
+                                    : escapeHtml(
+                                        investment.status
+                                    )}
+                            </span>
+
+                        </div>
+
+
+                        <div class="investment-progress">
+
+                            <div class="progress-info">
+
+                                <span>
+                                    Progression
+                                </span>
+
+                                <strong>
+                                    ${Math.round(progress)} %
+                                </strong>
+
+                            </div>
+
+
+                            <div class="progress-bar">
+
+                                <div
+                                    class="progress-fill"
+                                    style="width:${progress}%">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="investment-meta">
+
+                            <span>
+                                Montant :
+                                <strong>
+                                    ${formatFCFA(
+                                        investment.amount
+                                    )}
+                                </strong>
+                            </span>
+
+                            <span>
+                                Durée :
+                                <strong>
+                                    180 jours
+                                </strong>
+                            </span>
+
+                            <span>
+                                Début :
+                                <strong>
+                                    ${formatDateSafe(
+                                        investment.startDate
+                                    )}
+                                </strong>
+                            </span>
+
+                        </div>
+
+                    </article>
+                `;
+
             }
+        ).join("");
+
+}
+
+
+/* =====================================================
+   DEPOT
+===================================================== */
+
+document.getElementById(
+    "depositForm"
+).addEventListener(
+    "submit",
+    function (event) {
+
+        event.preventDefault();
+
+
+        const amount =
+            Number(
+                document.getElementById(
+                    "depositAmount"
+                ).value
+            );
+
+
+        const method =
+            document.getElementById(
+                "depositMethod"
+            ).value;
+
+
+        const reference =
+            document.getElementById(
+                "depositReference"
+            ).value.trim();
+
+
+        const messageBox =
+            document.getElementById(
+                "depositMessage"
+            );
+
+
+        const result =
+            createDepositRequest(
+                amount,
+                method,
+                reference
+            );
+
+
+        messageBox.textContent =
+            result.message;
+
+
+        messageBox.className =
+            "form-message " +
+            (
+                result.success
+                    ? "success"
+                    : "error"
+            );
+
+
+        if (result.success) {
+
+            this.reset();
+
+            refreshCurrentUser();
+
+            renderOverview();
+        }
+
+    }
+);
+
+
+/* =====================================================
+   RETRAIT
+===================================================== */
+
+document.getElementById(
+    "withdrawForm"
+).addEventListener(
+    "submit",
+    function (event) {
+
+        event.preventDefault();
+
+
+        const amount =
+            Number(
+                document.getElementById(
+                    "withdrawAmount"
+                ).value
+            );
+
+
+        const method =
+            document.getElementById(
+                "withdrawMethod"
+            ).value;
+
+
+        const phone =
+            document.getElementById(
+                "withdrawPhone"
+            ).value.trim();
+
+
+        const messageBox =
+            document.getElementById(
+                "withdrawMessage"
+            );
+
+
+        const result =
+            createWithdrawRequest(
+                amount,
+                method,
+                phone
+            );
+
+
+        messageBox.textContent =
+            result.message;
+
+
+        messageBox.className =
+            "form-message " +
+            (
+                result.success
+                    ? "success"
+                    : "error"
+            );
+
+
+        if (result.success) {
+
+            this.reset();
+
+            refreshCurrentUser();
+
+            renderOverview();
+        }
+
+    }
+);
+
+
+/* =====================================================
+   HISTORIQUE
+===================================================== */
+
+function createTransactionHtml(
+    transaction
+) {
+
+    const deposit =
+        transaction.type ===
+        "deposit";
+
+
+    const referral =
+        transaction.type ===
+        "referral_bonus";
+
+
+    const icon =
+        deposit
+            ? "fa-arrow-down"
+            : referral
+                ? "fa-gift"
+                : "fa-arrow-up";
+
+
+    const iconClass =
+        deposit
+            ? "deposit-history"
+            : "withdraw-history";
+
+
+    return `
+
+        <article class="history-item">
+
+            <div
+                class="history-icon ${iconClass}">
+
+                <i class="fa-solid ${icon}"></i>
+
+            </div>
+
+
+            <div class="history-main">
+
+                <strong>
+                    ${escapeHtml(
+                        transactionLabel(
+                            transaction.type
+                        )
+                    )}
+                </strong>
+
+                <span>
+                    ${formatDateSafe(
+                        transaction.createdAt
+                    )}
+                </span>
+
+            </div>
+
+
+            <div class="history-right">
+
+                <strong>
+                    ${formatFCFA(
+                        transaction.amount
+                    )}
+                </strong>
+
+                <span
+                    class="transaction-status ${transaction.status}">
+
+                    ${statusLabel(
+                        transaction.status
+                    )}
+
+                </span>
+
+            </div>
+
+        </article>
+    `;
+
+}
+
+
+function renderHistory() {
+
+    refreshCurrentUser();
+
+
+    const container =
+        document.getElementById(
+            "historyList"
         );
 
 
-        function renderTickets() {
-
-            const user =
-                getCurrentUser();
-
-
-            const container =
-                document.getElementById(
-                    "ticketsList"
-                );
+    let transactions =
+        Array.isArray(
+            currentUser.transactions
+        )
+            ? currentUser.transactions
+            : [];
 
 
-            const tickets =
-                user.tickets ||
-                [];
+    if (
+        historyFilter !==
+        "all"
+    ) {
+
+        transactions =
+            transactions.filter(
+                transaction =>
+                    transaction.type ===
+                    historyFilter
+            );
+    }
 
 
-            if (
-                tickets.length === 0
-            ) {
+    if (!transactions.length) {
 
-                container.innerHTML =
-                    `
+        container.innerHTML = `
 
-                    <div class="empty-state">
+            <div class="empty-state">
 
-                        <i class="fa-solid fa-headset"></i>
+                <i class="fa-solid fa-clock-rotate-left"></i>
 
-                        <h3>
+                <h3>
+                    Aucun historique
+                </h3>
 
-                            Aucun ticket
+                <p>
+                    Aucune opération correspondante
+                    n'a encore été enregistrée.
+                </p>
 
-                        </h3>
+            </div>
+        `;
 
-                        <p>
-
-                            Vos demandes d'assistance
-                            apparaîtront ici.
-
-                        </p>
-
-                    </div>
-
-                    `;
+        return;
+    }
 
 
-                return;
+    container.innerHTML =
+        transactions.map(
+            createTransactionHtml
+        ).join("");
 
-            }
-
-
-            container.innerHTML =
-                tickets.slice()
-                    .reverse()
-                    .map(
-                        function (ticket) {
-
-                            return `
-
-                            <article class="ticket-item">
-
-                                <div class="ticket-header">
-
-                                    <strong>
-
-                                        ${ticket.subject}
-
-                                    </strong>
+}
 
 
-                                    <span class="
-                                    ticket-status
-                                    ${
-                                        ticket.status ||
-                                        "open"
-                                    }
-                                    ">
+document
+    .querySelectorAll(
+        "[data-history-filter]"
+    )
+    .forEach(
+        button => {
 
-                                        ${
-                                            ticket.status ===
-                                            "answered"
-                                                ? "Répondu"
-                                                : "Ouvert"
-                                        }
+            button.addEventListener(
+                "click",
+                function () {
 
-                                    </span>
-
-                                </div>
-
-
-                                <p>
-
-                                    ${ticket.message}
-
-                                </p>
+                    document
+                        .querySelectorAll(
+                            "[data-history-filter]"
+                        )
+                        .forEach(
+                            item =>
+                                item.classList.remove(
+                                    "active"
+                                )
+                        );
 
 
-                                <small>
-
-                                    ${formatDate(
-                                        ticket.createdAt
-                                    )}
-
-                                </small>
-
-
-                                ${
-                                    ticket.adminReply
-                                        ? `
-
-                                        <div class="admin-ticket-reply">
-
-                                            <strong>
-
-                                                Réponse de l'administration
-
-                                            </strong>
-
-
-                                            <p>
-
-                                                ${ticket.adminReply}
-
-                                            </p>
-
-                                        </div>
-
-                                        `
-                                        : ""
-                                }
-
-                            </article>
-
-                            `;
-
-                        }
-                    ).join(
-                        ""
+                    this.classList.add(
+                        "active"
                     );
 
-        }
+
+                    historyFilter =
+                        this.dataset
+                            .historyFilter;
 
 
-        /* =========================================
-           TRANSACTIONS PUBLIQUES
-
-           Affichage uniquement des dépôts.
-        ========================================= */
-
-        function renderPublicTransactions() {
-
-            const users =
-                getUsers();
-
-
-            const deposits =
-                [];
-
-
-            users.forEach(
-                function (user) {
-
-                    (
-                        user.transactions ||
-                        []
-                    ).forEach(
-                        function (transaction) {
-
-                            if (
-                                transaction.type ===
-                                "deposit" &&
-                                transaction.status ===
-                                "approved"
-                            ) {
-
-                                deposits.push(
-                                    {
-
-                                        phone:
-                                            user.phone,
-
-                                        amount:
-                                            transaction.amount,
-
-                                        createdAt:
-                                            transaction.createdAt
-
-                                    }
-                                );
-
-                            }
-
-                        }
-                    );
+                    renderHistory();
 
                 }
             );
 
-
-            const examples = [
-
-                {
-                    phone: "0700002056",
-                    amount: 800000
-                },
-
-                {
-                    phone: "0500004821",
-                    amount: 200000
-                },
-
-                {
-                    phone: "0100007412",
-                    amount: 100000
-                }
-
-            ];
-
-
-            const data =
-                deposits.length > 0
-                    ? deposits
-                    : examples;
-
-
-            const ticker =
-                document.getElementById(
-                    "tickerContent"
-                );
-
-
-            ticker.innerHTML =
-                data.map(
-                    function (item) {
-
-                        const phone =
-                            String(
-                                item.phone ||
-                                ""
-                            );
-
-
-                        const visible =
-                            phone.slice(
-                                -4
-                            );
-
-
-                        return `
-
-                        <span class="ticker-item">
-
-                            <i class="fa-solid fa-circle-check"></i>
-
-                            *****${visible}
-
-                            a rechargé
-
-                            <strong>
-
-                                ${formatFCFA(
-                                    item.amount
-                                )}
-
-                            </strong>
-
-                        </span>
-
-                        `;
-
-                    }
-                ).join(
-                    ""
-                );
-
         }
+    );
 
 
-        /* =========================================
-           DECONNEXION
-        ========================================= */
+/* =====================================================
+   PARRAINAGE
+===================================================== */
 
-        document.getElementById(
-            "logoutButton"
-        ).addEventListener(
-            "click",
-            function () {
+function renderReferral() {
 
-                logoutUser();
+    refreshCurrentUser();
 
 
-                window.location.href =
-                    "login.html";
+    const code =
+        currentUser.referralCode ||
+        "---";
 
-            }
+
+    document.getElementById(
+        "referralCode"
+    ).textContent =
+        code;
+
+
+    document.getElementById(
+        "profileReferralCode"
+    ).textContent =
+        code;
+
+
+    const baseUrl =
+        window.location.href
+            .split("/")
+            .slice(0, -1)
+            .join("/");
+
+
+    document.getElementById(
+        "referralLink"
+    ).value =
+        baseUrl +
+        "/register.html?ref=" +
+        encodeURIComponent(
+            code
         );
 
+}
 
-        /* =========================================
-           PROFIL RACCOURCI
-        ========================================= */
 
-        document.getElementById(
-            "profileShortcut"
-        ).addEventListener(
-            "click",
-            function () {
+async function copyText(
+    text
+) {
 
-                showSection(
-                    "profile"
-                );
+    try {
 
-            }
+        await navigator.clipboard
+            .writeText(text);
+
+        alert(
+            "Copié avec succès."
         );
 
+    } catch (error) {
 
-        /* =========================================
-           RAFRAICHISSEMENT
-        ========================================= */
+        alert(
+            "Impossible de copier automatiquement."
+        );
+    }
 
-        function refreshDashboard() {
-
-            setUserInformation();
-
-            updateStatistics();
-
-            renderPacks();
-
-            renderInvestments();
-
-            renderHistory();
-
-            renderReferrals();
-
-            renderTickets();
-
-            renderPublicTransactions();
-
-        }
+}
 
 
-        /* =========================================
-           LANCEMENT
-        ========================================= */
+document.getElementById(
+    "copyReferralCode"
+).addEventListener(
+    "click",
+    function () {
 
-        refreshDashboard();
-
+        copyText(
+            document.getElementById(
+                "referralCode"
+            ).textContent
+        );
 
     }
 );
+
+
+document.getElementById(
+    "copyReferralLink"
+).addEventListener(
+    "click",
+    function () {
+
+        copyText(
+            document.getElementById(
+                "referralLink"
+            ).value
+        );
+
+    }
+);
+
+
+/* =====================================================
+   ASSISTANCE
+===================================================== */
+
+document.getElementById(
+    "supportForm"
+).addEventListener(
+    "submit",
+    function (event) {
+
+        event.preventDefault();
+
+
+        const subject =
+            document.getElementById(
+                "supportSubject"
+            ).value.trim();
+
+
+        const message =
+            document.getElementById(
+                "supportText"
+            ).value.trim();
+
+
+        const messageBox =
+            document.getElementById(
+                "supportMessage"
+            );
+
+
+        const result =
+            createSupportTicket(
+                subject,
+                message
+            );
+
+
+        messageBox.textContent =
+            result.message;
+
+
+        messageBox.className =
+            "form-message " +
+            (
+                result.success
+                    ? "success"
+                    : "error"
+            );
+
+
+        if (result.success) {
+
+            this.reset();
+
+            refreshCurrentUser();
+
+            renderTickets();
+        }
+
+    }
+);
+
+
+function renderTickets() {
+
+    refreshCurrentUser();
+
+
+    const container =
+        document.getElementById(
+            "ticketsList"
+        );
+
+
+    const tickets =
+        Array.isArray(
+            currentUser.tickets
+        )
+            ? currentUser.tickets
+            : [];
+
+
+    if (!tickets.length) {
+
+        container.innerHTML = `
+
+            <div class="empty-state">
+
+                <i class="fa-solid fa-headset"></i>
+
+                <h3>
+                    Aucune demande
+                </h3>
+
+                <p>
+                    Vos demandes d'assistance
+                    apparaîtront ici.
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML =
+        tickets.map(
+            ticket => `
+
+                <article class="ticket-item">
+
+                    <div class="ticket-header">
+
+                        <div>
+
+                            <strong>
+                                ${escapeHtml(
+                                    ticket.subject
+                                )}
+                            </strong>
+
+                            <small>
+                                ${formatDateSafe(
+                                    ticket.createdAt
+                                )}
+                            </small>
+
+                        </div>
+
+
+                        <span
+                            class="ticket-status ${ticket.status}">
+
+                            ${ticket.status === "answered"
+                                ? "Répondu"
+                                : "Ouvert"}
+
+                        </span>
+
+                    </div>
+
+
+                    <p>
+                        ${escapeHtml(
+                            ticket.message
+                        )}
+                    </p>
+
+
+                    ${ticket.adminReply
+                        ? `
+
+                        <div class="admin-ticket-reply">
+
+                            <strong>
+                                Réponse de l'administration
+                            </strong>
+
+                            <p>
+                                ${escapeHtml(
+                                    ticket.adminReply
+                                )}
+                            </p>
+
+                        </div>
+
+                        `
+                        : ""
+                    }
+
+                </article>
+
+            `
+        ).join("");
+
+}
+
+
+/* =====================================================
+   PROFIL
+===================================================== */
+
+function renderProfile() {
+
+    refreshCurrentUser();
+
+
+    const name =
+        currentUser.fullName ||
+        currentUser.name ||
+        "Utilisateur";
+
+
+    const initials =
+        getInitials(name);
+
+
+    document.getElementById(
+        "profileAvatar"
+    ).textContent =
+        initials;
+
+
+    document.getElementById(
+        "profileName"
+    ).textContent =
+        name;
+
+
+    document.getElementById(
+        "profilePhone"
+    ).textContent =
+        currentUser.phone || "---";
+
+
+    document.getElementById(
+        "profileFullName"
+    ).textContent =
+        name;
+
+
+    document.getElementById(
+        "profileDetailPhone"
+    ).textContent =
+        currentUser.phone || "---";
+
+
+    document.getElementById(
+        "profileReferralCode"
+    ).textContent =
+        currentUser.referralCode ||
+        "---";
+
+
+    document.getElementById(
+        "profileCreationDate"
+    ).textContent =
+        formatDateSafe(
+            currentUser.createdAt
+        );
+
+}
+
+
+/* =====================================================
+   DECONNEXION
+===================================================== */
+
+function performLogout() {
+
+    const confirmed =
+        window.confirm(
+            "Voulez-vous vraiment vous déconnecter de Housing's YQD ?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    logoutUser();
+
+
+    window.location.replace(
+        "login.html"
+    );
+}
+
+
+document.getElementById(
+    "logoutButton"
+).addEventListener(
+    "click",
+    performLogout
+);
+
+
+document.getElementById(
+    "profileLogoutButton"
+).addEventListener(
+    "click",
+    performLogout
+);
+
+
+/* =====================================================
+   INITIALISATION
+===================================================== */
+
+function initializeDashboard() {
+
+    renderUserIdentity();
+
+    renderPacks();
+
+    renderOverview();
+
+    renderInvestments();
+
+    renderHistory();
+
+    renderReferral();
+
+    renderTickets();
+
+    renderProfile();
+
+
+    document.getElementById(
+        "withdrawPhone"
+    ).value =
+        currentUser.phone || "";
+
+}
+
+
+initializeDashboard();
 
 </script>
 
