@@ -5,13 +5,12 @@
    SUPABASE CLIENT - V1
    ============================================================
 
-   Ce fichier contient UNIQUEMENT la connexion publique
-   à Supabase et les fonctions d'authentification/profil.
+   Connexion publique sécurisée à Supabase.
 
    IMPORTANT :
-   - SUPABASE_URL : autorisé côté navigateur
-   - PUBLISHABLE KEY : autorisée côté navigateur
-   - SERVICE_ROLE / SECRET KEY : INTERDITES ici
+   - Project URL : autorisée côté navigateur
+   - Publishable Key : autorisée côté navigateur
+   - service_role / sb_secret_ : JAMAIS dans ce fichier
    ============================================================ */
 
 
@@ -21,24 +20,9 @@
 
 const HYQD_SUPABASE_CONFIG = Object.freeze({
 
-    /*
-     * Exemple :
-     * https://abcdefghijk.supabase.co
-     */
-    URL: "VOTRE_URL_SUPABASE_ICI",
+    URL: "https://qcvagkialoztluqxpmcq.supabase.co",
 
-    /*
-     * Utiliser UNIQUEMENT la Publishable Key.
-     *
-     * Elle commence généralement par :
-     * sb_publishable_...
-     *
-     * Ne jamais mettre ici :
-     * - service_role
-     * - sb_secret_
-     * - mot de passe PostgreSQL
-     */
-    PUBLISHABLE_KEY: "VOTRE_CLE_PUBLISHABLE_ICI",
+    PUBLISHABLE_KEY: "sb_publishable_J_fhucIX6-Fdals6lVQvvA_yCmUkwVy",
 
     APP_NAME: "Housing's YQD",
 
@@ -54,7 +38,7 @@ const HYQD_SUPABASE_CONFIG = Object.freeze({
 
 
 /* ============================================================
-   2. VERIFICATIONS INITIALES
+   2. VERIFICATION DE LA CONFIGURATION
    ============================================================ */
 
 function hyqdSupabaseConfigurationIsValid() {
@@ -70,26 +54,20 @@ function hyqdSupabaseConfigurationIsValid() {
         ).trim();
 
 
-    if (
-        !url ||
-        url === "VOTRE_URL_SUPABASE_ICI"
-    ) {
+    if (!url) {
 
         console.error(
-            "[Housing's YQD] URL Supabase non configurée."
+            "[Housing's YQD] URL Supabase absente."
         );
 
         return false;
     }
 
 
-    if (
-        !key ||
-        key === "VOTRE_CLE_PUBLISHABLE_ICI"
-    ) {
+    if (!key) {
 
         console.error(
-            "[Housing's YQD] Publishable Key Supabase non configurée."
+            "[Housing's YQD] Publishable Key absente."
         );
 
         return false;
@@ -178,6 +156,10 @@ function initializeHousingSupabase() {
                 }
 
             );
+
+
+        window.hyqdSupabase =
+            hyqdSupabase;
 
 
         console.info(
@@ -276,31 +258,9 @@ function hyqdNormalizePhone(value) {
 }
 
 
-function hyqdGenerateFallbackReferralCode(
-    userId = ""
-) {
-
-    const base =
-        String(userId || "")
-            .replace(/-/g, "")
-            .substring(0, 8)
-            .toUpperCase();
-
-
-    return (
-        base ||
-        Math.random()
-            .toString(36)
-            .substring(2, 10)
-            .toUpperCase()
-    );
-}
-
-
 function hyqdSafeMessage(
     error,
-    fallback =
-        "Une erreur est survenue."
+    fallback = "Une erreur est survenue."
 ) {
 
     if (!error) {
@@ -318,10 +278,7 @@ function hyqdSafeMessage(
         ).trim();
 
 
-    return (
-        message ||
-        fallback
-    );
+    return message || fallback;
 }
 
 
@@ -338,10 +295,14 @@ async function getSupabaseSession() {
     if (!client) {
 
         return {
+
             success: false,
+
             session: null,
+
             message:
-                "Supabase n'est pas configuré."
+                "Supabase n'est pas disponible."
+
         };
     }
 
@@ -358,36 +319,52 @@ async function getSupabaseSession() {
         if (error) {
 
             return {
+
                 success: false,
+
                 session: null,
+
                 message:
                     hyqdSafeMessage(
                         error,
                         "Impossible de lire la session."
                     )
+
             };
         }
 
 
         return {
+
             success: true,
+
             session:
                 data?.session || null
+
         };
 
     } catch (error) {
 
         console.error(error);
 
+
         return {
+
             success: false,
+
             session: null,
+
             message:
                 "Impossible de vérifier la session."
+
         };
     }
 }
 
+
+/* ============================================================
+   6. UTILISATEUR AUTHENTIFIE
+   ============================================================ */
 
 async function getSupabaseUser() {
 
@@ -398,20 +375,19 @@ async function getSupabaseUser() {
     if (!client) {
 
         return {
+
             success: false,
+
             user: null,
+
             message:
-                "Supabase n'est pas configuré."
+                "Supabase n'est pas disponible."
+
         };
     }
 
 
     try {
-
-        /*
-         * getUser() valide réellement
-         * l'utilisateur auprès de Supabase Auth.
-         */
 
         const {
             data,
@@ -423,39 +399,51 @@ async function getSupabaseUser() {
         if (error) {
 
             return {
+
                 success: false,
+
                 user: null,
+
                 message:
                     hyqdSafeMessage(
                         error,
                         "Session utilisateur invalide."
                     )
+
             };
         }
 
 
         return {
+
             success: true,
+
             user:
                 data?.user || null
+
         };
 
     } catch (error) {
 
         console.error(error);
 
+
         return {
+
             success: false,
+
             user: null,
+
             message:
                 "Impossible de récupérer l'utilisateur."
+
         };
     }
 }
 
 
 /* ============================================================
-   6. INSCRIPTION
+   7. INSCRIPTION
    ============================================================ */
 
 async function registerSupabaseUser({
@@ -473,9 +461,12 @@ async function registerSupabaseUser({
     if (!client) {
 
         return {
+
             success: false,
+
             message:
-                "La connexion Supabase n'est pas configurée."
+                "La connexion Supabase n'est pas disponible."
+
         };
     }
 
@@ -503,9 +494,12 @@ async function registerSupabaseUser({
     ) {
 
         return {
+
             success: false,
+
             message:
                 "Veuillez saisir votre nom complet."
+
         };
     }
 
@@ -516,9 +510,12 @@ async function registerSupabaseUser({
     ) {
 
         return {
+
             success: false,
+
             message:
                 "Veuillez saisir une adresse email valide."
+
         };
     }
 
@@ -529,9 +526,12 @@ async function registerSupabaseUser({
     ) {
 
         return {
+
             success: false,
+
             message:
                 "Veuillez saisir un numéro ivoirien valide précédé de +225."
+
         };
     }
 
@@ -541,27 +541,17 @@ async function registerSupabaseUser({
     ) {
 
         return {
+
             success: false,
+
             message:
                 "Le mot de passe doit contenir au moins 8 caractères."
+
         };
     }
 
 
     try {
-
-        /*
-         * Si un code de parrainage est fourni,
-         * on vérifie qu'il existe AVANT l'inscription.
-         *
-         * ATTENTION :
-         * avec les policies actuelles, la recherche publique
-         * de profils n'est volontairement pas autorisée.
-         *
-         * Nous traiterons donc définitivement le parrainage
-         * côté serveur dans l'étape suivante.
-         */
-
 
         const {
             data,
@@ -595,12 +585,15 @@ async function registerSupabaseUser({
         if (error) {
 
             return {
+
                 success: false,
+
                 message:
                     hyqdSafeMessage(
                         error,
                         "Inscription impossible."
                     )
+
             };
         }
 
@@ -615,21 +608,14 @@ async function registerSupabaseUser({
         if (!user) {
 
             return {
+
                 success: false,
+
                 message:
                     "Le compte n'a pas pu être créé."
+
             };
         }
-
-
-        /*
-         * Le trigger SQL handle_new_user()
-         * crée automatiquement :
-         *
-         * - profiles
-         * - user_roles
-         * - referral_code
-         */
 
 
         return {
@@ -661,16 +647,19 @@ async function registerSupabaseUser({
 
 
         return {
+
             success: false,
+
             message:
                 "Impossible de créer le compte pour le moment."
+
         };
     }
 }
 
 
 /* ============================================================
-   7. CONNEXION
+   8. CONNEXION
    ============================================================ */
 
 async function loginSupabaseUser(
@@ -685,9 +674,12 @@ async function loginSupabaseUser(
     if (!client) {
 
         return {
+
             success: false,
+
             message:
-                "La connexion Supabase n'est pas configurée."
+                "La connexion Supabase n'est pas disponible."
+
         };
     }
 
@@ -702,9 +694,12 @@ async function loginSupabaseUser(
     if (!email) {
 
         return {
+
             success: false,
+
             message:
                 "Veuillez saisir votre adresse email."
+
         };
     }
 
@@ -712,9 +707,12 @@ async function loginSupabaseUser(
     if (!password) {
 
         return {
+
             success: false,
+
             message:
                 "Veuillez saisir votre mot de passe."
+
         };
     }
 
@@ -770,8 +768,11 @@ async function loginSupabaseUser(
 
 
             return {
+
                 success: false,
+
                 message
+
             };
         }
 
@@ -782,17 +783,15 @@ async function loginSupabaseUser(
         ) {
 
             return {
+
                 success: false,
+
                 message:
                     "La session n'a pas pu être créée."
+
             };
         }
 
-
-        /*
-         * Vérification supplémentaire :
-         * profil encore actif ?
-         */
 
         const profileResult =
             await getSupabaseProfile(
@@ -810,9 +809,12 @@ async function loginSupabaseUser(
 
 
             return {
+
                 success: false,
+
                 message:
                     "Ce compte est désactivé. Contactez l'assistance."
+
             };
         }
 
@@ -844,16 +846,19 @@ async function loginSupabaseUser(
 
 
         return {
+
             success: false,
+
             message:
                 "Impossible de vous connecter pour le moment."
+
         };
     }
 }
 
 
 /* ============================================================
-   8. DECONNEXION
+   9. DECONNEXION
    ============================================================ */
 
 async function logoutSupabaseUser() {
@@ -865,9 +870,12 @@ async function logoutSupabaseUser() {
     if (!client) {
 
         return {
+
             success: false,
+
             message:
-                "Supabase n'est pas configuré."
+                "Supabase n'est pas disponible."
+
         };
     }
 
@@ -883,20 +891,26 @@ async function logoutSupabaseUser() {
         if (error) {
 
             return {
+
                 success: false,
+
                 message:
                     hyqdSafeMessage(
                         error,
                         "Déconnexion impossible."
                     )
+
             };
         }
 
 
         return {
+
             success: true,
+
             message:
                 "Déconnexion réussie."
+
         };
 
     } catch (error) {
@@ -905,16 +919,19 @@ async function logoutSupabaseUser() {
 
 
         return {
+
             success: false,
+
             message:
                 "Une erreur est survenue pendant la déconnexion."
+
         };
     }
 }
 
 
 /* ============================================================
-   9. PROFIL
+   10. PROFIL UTILISATEUR
    ============================================================ */
 
 async function getSupabaseProfile(
@@ -928,10 +945,14 @@ async function getSupabaseProfile(
     if (!client) {
 
         return {
+
             success: false,
+
             profile: null,
+
             message:
-                "Supabase n'est pas configuré."
+                "Supabase n'est pas disponible."
+
         };
     }
 
@@ -950,10 +971,14 @@ async function getSupabaseProfile(
             ) {
 
                 return {
+
                     success: false,
+
                     profile: null,
+
                     message:
                         "Utilisateur non connecté."
+
                 };
             }
 
@@ -995,20 +1020,27 @@ async function getSupabaseProfile(
         if (error) {
 
             return {
+
                 success: false,
+
                 profile: null,
+
                 message:
                     hyqdSafeMessage(
                         error,
                         "Impossible de charger le profil."
                     )
+
             };
         }
 
 
         return {
+
             success: true,
+
             profile: data
+
         };
 
     } catch (error) {
@@ -1017,17 +1049,21 @@ async function getSupabaseProfile(
 
 
         return {
+
             success: false,
+
             profile: null,
+
             message:
                 "Impossible de charger le profil."
+
         };
     }
 }
 
 
 /* ============================================================
-   10. MISE A JOUR DU PROFIL
+   11. MODIFICATION DU PROFIL
    ============================================================ */
 
 async function updateSupabaseProfile({
@@ -1042,9 +1078,12 @@ async function updateSupabaseProfile({
     if (!client) {
 
         return {
+
             success: false,
+
             message:
-                "Supabase n'est pas configuré."
+                "Supabase n'est pas disponible."
+
         };
     }
 
@@ -1059,9 +1098,12 @@ async function updateSupabaseProfile({
     ) {
 
         return {
+
             success: false,
+
             message:
                 "Vous devez être connecté."
+
         };
     }
 
@@ -1078,9 +1120,12 @@ async function updateSupabaseProfile({
     ) {
 
         return {
+
             success: false,
+
             message:
                 "Nom complet invalide."
+
         };
     }
 
@@ -1091,9 +1136,12 @@ async function updateSupabaseProfile({
     ) {
 
         return {
+
             success: false,
+
             message:
                 "Numéro de téléphone invalide."
+
         };
     }
 
@@ -1107,19 +1155,6 @@ async function updateSupabaseProfile({
             await client
                 .from("profiles")
                 .update({
-
-                    /*
-                     * On ne permet volontairement PAS
-                     * à cette fonction de modifier :
-                     *
-                     * balance
-                     * total_deposited
-                     * total_withdrawn
-                     * total_invested
-                     * total_referral_bonus
-                     * is_active
-                     * role
-                     */
 
                     full_name:
                         fullName,
@@ -1151,20 +1186,18 @@ async function updateSupabaseProfile({
         if (error) {
 
             return {
+
                 success: false,
+
                 message:
                     hyqdSafeMessage(
                         error,
                         "Impossible de modifier le profil."
                     )
+
             };
         }
 
-
-        /*
-         * On met aussi à jour les metadata Auth
-         * afin de conserver des informations cohérentes.
-         */
 
         await client.auth.updateUser({
 
@@ -1197,16 +1230,19 @@ async function updateSupabaseProfile({
 
 
         return {
+
             success: false,
+
             message:
                 "Impossible de modifier le profil."
+
         };
     }
 }
 
 
 /* ============================================================
-   11. ROLE UTILISATEUR
+   12. ROLE UTILISATEUR
    ============================================================ */
 
 async function getSupabaseCurrentUserRole() {
@@ -1218,8 +1254,11 @@ async function getSupabaseCurrentUserRole() {
     if (!client) {
 
         return {
+
             success: false,
+
             role: null
+
         };
     }
 
@@ -1234,10 +1273,14 @@ async function getSupabaseCurrentUserRole() {
     ) {
 
         return {
+
             success: false,
+
             role: null,
+
             message:
                 "Utilisateur non connecté."
+
         };
     }
 
@@ -1261,13 +1304,17 @@ async function getSupabaseCurrentUserRole() {
         if (error) {
 
             return {
+
                 success: false,
+
                 role: null,
+
                 message:
                     hyqdSafeMessage(
                         error,
                         "Impossible de vérifier le rôle."
                     )
+
             };
         }
 
@@ -1287,17 +1334,21 @@ async function getSupabaseCurrentUserRole() {
 
 
         return {
+
             success: false,
+
             role: null,
+
             message:
                 "Impossible de vérifier le rôle."
+
         };
     }
 }
 
 
 /* ============================================================
-   12. PROTECTION DES PAGES UTILISATEUR
+   13. PROTECTION DES PAGES UTILISATEUR
    ============================================================ */
 
 async function requireSupabaseAuth({
@@ -1331,7 +1382,7 @@ async function requireSupabaseAuth({
 
 
 /* ============================================================
-   13. PROTECTION ADMIN
+   14. PROTECTION ADMINISTRATEUR
    ============================================================ */
 
 async function requireSupabaseAdmin({
@@ -1389,7 +1440,7 @@ async function requireSupabaseAdmin({
 
 
 /* ============================================================
-   14. RESET MOT DE PASSE
+   15. DEMANDE DE REINITIALISATION DU MOT DE PASSE
    ============================================================ */
 
 async function requestSupabasePasswordReset(
@@ -1403,9 +1454,12 @@ async function requestSupabasePasswordReset(
     if (!client) {
 
         return {
+
             success: false,
+
             message:
-                "Supabase n'est pas configuré."
+                "Supabase n'est pas disponible."
+
         };
     }
 
@@ -1417,22 +1471,17 @@ async function requestSupabasePasswordReset(
     if (!email) {
 
         return {
+
             success: false,
+
             message:
                 "Veuillez saisir votre adresse email."
+
         };
     }
 
 
     try {
-
-        /*
-         * IMPORTANT :
-         *
-         * Le lien doit correspondre à une URL autorisée
-         * dans Supabase :
-         * Authentication > URL Configuration.
-         */
 
         const resetUrl =
             new URL(
@@ -1448,8 +1497,10 @@ async function requestSupabasePasswordReset(
                 .resetPasswordForEmail(
                     email,
                     {
+
                         redirectTo:
                             resetUrl
+
                     }
                 );
 
@@ -1457,20 +1508,26 @@ async function requestSupabasePasswordReset(
         if (error) {
 
             return {
+
                 success: false,
+
                 message:
                     hyqdSafeMessage(
                         error,
                         "Impossible d'envoyer l'email."
                     )
+
             };
         }
 
 
         return {
+
             success: true,
+
             message:
                 "Si cette adresse correspond à un compte, les instructions de réinitialisation ont été envoyées."
+
         };
 
     } catch (error) {
@@ -1479,16 +1536,19 @@ async function requestSupabasePasswordReset(
 
 
         return {
+
             success: false,
+
             message:
                 "Impossible d'envoyer la demande de réinitialisation."
+
         };
     }
 }
 
 
 /* ============================================================
-   15. NOUVEAU MOT DE PASSE
+   16. NOUVEAU MOT DE PASSE
    ============================================================ */
 
 async function updateSupabasePassword(
@@ -1502,9 +1562,12 @@ async function updateSupabasePassword(
     if (!client) {
 
         return {
+
             success: false,
+
             message:
-                "Supabase n'est pas configuré."
+                "Supabase n'est pas disponible."
+
         };
     }
 
@@ -1520,9 +1583,12 @@ async function updateSupabasePassword(
     ) {
 
         return {
+
             success: false,
+
             message:
                 "Le nouveau mot de passe doit contenir au moins 8 caractères."
+
         };
     }
 
@@ -1544,12 +1610,15 @@ async function updateSupabasePassword(
         if (error) {
 
             return {
+
                 success: false,
+
                 message:
                     hyqdSafeMessage(
                         error,
                         "Impossible de modifier le mot de passe."
                     )
+
             };
         }
 
@@ -1572,16 +1641,19 @@ async function updateSupabasePassword(
 
 
         return {
+
             success: false,
+
             message:
                 "Impossible de modifier le mot de passe."
+
         };
     }
 }
 
 
 /* ============================================================
-   16. PACKS
+   17. PACKS D'INVESTISSEMENT
    ============================================================ */
 
 async function getSupabaseInvestmentPacks() {
@@ -1593,8 +1665,11 @@ async function getSupabaseInvestmentPacks() {
     if (!client) {
 
         return {
+
             success: false,
+
             packs: []
+
         };
     }
 
@@ -1633,13 +1708,17 @@ async function getSupabaseInvestmentPacks() {
         if (error) {
 
             return {
+
                 success: false,
+
                 packs: [],
+
                 message:
                     hyqdSafeMessage(
                         error,
                         "Impossible de charger les packs."
                     )
+
             };
         }
 
@@ -1661,17 +1740,21 @@ async function getSupabaseInvestmentPacks() {
 
 
         return {
+
             success: false,
+
             packs: [],
+
             message:
                 "Impossible de charger les packs."
+
         };
     }
 }
 
 
 /* ============================================================
-   17. SURVEILLER LES CHANGEMENTS DE SESSION
+   18. SURVEILLANCE DE SESSION
    ============================================================ */
 
 function onHousingAuthStateChange(
@@ -1727,7 +1810,7 @@ function onHousingAuthStateChange(
 
 
 /* ============================================================
-   18. DIAGNOSTIC
+   19. TEST DE CONNEXION SUPABASE
    ============================================================ */
 
 async function testHousingSupabaseConnection() {
@@ -1739,9 +1822,12 @@ async function testHousingSupabaseConnection() {
     if (!client) {
 
         return {
+
             success: false,
+
             message:
                 "Configuration Supabase absente ou invalide."
+
         };
     }
 
@@ -1769,12 +1855,15 @@ async function testHousingSupabaseConnection() {
 
 
             return {
+
                 success: false,
+
                 message:
                     hyqdSafeMessage(
                         error,
                         "Connexion Supabase impossible."
                     )
+
             };
         }
 
@@ -1786,9 +1875,12 @@ async function testHousingSupabaseConnection() {
 
 
         return {
+
             success: true,
+
             message:
                 "Connexion Supabase opérationnelle."
+
         };
 
     } catch (error) {
@@ -1800,29 +1892,23 @@ async function testHousingSupabaseConnection() {
 
 
         return {
+
             success: false,
+
             message:
                 "Connexion Supabase impossible."
+
         };
     }
 }
 
 
 /* ============================================================
-   19. EXPORT GLOBAL
+   20. EXPORT GLOBAL
    ============================================================ */
-
-/*
- * Comme Housing's YQD fonctionne actuellement avec
- * plusieurs fichiers HTML classiques et sans bundler,
- * nous exposons les fonctions globalement.
- */
 
 window.HYQD_SUPABASE_CONFIG =
     HYQD_SUPABASE_CONFIG;
-
-window.hyqdSupabase =
-    hyqdSupabase;
 
 window.initializeHousingSupabase =
     initializeHousingSupabase;
@@ -1874,5 +1960,5 @@ window.testHousingSupabaseConnection =
 
 
 /* ============================================================
-   FIN SUPABASE.JS
+   FIN - HOUSING'S YQD SUPABASE.JS
    ============================================================ */
