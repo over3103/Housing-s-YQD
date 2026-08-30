@@ -2,27 +2,17 @@
 <html lang="fr">
 
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tableau de bord Housing's YQD">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <title>Tableau de bord | Housing's YQD</title>
 
-    <meta name="description"
-          content="Tableau de bord Housing's YQD">
-
-    <title>
-        Tableau de bord | Housing's YQD
-    </title>
-
-    <link rel="stylesheet"
-          href="style.css">
+    <link rel="stylesheet" href="style.css">
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
 </head>
-
 
 <body class="dashboard-body">
 
@@ -31,14 +21,10 @@
      SIDEBAR
 ===================================================== -->
 
-<aside class="dashboard-sidebar"
-       id="dashboardSidebar">
-
+<aside class="dashboard-sidebar" id="dashboardSidebar">
 
     <div class="sidebar-brand">
-
-        <a href="dashboard.html"
-           class="brand">
+        <a href="dashboard.html" class="brand">
 
             <div class="brand-logo">
                 <i class="fa-solid fa-building"></i>
@@ -50,19 +36,16 @@
             </div>
 
         </a>
-
     </div>
 
 
     <div class="sidebar-user">
 
-        <div class="sidebar-avatar"
-             id="sidebarAvatar">
+        <div class="sidebar-avatar" id="sidebarAvatar">
             HY
         </div>
 
         <div>
-
             <strong id="sidebarUserName">
                 Utilisateur
             </strong>
@@ -70,7 +53,6 @@
             <span id="sidebarUserPhone">
                 ---
             </span>
-
         </div>
 
     </div>
@@ -78,160 +60,115 @@
 
     <nav class="sidebar-nav">
 
-
-        <button
-            type="button"
-            class="sidebar-link active"
-            data-section="overview">
+        <button type="button"
+                class="sidebar-link active"
+                data-section="overview">
 
             <i class="fa-solid fa-house"></i>
-
-            <span>
-                Tableau de bord
-            </span>
+            <span>Tableau de bord</span>
 
         </button>
 
 
-        <button
-            type="button"
-            class="sidebar-link"
-            data-section="packs">
+        <button type="button"
+                class="sidebar-link"
+                data-section="packs">
 
             <i class="fa-solid fa-building-circle-check"></i>
-
-            <span>
-                Investir
-            </span>
+            <span>Investir</span>
 
         </button>
 
 
-        <button
-            type="button"
-            class="sidebar-link"
-            data-section="investments">
+        <button type="button"
+                class="sidebar-link"
+                data-section="investments">
 
             <i class="fa-solid fa-chart-line"></i>
-
-            <span>
-                Mes investissements
-            </span>
+            <span>Mes investissements</span>
 
         </button>
 
 
-        <button
-            type="button"
-            class="sidebar-link"
-            data-section="deposit">
+        <button type="button"
+                class="sidebar-link"
+                data-section="deposit">
 
             <i class="fa-solid fa-circle-plus"></i>
-
-            <span>
-                Dépôt
-            </span>
+            <span>Dépôt</span>
 
         </button>
 
 
-        <button
-            type="button"
-            class="sidebar-link"
-            data-section="withdraw">
+        <button type="button"
+                class="sidebar-link"
+                data-section="withdraw">
 
             <i class="fa-solid fa-money-bill-transfer"></i>
-
-            <span>
-                Retrait
-            </span>
+            <span>Retrait</span>
 
         </button>
 
 
-        <button
-            type="button"
-            class="sidebar-link"
-            data-section="history">
+        <button type="button"
+                class="sidebar-link"
+                data-section="history">
 
             <i class="fa-solid fa-clock-rotate-left"></i>
-
-            <span>
-                Historique
-            </span>
+            <span>Historique</span>
 
         </button>
 
 
-        <button
-            type="button"
-            class="sidebar-link"
-            data-section="referral">
+        <button type="button"
+                class="sidebar-link"
+                data-section="referral">
 
             <i class="fa-solid fa-user-group"></i>
-
-            <span>
-                Parrainage
-            </span>
+            <span>Parrainage</span>
 
         </button>
 
 
-        <button
-            type="button"
-            class="sidebar-link"
-            data-section="support">
+        <button type="button"
+                class="sidebar-link"
+                data-section="support">
 
             <i class="fa-solid fa-headset"></i>
-
-            <span>
-                Assistance
-            </span>
+            <span>Assistance</span>
 
         </button>
 
 
-        <button
-            type="button"
-            class="sidebar-link"
-            data-section="profile">
+        <button type="button"
+                class="sidebar-link"
+                data-section="profile">
 
             <i class="fa-solid fa-user"></i>
-
-            <span>
-                Mon profil
-            </span>
+            <span>Mon profil</span>
 
         </button>
-
 
     </nav>
 
 
     <div class="sidebar-footer">
 
-        <button
-            type="button"
-            class="sidebar-link logout-link"
-            id="logoutButton">
+        <button type="button"
+                class="sidebar-link logout-link"
+                id="logoutButton">
 
             <i class="fa-solid fa-right-from-bracket"></i>
-
-            <span>
-                Déconnexion
-            </span>
+            <span>Déconnexion</span>
 
         </button>
 
     </div>
 
-
 </aside>
 
 
-<div class="dashboard-overlay"
-     id="dashboardOverlay">
-</div>
+<div class="dashboard-overlay" id="dashboardOverlay"></div>
 
 
 <!-- =====================================================
@@ -241,25 +178,19 @@
 <main class="dashboard-main">
 
 
-<!-- TOP BAR -->
-
 <header class="dashboard-topbar">
-
 
     <div class="topbar-left">
 
-        <button
-            type="button"
-            class="mobile-dashboard-menu"
-            id="mobileDashboardMenu">
+        <button type="button"
+                class="mobile-dashboard-menu"
+                id="mobileDashboardMenu">
 
             <i class="fa-solid fa-bars"></i>
 
         </button>
 
-
         <div>
-
             <span class="page-eyebrow">
                 HOUSING'S YQD
             </span>
@@ -267,7 +198,6 @@
             <h1 id="pageTitle">
                 Tableau de bord
             </h1>
-
         </div>
 
     </div>
@@ -275,22 +205,14 @@
 
     <div class="topbar-right">
 
-        <a href="index.html"
-           class="topbar-home">
-
+        <a href="index.html" class="topbar-home">
             <i class="fa-solid fa-house"></i>
-
-            <span>
-                Accueil
-            </span>
-
+            <span>Accueil</span>
         </a>
 
-
-        <button
-            type="button"
-            class="topbar-profile"
-            data-section="profile">
+        <button type="button"
+                class="topbar-profile"
+                data-section="profile">
 
             <div id="topbarAvatar">
                 HY
@@ -300,7 +222,6 @@
 
     </div>
 
-
 </header>
 
 
@@ -308,9 +229,8 @@
      OVERVIEW
 ===================================================== -->
 
-<section
-    class="dashboard-section active"
-    id="section-overview">
+<section class="dashboard-section active"
+         id="section-overview">
 
 
     <div class="welcome-banner">
@@ -333,15 +253,12 @@
 
         </div>
 
-
         <div class="welcome-icon">
             <i class="fa-solid fa-building-columns"></i>
         </div>
 
     </div>
 
-
-    <!-- SOLDE -->
 
     <div class="balance-card">
 
@@ -364,25 +281,21 @@
 
         <div class="balance-actions">
 
-            <button
-                type="button"
-                class="dashboard-action-btn"
-                data-section="deposit">
+            <button type="button"
+                    class="dashboard-action-btn"
+                    data-section="deposit">
 
                 <i class="fa-solid fa-plus"></i>
-
                 Recharger
 
             </button>
 
 
-            <button
-                type="button"
-                class="dashboard-action-btn withdraw-action"
-                data-section="withdraw">
+            <button type="button"
+                    class="dashboard-action-btn withdraw-action"
+                    data-section="withdraw">
 
                 <i class="fa-solid fa-arrow-up"></i>
-
                 Retirer
 
             </button>
@@ -392,10 +305,7 @@
     </div>
 
 
-    <!-- STATISTIQUES -->
-
     <div class="dashboard-stats">
-
 
         <article class="dashboard-stat-card">
 
@@ -404,15 +314,11 @@
             </div>
 
             <div>
-
-                <span>
-                    Total déposé
-                </span>
+                <span>Total déposé</span>
 
                 <strong id="totalDeposited">
                     0 FCFA
                 </strong>
-
             </div>
 
         </article>
@@ -425,15 +331,11 @@
             </div>
 
             <div>
-
-                <span>
-                    Total retiré
-                </span>
+                <span>Total retiré</span>
 
                 <strong id="totalWithdrawn">
                     0 FCFA
                 </strong>
-
             </div>
 
         </article>
@@ -446,15 +348,11 @@
             </div>
 
             <div>
-
-                <span>
-                    Total investi
-                </span>
+                <span>Total investi</span>
 
                 <strong id="totalInvested">
                     0 FCFA
                 </strong>
-
             </div>
 
         </article>
@@ -467,31 +365,25 @@
             </div>
 
             <div>
-
-                <span>
-                    Investissements actifs
-                </span>
+                <span>Investissements actifs</span>
 
                 <strong id="activeInvestmentCount">
                     0
                 </strong>
-
             </div>
 
         </article>
 
-
     </div>
 
 
-    <!-- RECHARGEMENTS DÉFILANTS -->
+    <!-- RECHARGEMENTS ACTUELS CONSERVÉS -->
 
     <div class="dashboard-panel">
 
         <div class="panel-header">
 
             <div>
-
                 <span class="panel-eyebrow">
                     ACTIVITÉ
                 </span>
@@ -499,7 +391,6 @@
                 <h3>
                     Rechargements récents
                 </h3>
-
             </div>
 
         </div>
@@ -537,14 +428,11 @@
     </div>
 
 
-    <!-- DERNIÈRES OPÉRATIONS -->
-
     <div class="dashboard-panel">
 
         <div class="panel-header">
 
             <div>
-
                 <span class="panel-eyebrow">
                     ACTIVITÉ DU COMPTE
                 </span>
@@ -552,14 +440,11 @@
                 <h3>
                     Dernières opérations
                 </h3>
-
             </div>
 
-
-            <button
-                type="button"
-                class="panel-link"
-                data-section="history">
+            <button type="button"
+                    class="panel-link"
+                    data-section="history">
 
                 Voir tout
 
@@ -567,12 +452,9 @@
 
         </div>
 
-
-        <div id="recentTransactions">
-        </div>
+        <div id="recentTransactions"></div>
 
     </div>
-
 
 </section>
 
@@ -581,9 +463,8 @@
      PACKS
 ===================================================== -->
 
-<section
-    class="dashboard-section"
-    id="section-packs">
+<section class="dashboard-section"
+         id="section-packs">
 
 
     <div class="section-intro">
@@ -597,9 +478,9 @@
         </h2>
 
         <p>
-            Sélectionnez l'offre correspondant à votre
-            budget. La durée de chaque investissement
-            est de 180 jours.
+            Sélectionnez le pack correspondant à votre budget.
+            Chaque investissement possède une durée de
+            180 jours.
         </p>
 
     </div>
@@ -609,7 +490,6 @@
          id="packsGrid">
     </div>
 
-
 </section>
 
 
@@ -617,10 +497,8 @@
      INVESTISSEMENTS
 ===================================================== -->
 
-<section
-    class="dashboard-section"
-    id="section-investments">
-
+<section class="dashboard-section"
+         id="section-investments">
 
     <div class="section-intro">
 
@@ -633,17 +511,16 @@
         </h2>
 
         <p>
-            Consultez les investissements actuellement
-            enregistrés sur votre compte.
+            Consultez vos investissements actifs,
+            leur gain journalier et leur gain total
+            prévu sur 180 jours.
         </p>
 
     </div>
 
-
     <div class="investment-list"
          id="investmentList">
     </div>
-
 
 </section>
 
@@ -652,10 +529,8 @@
      DEPOT
 ===================================================== -->
 
-<section
-    class="dashboard-section"
-    id="section-deposit">
-
+<section class="dashboard-section"
+         id="section-deposit">
 
     <div class="section-intro">
 
@@ -669,8 +544,8 @@
 
         <p>
             Envoyez une demande de dépôt.
-            Elle apparaîtra ensuite dans l'espace
-            administrateur pour validation.
+            Elle apparaîtra dans l'espace administrateur
+            pour validation.
         </p>
 
     </div>
@@ -678,13 +553,11 @@
 
     <div class="dashboard-form-layout">
 
-
         <div class="dashboard-form-card">
 
             <h3>
                 Nouvelle demande
             </h3>
-
 
             <div id="depositMessage"
                  class="form-message">
@@ -693,20 +566,18 @@
 
             <form id="depositForm">
 
-
                 <div class="form-group">
 
                     <label for="depositAmount">
                         Montant
                     </label>
 
-                    <input
-                        type="number"
-                        id="depositAmount"
-                        class="form-control"
-                        min="1000"
-                        placeholder="Exemple : 10000"
-                        required>
+                    <input type="number"
+                           id="depositAmount"
+                           class="form-control"
+                           min="1000"
+                           placeholder="Exemple : 10000"
+                           required>
 
                 </div>
 
@@ -717,10 +588,9 @@
                         Moyen de paiement
                     </label>
 
-                    <select
-                        id="depositMethod"
-                        class="form-control"
-                        required>
+                    <select id="depositMethod"
+                            class="form-control"
+                            required>
 
                         <option value="">
                             Sélectionner
@@ -753,26 +623,22 @@
                         Référence de transaction
                     </label>
 
-                    <input
-                        type="text"
-                        id="depositReference"
-                        class="form-control"
-                        placeholder="Référence du paiement"
-                        required>
+                    <input type="text"
+                           id="depositReference"
+                           class="form-control"
+                           placeholder="Référence du paiement"
+                           required>
 
                 </div>
 
 
-                <button
-                    type="submit"
-                    class="form-submit">
+                <button type="submit"
+                        class="form-submit">
 
                     <i class="fa-solid fa-paper-plane"></i>
-
                     Envoyer la demande
 
                 </button>
-
 
             </form>
 
@@ -791,15 +657,12 @@
 
             <p>
                 La demande reste en attente tant qu'elle
-                n'a pas été traitée dans l'espace
-                administrateur.
+                n'a pas été traitée dans l'espace administrateur.
             </p>
 
         </div>
 
-
     </div>
-
 
 </section>
 
@@ -808,10 +671,8 @@
      RETRAIT
 ===================================================== -->
 
-<section
-    class="dashboard-section"
-    id="section-withdraw">
-
+<section class="dashboard-section"
+         id="section-withdraw">
 
     <div class="section-intro">
 
@@ -833,13 +694,11 @@
 
     <div class="dashboard-form-layout">
 
-
         <div class="dashboard-form-card">
 
             <h3>
                 Nouvelle demande
             </h3>
-
 
             <div id="withdrawMessage"
                  class="form-message">
@@ -848,20 +707,18 @@
 
             <form id="withdrawForm">
 
-
                 <div class="form-group">
 
                     <label for="withdrawAmount">
                         Montant
                     </label>
 
-                    <input
-                        type="number"
-                        id="withdrawAmount"
-                        class="form-control"
-                        min="1000"
-                        placeholder="Montant du retrait"
-                        required>
+                    <input type="number"
+                           id="withdrawAmount"
+                           class="form-control"
+                           min="1000"
+                           placeholder="Montant du retrait"
+                           required>
 
                 </div>
 
@@ -872,10 +729,9 @@
                         Moyen de paiement
                     </label>
 
-                    <select
-                        id="withdrawMethod"
-                        class="form-control"
-                        required>
+                    <select id="withdrawMethod"
+                            class="form-control"
+                            required>
 
                         <option value="">
                             Sélectionner
@@ -908,26 +764,22 @@
                         Numéro de réception
                     </label>
 
-                    <input
-                        type="tel"
-                        id="withdrawPhone"
-                        class="form-control"
-                        placeholder="0700000000"
-                        required>
+                    <input type="tel"
+                           id="withdrawPhone"
+                           class="form-control"
+                           placeholder="0700000000"
+                           required>
 
                 </div>
 
 
-                <button
-                    type="submit"
-                    class="form-submit">
+                <button type="submit"
+                        class="form-submit">
 
                     <i class="fa-solid fa-paper-plane"></i>
-
                     Envoyer la demande
 
                 </button>
-
 
             </form>
 
@@ -948,16 +800,9 @@
                 0 FCFA
             </h2>
 
-            <p>
-                Vérifiez votre numéro avant d'envoyer
-                votre demande.
-            </p>
-
         </div>
 
-
     </div>
-
 
 </section>
 
@@ -966,10 +811,8 @@
      HISTORIQUE
 ===================================================== -->
 
-<section
-    class="dashboard-section"
-    id="section-history">
-
+<section class="dashboard-section"
+         id="section-history">
 
     <div class="section-intro">
 
@@ -982,8 +825,8 @@
         </h2>
 
         <p>
-            Retrouvez les dépôts, retraits et autres
-            opérations enregistrés sur votre compte.
+            Retrouvez vos dépôts, retraits et autres
+            opérations enregistrés.
         </p>
 
     </div>
@@ -991,31 +834,22 @@
 
     <div class="history-tabs">
 
-        <button
-            type="button"
-            class="history-tab active"
-            data-history-filter="all">
-
+        <button type="button"
+                class="history-tab active"
+                data-history-filter="all">
             Toutes
-
         </button>
 
-        <button
-            type="button"
-            class="history-tab"
-            data-history-filter="deposit">
-
+        <button type="button"
+                class="history-tab"
+                data-history-filter="deposit">
             Dépôts
-
         </button>
 
-        <button
-            type="button"
-            class="history-tab"
-            data-history-filter="withdraw">
-
+        <button type="button"
+                class="history-tab"
+                data-history-filter="withdraw">
             Retraits
-
         </button>
 
     </div>
@@ -1025,7 +859,6 @@
          id="historyList">
     </div>
 
-
 </section>
 
 
@@ -1033,10 +866,8 @@
      PARRAINAGE
 ===================================================== -->
 
-<section
-    class="dashboard-section"
-    id="section-referral">
-
+<section class="dashboard-section"
+         id="section-referral">
 
     <div class="referral-hero">
 
@@ -1057,7 +888,6 @@
 
         </div>
 
-
         <div class="referral-icon">
             <i class="fa-solid fa-users"></i>
         </div>
@@ -1066,7 +896,6 @@
 
 
     <div class="referral-grid">
-
 
         <div class="referral-card">
 
@@ -1078,16 +907,14 @@
                 Code d'invitation
             </h3>
 
-
             <div class="referral-code-box">
 
                 <strong id="referralCode">
                     ---
                 </strong>
 
-                <button
-                    type="button"
-                    id="copyReferralCode">
+                <button type="button"
+                        id="copyReferralCode">
 
                     <i class="fa-regular fa-copy"></i>
 
@@ -1108,16 +935,13 @@
                 Lien de parrainage
             </h3>
 
-
             <div class="referral-link-box">
 
-                <input
-                    id="referralLink"
-                    readonly>
+                <input id="referralLink"
+                       readonly>
 
-                <button
-                    type="button"
-                    id="copyReferralLink">
+                <button type="button"
+                        id="copyReferralLink">
 
                     <i class="fa-regular fa-copy"></i>
 
@@ -1126,7 +950,6 @@
             </div>
 
         </div>
-
 
     </div>
 
@@ -1144,15 +967,14 @@
             </strong>
 
             <p>
-                Lors du premier dépôt validé d'un
-                utilisateur invité, le système applique
-                automatiquement le bonus prévu au parrain.
+                Lors du premier dépôt validé d'un utilisateur
+                invité, le bonus prévu est automatiquement
+                attribué au parrain.
             </p>
 
         </div>
 
     </div>
-
 
 </section>
 
@@ -1161,10 +983,8 @@
      ASSISTANCE
 ===================================================== -->
 
-<section
-    class="dashboard-section"
-    id="section-support">
-
+<section class="dashboard-section"
+         id="section-support">
 
     <div class="section-intro">
 
@@ -1177,8 +997,7 @@
         </h2>
 
         <p>
-            Envoyez votre demande à l'administration
-            et consultez ensuite son état.
+            Envoyez votre demande à l'administration.
         </p>
 
     </div>
@@ -1186,13 +1005,11 @@
 
     <div class="support-layout">
 
-
         <div class="dashboard-form-card">
 
             <h3>
                 Nouvelle demande
             </h3>
-
 
             <div id="supportMessage"
                  class="form-message">
@@ -1201,19 +1018,17 @@
 
             <form id="supportForm">
 
-
                 <div class="form-group">
 
                     <label for="supportSubject">
                         Sujet
                     </label>
 
-                    <input
-                        type="text"
-                        id="supportSubject"
-                        class="form-control"
-                        placeholder="Objet de votre demande"
-                        required>
+                    <input type="text"
+                           id="supportSubject"
+                           class="form-control"
+                           placeholder="Objet de votre demande"
+                           required>
 
                 </div>
 
@@ -1224,65 +1039,54 @@
                         Message
                     </label>
 
-                    <textarea
-                        id="supportText"
-                        class="form-control"
-                        rows="7"
-                        placeholder="Expliquez votre demande..."
-                        required></textarea>
+                    <textarea id="supportText"
+                              class="form-control"
+                              rows="7"
+                              placeholder="Expliquez votre demande..."
+                              required></textarea>
 
                 </div>
 
 
-                <button
-                    type="submit"
-                    class="form-submit">
+                <button type="submit"
+                        class="form-submit">
 
                     <i class="fa-solid fa-paper-plane"></i>
-
                     Envoyer
 
                 </button>
-
 
             </form>
 
         </div>
 
 
-        <div>
+        <div class="dashboard-panel"
+             style="margin-top:0;">
 
-            <div class="dashboard-panel"
-                 style="margin-top:0;">
+            <div class="panel-header">
 
-                <div class="panel-header">
+                <div>
 
-                    <div>
+                    <span class="panel-eyebrow">
+                        MES DEMANDES
+                    </span>
 
-                        <span class="panel-eyebrow">
-                            MES DEMANDES
-                        </span>
+                    <h3>
+                        Historique assistance
+                    </h3>
 
-                        <h3>
-                            Historique assistance
-                        </h3>
-
-                    </div>
-
-                </div>
-
-
-                <div class="tickets-list"
-                     id="ticketsList">
                 </div>
 
             </div>
 
+            <div class="tickets-list"
+                 id="ticketsList">
+            </div>
+
         </div>
 
-
     </div>
-
 
 </section>
 
@@ -1291,10 +1095,8 @@
      PROFIL
 ===================================================== -->
 
-<section
-    class="dashboard-section"
-    id="section-profile">
-
+<section class="dashboard-section"
+         id="section-profile">
 
     <div class="section-intro">
 
@@ -1306,16 +1108,10 @@
             Mon profil
         </h2>
 
-        <p>
-            Consultez les principales informations
-            enregistrées sur votre compte.
-        </p>
-
     </div>
 
 
     <div class="profile-layout">
-
 
         <div class="profile-card">
 
@@ -1347,75 +1143,42 @@
 
 
             <div class="profile-detail-row">
-
-                <span>
-                    Nom complet
-                </span>
-
-                <strong id="profileFullName">
-                    ---
-                </strong>
-
+                <span>Nom complet</span>
+                <strong id="profileFullName">---</strong>
             </div>
 
 
             <div class="profile-detail-row">
-
-                <span>
-                    Téléphone
-                </span>
-
-                <strong id="profileDetailPhone">
-                    ---
-                </strong>
-
+                <span>Téléphone</span>
+                <strong id="profileDetailPhone">---</strong>
             </div>
 
 
             <div class="profile-detail-row">
-
-                <span>
-                    Code de parrainage
-                </span>
-
-                <strong id="profileReferralCode">
-                    ---
-                </strong>
-
+                <span>Code de parrainage</span>
+                <strong id="profileReferralCode">---</strong>
             </div>
 
 
             <div class="profile-detail-row">
-
-                <span>
-                    Date de création
-                </span>
-
-                <strong id="profileCreationDate">
-                    ---
-                </strong>
-
+                <span>Date de création</span>
+                <strong id="profileCreationDate">---</strong>
             </div>
 
 
-            <button
-                type="button"
-                class="form-submit"
-                id="profileLogoutButton"
-                style="margin-top:25px;background:#b73535;">
+            <button type="button"
+                    class="form-submit"
+                    id="profileLogoutButton"
+                    style="margin-top:25px;background:#b73535;">
 
                 <i class="fa-solid fa-right-from-bracket"></i>
-
                 Se déconnecter
 
             </button>
 
-
         </div>
 
-
     </div>
-
 
 </section>
 
@@ -1430,7 +1193,6 @@
 <div class="dashboard-modal"
      id="investmentModal">
 
-
     <div class="modal-backdrop"
          data-close-modal>
     </div>
@@ -1438,11 +1200,9 @@
 
     <div class="modal-box">
 
-
-        <button
-            type="button"
-            class="modal-close"
-            data-close-modal>
+        <button type="button"
+                class="modal-close"
+                data-close-modal>
 
             <i class="fa-solid fa-xmark"></i>
 
@@ -1464,27 +1224,37 @@
         </h2>
 
 
-        <p>
-            Vérifiez les informations avant de confirmer.
-        </p>
-
-
         <div class="modal-investment-info">
 
             <div>
-                <span>
-                    Montant
-                </span>
+                <span>Montant</span>
 
                 <strong id="investmentModalAmount">
                     0 FCFA
                 </strong>
             </div>
 
+
             <div>
-                <span>
-                    Durée
-                </span>
+                <span>Gain journalier</span>
+
+                <strong id="investmentModalDaily">
+                    0 FCFA
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Gain total / 180 jours</span>
+
+                <strong id="investmentModalTotal">
+                    0 FCFA
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Durée</span>
 
                 <strong>
                     180 jours
@@ -1499,27 +1269,19 @@
         </div>
 
 
-        <button
-            type="button"
-            class="form-submit"
-            id="confirmInvestment">
+        <button type="button"
+                class="form-submit"
+                id="confirmInvestment">
 
             <i class="fa-solid fa-circle-check"></i>
-
             Confirmer l'investissement
 
         </button>
 
-
     </div>
-
 
 </div>
 
-
-<!-- =====================================================
-     SCRIPT GLOBAL
-===================================================== -->
 
 <script src="script.js"></script>
 
@@ -1529,10 +1291,6 @@
 "use strict";
 
 
-/* =====================================================
-   UTILISATEUR CONNECTÉ
-===================================================== */
-
 let currentUser = requireAuth();
 
 if (!currentUser) {
@@ -1541,7 +1299,7 @@ if (!currentUser) {
 
 
 /* =====================================================
-   PACKS
+   GRILLE OFFICIELLE DES 8 PACKS
 ===================================================== */
 
 const HYQD_PACKS = [
@@ -1550,6 +1308,9 @@ const HYQD_PACKS = [
         id: "starter",
         name: "Starter",
         amount: 3000,
+        dailyIncome: 700,
+        totalIncome: 126000,
+        duration: 180,
         image:
             "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=900&q=80"
     },
@@ -1558,6 +1319,9 @@ const HYQD_PACKS = [
         id: "familial",
         name: "Familial",
         amount: 10000,
+        dailyIncome: 2250,
+        totalIncome: 405000,
+        duration: 180,
         image:
             "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=80"
     },
@@ -1566,6 +1330,9 @@ const HYQD_PACKS = [
         id: "confort",
         name: "Confort",
         amount: 20000,
+        dailyIncome: 5300,
+        totalIncome: 954000,
+        duration: 180,
         image:
             "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=900&q=80"
     },
@@ -1574,6 +1341,9 @@ const HYQD_PACKS = [
         id: "premium",
         name: "Premium",
         amount: 45000,
+        dailyIncome: 12571,
+        totalIncome: 2262780,
+        duration: 180,
         image:
             "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=900&q=80"
     },
@@ -1582,6 +1352,9 @@ const HYQD_PACKS = [
         id: "prestige",
         name: "Prestige",
         amount: 100000,
+        dailyIncome: 28225,
+        totalIncome: 5080500,
+        duration: 180,
         image:
             "https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=900&q=80"
     },
@@ -1590,6 +1363,9 @@ const HYQD_PACKS = [
         id: "premium-plus",
         name: "Premium Plus",
         amount: 200000,
+        dailyIncome: 57000,
+        totalIncome: 10260000,
+        duration: 180,
         image:
             "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=900&q=80"
     },
@@ -1598,6 +1374,9 @@ const HYQD_PACKS = [
         id: "elite",
         name: "Elite",
         amount: 400000,
+        dailyIncome: 114600,
+        totalIncome: 20628000,
+        duration: 180,
         image:
             "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=900&q=80"
     },
@@ -1606,6 +1385,9 @@ const HYQD_PACKS = [
         id: "luxury",
         name: "Luxury",
         amount: 800000,
+        dailyIncome: 229900,
+        totalIncome: 41382000,
+        duration: 180,
         image:
             "https://images.unsplash.com/photo-1600607688960-e095ff83135c?auto=format&fit=crop&w=900&q=80"
     }
@@ -1617,14 +1399,9 @@ let selectedPack = null;
 let historyFilter = "all";
 
 
-/* =====================================================
-   OUTILS
-===================================================== */
-
 function refreshCurrentUser() {
 
-    const refreshed =
-        getCurrentUser();
+    const refreshed = getCurrentUser();
 
     if (!refreshed) {
 
@@ -1719,64 +1496,38 @@ function statusLabel(status) {
 
 
 /* =====================================================
-   NAVIGATION DASHBOARD
+   NAVIGATION
 ===================================================== */
 
 const sectionTitles = {
 
-    overview:
-        "Tableau de bord",
+    overview: "Tableau de bord",
+    packs: "Investir",
+    investments: "Mes investissements",
+    deposit: "Dépôt",
+    withdraw: "Retrait",
+    history: "Historique",
+    referral: "Parrainage",
+    support: "Assistance",
+    profile: "Mon profil"
 
-    packs:
-        "Investir",
-
-    investments:
-        "Mes investissements",
-
-    deposit:
-        "Dépôt",
-
-    withdraw:
-        "Retrait",
-
-    history:
-        "Historique",
-
-    referral:
-        "Parrainage",
-
-    support:
-        "Assistance",
-
-    profile:
-        "Mon profil"
 };
 
 
 function openSection(sectionName) {
 
     document
-        .querySelectorAll(
-            ".dashboard-section"
-        )
-        .forEach(
-            section =>
-                section.classList.remove(
-                    "active"
-                )
-        );
+        .querySelectorAll(".dashboard-section")
+        .forEach(section => {
+            section.classList.remove("active");
+        });
 
 
     document
-        .querySelectorAll(
-            ".sidebar-link[data-section]"
-        )
-        .forEach(
-            button =>
-                button.classList.remove(
-                    "active"
-                )
-        );
+        .querySelectorAll(".sidebar-link[data-section]")
+        .forEach(button => {
+            button.classList.remove("active");
+        });
 
 
     const section =
@@ -1786,10 +1537,7 @@ function openSection(sectionName) {
 
 
     if (section) {
-
-        section.classList.add(
-            "active"
-        );
+        section.classList.add("active");
     }
 
 
@@ -1799,68 +1547,50 @@ function openSection(sectionName) {
             sectionName +
             '"]'
         )
-        .forEach(
-            button => {
+        .forEach(button => {
 
-                if (
-                    button.classList.contains(
-                        "sidebar-link"
-                    )
-                ) {
-
-                    button.classList.add(
-                        "active"
-                    );
-                }
-
+            if (
+                button.classList.contains(
+                    "sidebar-link"
+                )
+            ) {
+                button.classList.add("active");
             }
-        );
+
+        });
 
 
     document.getElementById(
         "pageTitle"
     ).textContent =
-        sectionTitles[
-            sectionName
-        ] || "Dashboard";
+        sectionTitles[sectionName] ||
+        "Dashboard";
 
 
     closeMobileSidebar();
 
 
-    if (
-        sectionName === "overview"
-    ) {
+    if (sectionName === "overview") {
         renderOverview();
     }
 
-    if (
-        sectionName === "investments"
-    ) {
+    if (sectionName === "investments") {
         renderInvestments();
     }
 
-    if (
-        sectionName === "history"
-    ) {
+    if (sectionName === "history") {
         renderHistory();
     }
 
-    if (
-        sectionName === "support"
-    ) {
+    if (sectionName === "support") {
         renderTickets();
     }
 
-    if (
-        sectionName === "profile"
-    ) {
+    if (sectionName === "profile") {
         renderProfile();
     }
 
-    if (
-        sectionName === "referral"
-    ) {
+    if (sectionName === "referral") {
         renderReferral();
     }
 
@@ -1868,28 +1598,24 @@ function openSection(sectionName) {
 
 
 document
-    .querySelectorAll(
-        "[data-section]"
-    )
-    .forEach(
-        element => {
+    .querySelectorAll("[data-section]")
+    .forEach(element => {
 
-            element.addEventListener(
-                "click",
-                function () {
+        element.addEventListener(
+            "click",
+            function () {
 
-                    const section =
-                        this.dataset.section;
+                const section =
+                    this.dataset.section;
 
-                    if (section) {
-                        openSection(section);
-                    }
-
+                if (section) {
+                    openSection(section);
                 }
-            );
 
-        }
-    );
+            }
+        );
+
+    });
 
 
 /* =====================================================
@@ -1932,6 +1658,7 @@ document.getElementById(
         overlay.classList.toggle(
             "active"
         );
+
     }
 );
 
@@ -1943,38 +1670,35 @@ overlay.addEventListener(
 
 
 /* =====================================================
-   AFFICHAGE UTILISATEUR
+   IDENTITÉ
 ===================================================== */
 
 function renderUserIdentity() {
 
     refreshCurrentUser();
 
+    const name =
+        currentUser.fullName ||
+        currentUser.name ||
+        "Utilisateur";
+
     const initials =
-        getInitials(
-            currentUser.fullName ||
-            currentUser.name
-        );
+        getInitials(name);
 
 
     document.getElementById(
         "sidebarAvatar"
-    ).textContent =
-        initials;
+    ).textContent = initials;
 
 
     document.getElementById(
         "topbarAvatar"
-    ).textContent =
-        initials;
+    ).textContent = initials;
 
 
     document.getElementById(
         "sidebarUserName"
-    ).textContent =
-        currentUser.fullName ||
-        currentUser.name ||
-        "Utilisateur";
+    ).textContent = name;
 
 
     document.getElementById(
@@ -1986,12 +1710,7 @@ function renderUserIdentity() {
     document.getElementById(
         "welcomeName"
     ).textContent =
-        "Bienvenue, " +
-        (
-            currentUser.fullName ||
-            currentUser.name ||
-            ""
-        );
+        "Bienvenue, " + name;
 
 }
 
@@ -2025,8 +1744,7 @@ function renderOverview() {
         "totalDeposited"
     ).textContent =
         formatFCFA(
-            currentUser.totalDeposited ||
-            0
+            currentUser.totalDeposited || 0
         );
 
 
@@ -2034,8 +1752,7 @@ function renderOverview() {
         "totalWithdrawn"
     ).textContent =
         formatFCFA(
-            currentUser.totalWithdrawn ||
-            0
+            currentUser.totalWithdrawn || 0
         );
 
 
@@ -2043,15 +1760,12 @@ function renderOverview() {
         "totalInvested"
     ).textContent =
         formatFCFA(
-            currentUser.totalInvested ||
-            0
+            currentUser.totalInvested || 0
         );
 
 
     const investments =
-        Array.isArray(
-            currentUser.investments
-        )
+        Array.isArray(currentUser.investments)
             ? currentUser.investments
             : [];
 
@@ -2061,8 +1775,7 @@ function renderOverview() {
     ).textContent =
         investments.filter(
             investment =>
-                investment.status ===
-                "active"
+                investment.status === "active"
         ).length;
 
 
@@ -2071,7 +1784,7 @@ function renderOverview() {
 
 
 /* =====================================================
-   DERNIERES TRANSACTIONS
+   TRANSACTIONS RÉCENTES
 ===================================================== */
 
 function renderRecentTransactions() {
@@ -2083,9 +1796,7 @@ function renderRecentTransactions() {
 
 
     const transactions =
-        Array.isArray(
-            currentUser.transactions
-        )
+        Array.isArray(currentUser.transactions)
             ? currentUser.transactions
             : [];
 
@@ -2102,9 +1813,7 @@ function renderRecentTransactions() {
 
                 <i class="fa-solid fa-receipt"></i>
 
-                <h3>
-                    Aucune opération
-                </h3>
+                <h3>Aucune opération</h3>
 
                 <p>
                     Vos prochaines opérations
@@ -2120,17 +1829,14 @@ function renderRecentTransactions() {
 
     container.innerHTML =
         recent.map(
-            transaction =>
-                createTransactionHtml(
-                    transaction
-                )
+            createTransactionHtml
         ).join("");
 
 }
 
 
 /* =====================================================
-   PACKS
+   AFFICHAGE DES 8 PACKS + GAINS
 ===================================================== */
 
 function renderPacks() {
@@ -2145,97 +1851,142 @@ function renderPacks() {
         HYQD_PACKS.map(
             pack => `
 
-                <article class="dashboard-pack-card">
+            <article class="dashboard-pack-card">
 
-                    <div class="dashboard-pack-image">
+                <div class="dashboard-pack-image">
 
-                        <img
-                            src="${pack.image}"
-                            alt="${escapeHtml(pack.name)}"
-                            loading="lazy">
+                    <img
+                        src="${pack.image}"
+                        alt="${escapeHtml(pack.name)}"
+                        loading="lazy">
+
+                </div>
+
+
+                <div class="dashboard-pack-content">
+
+                    <span class="pack-small-label">
+                        PACK IMMOBILIER
+                    </span>
+
+
+                    <h3>
+                        ${escapeHtml(pack.name)}
+                    </h3>
+
+
+                    <div class="dashboard-pack-price">
+                        ${formatFCFA(pack.amount)}
+                    </div>
+
+
+                    <div style="
+                        display:grid;
+                        grid-template-columns:1fr 1fr;
+                        gap:10px;
+                        margin:18px 0;
+                    ">
+
+                        <div style="
+                            padding:12px;
+                            border-radius:12px;
+                            background:#f5f8f7;
+                        ">
+
+                            <small style="
+                                display:block;
+                                margin-bottom:6px;
+                            ">
+                                Gain journalier
+                            </small>
+
+                            <strong style="
+                                color:#0a6b57;
+                                font-size:17px;
+                            ">
+                                ${formatFCFA(pack.dailyIncome)}
+                            </strong>
+
+                        </div>
+
+
+                        <div style="
+                            padding:12px;
+                            border-radius:12px;
+                            background:#f5f8f7;
+                        ">
+
+                            <small style="
+                                display:block;
+                                margin-bottom:6px;
+                            ">
+                                Gain total
+                            </small>
+
+                            <strong style="
+                                color:#0a6b57;
+                                font-size:17px;
+                            ">
+                                ${formatFCFA(pack.totalIncome)}
+                            </strong>
+
+                        </div>
 
                     </div>
 
 
-                    <div class="dashboard-pack-content">
+                    <div class="dashboard-pack-duration">
 
-                        <span class="pack-small-label">
-                            PACK IMMOBILIER
-                        </span>
+                        <i class="fa-regular fa-clock"></i>
 
-                        <h3>
-                            ${escapeHtml(pack.name)}
-                        </h3>
-
-                        <p>
-                            Investissement immobilier
-                            d'une durée totale de
-                            180 jours.
-                        </p>
-
-
-                        <div class="dashboard-pack-price">
-                            ${formatFCFA(pack.amount)}
-                        </div>
-
-
-                        <div class="dashboard-pack-duration">
-
-                            <i class="fa-regular fa-clock"></i>
-
-                            Durée : 180 jours
-
-                        </div>
-
-
-                        <button
-                            type="button"
-                            class="dashboard-invest-button"
-                            data-pack-id="${pack.id}">
-
-                            Investir
-
-                            <i class="fa-solid fa-arrow-right"></i>
-
-                        </button>
+                        Durée :
+                        <strong>180 jours</strong>
 
                     </div>
 
-                </article>
-            `
+
+                    <button
+                        type="button"
+                        class="dashboard-invest-button"
+                        data-pack-id="${pack.id}">
+
+                        Investir
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </button>
+
+                </div>
+
+            </article>
+
+        `
         ).join("");
 
 
     document
-        .querySelectorAll(
-            "[data-pack-id]"
-        )
-        .forEach(
-            button => {
+        .querySelectorAll("[data-pack-id]")
+        .forEach(button => {
 
-                button.addEventListener(
-                    "click",
-                    function () {
+            button.addEventListener(
+                "click",
+                function () {
 
-                        const pack =
-                            HYQD_PACKS.find(
-                                item =>
-                                    item.id ===
-                                    this.dataset.packId
-                            );
+                    const pack =
+                        HYQD_PACKS.find(
+                            item =>
+                                item.id ===
+                                this.dataset.packId
+                        );
 
-                        if (pack) {
-
-                            openInvestmentModal(
-                                pack
-                            );
-                        }
-
+                    if (pack) {
+                        openInvestmentModal(pack);
                     }
-                );
 
-            }
-        );
+                }
+            );
+
+        });
 
 }
 
@@ -2244,9 +1995,7 @@ function renderPacks() {
    MODAL INVESTISSEMENT
 ===================================================== */
 
-function openInvestmentModal(
-    pack
-) {
+function openInvestmentModal(pack) {
 
     selectedPack = pack;
 
@@ -2260,9 +2009,19 @@ function openInvestmentModal(
     document.getElementById(
         "investmentModalAmount"
     ).textContent =
-        formatFCFA(
-            pack.amount
-        );
+        formatFCFA(pack.amount);
+
+
+    document.getElementById(
+        "investmentModalDaily"
+    ).textContent =
+        formatFCFA(pack.dailyIncome);
+
+
+    document.getElementById(
+        "investmentModalTotal"
+    ).textContent =
+        formatFCFA(pack.totalIncome);
 
 
     document.getElementById(
@@ -2278,9 +2037,8 @@ function openInvestmentModal(
 
     document.getElementById(
         "investmentModal"
-    ).classList.add(
-        "active"
-    );
+    ).classList.add("active");
+
 }
 
 
@@ -2288,28 +2046,22 @@ function closeInvestmentModal() {
 
     document.getElementById(
         "investmentModal"
-    ).classList.remove(
-        "active"
-    );
+    ).classList.remove("active");
 
     selectedPack = null;
 }
 
 
 document
-    .querySelectorAll(
-        "[data-close-modal]"
-    )
-    .forEach(
-        button => {
+    .querySelectorAll("[data-close-modal]")
+    .forEach(button => {
 
-            button.addEventListener(
-                "click",
-                closeInvestmentModal
-            );
+        button.addEventListener(
+            "click",
+            closeInvestmentModal
+        );
 
-        }
-    );
+    });
 
 
 document.getElementById(
@@ -2329,10 +2081,14 @@ document.getElementById(
             );
 
 
+        /*
+         * Les données de gain sont également transmises
+         * avec le pack afin qu'elles puissent être
+         * conservées avec l'investissement.
+         */
+
         const result =
-            investInPack(
-                selectedPack
-            );
+            investInPack(selectedPack);
 
 
         messageBox.textContent =
@@ -2352,8 +2108,15 @@ document.getElementById(
 
             refreshCurrentUser();
 
-            renderOverview();
+            /*
+             * Si l'ancienne version de script.js
+             * n'a pas encore enregistré dailyIncome
+             * et totalIncome dans l'investissement,
+             * l'affichage retrouve automatiquement
+             * ces données depuis HYQD_PACKS.
+             */
 
+            renderOverview();
             renderInvestments();
 
 
@@ -2369,6 +2132,7 @@ document.getElementById(
                 },
                 800
             );
+
         }
 
     }
@@ -2376,7 +2140,7 @@ document.getElementById(
 
 
 /* =====================================================
-   INVESTISSEMENTS
+   INVESTISSEMENTS ACTIFS + GAINS
 ===================================================== */
 
 function renderInvestments() {
@@ -2391,9 +2155,7 @@ function renderInvestments() {
 
 
     const investments =
-        Array.isArray(
-            currentUser.investments
-        )
+        Array.isArray(currentUser.investments)
             ? currentUser.investments
             : [];
 
@@ -2411,8 +2173,7 @@ function renderInvestments() {
                 </h3>
 
                 <p>
-                    Vous n'avez pas encore
-                    activé de pack.
+                    Vous n'avez pas encore activé de pack.
                 </p>
 
             </div>
@@ -2425,6 +2186,32 @@ function renderInvestments() {
     container.innerHTML =
         investments.map(
             investment => {
+
+                const matchingPack =
+                    HYQD_PACKS.find(
+                        pack =>
+                            pack.id === investment.packId ||
+                            pack.name === investment.packName ||
+                            Number(pack.amount) ===
+                            Number(investment.amount)
+                    );
+
+
+                const dailyIncome =
+                    Number(
+                        investment.dailyIncome ||
+                        matchingPack?.dailyIncome ||
+                        0
+                    );
+
+
+                const totalIncome =
+                    Number(
+                        investment.totalIncome ||
+                        matchingPack?.totalIncome ||
+                        0
+                    );
+
 
                 let progress = 0;
 
@@ -2448,10 +2235,14 @@ function renderInvestments() {
                         Date.now();
 
 
-                    progress =
-                        ((now - start) /
-                            (end - start)) *
-                        100;
+                    if (end > start) {
+
+                        progress =
+                            ((now - start) /
+                                (end - start)) *
+                            100;
+
+                    }
 
 
                     progress =
@@ -2462,99 +2253,199 @@ function renderInvestments() {
                                 progress
                             )
                         );
+
                 }
 
 
                 return `
 
-                    <article class="investment-item">
+                <article class="investment-item">
 
-                        <div class="investment-item-header">
+                    <div class="investment-item-header">
 
-                            <div>
+                        <div>
 
-                                <span>
-                                    INVESTISSEMENT
-                                </span>
-
-                                <h3>
-                                    ${escapeHtml(
-                                        investment.packName
-                                    )}
-                                </h3>
-
-                            </div>
-
-
-                            <span class="active-badge">
-                                ${investment.status === "active"
-                                    ? "Actif"
-                                    : escapeHtml(
-                                        investment.status
-                                    )}
+                            <span>
+                                INVESTISSEMENT
                             </span>
+
+                            <h3>
+                                ${escapeHtml(
+                                    investment.packName ||
+                                    matchingPack?.name ||
+                                    "Pack Housing's YQD"
+                                )}
+                            </h3>
 
                         </div>
 
 
-                        <div class="investment-progress">
+                        <span class="active-badge">
 
-                            <div class="progress-info">
+                            ${investment.status === "active"
+                                ? "Actif"
+                                : escapeHtml(
+                                    investment.status ||
+                                    "Actif"
+                                )
+                            }
 
-                                <span>
-                                    Progression
-                                </span>
+                        </span>
 
-                                <strong>
-                                    ${Math.round(progress)} %
-                                </strong>
-
-                            </div>
+                    </div>
 
 
-                            <div class="progress-bar">
+                    <div style="
+                        display:grid;
+                        grid-template-columns:
+                            repeat(auto-fit,minmax(150px,1fr));
+                        gap:12px;
+                        margin:18px 0;
+                    ">
 
-                                <div
-                                    class="progress-fill"
-                                    style="width:${progress}%">
-                                </div>
 
-                            </div>
+                        <div style="
+                            padding:14px;
+                            border-radius:12px;
+                            background:#f5f8f7;
+                        ">
+
+                            <small>
+                                Montant investi
+                            </small>
+
+                            <strong style="
+                                display:block;
+                                margin-top:6px;
+                            ">
+                                ${formatFCFA(
+                                    investment.amount
+                                )}
+                            </strong>
+
+                        </div>
+
+
+                        <div style="
+                            padding:14px;
+                            border-radius:12px;
+                            background:#f5f8f7;
+                        ">
+
+                            <small>
+                                Gain journalier
+                            </small>
+
+                            <strong style="
+                                display:block;
+                                margin-top:6px;
+                                color:#0a6b57;
+                            ">
+                                ${formatFCFA(
+                                    dailyIncome
+                                )}
+                            </strong>
 
                         </div>
 
 
-                        <div class="investment-meta">
+                        <div style="
+                            padding:14px;
+                            border-radius:12px;
+                            background:#f5f8f7;
+                        ">
 
-                            <span>
-                                Montant :
-                                <strong>
-                                    ${formatFCFA(
-                                        investment.amount
-                                    )}
-                                </strong>
-                            </span>
+                            <small>
+                                Gain total / 180 jours
+                            </small>
 
-                            <span>
-                                Durée :
-                                <strong>
-                                    180 jours
-                                </strong>
-                            </span>
-
-                            <span>
-                                Début :
-                                <strong>
-                                    ${formatDateSafe(
-                                        investment.startDate
-                                    )}
-                                </strong>
-                            </span>
+                            <strong style="
+                                display:block;
+                                margin-top:6px;
+                                color:#0a6b57;
+                            ">
+                                ${formatFCFA(
+                                    totalIncome
+                                )}
+                            </strong>
 
                         </div>
 
-                    </article>
-                `;
+
+                        <div style="
+                            padding:14px;
+                            border-radius:12px;
+                            background:#f5f8f7;
+                        ">
+
+                            <small>
+                                Durée
+                            </small>
+
+                            <strong style="
+                                display:block;
+                                margin-top:6px;
+                            ">
+                                180 jours
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="investment-progress">
+
+                        <div class="progress-info">
+
+                            <span>
+                                Progression
+                            </span>
+
+                            <strong>
+                                ${Math.round(progress)} %
+                            </strong>
+
+                        </div>
+
+
+                        <div class="progress-bar">
+
+                            <div
+                                class="progress-fill"
+                                style="width:${progress}%">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="investment-meta">
+
+                        <span>
+                            Début :
+                            <strong>
+                                ${formatDateSafe(
+                                    investment.startDate
+                                )}
+                            </strong>
+                        </span>
+
+                        <span>
+                            Fin :
+                            <strong>
+                                ${formatDateSafe(
+                                    investment.endDate
+                                )}
+                            </strong>
+                        </span>
+
+                    </div>
+
+                </article>
+
+            `;
 
             }
         ).join("");
@@ -2627,8 +2518,8 @@ document.getElementById(
             this.reset();
 
             refreshCurrentUser();
-
             renderOverview();
+
         }
 
     }
@@ -2700,8 +2591,8 @@ document.getElementById(
             this.reset();
 
             refreshCurrentUser();
-
             renderOverview();
+
         }
 
     }
@@ -2717,8 +2608,7 @@ function createTransactionHtml(
 ) {
 
     const deposit =
-        transaction.type ===
-        "deposit";
+        transaction.type === "deposit";
 
 
     const referral =
@@ -2744,8 +2634,7 @@ function createTransactionHtml(
 
         <article class="history-item">
 
-            <div
-                class="history-icon ${iconClass}">
+            <div class="history-icon ${iconClass}">
 
                 <i class="fa-solid ${icon}"></i>
 
@@ -2791,6 +2680,7 @@ function createTransactionHtml(
             </div>
 
         </article>
+
     `;
 
 }
@@ -2808,17 +2698,12 @@ function renderHistory() {
 
 
     let transactions =
-        Array.isArray(
-            currentUser.transactions
-        )
+        Array.isArray(currentUser.transactions)
             ? currentUser.transactions
             : [];
 
 
-    if (
-        historyFilter !==
-        "all"
-    ) {
+    if (historyFilter !== "all") {
 
         transactions =
             transactions.filter(
@@ -2826,6 +2711,7 @@ function renderHistory() {
                     transaction.type ===
                     historyFilter
             );
+
     }
 
 
@@ -2847,6 +2733,7 @@ function renderHistory() {
                 </p>
 
             </div>
+
         `;
 
         return;
@@ -2865,42 +2752,38 @@ document
     .querySelectorAll(
         "[data-history-filter]"
     )
-    .forEach(
-        button => {
+    .forEach(button => {
 
-            button.addEventListener(
-                "click",
-                function () {
+        button.addEventListener(
+            "click",
+            function () {
 
-                    document
-                        .querySelectorAll(
-                            "[data-history-filter]"
+                document
+                    .querySelectorAll(
+                        "[data-history-filter]"
+                    )
+                    .forEach(item =>
+                        item.classList.remove(
+                            "active"
                         )
-                        .forEach(
-                            item =>
-                                item.classList.remove(
-                                    "active"
-                                )
-                        );
-
-
-                    this.classList.add(
-                        "active"
                     );
 
 
-                    historyFilter =
-                        this.dataset
-                            .historyFilter;
+                this.classList.add(
+                    "active"
+                );
 
 
-                    renderHistory();
+                historyFilter =
+                    this.dataset.historyFilter;
 
-                }
-            );
 
-        }
-    );
+                renderHistory();
+
+            }
+        );
+
+    });
 
 
 /* =====================================================
@@ -2941,31 +2824,26 @@ function renderReferral() {
     ).value =
         baseUrl +
         "/register.html?ref=" +
-        encodeURIComponent(
-            code
-        );
+        encodeURIComponent(code);
 
 }
 
 
-async function copyText(
-    text
-) {
+async function copyText(text) {
 
     try {
 
         await navigator.clipboard
             .writeText(text);
 
-        alert(
-            "Copié avec succès."
-        );
+        alert("Copié avec succès.");
 
     } catch (error) {
 
         alert(
             "Impossible de copier automatiquement."
         );
+
     }
 
 }
@@ -3059,8 +2937,8 @@ document.getElementById(
             this.reset();
 
             refreshCurrentUser();
-
             renderTickets();
+
         }
 
     }
@@ -3079,9 +2957,7 @@ function renderTickets() {
 
 
     const tickets =
-        Array.isArray(
-            currentUser.tickets
-        )
+        Array.isArray(currentUser.tickets)
             ? currentUser.tickets
             : [];
 
@@ -3104,6 +2980,7 @@ function renderTickets() {
                 </p>
 
             </div>
+
         `;
 
         return;
@@ -3272,6 +3149,7 @@ function performLogout() {
     window.location.replace(
         "login.html"
     );
+
 }
 
 
