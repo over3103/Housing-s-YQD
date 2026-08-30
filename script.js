@@ -1,128 +1,48 @@
 "use strict";
 
 /* =========================================================
-   HOUSING'S YQD
-   SCRIPT PRINCIPAL
+   HOUSING'S YQD — SCRIPT PRINCIPAL
 
-   Fonctionnalités :
-   - Inscription / connexion
-   - Sessions utilisateur
-   - Dépôts
-   - Retraits
-   - Investissements
-   - Gains quotidiens pendant 180 jours
-   - Parrainage
-   - Assistance
-   - Notifications
-   - Administration
+   IMPORTANT : cette version conserve le stockage navigateur
+   pour rester compatible avec le site statique actuel.
+   Pour une mise en production financière réelle, comptes,
+   soldes, rôles et transactions doivent être déplacés vers
+   un backend sécurisé (ex. Supabase + RLS/fonctions serveur).
 ========================================================= */
 
-
-/* =========================================================
-   CONFIGURATION
-========================================================= */
-
-const HYQD_CONFIG = {
+const HYQD_CONFIG = Object.freeze({
     APP_NAME: "Housing's YQD",
-    ADMIN_CODE: "937854M",
+    ADMIN_CODE: "937854M", // Compatibilité maquette uniquement : ne constitue pas une sécurité serveur.
     REFERRAL_RATE: 0.10,
+    DEPOSIT_FEE_RATE: 0.01,
+    WITHDRAW_FEE_RATE: 0.25,
     INVESTMENT_DURATION: 180,
+    MIN_DEPOSIT: 1000,
+    MIN_WITHDRAWAL: 1000,
     DAY_MS: 24 * 60 * 60 * 1000
-};
+});
 
-
-/* =========================================================
-   CLÉS DE STOCKAGE
-========================================================= */
-
-const HYQD_KEYS = {
+const HYQD_KEYS = Object.freeze({
     USERS: "hyqd_users_v4",
     CURRENT_USER: "hyqd_current_user_v4",
     ADMIN_SESSION: "hyqd_admin_session_v4",
     PASSWORD_RESETS: "hyqd_password_resets_v4"
-};
-
+});
 
 /* =========================================================
-   GRILLE OFFICIELLE DES 8 PACKS
+   GRILLE DES 8 PACKS — SOURCE UNIQUE
 ========================================================= */
 
-const HYQD_INVESTMENT_PACKS = [
-
-    {
-        id: "starter",
-        name: "Starter",
-        amount: 3000,
-        dailyIncome: 700,
-        totalIncome: 126000,
-        duration: 180
-    },
-
-    {
-        id: "familial",
-        name: "Familial",
-        amount: 10000,
-        dailyIncome: 2250,
-        totalIncome: 405000,
-        duration: 180
-    },
-
-    {
-        id: "confort",
-        name: "Confort",
-        amount: 20000,
-        dailyIncome: 5300,
-        totalIncome: 954000,
-        duration: 180
-    },
-
-    {
-        id: "premium",
-        name: "Premium",
-        amount: 45000,
-        dailyIncome: 12571,
-        totalIncome: 2262780,
-        duration: 180
-    },
-
-    {
-        id: "prestige",
-        name: "Prestige",
-        amount: 100000,
-        dailyIncome: 28225,
-        totalIncome: 5080500,
-        duration: 180
-    },
-
-    {
-        id: "premium-plus",
-        name: "Premium Plus",
-        amount: 200000,
-        dailyIncome: 57000,
-        totalIncome: 10260000,
-        duration: 180
-    },
-
-    {
-        id: "elite",
-        name: "Elite",
-        amount: 400000,
-        dailyIncome: 114600,
-        totalIncome: 20628000,
-        duration: 180
-    },
-
-    {
-        id: "luxury",
-        name: "Luxury",
-        amount: 800000,
-        dailyIncome: 229900,
-        totalIncome: 41382000,
-        duration: 180
-    }
-
-];
-
+const HYQD_INVESTMENT_PACKS = Object.freeze([
+    Object.freeze({ id: "starter",      name: "Starter",      amount: 3000,   dailyIncome: 800,    totalIncome: 144000,   duration: 180 }),
+    Object.freeze({ id: "familial",     name: "Familial",     amount: 10000,  dailyIncome: 3000,   totalIncome: 540000,   duration: 180 }),
+    Object.freeze({ id: "confort",      name: "Confort",      amount: 20000,  dailyIncome: 6000,   totalIncome: 1080000,  duration: 180 }),
+    Object.freeze({ id: "premium",      name: "Premium",      amount: 45000,  dailyIncome: 14000,  totalIncome: 2520000,  duration: 180 }),
+    Object.freeze({ id: "prestige",     name: "Prestige",     amount: 100000, dailyIncome: 30000,  totalIncome: 5400000,  duration: 180 }),
+    Object.freeze({ id: "premium-plus", name: "Premium Plus", amount: 200000, dailyIncome: 65000,  totalIncome: 11700000, duration: 180 }),
+    Object.freeze({ id: "elite",        name: "Elite",        amount: 400000, dailyIncome: 140000, totalIncome: 25200000, duration: 180 }),
+    Object.freeze({ id: "luxury",       name: "Luxury",       amount: 800000, dailyIncome: 290000, totalIncome: 52200000, duration: 180 })
+]);
 
 /* =========================================================
    STOCKAGE
@@ -131,218 +51,194 @@ const HYQD_INVESTMENT_PACKS = [
 function hyqdGet(key, fallback = null) {
     try {
         const raw = localStorage.getItem(key);
-
-        if (raw === null) {
-            return fallback;
-        }
-
-        return JSON.parse(raw);
-
+        return raw === null ? fallback : JSON.parse(raw);
     } catch (error) {
-        console.error("Erreur lecture localStorage :", error);
+        console.error("Erreur lecture stockage Housing's YQD :", error);
         return fallback;
     }
 }
 
-
 function hyqdSet(key, value) {
     try {
-        localStorage.setItem(
-            key,
-            JSON.stringify(value)
-        );
-
+        localStorage.setItem(key, JSON.stringify(value));
         return true;
-
     } catch (error) {
-        console.error("Erreur écriture localStorage :", error);
+        console.error("Erreur écriture stockage Housing's YQD :", error);
         return false;
     }
 }
 
+function cloneData(value) {
+    if (value === undefined) return undefined;
+    return JSON.parse(JSON.stringify(value));
+}
 
 /* =========================================================
    OUTILS
 ========================================================= */
 
-function generateId(prefix = "id") {
-    return (
-        prefix +
-        "_" +
-        Date.now().toString(36) +
-        "_" +
-        Math.random().toString(36).slice(2, 10)
-    );
+function safeNumber(value) {
+    const number = Number(value);
+    return Number.isFinite(number) ? number : 0;
 }
 
+function roundFCFA(value) {
+    return Math.max(0, Math.round(safeNumber(value)));
+}
+
+function generateId(prefix = "id") {
+    if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+        return `${prefix}_${crypto.randomUUID()}`;
+    }
+
+    return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
+}
 
 function generateCode() {
-    const letters =
-        Math.random()
-            .toString(36)
-            .slice(2, 6)
-            .toUpperCase();
-
-    const numbers =
-        Math.floor(
-            1000 +
-            Math.random() * 9000
-        );
-
-    return "YQD" + letters + numbers;
+    const letters = Math.random().toString(36).slice(2, 6).toUpperCase();
+    const numbers = Math.floor(1000 + Math.random() * 9000);
+    return `YQD${letters}${numbers}`;
 }
 
-
 function normalizePhone(phone) {
+    let value = String(phone || "")
+        .trim()
+        .replace(/\s+/g, "")
+        .replace(/[^\d+]/g, "");
 
-    let value =
-        String(phone || "")
-            .trim()
-            .replace(/\s+/g, "")
-            .replace(/[^\d+]/g, "");
-
-    if (value.startsWith("+225")) {
-        value = value.substring(4);
-    }
-
-    if (value.startsWith("00225")) {
-        value = value.substring(5);
-    }
+    if (value.startsWith("+225")) value = value.slice(4);
+    if (value.startsWith("00225")) value = value.slice(5);
 
     return value.replace(/\D/g, "");
 }
 
-
-function formatFCFA(amount) {
-
-    return (
-        new Intl.NumberFormat("fr-FR")
-            .format(Number(amount || 0)) +
-        " FCFA"
-    );
+function isValidIvoryCoastPhone(phone) {
+    const normalized = normalizePhone(phone);
+    return /^\d{8,10}$/.test(normalized);
 }
 
+function formatFCFA(amount) {
+    return `${new Intl.NumberFormat("fr-FR").format(roundFCFA(amount))} FCFA`;
+}
 
 function escapeHtml(value) {
+    const text = String(value ?? "");
 
-    const div =
-        document.createElement("div");
+    if (typeof document === "undefined") {
+        return text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
 
-    div.textContent =
-        String(value ?? "");
-
+    const div = document.createElement("div");
+    div.textContent = text;
     return div.innerHTML;
 }
 
-
-function safeNumber(value) {
-
-    const number =
-        Number(value);
-
-    return Number.isFinite(number)
-        ? number
-        : 0;
+function nowIso() {
+    return new Date().toISOString();
 }
 
-
-function cloneData(value) {
-
-    return JSON.parse(
-        JSON.stringify(value)
-    );
+function calculateFee(amount, rate) {
+    return Math.floor(roundFCFA(amount) * safeNumber(rate));
 }
 
+function ensureUserShape(user) {
+    if (!user || typeof user !== "object") return user;
+
+    user.fullName = String(user.fullName || user.name || "Utilisateur").trim();
+    user.name = user.fullName;
+    user.phone = normalizePhone(user.phone);
+    user.balance = safeNumber(user.balance);
+    user.totalDeposited = safeNumber(user.totalDeposited);
+    user.totalWithdrawn = safeNumber(user.totalWithdrawn);
+    user.totalInvested = safeNumber(user.totalInvested);
+    user.totalInvestmentIncome = safeNumber(user.totalInvestmentIncome);
+    user.totalReferralBonus = safeNumber(user.totalReferralBonus);
+    user.transactions = Array.isArray(user.transactions) ? user.transactions : [];
+    user.investments = Array.isArray(user.investments) ? user.investments : [];
+    user.tickets = Array.isArray(user.tickets) ? user.tickets : [];
+    user.notifications = Array.isArray(user.notifications) ? user.notifications : [];
+    user.status = user.status || "active";
+    user.firstDepositCompleted = Boolean(user.firstDepositCompleted);
+    user.createdAt = user.createdAt || nowIso();
+
+    if (!user.referralCode) user.referralCode = generateCode();
+
+    return user;
+}
 
 /* =========================================================
    PACKS
 ========================================================= */
 
-function getPackById(packId) {
-
-    return HYQD_INVESTMENT_PACKS.find(
-        pack =>
-            pack.id === packId
-    ) || null;
+function getInvestmentPacks() {
+    return cloneData(HYQD_INVESTMENT_PACKS);
 }
 
+function getPackById(packId) {
+    return HYQD_INVESTMENT_PACKS.find(
+        pack => pack.id === String(packId || "")
+    ) || null;
+}
 
 function getPackByAmount(amount) {
-
     return HYQD_INVESTMENT_PACKS.find(
-        pack =>
-            Number(pack.amount) ===
-            Number(amount)
+        pack => Number(pack.amount) === Number(amount)
     ) || null;
 }
 
-
 function getCanonicalPack(pack) {
-
-    if (!pack) {
-        return null;
-    }
+    if (!pack) return null;
 
     if (typeof pack === "string") {
         return getPackById(pack);
     }
 
-    if (pack.id) {
-
-        const byId =
-            getPackById(pack.id);
-
-        if (byId) {
-            return byId;
-        }
-    }
-
-    if (pack.amount) {
-        return getPackByAmount(pack.amount);
-    }
-
-    return null;
+    return (pack.id && getPackById(pack.id)) ||
+        getPackByAmount(pack.amount);
 }
-
 
 /* =========================================================
    UTILISATEURS
 ========================================================= */
 
 function getUsersRaw() {
-
-    const users =
-        hyqdGet(
-            HYQD_KEYS.USERS,
-            []
-        );
-
-    return Array.isArray(users)
-        ? users
-        : [];
-}
-
-
-function saveUsers(users) {
-
-    return hyqdSet(
+    const users = hyqdGet(
         HYQD_KEYS.USERS,
-        users
+        []
+    );
+
+    if (!Array.isArray(users)) {
+        return [];
+    }
+
+    return users.map(
+        ensureUserShape
     );
 }
 
+function saveUsers(users) {
+    const safeUsers = Array.isArray(users)
+        ? users.map(ensureUserShape)
+        : [];
+
+    return hyqdSet(
+        HYQD_KEYS.USERS,
+        safeUsers
+    );
+}
 
 function findUserById(userId) {
-
     return getUsersRaw().find(
-        user =>
-            user.id === userId
+        user => user.id === userId
     ) || null;
 }
 
-
 function findUserByPhone(phone) {
-
     const normalized =
         normalizePhone(phone);
 
@@ -353,9 +249,7 @@ function findUserByPhone(phone) {
     ) || null;
 }
 
-
 function findUserByReferralCode(code) {
-
     const referral =
         String(code || "")
             .trim()
@@ -373,43 +267,30 @@ function findUserByReferralCode(code) {
     ) || null;
 }
 
-
 /* =========================================================
-   INSCRIPTION
+   INSCRIPTION / CONNEXION
 ========================================================= */
 
 function registerUser(...args) {
-
-    let data = {};
+    let data;
 
     if (
         args.length === 1 &&
-        typeof args[0] === "object"
+        typeof args[0] === "object" &&
+        args[0] !== null
     ) {
         data = args[0];
 
     } else {
         data = {
-
-            fullName:
-                args[0] || "",
-
-            phone:
-                args[1] || "",
-
-            password:
-                args[2] || "",
-
+            fullName: args[0] || "",
+            phone: args[1] || "",
+            password: args[2] || "",
             confirmPassword:
-                args[3] ||
-                args[2] ||
-                "",
-
-            referralCode:
-                args[4] || ""
+                args[3] ?? args[2] ?? "",
+            referralCode: args[4] || ""
         };
     }
-
 
     const fullName =
         String(
@@ -418,18 +299,15 @@ function registerUser(...args) {
             ""
         ).trim();
 
-
     const phone =
         normalizePhone(
             data.phone
         );
 
-
     const password =
         String(
             data.password || ""
         );
-
 
     const confirmPassword =
         String(
@@ -437,12 +315,12 @@ function registerUser(...args) {
             password
         );
 
-
     const referralCode =
         String(
             data.referralCode || ""
-        ).trim();
-
+        )
+            .trim()
+            .toUpperCase();
 
     if (
         fullName.length < 3 ||
@@ -451,7 +329,6 @@ function registerUser(...args) {
             .filter(Boolean)
             .length < 2
     ) {
-
         return {
             success: false,
             message:
@@ -459,9 +336,7 @@ function registerUser(...args) {
         };
     }
 
-
-    if (phone.length < 8) {
-
+    if (!isValidIvoryCoastPhone(phone)) {
         return {
             success: false,
             message:
@@ -469,9 +344,7 @@ function registerUser(...args) {
         };
     }
 
-
     if (password.length < 6) {
-
         return {
             success: false,
             message:
@@ -479,12 +352,7 @@ function registerUser(...args) {
         };
     }
 
-
-    if (
-        password !==
-        confirmPassword
-    ) {
-
+    if (password !== confirmPassword) {
         return {
             success: false,
             message:
@@ -492,22 +360,16 @@ function registerUser(...args) {
         };
     }
 
-
     const users =
         getUsersRaw();
 
-
-    const existing =
-        users.find(
+    if (
+        users.some(
             user =>
-                normalizePhone(
-                    user.phone
-                ) === phone
-        );
-
-
-    if (existing) {
-
+                normalizePhone(user.phone) ===
+                phone
+        )
+    ) {
         return {
             success: false,
             message:
@@ -515,36 +377,30 @@ function registerUser(...args) {
         };
     }
 
-
-    let sponsor = null;
-
-
-    if (referralCode) {
-
-        sponsor =
-            users.find(
+    const sponsor =
+        referralCode
+            ? users.find(
                 user =>
                     String(
                         user.referralCode || ""
                     ).toUpperCase() ===
-                    referralCode.toUpperCase()
-            );
+                    referralCode
+            )
+            : null;
 
-
-        if (!sponsor) {
-
-            return {
-                success: false,
-                message:
-                    "Le code de parrainage est invalide."
-            };
-        }
+    if (
+        referralCode &&
+        !sponsor
+    ) {
+        return {
+            success: false,
+            message:
+                "Le code de parrainage est invalide."
+        };
     }
-
 
     let personalReferralCode =
         generateCode();
-
 
     while (
         users.some(
@@ -557,86 +413,84 @@ function registerUser(...args) {
             generateCode();
     }
 
+    const user =
+        ensureUserShape({
 
-    const user = {
+            id:
+                generateId("user"),
 
-        id:
-            generateId("user"),
-
-        fullName,
-
-        name:
             fullName,
 
-        phone,
+            name:
+                fullName,
 
-        password,
+            phone,
 
-        balance:
-            0,
+            // Compatibilité maquette actuelle.
+            // À remplacer par Auth serveur avant production.
+            password,
 
-        totalDeposited:
-            0,
+            balance:
+                0,
 
-        totalWithdrawn:
-            0,
+            totalDeposited:
+                0,
 
-        totalInvested:
-            0,
+            totalWithdrawn:
+                0,
 
-        totalInvestmentIncome:
-            0,
+            totalInvested:
+                0,
 
-        totalReferralBonus:
-            0,
+            totalInvestmentIncome:
+                0,
 
-        referralCode:
-            personalReferralCode,
+            totalReferralBonus:
+                0,
 
-        referredBy:
-            sponsor
-                ? sponsor.referralCode
-                : "",
+            referralCode:
+                personalReferralCode,
 
-        sponsorId:
-            sponsor
-                ? sponsor.id
-                : null,
+            referredBy:
+                sponsor
+                    ? sponsor.referralCode
+                    : "",
 
-        firstDepositCompleted:
-            false,
+            sponsorId:
+                sponsor
+                    ? sponsor.id
+                    : null,
 
-        transactions:
-            [],
+            firstDepositCompleted:
+                false,
 
-        investments:
-            [],
+            transactions:
+                [],
 
-        tickets:
-            [],
+            investments:
+                [],
 
-        notifications:
-            [],
+            tickets:
+                [],
 
-        status:
-            "active",
+            notifications:
+                [],
 
-        createdAt:
-            new Date().toISOString()
+            status:
+                "active",
 
-    };
-
+            createdAt:
+                nowIso()
+        });
 
     users.unshift(user);
 
     saveUsers(users);
 
-
     hyqdSet(
         HYQD_KEYS.CURRENT_USER,
         user.id
     );
-
 
     return {
         success: true,
@@ -647,45 +501,31 @@ function registerUser(...args) {
     };
 }
 
-
-/* =========================================================
-   CONNEXION
-========================================================= */
-
 function loginUser(phone, password) {
-
     const normalized =
         normalizePhone(phone);
-
 
     const users =
         getUsersRaw();
 
-
     const user =
         users.find(
             item =>
-                normalizePhone(
-                    item.phone
-                ) === normalized
+                normalizePhone(item.phone) ===
+                normalized
         );
 
-
     if (!user) {
-
         return {
             success: false,
             message:
                 "Compte introuvable."
         };
     }
-
-
-    if (
+       if (
         String(user.password) !==
         String(password)
     ) {
-
         return {
             success: false,
             message:
@@ -693,12 +533,10 @@ function loginUser(phone, password) {
         };
     }
 
-
     if (
         user.status ===
         "blocked"
     ) {
-
         return {
             success: false,
             message:
@@ -706,17 +544,14 @@ function loginUser(phone, password) {
         };
     }
 
-
     hyqdSet(
         HYQD_KEYS.CURRENT_USER,
         user.id
     );
 
-
     processInvestmentGainsForUser(
         user.id
     );
-
 
     return {
         success: true,
@@ -727,9 +562,7 @@ function loginUser(phone, password) {
     };
 }
 
-
 function logoutUser() {
-
     localStorage.removeItem(
         HYQD_KEYS.CURRENT_USER
     );
@@ -737,66 +570,59 @@ function logoutUser() {
     return true;
 }
 
-
 /* =========================================================
    SESSION UTILISATEUR
 ========================================================= */
 
 function getCurrentUserId() {
-
     return hyqdGet(
         HYQD_KEYS.CURRENT_USER,
         null
     );
 }
 
-
 function getCurrentUser() {
-
     const userId =
         getCurrentUserId();
-
 
     if (!userId) {
         return null;
     }
 
-
     processInvestmentGainsForUser(
         userId
     );
 
-
     const users =
         getUsersRaw();
-
 
     const user =
         users.find(
             item =>
-                item.id === userId
+                item.id ===
+                userId
         );
 
+    if (!user) {
+        localStorage.removeItem(
+            HYQD_KEYS.CURRENT_USER
+        );
 
-    return user
-        ? cloneData(user)
-        : null;
+        return null;
+    }
+
+    return cloneData(user);
 }
 
-
 function requireAuth() {
-
     const user =
         getCurrentUser();
 
-
     if (!user) {
-
         if (
             typeof window !==
             "undefined"
         ) {
-
             window.location.replace(
                 "login.html"
             );
@@ -805,84 +631,213 @@ function requireAuth() {
         return null;
     }
 
-
     return user;
 }
 
-
 /* =========================================================
-   GAINS QUOTIDIENS
+   NOTIFICATIONS
 ========================================================= */
 
-function processInvestmentGainsForUser(userId) {
+function addNotification(
+    user,
+    type,
+    title,
+    message
+) {
+    ensureUserShape(user);
 
-    if (!userId) {
-        return;
+    const notification = {
+        id:
+            generateId(
+                "notification"
+            ),
+
+        type:
+            String(
+                type || "general"
+            ),
+
+        title:
+            String(
+                title || "Notification"
+            ),
+
+        message:
+            String(
+                message || ""
+            ),
+
+        read:
+            false,
+
+        createdAt:
+            nowIso()
+    };
+
+    user.notifications.unshift(
+        notification
+    );
+
+    return notification;
+}
+
+function getCurrentUserNotifications() {
+    const user =
+        getCurrentUser();
+
+    if (!user) {
+        return [];
     }
 
+    return cloneData(
+        user.notifications || []
+    );
+}
+
+function getUnreadNotificationCount() {
+    return getCurrentUserNotifications()
+        .filter(
+            notification =>
+                !notification.read
+        )
+        .length;
+}
+
+function markNotificationAsRead(
+    notificationId
+) {
+    const userId =
+        getCurrentUserId();
+
+    if (!userId) {
+        return false;
+    }
 
     const users =
         getUsersRaw();
 
+    const userIndex =
+        users.findIndex(
+            user =>
+                user.id ===
+                userId
+        );
+
+    if (userIndex < 0) {
+        return false;
+    }
+
+    const user =
+        users[userIndex];
+
+    const notification =
+        user.notifications.find(
+            item =>
+                item.id ===
+                notificationId
+        );
+
+    if (!notification) {
+        return false;
+    }
+
+    notification.read =
+        true;
+
+    users[userIndex] =
+        user;
+
+    saveUsers(users);
+
+    return true;
+}
+
+function markAllNotificationsAsRead() {
+    const userId =
+        getCurrentUserId();
+
+    if (!userId) {
+        return false;
+    }
+
+    const users =
+        getUsersRaw();
 
     const userIndex =
         users.findIndex(
             user =>
-                user.id === userId
+                user.id ===
+                userId
         );
 
+    if (userIndex < 0) {
+        return false;
+    }
+
+    const user =
+        users[userIndex];
+
+    user.notifications.forEach(
+        notification => {
+            notification.read =
+                true;
+        }
+    );
+
+    users[userIndex] =
+        user;
+
+    saveUsers(users);
+
+    return true;
+}
+
+/* =========================================================
+   GAINS D'INVESTISSEMENT
+========================================================= */
+
+function processInvestmentGainsForUser(
+    userId
+) {
+    if (!userId) {
+        return;
+    }
+
+    const users =
+        getUsersRaw();
+
+    const userIndex =
+        users.findIndex(
+            user =>
+                user.id ===
+                userId
+        );
 
     if (userIndex < 0) {
         return;
     }
 
-
     const user =
         users[userIndex];
 
+    ensureUserShape(user);
 
-    if (
-        !Array.isArray(
-            user.investments
-        ) ||
-        !user.investments.length
-    ) {
+    if (!user.investments.length) {
         return;
     }
 
+    let changed =
+        false;
 
-    if (
-        !Array.isArray(
-            user.transactions
-        )
-    ) {
-        user.transactions = [];
-    }
-
-
-    if (
-        !Array.isArray(
-            user.notifications
-        )
-    ) {
-        user.notifications = [];
-    }
-
-
-    let changed = false;
-
-    const now =
+    const currentTime =
         Date.now();
-
 
     user.investments.forEach(
         investment => {
 
-
             if (!investment) {
                 return;
             }
-
 
             const canonicalPack =
                 getPackById(
@@ -892,72 +847,66 @@ function processInvestmentGainsForUser(userId) {
                     investment.amount
                 );
 
-
             if (!canonicalPack) {
                 return;
             }
 
-
             if (
                 !investment.dailyIncome
             ) {
-
                 investment.dailyIncome =
                     canonicalPack.dailyIncome;
 
-                changed = true;
+                changed =
+                    true;
             }
-
 
             if (
                 !investment.totalIncome
             ) {
-
                 investment.totalIncome =
                     canonicalPack.totalIncome;
 
-                changed = true;
+                changed =
+                    true;
             }
-
 
             if (
                 !investment.duration
             ) {
-
                 investment.duration =
                     canonicalPack.duration;
 
-                changed = true;
+                changed =
+                    true;
             }
-
 
             if (
                 typeof investment.creditedDays !==
                 "number"
             ) {
-
                 investment.creditedDays =
                     0;
 
-                changed = true;
+                changed =
+                    true;
             }
-
 
             if (
                 typeof investment.totalIncomeCredited !==
                 "number"
             ) {
-
                 investment.totalIncomeCredited =
-                    investment.creditedDays *
-                    Number(
-                        investment.dailyIncome ||
-                        0
+                    safeNumber(
+                        investment.creditedDays
+                    ) *
+                    safeNumber(
+                        investment.dailyIncome
                     );
 
-                changed = true;
+                changed =
+                    true;
             }
-
 
             if (
                 investment.status ===
@@ -965,7 +914,6 @@ function processInvestmentGainsForUser(userId) {
             ) {
                 return;
             }
-
 
             if (
                 investment.status &&
@@ -975,20 +923,17 @@ function processInvestmentGainsForUser(userId) {
                 return;
             }
 
-
             const start =
                 new Date(
                     investment.startDate ||
                     investment.createdAt
                 ).getTime();
 
-
             if (
                 !Number.isFinite(start)
             ) {
                 return;
             }
-
 
             const duration =
                 Number(
@@ -998,39 +943,33 @@ function processInvestmentGainsForUser(userId) {
                         .INVESTMENT_DURATION
                 );
 
-
             const dailyIncome =
-                Number(
+                safeNumber(
                     investment.dailyIncome ||
-                    canonicalPack.dailyIncome ||
-                    0
+                    canonicalPack.dailyIncome
                 );
 
-
             if (
-                dailyIncome <= 0 ||
-                duration <= 0
+                duration <= 0 ||
+                dailyIncome <= 0
             ) {
                 return;
             }
-
 
             const elapsedFullDays =
                 Math.floor(
                     Math.max(
                         0,
-                        now - start
+                        currentTime - start
                     ) /
                     HYQD_CONFIG.DAY_MS
                 );
-
 
             const payableDays =
                 Math.min(
                     duration,
                     elapsedFullDays
                 );
-
 
             const creditedDays =
                 Math.max(
@@ -1041,20 +980,19 @@ function processInvestmentGainsForUser(userId) {
                     )
                 );
 
-
             const dueDays =
                 payableDays -
                 creditedDays;
 
-
-            if (dueDays <= 0) {
-
+            if (
+                dueDays <= 0
+            ) {
                 if (
-                    creditedDays >= duration &&
+                    creditedDays >=
+                        duration &&
                     investment.status !==
-                    "completed"
+                        "completed"
                 ) {
-
                     investment.status =
                         "completed";
 
@@ -1066,22 +1004,30 @@ function processInvestmentGainsForUser(userId) {
                             HYQD_CONFIG.DAY_MS
                         ).toISOString();
 
-                    changed = true;
+                    changed =
+                        true;
                 }
 
                 return;
             }
 
+            /*
+             * On crédite en une seule opération logique
+             * le nombre de jours dus.
+             *
+             * Les transactions restent détaillées jour
+             * par jour pour conserver un historique clair.
+             */
 
             for (
                 let day =
                     creditedDays + 1;
 
-                day <= payableDays;
+                day <=
+                    payableDays;
 
                 day++
             ) {
-
                 const payoutDate =
                     new Date(
                         start +
@@ -1089,13 +1035,11 @@ function processInvestmentGainsForUser(userId) {
                         HYQD_CONFIG.DAY_MS
                     ).toISOString();
 
-
                 user.balance =
                     safeNumber(
                         user.balance
                     ) +
                     dailyIncome;
-
 
                 user.totalInvestmentIncome =
                     safeNumber(
@@ -1103,26 +1047,24 @@ function processInvestmentGainsForUser(userId) {
                     ) +
                     dailyIncome;
 
-
                 investment.totalIncomeCredited =
                     safeNumber(
-                        investment.totalIncomeCredited
+                        investment
+                            .totalIncomeCredited
                     ) +
                     dailyIncome;
-
 
                 investment.creditedDays =
                     day;
 
-
                 investment.lastPayoutAt =
                     payoutDate;
 
-
                 user.transactions.unshift({
-
                     id:
-                        generateId("gain"),
+                        generateId(
+                            "gain"
+                        ),
 
                     type:
                         "daily_gain",
@@ -1140,69 +1082,50 @@ function processInvestmentGainsForUser(userId) {
                         investment.packId,
 
                     packName:
-                        investment.packName,
+                        investment.packName ||
+                        canonicalPack.name,
 
                     payoutDay:
                         day,
 
                     description:
-                        "Gain journalier - jour " +
-                        day +
-                        "/" +
-                        duration,
+                        `Gain journalier - jour ${day}/${duration}`,
 
                     createdAt:
                         payoutDate,
 
                     processedAt:
                         payoutDate
-
                 });
-
-
-                user.notifications.unshift({
-
-                    id:
-                        generateId(
-                            "notification"
-                        ),
-
-                    type:
-                        "daily_gain",
-
-                    title:
-                        "Gain journalier crédité",
-
-                    message:
-                        formatFCFA(
-                            dailyIncome
-                        ) +
-                        " ont été ajoutés à votre solde pour le pack " +
-                        (
-                            investment.packName ||
-                            canonicalPack.name
-                        ) +
-                        ".",
-
-                    read:
-                        false,
-
-                    createdAt:
-                        payoutDate
-
-                });
-
             }
 
+            /*
+             * Une seule notification résume le crédit,
+             * même si l'utilisateur revient après
+             * plusieurs jours d'absence.
+             */
+
+            const totalCredited =
+                dueDays *
+                dailyIncome;
+
+            addNotification(
+                user,
+                "daily_gain",
+                dueDays > 1
+                    ? "Gains journaliers crédités"
+                    : "Gain journalier crédité",
+                dueDays > 1
+                    ? `${formatFCFA(totalCredited)} ont été ajoutés à votre solde pour ${dueDays} jours du pack ${investment.packName || canonicalPack.name}.`
+                    : `${formatFCFA(dailyIncome)} ont été ajoutés à votre solde pour le pack ${investment.packName || canonicalPack.name}.`
+            );
 
             if (
                 investment.creditedDays >=
                 duration
             ) {
-
                 investment.status =
                     "completed";
-
 
                 investment.completedAt =
                     new Date(
@@ -1210,18 +1133,14 @@ function processInvestmentGainsForUser(userId) {
                         duration *
                         HYQD_CONFIG.DAY_MS
                     ).toISOString();
-
             }
 
-
-            changed = true;
-
+            changed =
+                true;
         }
     );
 
-
     if (changed) {
-
         users[userIndex] =
             user;
 
@@ -1229,37 +1148,28 @@ function processInvestmentGainsForUser(userId) {
     }
 }
 
-
 function processAllInvestmentGains() {
-
     const users =
         getUsersRaw();
 
-
     users.forEach(
         user => {
-
             processInvestmentGainsForUser(
                 user.id
             );
-
         }
     );
 }
-
 
 /* =========================================================
    INVESTISSEMENT
 ========================================================= */
 
 function investInPack(packInput) {
-
     const currentUserId =
         getCurrentUserId();
 
-
     if (!currentUserId) {
-
         return {
             success: false,
             message:
@@ -1267,15 +1177,16 @@ function investInPack(packInput) {
         };
     }
 
+    processInvestmentGainsForUser(
+        currentUserId
+    );
 
     const pack =
         getCanonicalPack(
             packInput
         );
 
-
     if (!pack) {
-
         return {
             success: false,
             message:
@@ -1283,10 +1194,8 @@ function investInPack(packInput) {
         };
     }
 
-
     const users =
         getUsersRaw();
-
 
     const userIndex =
         users.findIndex(
@@ -1295,9 +1204,7 @@ function investInPack(packInput) {
                 currentUserId
         );
 
-
     if (userIndex < 0) {
-
         return {
             success: false,
             message:
@@ -1305,21 +1212,20 @@ function investInPack(packInput) {
         };
     }
 
-
     const user =
         users[userIndex];
 
-
     const amount =
-        Number(pack.amount);
-
+        safeNumber(
+            pack.amount
+        );
 
     if (
         safeNumber(
             user.balance
-        ) < amount
+        ) <
+        amount
     ) {
-
         return {
             success: false,
             message:
@@ -1327,21 +1233,17 @@ function investInPack(packInput) {
         };
     }
 
-
-    const now =
+    const startDate =
         new Date();
 
-
-    const end =
+    const endDate =
         new Date(
-            now.getTime() +
+            startDate.getTime() +
             pack.duration *
             HYQD_CONFIG.DAY_MS
         );
 
-
     const investment = {
-
         id:
             generateId(
                 "investment"
@@ -1378,19 +1280,17 @@ function investInPack(packInput) {
             "active",
 
         startDate:
-            now.toISOString(),
+            startDate.toISOString(),
 
         endDate:
-            end.toISOString(),
+            endDate.toISOString(),
 
         createdAt:
-            now.toISOString(),
+            startDate.toISOString(),
 
         completedAt:
             null
-
     };
-
 
     user.balance =
         safeNumber(
@@ -1398,39 +1298,17 @@ function investInPack(packInput) {
         ) -
         amount;
 
-
     user.totalInvested =
         safeNumber(
             user.totalInvested
         ) +
         amount;
 
-
-    if (
-        !Array.isArray(
-            user.investments
-        )
-    ) {
-        user.investments = [];
-    }
-
-
     user.investments.unshift(
         investment
     );
 
-
-    if (
-        !Array.isArray(
-            user.transactions
-        )
-    ) {
-        user.transactions = [];
-    }
-
-
     user.transactions.unshift({
-
         id:
             generateId(
                 "investment_tx"
@@ -1454,24 +1332,26 @@ function investInPack(packInput) {
             pack.name,
 
         description:
-            "Activation du pack " +
-            pack.name,
+            `Activation du pack ${pack.name}`,
 
         createdAt:
-            now.toISOString(),
+            startDate.toISOString(),
 
         processedAt:
-            now.toISOString()
-
+            startDate.toISOString()
     });
 
+    addNotification(
+        user,
+        "investment",
+        "Investissement activé",
+        `Le pack ${pack.name} de ${formatFCFA(amount)} a été activé pour ${pack.duration} jours.`
+    );
 
     users[userIndex] =
         user;
 
-
     saveUsers(users);
-
 
     return {
         success: true,
@@ -1484,7 +1364,6 @@ function investInPack(packInput) {
     };
 }
 
-
 /* =========================================================
    DÉPÔTS
 ========================================================= */
@@ -1494,13 +1373,10 @@ function requestDeposit(
     method,
     reference
 ) {
-
     const userId =
         getCurrentUserId();
 
-
     if (!userId) {
-
         return {
             success: false,
             message:
@@ -1508,31 +1384,28 @@ function requestDeposit(
         };
     }
 
-
     const value =
-        Number(amount);
-
+        roundFCFA(
+            amount
+        );
 
     if (
-        !Number.isFinite(value) ||
-        value < 1000
+        value <
+        HYQD_CONFIG.MIN_DEPOSIT
     ) {
-
         return {
             success: false,
             message:
-                "Le montant minimum de dépôt est de 1 000 FCFA."
+                `Le montant minimum de dépôt est de ${formatFCFA(HYQD_CONFIG.MIN_DEPOSIT)}.`
         };
     }
 
-
     const paymentMethod =
-        String(method || "")
-            .trim();
-
+        String(
+            method || ""
+        ).trim();
 
     if (!paymentMethod) {
-
         return {
             success: false,
             message:
@@ -1540,14 +1413,12 @@ function requestDeposit(
         };
     }
 
-
     const paymentReference =
-        String(reference || "")
-            .trim();
-
+        String(
+            reference || ""
+        ).trim();
 
     if (!paymentReference) {
-
         return {
             success: false,
             message:
@@ -1555,20 +1426,49 @@ function requestDeposit(
         };
     }
 
-
     const users =
         getUsersRaw();
 
+    /*
+     * Une référence de paiement ne peut être utilisée
+     * qu'une seule fois dans toute la plateforme.
+     */
+
+    const referenceAlreadyUsed =
+        users.some(
+            user =>
+                (user.transactions || [])
+                    .some(
+                        transaction =>
+                            transaction.type ===
+                                "deposit" &&
+                            String(
+                                transaction.reference ||
+                                ""
+                            )
+                                .trim()
+                                .toLowerCase() ===
+                            paymentReference
+                                .toLowerCase()
+                    )
+        );
+
+    if (referenceAlreadyUsed) {
+        return {
+            success: false,
+            message:
+                "Cette référence de transaction a déjà été utilisée."
+        };
+    }
 
     const userIndex =
         users.findIndex(
             user =>
-                user.id === userId
+                user.id ===
+                userId
         );
 
-
     if (userIndex < 0) {
-
         return {
             success: false,
             message:
@@ -1576,22 +1476,22 @@ function requestDeposit(
         };
     }
 
-
     const user =
         users[userIndex];
 
+    const fee =
+        calculateFee(
+            value,
+            HYQD_CONFIG.DEPOSIT_FEE_RATE
+        );
 
-    if (
-        !Array.isArray(
-            user.transactions
-        )
-    ) {
-        user.transactions = [];
-    }
-
+    const netAmount =
+        Math.max(
+            0,
+            value - fee
+        );
 
     const transaction = {
-
         id:
             generateId(
                 "deposit"
@@ -1603,6 +1503,17 @@ function requestDeposit(
         amount:
             value,
 
+        grossAmount:
+            value,
+
+        fee,
+
+        feeRate:
+            HYQD_CONFIG
+                .DEPOSIT_FEE_RATE,
+
+        netAmount,
+
         method:
             paymentMethod,
 
@@ -1613,26 +1524,27 @@ function requestDeposit(
             "pending",
 
         createdAt:
-            new Date()
-                .toISOString(),
+            nowIso(),
 
         processedAt:
             null
-
     };
-
 
     user.transactions.unshift(
         transaction
     );
 
+    addNotification(
+        user,
+        "deposit",
+        "Dépôt en attente",
+        `Votre demande de dépôt de ${formatFCFA(value)} a été enregistrée et attend la validation de l'administration.`
+    );
 
     users[userIndex] =
         user;
 
-
     saveUsers(users);
-
 
     return {
         success: true,
@@ -1645,21 +1557,17 @@ function requestDeposit(
     };
 }
 
-
 function createDepositRequest(
     amount,
     method,
     reference
 ) {
-
     return requestDeposit(
         amount,
         method,
         reference
     );
 }
-
-
 /* =========================================================
    RETRAITS
 ========================================================= */
@@ -1669,13 +1577,10 @@ function requestWithdrawal(
     method,
     phone
 ) {
-
     const userId =
         getCurrentUserId();
 
-
     if (!userId) {
-
         return {
             success: false,
             message:
@@ -1683,25 +1588,21 @@ function requestWithdrawal(
         };
     }
 
-
     processInvestmentGainsForUser(
         userId
     );
 
-
     const users =
         getUsersRaw();
-
 
     const userIndex =
         users.findIndex(
             user =>
-                user.id === userId
+                user.id ===
+                userId
         );
 
-
     if (userIndex < 0) {
-
         return {
             success: false,
             message:
@@ -1709,35 +1610,31 @@ function requestWithdrawal(
         };
     }
 
-
     const user =
         users[userIndex];
 
-
     const value =
-        Number(amount);
-
+        roundFCFA(
+            amount
+        );
 
     if (
-        !Number.isFinite(value) ||
-        value < 1000
+        value <
+        HYQD_CONFIG.MIN_WITHDRAWAL
     ) {
-
         return {
             success: false,
             message:
-                "Le montant minimum de retrait est de 1 000 FCFA."
+                `Le montant minimum de retrait est de ${formatFCFA(HYQD_CONFIG.MIN_WITHDRAWAL)}.`
         };
     }
 
-
     const paymentMethod =
-        String(method || "")
-            .trim();
-
+        String(
+            method || ""
+        ).trim();
 
     if (!paymentMethod) {
-
         return {
             success: false,
             message:
@@ -1745,31 +1642,22 @@ function requestWithdrawal(
         };
     }
 
-
     const receivePhone =
-        normalizePhone(phone);
-
+        normalizePhone(
+            phone
+        );
 
     if (
-        receivePhone.length < 8
+        !isValidIvoryCoastPhone(
+            receivePhone
+        )
     ) {
-
         return {
             success: false,
             message:
                 "Veuillez renseigner un numéro de réception valide."
         };
     }
-
-
-    if (
-        !Array.isArray(
-            user.transactions
-        )
-    ) {
-        user.transactions = [];
-    }
-
 
     const pendingWithdrawals =
         user.transactions
@@ -1781,7 +1669,10 @@ function requestWithdrawal(
                         "pending"
             )
             .reduce(
-                (total, transaction) =>
+                (
+                    total,
+                    transaction
+                ) =>
                     total +
                     safeNumber(
                         transaction.amount
@@ -1789,19 +1680,16 @@ function requestWithdrawal(
                 0
             );
 
-
     const availableForWithdrawal =
         safeNumber(
             user.balance
         ) -
         pendingWithdrawals;
 
-
     if (
         value >
         availableForWithdrawal
     ) {
-
         return {
             success: false,
             message:
@@ -1809,9 +1697,19 @@ function requestWithdrawal(
         };
     }
 
+    const fee =
+        calculateFee(
+            value,
+            HYQD_CONFIG.WITHDRAW_FEE_RATE
+        );
+
+    const netAmount =
+        Math.max(
+            0,
+            value - fee
+        );
 
     const transaction = {
-
         id:
             generateId(
                 "withdraw"
@@ -1823,6 +1721,17 @@ function requestWithdrawal(
         amount:
             value,
 
+        grossAmount:
+            value,
+
+        fee,
+
+        feeRate:
+            HYQD_CONFIG
+                .WITHDRAW_FEE_RATE,
+
+        netAmount,
+
         method:
             paymentMethod,
 
@@ -1833,26 +1742,27 @@ function requestWithdrawal(
             "pending",
 
         createdAt:
-            new Date()
-                .toISOString(),
+            nowIso(),
 
         processedAt:
             null
-
     };
-
 
     user.transactions.unshift(
         transaction
     );
 
+    addNotification(
+        user,
+        "withdraw",
+        "Retrait en attente",
+        `Votre demande de retrait de ${formatFCFA(value)} a été enregistrée. Montant net prévu après frais : ${formatFCFA(netAmount)}.`
+    );
 
     users[userIndex] =
         user;
 
-
     saveUsers(users);
-
 
     return {
         success: true,
@@ -1865,20 +1775,17 @@ function requestWithdrawal(
     };
 }
 
-
 function createWithdrawRequest(
     amount,
     method,
     phone
 ) {
-
     return requestWithdrawal(
         amount,
         method,
         phone
     );
 }
-
 
 /* =========================================================
    ASSISTANCE
@@ -1888,13 +1795,10 @@ function createTicket(
     subject,
     message
 ) {
-
     const userId =
         getCurrentUserId();
 
-
     if (!userId) {
-
         return {
             success: false,
             message:
@@ -1902,21 +1806,19 @@ function createTicket(
         };
     }
 
-
     const cleanSubject =
-        String(subject || "")
-            .trim();
-
+        String(
+            subject || ""
+        ).trim();
 
     const cleanMessage =
-        String(message || "")
-            .trim();
-
+        String(
+            message || ""
+        ).trim();
 
     if (
         cleanSubject.length < 2
     ) {
-
         return {
             success: false,
             message:
@@ -1924,11 +1826,9 @@ function createTicket(
         };
     }
 
-
     if (
         cleanMessage.length < 5
     ) {
-
         return {
             success: false,
             message:
@@ -1936,20 +1836,17 @@ function createTicket(
         };
     }
 
-
     const users =
         getUsersRaw();
-
 
     const userIndex =
         users.findIndex(
             user =>
-                user.id === userId
+                user.id ===
+                userId
         );
 
-
     if (userIndex < 0) {
-
         return {
             success: false,
             message:
@@ -1957,22 +1854,10 @@ function createTicket(
         };
     }
 
-
     const user =
         users[userIndex];
 
-
-    if (
-        !Array.isArray(
-            user.tickets
-        )
-    ) {
-        user.tickets = [];
-    }
-
-
     const ticket = {
-
         id:
             generateId(
                 "ticket"
@@ -1991,63 +1876,189 @@ function createTicket(
             "",
 
         createdAt:
-            new Date()
-                .toISOString(),
+            nowIso(),
 
         repliedAt:
             null
-
     };
-
 
     user.tickets.unshift(
         ticket
     );
 
+    addNotification(
+        user,
+        "support",
+        "Demande envoyée",
+        `Votre demande « ${cleanSubject} » a été transmise à l'assistance.`
+    );
 
     users[userIndex] =
         user;
 
-
     saveUsers(users);
-
 
     return {
         success: true,
         message:
             "Votre demande a été envoyée à l'assistance.",
         ticket:
-            cloneData(ticket)
+            cloneData(
+                ticket
+            )
     };
 }
-
 
 function createSupportTicket(
     subject,
     message
 ) {
-
     return createTicket(
         subject,
         message
     );
 }
 
+/* =========================================================
+   PROFIL
+========================================================= */
+
+function updateCurrentUserProfile(
+    data = {}
+) {
+    const userId =
+        getCurrentUserId();
+
+    if (!userId) {
+        return {
+            success: false,
+            message:
+                "Vous devez être connecté."
+        };
+    }
+
+    const users =
+        getUsersRaw();
+
+    const userIndex =
+        users.findIndex(
+            user =>
+                user.id ===
+                userId
+        );
+
+    if (userIndex < 0) {
+        return {
+            success: false,
+            message:
+                "Utilisateur introuvable."
+        };
+    }
+
+    const user =
+        users[userIndex];
+
+    const fullName =
+        String(
+            data.fullName ||
+            data.name ||
+            user.fullName ||
+            ""
+        ).trim();
+
+    const phone =
+        normalizePhone(
+            data.phone ||
+            user.phone
+        );
+
+    if (
+        fullName.length < 3 ||
+        fullName
+            .split(/\s+/)
+            .filter(Boolean)
+            .length < 2
+    ) {
+        return {
+            success: false,
+            message:
+                "Veuillez renseigner votre nom complet."
+        };
+    }
+
+    if (
+        !isValidIvoryCoastPhone(
+            phone
+        )
+    ) {
+        return {
+            success: false,
+            message:
+                "Numéro de téléphone invalide."
+        };
+    }
+
+    const phoneUsed =
+        users.some(
+            item =>
+                item.id !==
+                    user.id &&
+                normalizePhone(
+                    item.phone
+                ) ===
+                    phone
+        );
+
+    if (phoneUsed) {
+        return {
+            success: false,
+            message:
+                "Ce numéro de téléphone est déjà utilisé par un autre compte."
+        };
+    }
+
+    user.fullName =
+        fullName;
+
+    user.name =
+        fullName;
+
+    user.phone =
+        phone;
+
+    users[userIndex] =
+        user;
+
+    saveUsers(users);
+
+    return {
+        success: true,
+        message:
+            "Profil mis à jour avec succès.",
+        user:
+            cloneData(
+                user
+            )
+    };
+}
 
 /* =========================================================
    MOT DE PASSE OUBLIÉ
 ========================================================= */
 
-function requestPasswordReset(phone) {
-
+function requestPasswordReset(
+    phone
+) {
     const normalized =
-        normalizePhone(phone);
-
+        normalizePhone(
+            phone
+        );
 
     if (
-        normalized.length < 8
+        !isValidIvoryCoastPhone(
+            normalized
+        )
     ) {
-
         return {
             success: false,
             message:
@@ -2055,15 +2066,12 @@ function requestPasswordReset(phone) {
         };
     }
 
-
     const user =
         findUserByPhone(
             normalized
         );
 
-
     if (!user) {
-
         return {
             success: false,
             message:
@@ -2071,28 +2079,36 @@ function requestPasswordReset(phone) {
         };
     }
 
+    /*
+     * IMPORTANT :
+     * cette fonction ne modifie volontairement PAS
+     * le mot de passe.
+     *
+     * Une vraie réinitialisation doit utiliser
+     * un code OTP ou un lien sécurisé délivré
+     * par un service d'authentification serveur.
+     */
 
     return {
         success: true,
         message:
-            "Compte identifié. La réinitialisation sécurisée du mot de passe sera reliée au service d'authentification."
+            "Compte identifié. La réinitialisation sécurisée du mot de passe doit être confirmée par le service d'authentification."
     };
 }
 
-
 /* =========================================================
-   ADMIN
+   ADMINISTRATION
 ========================================================= */
 
-function adminLogin(code) {
-
+function adminLogin(
+    code
+) {
     const inputCode =
-        String(code || "")
-            .trim();
-
+        String(
+            code || ""
+        ).trim();
 
     if (!inputCode) {
-
         return {
             success: false,
             message:
@@ -2100,12 +2116,10 @@ function adminLogin(code) {
         };
     }
 
-
     if (
         inputCode !==
         HYQD_CONFIG.ADMIN_CODE
     ) {
-
         return {
             success: false,
             message:
@@ -2113,71 +2127,10 @@ function adminLogin(code) {
         };
     }
 
-
     sessionStorage.setItem(
-        HYQD_KEYS.ADMIN_SESSION,
-        "authenticated"
-    );
-
-
-    processAllInvestmentGains();
-
-
-    return {
-        success: true,
-        message:
-            "Accès administrateur autorisé."
-    };
-}
-
-
-function authenticateAdmin(code) {
-
-    return adminLogin(code);
-}
-
-
-function isAdminAuthenticated() {
-
-    return (
-        sessionStorage.getItem(
-            HYQD_KEYS.ADMIN_SESSION
-        ) === "authenticated"
-    );
-}
-
-
-function adminLogout() {
-
-    sessionStorage.removeItem(
-        HYQD_KEYS.ADMIN_SESSION
-    );
-
-    return true;
-}
-
-
-/* =========================================================
-   UTILISATEURS ADMIN
-========================================================= */
-
-function getUsers() {
-
-    if (
-        isAdminAuthenticated()
-    ) {
-        processAllInvestmentGains();
-    }
-
-
-    return cloneData(
-        getUsersRaw()
-    );
-}
-
-
-/* =========================================================
-   VALIDATION DÉPÔT / RETRAIT
+        HY
+       /* =========================================================
+   VALIDATION ADMIN — DÉPÔTS / RETRAITS
 ========================================================= */
 
 function adminProcessTransaction(
@@ -2185,11 +2138,9 @@ function adminProcessTransaction(
     transactionId,
     status
 ) {
-
     if (
         !isAdminAuthenticated()
     ) {
-
         return {
             success: false,
             message:
@@ -2197,12 +2148,10 @@ function adminProcessTransaction(
         };
     }
 
-
     if (
         status !== "approved" &&
         status !== "rejected"
     ) {
-
         return {
             success: false,
             message:
@@ -2210,25 +2159,23 @@ function adminProcessTransaction(
         };
     }
 
-
     processInvestmentGainsForUser(
         userId
     );
 
-
     const users =
         getUsersRaw();
-
 
     const userIndex =
         users.findIndex(
             user =>
-                user.id === userId
+                user.id ===
+                userId
         );
 
-
-    if (userIndex < 0) {
-
+    if (
+        userIndex < 0
+    ) {
         return {
             success: false,
             message:
@@ -2236,24 +2183,21 @@ function adminProcessTransaction(
         };
     }
 
-
     const user =
-        users[userIndex];
-
+        ensureUserShape(
+            users[userIndex]
+        );
 
     const transactionIndex =
-        (user.transactions || [])
-            .findIndex(
-                transaction =>
-                    transaction.id ===
-                    transactionId
-            );
-
+        user.transactions.findIndex(
+            transaction =>
+                transaction.id ===
+                transactionId
+        );
 
     if (
         transactionIndex < 0
     ) {
-
         return {
             success: false,
             message:
@@ -2261,18 +2205,15 @@ function adminProcessTransaction(
         };
     }
 
-
     const transaction =
         user.transactions[
             transactionIndex
         ];
 
-
     if (
         transaction.status !==
         "pending"
     ) {
-
         return {
             success: false,
             message:
@@ -2280,45 +2221,117 @@ function adminProcessTransaction(
         };
     }
 
+    if (
+        transaction.type !==
+            "deposit" &&
+        transaction.type !==
+            "withdraw"
+    ) {
+        return {
+            success: false,
+            message:
+                "Ce type d'opération ne peut pas être traité ici."
+        };
+    }
 
-    /* DÉPÔT */
+    /* =====================================================
+       VALIDATION D'UN DÉPÔT
+    ===================================================== */
 
     if (
         transaction.type ===
             "deposit" &&
-        status === "approved"
+        status ===
+            "approved"
     ) {
-
-        const amount =
-            safeNumber(
+        const grossAmount =
+            roundFCFA(
                 transaction.amount
             );
 
+        const fee =
+            Number.isFinite(
+                Number(
+                    transaction.fee
+                )
+            )
+                ? roundFCFA(
+                    transaction.fee
+                )
+                : calculateFee(
+                    grossAmount,
+                    HYQD_CONFIG
+                        .DEPOSIT_FEE_RATE
+                );
+
+        const netAmount =
+            Number.isFinite(
+                Number(
+                    transaction.netAmount
+                )
+            )
+                ? roundFCFA(
+                    transaction.netAmount
+                )
+                : Math.max(
+                    0,
+                    grossAmount - fee
+                );
+
+        transaction.grossAmount =
+            grossAmount;
+
+        transaction.fee =
+            fee;
+
+        transaction.feeRate =
+            HYQD_CONFIG
+                .DEPOSIT_FEE_RATE;
+
+        transaction.netAmount =
+            netAmount;
+
+        /*
+         * Le montant réellement ajouté au solde
+         * correspond au dépôt moins les frais de 1 %.
+         */
 
         user.balance =
             safeNumber(
                 user.balance
             ) +
-            amount;
+            netAmount;
 
+        /*
+         * Le total des dépôts conserve le montant brut
+         * réellement déposé par l'utilisateur.
+         */
 
         user.totalDeposited =
             safeNumber(
                 user.totalDeposited
             ) +
-            amount;
+            grossAmount;
 
+        /* =================================================
+           BONUS DE PARRAINAGE
+
+           10 % uniquement sur le premier dépôt VALIDÉ
+           du filleul.
+        ================================================= */
 
         if (
             !user.firstDepositCompleted
         ) {
-
             user.firstDepositCompleted =
                 true;
 
+            user.firstDepositAt =
+                nowIso();
 
-            if (user.sponsorId) {
-
+            if (
+                user.sponsorId
+            ) {
                 const sponsorIndex =
                     users.findIndex(
                         item =>
@@ -2326,447 +2339,115 @@ function adminProcessTransaction(
                             user.sponsorId
                     );
 
-
                 if (
                     sponsorIndex >= 0 &&
                     sponsorIndex !==
                     userIndex
                 ) {
-
                     const sponsor =
-                        users[
-                            sponsorIndex
-                        ];
-
+                        ensureUserShape(
+                            users[
+                                sponsorIndex
+                            ]
+                        );
 
                     const bonus =
                         Math.floor(
-                            amount *
+                            grossAmount *
                             HYQD_CONFIG
                                 .REFERRAL_RATE
                         );
 
-
-                    sponsor.balance =
-                        safeNumber(
-                            sponsor.balance
-                        ) +
-                        bonus;
-
-
-                    sponsor.totalReferralBonus =
-                        safeNumber(
-                            sponsor
-                                .totalReferralBonus
-                        ) +
-                        bonus;
-
-
                     if (
-                        !Array.isArray(
-                            sponsor.transactions
-                        )
+                        bonus > 0
                     ) {
-                        sponsor.transactions =
-                            [];
-                    }
-
-
-                    sponsor.transactions.unshift({
-
-                        id:
-                            generateId(
-                                "referral_bonus"
-                            ),
-
-                        type:
-                            "referral_bonus",
-
-                        amount:
-                            bonus,
-
-                        status:
-                            "approved",
-
-                        sourceUserId:
-                            user.id,
-
-                        sourceDepositId:
-                            transaction.id,
-
-                        description:
-                            "Bonus de parrainage",
-
-                        createdAt:
-                            new Date()
-                                .toISOString(),
-
-                        processedAt:
-                            new Date()
-                                .toISOString()
-
-                    });
-
-
-                    if (
-                        !Array.isArray(
-                            sponsor.notifications
-                        )
-                    ) {
-                        sponsor.notifications =
-                            [];
-                    }
-
-
-                    sponsor.notifications.unshift({
-
-                        id:
-                            generateId(
-                                "notification"
-                            ),
-
-                        type:
-                            "referral_bonus",
-
-                        title:
-                            "Bonus de parrainage",
-
-                        message:
-                            "Un bonus de " +
-                            formatFCFA(
-                                bonus
+                        sponsor.balance =
+                            safeNumber(
+                                sponsor.balance
                             ) +
-                            " a été ajouté à votre solde.",
+                            bonus;
 
-                        read:
-                            false,
+                        sponsor.totalReferralBonus =
+                            safeNumber(
+                                sponsor
+                                    .totalReferralBonus
+                            ) +
+                            bonus;
 
-                        createdAt:
-                            new Date()
-                                .toISOString()
+                        sponsor.transactions
+                            .unshift({
 
-                    });
+                                id:
+                                    generateId(
+                                        "referral_bonus"
+                                    ),
 
+                                type:
+                                    "referral_bonus",
 
-                    users[
-                        sponsorIndex
-                    ] =
-                        sponsor;
+                                amount:
+                                    bonus,
+
+                                status:
+                                    "approved",
+
+                                sourceUserId:
+                                    user.id,
+
+                                sourceUserName:
+                                    user.fullName,
+
+                                sourceDepositId:
+                                    transaction.id,
+
+                                description:
+                                    "Bonus de parrainage - 10 % du premier dépôt validé",
+
+                                createdAt:
+                                    nowIso(),
+
+                                processedAt:
+                                    nowIso()
+                            });
+
+                        addNotification(
+                            sponsor,
+                            "referral_bonus",
+                            "Bonus de parrainage",
+                            `Votre filleul a effectué son premier dépôt validé. Un bonus de ${formatFCFA(bonus)} a été ajouté à votre solde.`
+                        );
+
+                        users[
+                            sponsorIndex
+                        ] =
+                            sponsor;
+                    }
                 }
             }
         }
     }
 
-
-    /* RETRAIT */
+    /* =====================================================
+       VALIDATION D'UN RETRAIT
+    ===================================================== */
 
     if (
         transaction.type ===
             "withdraw" &&
-        status === "approved"
+        status ===
+            "approved"
     ) {
-
-        const amount =
-            safeNumber(
+        const grossAmount =
+            roundFCFA(
                 transaction.amount
             );
 
-
-        if (
-            safeNumber(
-                user.balance
-            ) < amount
-        ) {
-
-            return {
-                success: false,
-                message:
-                    "Le solde actuel de l'utilisateur est insuffisant pour valider ce retrait."
-            };
-        }
-
-
-        user.balance =
-            safeNumber(
-                user.balance
-            ) -
-            amount;
-
-
-        user.totalWithdrawn =
-            safeNumber(
-                user.totalWithdrawn
-            ) +
-            amount;
-    }
-
-
-    transaction.status =
-        status;
-
-
-    transaction.processedAt =
-        new Date()
-            .toISOString();
-
-
-    user.transactions[
-        transactionIndex
-    ] =
-        transaction;
-
-
-    if (
-        !Array.isArray(
-            user.notifications
-        )
-    ) {
-        user.notifications = [];
-    }
-
-
-    user.notifications.unshift({
-
-        id:
-            generateId(
-                "notification"
-            ),
-
-        type:
-            transaction.type,
-
-        title:
-            status === "approved"
-                ? "Opération validée"
-                : "Opération refusée",
-
-        message:
-            transaction.type === "deposit"
-
-                ? (
-                    status === "approved"
-
-                        ? "Votre dépôt de " +
-                          formatFCFA(
-                              transaction.amount
-                          ) +
-                          " a été validé."
-
-                        : "Votre demande de dépôt de " +
-                          formatFCFA(
-                              transaction.amount
-                          ) +
-                          " a été refusée."
+        const fee =
+            Number.isFinite(
+                Number(
+                    transaction.fee
                 )
-
-                : (
-                    status === "approved"
-
-                        ? "Votre retrait de " +
-                          formatFCFA(
-                              transaction.amount
-                          ) +
-                          " a été validé."
-
-                        : "Votre demande de retrait de " +
-                          formatFCFA(
-                              transaction.amount
-                          ) +
-                          " a été refusée."
-                ),
-
-        read:
-            false,
-
-        createdAt:
-            new Date()
-                .toISOString()
-
-    });
-
-
-    users[userIndex] =
-        user;
-
-
-    saveUsers(users);
-
-
-    return {
-        success: true,
-        message:
-            status === "approved"
-                ? "Transaction validée avec succès."
-                : "Transaction refusée avec succès."
-    };
-}
-
-
-/* =========================================================
-   RÉPONSE ADMIN SUPPORT
-========================================================= */
-
-function adminReplyToTicket(
-    userId,
-    ticketId,
-    reply
-) {
-
-    if (
-        !isAdminAuthenticated()
-    ) {
-
-        return {
-            success: false,
-            message:
-                "Accès administrateur requis."
-        };
-    }
-
-
-    const cleanReply =
-        String(reply || "")
-            .trim();
-
-
-    if (
-        cleanReply.length < 2
-    ) {
-
-        return {
-            success: false,
-            message:
-                "Veuillez saisir une réponse."
-        };
-    }
-
-
-    const users =
-        getUsersRaw();
-
-
-    const userIndex =
-        users.findIndex(
-            user =>
-                user.id === userId
-        );
-
-
-    if (
-        userIndex < 0
-    ) {
-
-        return {
-            success: false,
-            message:
-                "Utilisateur introuvable."
-        };
-    }
-
-
-    const user =
-        users[userIndex];
-
-
-    const ticketIndex =
-        (user.tickets || [])
-            .findIndex(
-                ticket =>
-                    ticket.id ===
-                    ticketId
-            );
-
-
-    if (
-        ticketIndex < 0
-    ) {
-
-        return {
-            success: false,
-            message:
-                "Ticket introuvable."
-        };
-    }
-
-
-    user.tickets[
-        ticketIndex
-    ].adminReply =
-        cleanReply;
-
-
-    user.tickets[
-        ticketIndex
-    ].status =
-        "answered";
-
-
-    user.tickets[
-        ticketIndex
-    ].repliedAt =
-        new Date()
-            .toISOString();
-
-
-    if (
-        !Array.isArray(
-            user.notifications
-        )
-    ) {
-        user.notifications = [];
-    }
-
-
-    user.notifications.unshift({
-
-        id:
-            generateId(
-                "notification"
-            ),
-
-        type:
-            "support",
-
-        title:
-            "Réponse de l'assistance",
-
-        message:
-            "L'administration a répondu à votre demande « " +
-            user.tickets[
-                ticketIndex
-            ].subject +
-            " ».",
-
-        read:
-            false,
-
-        createdAt:
-            new Date()
-                .toISOString()
-
-    });
-
-
-    users[userIndex] =
-        user;
-
-
-    saveUsers(users);
-
-
-    return {
-        success: true,
-        message:
-            "Réponse envoyée avec succès."
-    };
-}
-
-
-/* =========================================================
-   NOTIFICATIONS
-========================================================= */
-
-function getCurrentUserNotifications() {
-
-    const user =
-        getCurrent
+            )
+                ? roundFCFA(
+                    transaction.fee
+               
