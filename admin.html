@@ -1,214 +1,228 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="description"
-        content="Espace administrateur sécurisé de Housing's YQD."
-    >
-
-    <meta name="theme-color" content="#0a3d78">
+    <meta name="description"
+          content="Administration sécurisée de Housing's YQD">
 
     <title>Administration | Housing's YQD</title>
 
-    <!-- STYLE PRINCIPAL -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet"
+          href="style.css">
 
-    <!-- FONT AWESOME -->
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    >
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
 </head>
 
 
 <body class="dashboard-body admin-body">
 
 
-    <!-- =========================================
-         VERIFICATION DU CODE ADMINISTRATEUR
-    ========================================== -->
+<!-- =========================================
+     ÉCRAN DE VÉRIFICATION ADMINISTRATEUR
+========================================= -->
 
-    <div
-        class="admin-auth-screen"
-        id="adminAuthScreen"
-    >
-
-        <div class="admin-auth-card">
+<div class="admin-access-screen"
+     id="adminAccessScreen">
 
 
-            <div class="admin-auth-logo">
+    <div class="admin-access-card">
 
-                <span class="logo-icon">
+
+        <div class="admin-access-logo">
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+        </div>
+
+
+        <span class="page-eyebrow">
+
+            ACCÈS PROTÉGÉ
+
+        </span>
+
+
+        <h1>
+
+            Administration
+
+        </h1>
+
+
+        <p>
+
+            Veuillez saisir votre code administrateur
+            pour accéder à l'espace de gestion.
+
+        </p>
+
+
+        <div id="adminAccessMessage"
+             class="form-message">
+
+        </div>
+
+
+        <form id="adminAccessForm">
+
+
+            <div class="form-group">
+
+                <label for="adminCode">
+
+                    Code administrateur
+
+                </label>
+
+
+                <div class="password-input-wrapper">
+
+                    <input type="password"
+                           id="adminCode"
+                           class="form-control"
+                           placeholder="Saisissez votre code"
+                           autocomplete="current-password"
+                           required>
+
+
+                    <button type="button"
+                            class="password-toggle"
+                            id="toggleAdminCode">
+
+                        <i class="fa-regular fa-eye"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <button type="submit"
+                    class="form-submit">
+
+                <i class="fa-solid fa-lock"></i>
+
+                Vérifier et accéder
+
+            </button>
+
+
+        </form>
+
+
+        <a href="index.html"
+           class="admin-back-home">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Retour à l'accueil
+
+        </a>
+
+
+    </div>
+
+
+</div>
+
+
+<!-- =========================================
+     INTERFACE ADMIN
+========================================= -->
+
+<div id="adminApplication"
+     style="display:none;">
+
+
+    <!-- OVERLAY MOBILE -->
+
+    <div class="dashboard-overlay"
+         id="adminOverlay">
+
+    </div>
+
+
+    <!-- =====================================
+         SIDEBAR ADMIN
+    ====================================== -->
+
+    <aside class="dashboard-sidebar admin-sidebar"
+           id="adminSidebar">
+
+
+        <!-- BRAND -->
+
+        <div class="sidebar-brand">
+
+
+            <a href="index.html"
+               class="brand">
+
+
+                <div class="brand-logo">
 
                     <i class="fa-solid fa-building"></i>
-
-                </span>
-
-            </div>
-
-
-            <h1>
-                Housing's YQD
-            </h1>
-
-
-            <p class="admin-auth-subtitle">
-
-                Accès réservé à l'administration
-
-            </p>
-
-
-            <div class="admin-security-icon">
-
-                <i class="fa-solid fa-shield-halved"></i>
-
-            </div>
-
-
-            <h2>
-                Vérification de sécurité
-            </h2>
-
-
-            <p>
-
-                Veuillez saisir votre code administrateur
-                pour accéder au tableau de contrôle.
-
-            </p>
-
-
-            <form
-                id="adminCodeForm"
-                autocomplete="off"
-            >
-
-
-                <div class="form-group">
-
-                    <label
-                        for="adminAccessCode"
-                        class="form-label"
-                    >
-
-                        Code administrateur
-
-                    </label>
-
-
-                    <div class="input-wrapper">
-
-
-                        <input
-
-                            type="password"
-
-                            id="adminAccessCode"
-
-                            class="form-control"
-
-                            placeholder="Saisissez votre code"
-
-                            autocomplete="off"
-
-                            required
-
-                        >
-
-
-                        <button
-
-                            type="button"
-
-                            class="password-toggle"
-
-                            id="toggleAdminCode"
-
-                            aria-label="Afficher ou masquer le code"
-
-                        >
-
-                            <i class="fa-solid fa-eye"></i>
-
-                        </button>
-
-
-                    </div>
-
 
                 </div>
 
 
+                <div class="brand-text">
 
-                <!-- MESSAGE -->
+                    <strong>
 
-                <div
-                    id="adminAuthMessage"
-                    role="alert"
-                    aria-live="polite"
-                    style="
-                        display: none;
-                        padding: 12px;
-                        margin-bottom: 18px;
-                        border-radius: 10px;
-                        font-size: 14px;
-                    "
-                ></div>
+                        Housing's YQD
+
+                    </strong>
 
 
+                    <span>
 
-                <button
-                    type="submit"
-                    class="btn btn-primary btn-full"
-                    id="adminLoginButton"
-                >
+                        ADMINISTRATION
 
-                    <i class="fa-solid fa-lock"></i>
+                    </span>
 
-                    Vérifier et accéder
-
-                </button>
+                </div>
 
 
-            </form>
+            </a>
 
 
+        </div>
 
-            <div
-                style="
-                    text-align: center;
-                    margin-top: 22px;
-                "
-            >
 
-                <a
-                    href="login.html"
-                    style="
-                        color: #64748b;
-                        font-size: 14px;
-                    "
-                >
+        <!-- ADMIN PROFILE -->
 
-                    <i class="fa-solid fa-arrow-left"></i>
+        <div class="sidebar-user admin-sidebar-user">
 
-                    Retour à la connexion
 
-                </a>
+            <div class="sidebar-avatar admin-avatar">
+
+                A
 
             </div>
 
 
-            <div class="admin-auth-security">
+            <div>
 
-                <i class="fa-solid fa-lock"></i>
+                <strong>
+
+                    Administrateur
+
+                </strong>
+
 
                 <span>
-                    Zone administrative sécurisée
+
+                    Accès sécurisé
+
                 </span>
 
             </div>
@@ -216,234 +230,255 @@
 
         </div>
 
-    </div>
+
+        <!-- NAVIGATION -->
+
+        <nav class="sidebar-nav">
 
 
+            <button class="sidebar-link active"
+                    data-admin-section="overview">
 
-    <!-- =========================================
-         ESPACE ADMINISTRATEUR
-    ========================================== -->
-
-    <div
-        id="adminPanel"
-        style="display: none;"
-    >
-
-
-        <!-- =====================================
-             SIDEBAR ADMIN
-        ====================================== -->
-
-        <aside
-            class="sidebar admin-sidebar"
-            id="adminSidebar"
-        >
-
-
-            <div class="sidebar-brand">
-
-                <span class="logo-icon">
-
-                    <i class="fa-solid fa-building"></i>
-
-                </span>
-
+                <i class="fa-solid fa-table-columns"></i>
 
                 <span>
 
-                    Housing's YQD
+                    Tableau de bord
 
                 </span>
 
-
-            </div>
-
+            </button>
 
 
-            <div class="admin-badge">
+            <button class="sidebar-link"
+                    data-admin-section="users">
 
-                <i class="fa-solid fa-user-shield"></i>
+                <i class="fa-solid fa-users"></i>
 
-                Administration
-
-            </div>
-
-
-
-            <nav class="sidebar-menu">
-
-
-                <a
-                    href="#adminOverview"
-                    class="active"
-                    data-admin-section="adminOverview"
-                >
-
-                    <i class="fa-solid fa-chart-pie"></i>
-
-                    Tableau de bord
-
-                </a>
-
-
-
-                <a
-                    href="#adminUsers"
-                    data-admin-section="adminUsers"
-                >
-
-                    <i class="fa-solid fa-users"></i>
+                <span>
 
                     Utilisateurs
 
-                </a>
+                </span>
+
+            </button>
 
 
+            <button class="sidebar-link"
+                    data-admin-section="deposits">
 
-                <a
-                    href="#adminDeposits"
-                    data-admin-section="adminDeposits"
-                >
+                <i class="fa-solid fa-arrow-down"></i>
 
-                    <i class="fa-solid fa-wallet"></i>
+                <span>
 
                     Dépôts
 
-                    <span
-                        class="menu-count"
-                        id="pendingDepositsCount"
-                    >
-                        0
-                    </span>
+                </span>
 
-                </a>
+            </button>
 
 
+            <button class="sidebar-link"
+                    data-admin-section="withdrawals">
 
-                <a
-                    href="#adminWithdrawals"
-                    data-admin-section="adminWithdrawals"
-                >
+                <i class="fa-solid fa-arrow-up"></i>
 
-                    <i class="fa-solid fa-money-bill-transfer"></i>
+                <span>
 
                     Retraits
 
-                    <span
-                        class="menu-count"
-                        id="pendingWithdrawalsCount"
-                    >
-                        0
-                    </span>
+                </span>
 
-                </a>
+            </button>
 
 
+            <button class="sidebar-link"
+                    data-admin-section="investments">
 
-                <a
-                    href="#adminInvestments"
-                    data-admin-section="adminInvestments"
-                >
+                <i class="fa-solid fa-chart-line"></i>
 
-                    <i class="fa-solid fa-chart-line"></i>
+                <span>
 
                     Investissements
 
-                </a>
+                </span>
+
+            </button>
 
 
+            <button class="sidebar-link"
+                    data-admin-section="tickets">
 
-                <a
-                    href="#adminTickets"
-                    data-admin-section="adminTickets"
-                >
+                <i class="fa-solid fa-headset"></i>
 
-                    <i class="fa-solid fa-headset"></i>
+                <span>
 
                     Assistance
 
-                    <span
-                        class="menu-count"
-                        id="pendingTicketsCount"
-                    >
-                        0
-                    </span>
+                </span>
 
-                </a>
+            </button>
 
 
+            <button class="sidebar-link"
+                    data-admin-section="history">
 
-                <a
-                    href="#adminTransactions"
-                    data-admin-section="adminTransactions"
-                >
+                <i class="fa-solid fa-clock-rotate-left"></i>
 
-                    <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>
 
                     Historique
 
-                </a>
+                </span>
+
+            </button>
 
 
+        </nav>
 
-                <button
-                    type="button"
-                    class="logout-btn"
-                    id="adminLogoutButton"
-                >
 
-                    <i class="fa-solid fa-right-from-bracket"></i>
+        <!-- FOOTER -->
+
+        <div class="sidebar-footer">
+
+
+            <button class="sidebar-link logout-link"
+                    id="adminLogoutButton">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                <span>
 
                     Déconnexion
 
-                </button>
+                </span>
+
+            </button>
 
 
-            </nav>
+        </div>
 
 
-        </aside>
+    </aside>
 
 
+    <!-- =====================================
+         MAIN
+    ====================================== -->
 
-        <!-- =====================================
-             CONTENU PRINCIPAL
-        ====================================== -->
-
-        <div class="dashboard-main">
-
-
-            <!-- =================================
-                 TOPBAR
-            ================================== -->
-
-            <header class="dashboard-topbar">
+    <main class="dashboard-main admin-main">
 
 
-                <button
-                    class="mobile-menu-btn"
-                    id="adminMobileMenuButton"
-                    type="button"
-                >
+        <!-- TOPBAR -->
+
+        <header class="dashboard-topbar">
+
+
+            <div class="topbar-left">
+
+
+                <button class="mobile-dashboard-menu"
+                        id="adminMobileMenu">
 
                     <i class="fa-solid fa-bars"></i>
 
                 </button>
 
 
+                <div>
 
-                <div class="topbar-title">
 
-                    <h2 id="adminPageTitle">
+                    <span class="page-eyebrow">
 
-                        Tableau de bord administrateur
+                        ESPACE ADMINISTRATEUR
+
+                    </span>
+
+
+                    <h1 id="adminPageTitle">
+
+                        Tableau de bord
+
+                    </h1>
+
+
+                </div>
+
+
+            </div>
+
+
+            <div class="topbar-right">
+
+
+                <a href="index.html"
+                   class="topbar-home">
+
+                    <i class="fa-solid fa-house"></i>
+
+                    <span>
+
+                        Accueil
+
+                    </span>
+
+                </a>
+
+
+                <div class="admin-online-status">
+
+                    <i class="fa-solid fa-circle"></i>
+
+                    <span>
+
+                        Session sécurisée
+
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+        </header>
+
+
+        <!-- =================================
+             OVERVIEW
+        ================================== -->
+
+        <section class="dashboard-section active"
+                 id="adminOverviewSection">
+
+
+            <!-- HERO -->
+
+            <div class="welcome-banner admin-welcome-banner">
+
+
+                <div>
+
+
+                    <span>
+
+                        Centre de contrôle Housing's YQD
+
+                    </span>
+
+
+                    <h2>
+
+                        Bonjour, Administrateur 👋
 
                     </h2>
 
 
                     <p>
 
-                        Gestion et contrôle de Housing's YQD.
+                        Gérez les utilisateurs, les transactions,
+                        les investissements et les demandes
+                        d'assistance depuis un seul espace.
 
                     </p>
 
@@ -451,1247 +486,459 @@
                 </div>
 
 
+                <div class="welcome-icon">
 
-                <div class="topbar-actions">
+                    <i class="fa-solid fa-shield-halved"></i>
 
-
-                    <button
-                        class="notification-btn"
-                        type="button"
-                        id="adminNotificationButton"
-                    >
-
-                        <i class="fa-solid fa-bell"></i>
-
-                        <span class="notification-dot"></span>
-
-                    </button>
+                </div>
 
 
-
-                    <div class="user-topbar">
-
-
-                        <div class="user-avatar">
-
-                            A
-
-                        </div>
+            </div>
 
 
-                        <span class="user-name">
+            <!-- STATISTIQUES -->
 
-                            Administrateur
+            <div class="dashboard-stats admin-stats">
+
+
+                <article class="dashboard-stat-card">
+
+
+                    <div class="stat-icon blue">
+
+                        <i class="fa-solid fa-users"></i>
+
+                    </div>
+
+
+                    <div>
+
+
+                        <span>
+
+                            Utilisateurs
 
                         </span>
 
 
+                        <strong id="adminTotalUsers">
+
+                            0
+
+                        </strong>
+
+
+                    </div>
+
+
+                </article>
+
+
+                <article class="dashboard-stat-card">
+
+
+                    <div class="stat-icon orange">
+
+                        <i class="fa-solid fa-clock"></i>
+
+                    </div>
+
+
+                    <div>
+
+
+                        <span>
+
+                            Dépôts en attente
+
+                        </span>
+
+
+                        <strong id="adminPendingDeposits">
+
+                            0
+
+                        </strong>
+
+
+                    </div>
+
+
+                </article>
+
+
+                <article class="dashboard-stat-card">
+
+
+                    <div class="stat-icon purple">
+
+                        <i class="fa-solid fa-money-bill-transfer"></i>
+
+                    </div>
+
+
+                    <div>
+
+
+                        <span>
+
+                            Retraits en attente
+
+                        </span>
+
+
+                        <strong id="adminPendingWithdrawals">
+
+                            0
+
+                        </strong>
+
+
+                    </div>
+
+
+                </article>
+
+
+                <article class="dashboard-stat-card">
+
+
+                    <div class="stat-icon green">
+
+                        <i class="fa-solid fa-chart-line"></i>
+
+                    </div>
+
+
+                    <div>
+
+
+                        <span>
+
+                            Investissements actifs
+
+                        </span>
+
+
+                        <strong id="adminActiveInvestments">
+
+                            0
+
+                        </strong>
+
+
+                    </div>
+
+
+                </article>
+
+
+            </div>
+
+
+            <!-- ACTIONS RAPIDES -->
+
+            <div class="dashboard-panel">
+
+
+                <div class="panel-header">
+
+
+                    <div>
+
+
+                        <span class="panel-eyebrow">
+
+                            ACTIONS RAPIDES
+
+                        </span>
+
+
+                        <h3>
+
+                            Gestion administrative
+
+                        </h3>
+
+
                     </div>
 
 
                 </div>
 
 
-            </header>
+                <div class="admin-quick-actions">
 
 
+                    <button class="admin-quick-action"
+                            data-admin-go="deposits">
 
-            <!-- =================================
-                 CONTENU ADMIN
-            ================================== -->
 
-            <main class="dashboard-content">
+                        <i class="fa-solid fa-arrow-down"></i>
 
 
+                        <span>
 
-                <!-- =================================
-                     OVERVIEW
-                ================================== -->
+                            Gérer les dépôts
 
-                <section
-                    id="adminOverview"
-                    class="admin-section"
-                >
+                        </span>
 
 
-                    <div class="welcome-banner">
+                    </button>
 
-                        <h1>
 
-                            Centre de contrôle 👨‍💼
+                    <button class="admin-quick-action"
+                            data-admin-go="withdrawals">
 
-                        </h1>
 
+                        <i class="fa-solid fa-arrow-up"></i>
 
-                        <p>
 
-                            Surveillez les utilisateurs, transactions,
-                            investissements et demandes de la plateforme.
+                        <span>
 
-                        </p>
+                            Gérer les retraits
 
+                        </span>
 
-                    </div>
 
+                    </button>
 
 
-                    <!-- STATISTIQUES -->
+                    <button class="admin-quick-action"
+                            data-admin-go="tickets">
 
-                    <div class="balance-grid">
 
+                        <i class="fa-solid fa-headset"></i>
 
-                        <div class="balance-card">
 
+                        <span>
 
-                            <div class="balance-card-icon">
+                            Assistance
 
-                                <i class="fa-solid fa-users"></i>
+                        </span>
 
-                            </div>
 
+                    </button>
 
-                            <div class="balance-card-label">
 
-                                Utilisateurs enregistrés
+                    <button class="admin-quick-action"
+                            data-admin-go="users">
 
-                            </div>
 
+                        <i class="fa-solid fa-users"></i>
 
-                            <div
-                                class="balance-card-value"
-                                id="adminTotalUsers"
-                            >
 
-                                0
+                        <span>
 
-                            </div>
+                            Utilisateurs
 
+                        </span>
 
-                        </div>
 
-
-
-                        <div class="balance-card">
-
-
-                            <div class="balance-card-icon">
-
-                                <i class="fa-solid fa-wallet"></i>
-
-                            </div>
-
-
-                            <div class="balance-card-label">
-
-                                Dépôts en attente
-
-                            </div>
-
-
-                            <div
-                                class="balance-card-value"
-                                id="adminPendingDeposits"
-                            >
-
-                                0
-
-                            </div>
-
-
-                        </div>
-
-
-
-                        <div class="balance-card">
-
-
-                            <div class="balance-card-icon">
-
-                                <i class="fa-solid fa-money-bill-transfer"></i>
-
-                            </div>
-
-
-                            <div class="balance-card-label">
-
-                                Retraits en attente
-
-                            </div>
-
-
-                            <div
-                                class="balance-card-value"
-                                id="adminPendingWithdrawals"
-                            >
-
-                                0
-
-                            </div>
-
-
-                        </div>
-
-
-
-                        <div class="balance-card">
-
-
-                            <div class="balance-card-icon">
-
-                                <i class="fa-solid fa-chart-line"></i>
-
-                            </div>
-
-
-                            <div class="balance-card-label">
-
-                                Investissements actifs
-
-                            </div>
-
-
-                            <div
-                                class="balance-card-value"
-                                id="adminActiveInvestments"
-                            >
-
-                                0
-
-                            </div>
-
-
-                        </div>
-
-
-                    </div>
-
-
-
-                    <!-- ACTIONS RAPIDES -->
-
-                    <div class="quick-actions">
-
-
-                        <a
-                            href="#adminDeposits"
-                            class="admin-quick-action"
-                            data-admin-target="adminDeposits"
-                        >
-
-                            <div class="quick-action-icon">
-
-                                <i class="fa-solid fa-wallet"></i>
-
-                            </div>
-
-
-                            <strong>
-
-                                Valider les dépôts
-
-                            </strong>
-
-
-                        </a>
-
-
-
-                        <a
-                            href="#adminWithdrawals"
-                            class="admin-quick-action"
-                            data-admin-target="adminWithdrawals"
-                        >
-
-                            <div class="quick-action-icon">
-
-                                <i class="fa-solid fa-money-bill-transfer"></i>
-
-                            </div>
-
-
-                            <strong>
-
-                                Gérer les retraits
-
-                            </strong>
-
-
-                        </a>
-
-
-
-                        <a
-                            href="#adminTickets"
-                            class="admin-quick-action"
-                            data-admin-target="adminTickets"
-                        >
-
-                            <div class="quick-action-icon">
-
-                                <i class="fa-solid fa-headset"></i>
-
-                            </div>
-
-
-                            <strong>
-
-                                Voir l'assistance
-
-                            </strong>
-
-
-                        </a>
-
-
-
-                        <a
-                            href="#adminUsers"
-                            class="admin-quick-action"
-                            data-admin-target="adminUsers"
-                        >
-
-                            <div class="quick-action-icon">
-
-                                <i class="fa-solid fa-users"></i>
-
-                            </div>
-
-
-                            <strong>
-
-                                Gérer les utilisateurs
-
-                            </strong>
-
-
-                        </a>
-
-
-                    </div>
-
-
-
-                    <!-- ACTIVITE RECENTE -->
-
-                    <div class="dashboard-grid">
-
-
-                        <div class="dashboard-card">
-
-
-                            <div class="dashboard-card-header">
-
-                                <h3>
-
-                                    Dernières opérations
-
-                                </h3>
-
-
-                                <a
-                                    href="#adminTransactions"
-                                    class="view-all"
-                                    data-admin-target="adminTransactions"
-                                >
-
-                                    Voir tout
-
-                                </a>
-
-
-                            </div>
-
-
-
-                            <div class="table-wrapper">
-
-
-                                <table class="data-table">
-
-
-                                    <thead>
-
-                                        <tr>
-
-                                            <th>Utilisateur</th>
-
-                                            <th>Type</th>
-
-                                            <th>Montant</th>
-
-                                            <th>Statut</th>
-
-                                        </tr>
-
-                                    </thead>
-
-
-
-                                    <tbody
-                                        id="adminRecentActivityBody"
-                                    >
-
-                                        <tr>
-
-                                            <td colspan="4">
-
-                                                Aucune activité récente.
-
-                                            </td>
-
-                                        </tr>
-
-                                    </tbody>
-
-
-                                </table>
-
-
-                            </div>
-
-
-                        </div>
-
-
-
-                        <div class="dashboard-card">
-
-
-                            <div class="dashboard-card-header">
-
-                                <h3>
-
-                                    Demandes d'assistance
-
-                                </h3>
-
-                            </div>
-
-
-
-                            <div
-                                id="adminRecentTickets"
-                            >
-
-                                <p class="text-muted">
-
-                                    Aucune demande.
-
-                                </p>
-
-                            </div>
-
-
-                        </div>
-
-
-                    </div>
-
-
-                </section>
-
-
-
-                <!-- =================================
-                     UTILISATEURS
-                ================================== -->
-
-                <section
-                    id="adminUsers"
-                    class="admin-section"
-                    style="display: none;"
-                >
-
-
-                    <div class="dashboard-card">
-
-
-                        <div class="dashboard-card-header">
-
-                            <h3>
-
-                                Utilisateurs enregistrés
-
-                            </h3>
-
-
-                            <input
-                                type="search"
-                                id="userSearchInput"
-                                class="admin-search"
-                                placeholder="Rechercher un utilisateur..."
-                            >
-
-
-                        </div>
-
-
-
-                        <div class="table-wrapper">
-
-
-                            <table class="data-table">
-
-
-                                <thead>
-
-                                    <tr>
-
-                                        <th>Utilisateur</th>
-
-                                        <th>Téléphone</th>
-
-                                        <th>Solde</th>
-
-                                        <th>Investissement</th>
-
-                                        <th>Inscription</th>
-
-                                        <th>Action</th>
-
-                                    </tr>
-
-                                </thead>
-
-
-
-                                <tbody
-                                    id="adminUsersBody"
-                                >
-
-                                    <tr>
-
-                                        <td colspan="6">
-
-                                            Aucun utilisateur enregistré.
-
-                                        </td>
-
-                                    </tr>
-
-                                </tbody>
-
-
-                            </table>
-
-
-                        </div>
-
-
-                    </div>
-
-
-                </section>
-
-
-
-                <!-- =================================
-                     DEPOTS
-                ================================== -->
-
-                <section
-                    id="adminDeposits"
-                    class="admin-section"
-                    style="display: none;"
-                >
-
-
-                    <div class="dashboard-card">
-
-
-                        <div class="dashboard-card-header">
-
-                            <h3>
-
-                                Demandes de dépôt
-
-                            </h3>
-
-
-                            <select
-                                id="depositStatusFilter"
-                                class="admin-filter"
-                            >
-
-                                <option value="all">
-
-                                    Tous les dépôts
-
-                                </option>
-
-
-                                <option value="pending">
-
-                                    En attente
-
-                                </option>
-
-
-                                <option value="approved">
-
-                                    Validés
-
-                                </option>
-
-
-                                <option value="rejected">
-
-                                    Refusés
-
-                                </option>
-
-
-                            </select>
-
-
-                        </div>
-
-
-
-                        <div class="table-wrapper">
-
-
-                            <table class="data-table">
-
-
-                                <thead>
-
-                                    <tr>
-
-                                        <th>Utilisateur</th>
-
-                                        <th>Montant</th>
-
-                                        <th>Moyen</th>
-
-                                        <th>Référence</th>
-
-                                        <th>Date</th>
-
-                                        <th>Statut</th>
-
-                                        <th>Action</th>
-
-                                    </tr>
-
-                                </thead>
-
-
-
-                                <tbody
-                                    id="adminDepositsBody"
-                                >
-
-                                    <tr>
-
-                                        <td colspan="7">
-
-                                            Aucune demande de dépôt.
-
-                                        </td>
-
-                                    </tr>
-
-                                </tbody>
-
-
-                            </table>
-
-
-                        </div>
-
-
-                    </div>
-
-
-                </section>
-
-
-
-                <!-- =================================
-                     RETRAITS
-                ================================== -->
-
-                <section
-                    id="adminWithdrawals"
-                    class="admin-section"
-                    style="display: none;"
-                >
-
-
-                    <div class="dashboard-card">
-
-
-                        <div class="dashboard-card-header">
-
-                            <h3>
-
-                                Demandes de retrait
-
-                            </h3>
-
-
-                            <select
-                                id="withdrawalStatusFilter"
-                                class="admin-filter"
-                            >
-
-                                <option value="all">
-
-                                    Tous les retraits
-
-                                </option>
-
-
-                                <option value="pending">
-
-                                    En attente
-
-                                </option>
-
-
-                                <option value="approved">
-
-                                    Validés
-
-                                </option>
-
-
-                                <option value="rejected">
-
-                                    Refusés
-
-                                </option>
-
-
-                            </select>
-
-
-                        </div>
-
-
-
-                        <div class="table-wrapper">
-
-
-                            <table class="data-table">
-
-
-                                <thead>
-
-                                    <tr>
-
-                                        <th>Utilisateur</th>
-
-                                        <th>Montant</th>
-
-                                        <th>Moyen</th>
-
-                                        <th>Compte</th>
-
-                                        <th>Date</th>
-
-                                        <th>Statut</th>
-
-                                        <th>Action</th>
-
-                                    </tr>
-
-                                </thead>
-
-
-
-                                <tbody
-                                    id="adminWithdrawalsBody"
-                                >
-
-                                    <tr>
-
-                                        <td colspan="7">
-
-                                            Aucune demande de retrait.
-
-                                        </td>
-
-                                    </tr>
-
-                                </tbody>
-
-
-                            </table>
-
-
-                        </div>
-
-
-                    </div>
-
-
-                </section>
-
-
-
-                <!-- =================================
-                     INVESTISSEMENTS
-                ================================== -->
-
-                <section
-                    id="adminInvestments"
-                    class="admin-section"
-                    style="display: none;"
-                >
-
-
-                    <div class="dashboard-card">
-
-
-                        <div class="dashboard-card-header">
-
-                            <h3>
-
-                                Tous les investissements
-
-                            </h3>
-
-                        </div>
-
-
-
-                        <div class="table-wrapper">
-
-
-                            <table class="data-table">
-
-
-                                <thead>
-
-                                    <tr>
-
-                                        <th>Utilisateur</th>
-
-                                        <th>Pack</th>
-
-                                        <th>Montant</th>
-
-                                        <th>Date début</th>
-
-                                        <th>Fin prévue</th>
-
-                                        <th>Statut</th>
-
-                                        <th>Détails</th>
-
-                                    </tr>
-
-                                </thead>
-
-
-
-                                <tbody
-                                    id="adminInvestmentsBody"
-                                >
-
-                                    <tr>
-
-                                        <td colspan="7">
-
-                                            Aucun investissement enregistré.
-
-                                        </td>
-
-                                    </tr>
-
-                                </tbody>
-
-
-                            </table>
-
-
-                        </div>
-
-
-                    </div>
-
-
-                </section>
-
-
-
-                <!-- =================================
-                     ASSISTANCE
-                ================================== -->
-
-                <section
-                    id="adminTickets"
-                    class="admin-section"
-                    style="display: none;"
-                >
-
-
-                    <div class="dashboard-card">
-
-
-                        <div class="dashboard-card-header">
-
-                            <h3>
-
-                                Messages et assistance
-
-                            </h3>
-
-                        </div>
-
-
-
-                        <div
-                            id="adminTicketsContainer"
-                            class="admin-tickets-container"
-                        >
-
-                            <p class="text-muted">
-
-                                Aucun ticket utilisateur.
-
-                            </p>
-
-                        </div>
-
-
-                    </div>
-
-
-                </section>
-
-
-
-                <!-- =================================
-                     HISTORIQUE COMPLET
-                ================================== -->
-
-                <section
-                    id="adminTransactions"
-                    class="admin-section"
-                    style="display: none;"
-                >
-
-
-                    <div class="dashboard-card">
-
-
-                        <div class="dashboard-card-header">
-
-                            <h3>
-
-                                Historique complet des transactions
-
-                            </h3>
-
-                        </div>
-
-
-
-                        <div class="table-wrapper">
-
-
-                            <table class="data-table">
-
-
-                                <thead>
-
-                                    <tr>
-
-                                        <th>Utilisateur</th>
-
-                                        <th>Type</th>
-
-                                        <th>Montant</th>
-
-                                        <th>Détails</th>
-
-                                        <th>Date</th>
-
-                                        <th>Statut</th>
-
-                                    </tr>
-
-                                </thead>
-
-
-
-                                <tbody
-                                    id="adminTransactionsBody"
-                                >
-
-                                    <tr>
-
-                                        <td colspan="6">
-
-                                            Aucune transaction enregistrée.
-
-                                        </td>
-
-                                    </tr>
-
-                                </tbody>
-
-
-                            </table>
-
-
-                        </div>
-
-
-                    </div>
-
-
-                </section>
-
-
-            </main>
-
-
-        </div>
-
-
-    </div>
-
-
-
-    <!-- =========================================
-         MODAL DETAILS UTILISATEUR
-    ========================================== -->
-
-    <div
-        class="modal"
-        id="userDetailsModal"
-    >
-
-
-        <div class="modal-box large-modal">
-
-
-            <div class="modal-header">
-
-
-                <h3>
-
-                    Détails de l'utilisateur
-
-                </h3>
-
-
-                <button
-                    type="button"
-                    class="modal-close"
-                    data-close-modal="userDetailsModal"
-                >
-
-                    <i class="fa-solid fa-xmark"></i>
-
-                </button>
-
-
-            </div>
-
-
-
-            <div
-                id="userDetailsContent"
-            >
-
-                <!-- Généré par script.js -->
-
-            </div>
-
-
-        </div>
-
-
-    </div>
-
-
-
-    <!-- =========================================
-         MODAL DETAILS INVESTISSEMENT
-    ========================================== -->
-
-    <div
-        class="modal"
-        id="adminInvestmentModal"
-    >
-
-
-        <div class="modal-box">
-
-
-            <div class="modal-header">
-
-
-                <h3>
-
-                    Détails de l'investissement
-
-                </h3>
-
-
-                <button
-                    type="button"
-                    class="modal-close"
-                    data-close-modal="adminInvestmentModal"
-                >
-
-                    <i class="fa-solid fa-xmark"></i>
-
-                </button>
-
-
-            </div>
-
-
-
-            <div
-                id="adminInvestmentModalContent"
-            >
-
-                <!-- Généré par script.js -->
-
-            </div>
-
-
-        </div>
-
-
-    </div>
-
-
-
-    <!-- =========================================
-         MODAL REPONSE TICKET
-    ========================================== -->
-
-    <div
-        class="modal"
-        id="ticketReplyModal"
-    >
-
-
-        <div class="modal-box">
-
-
-            <div class="modal-header">
-
-
-                <h3>
-
-                    Répondre au ticket
-
-                </h3>
-
-
-                <button
-                    type="button"
-                    class="modal-close"
-                    data-close-modal="ticketReplyModal"
-                >
-
-                    <i class="fa-solid fa-xmark"></i>
-
-                </button>
-
-
-            </div>
-
-
-
-            <form
-                id="ticketReplyForm"
-            >
-
-
-                <input
-                    type="hidden"
-                    id="replyTicketId"
-                >
-
-
-
-                <div class="form-group">
-
-
-                    <label
-                        for="ticketReplyMessage"
-                        class="form-label"
-                    >
-
-                        Votre réponse
-
-                    </label>
-
-
-                    <textarea
-                        id="ticketReplyMessage"
-                        class="form-control"
-                        placeholder="Écrivez votre réponse..."
-                        required
-                    ></textarea>
+                    </button>
 
 
                 </div>
 
 
+            </div>
 
-                <button
-                    type="submit"
-                    class="btn btn-primary"
-                >
 
-                    <i class="fa-solid fa-paper-plane"></i>
+            <!-- TRANSACTIONS RECENTES -->
 
-                    Envoyer la réponse
+            <div class="dashboard-panel">
+
+
+                <div class="panel-header">
+
+
+                    <div>
+
+
+                        <span class="panel-eyebrow">
+
+                            ACTIVITÉ RÉCENTE
+
+                        </span>
+
+
+                        <h3>
+
+                            Dernières transactions
+
+                        </h3>
+
+
+                    </div>
+
+
+                    <button class="panel-link"
+                            data-admin-go="history">
+
+
+                        Voir tout
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+
+                    </button>
+
+
+                </div>
+
+
+                <div id="adminRecentTransactions"
+                     class="admin-transaction-list">
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+        <!-- =================================
+             UTILISATEURS
+        ================================== -->
+
+        <section class="dashboard-section"
+                 id="adminUsersSection">
+
+
+            <div class="section-intro">
+
+
+                <div>
+
+
+                    <span class="page-eyebrow">
+
+                        UTILISATEURS
+
+                    </span>
+
+
+                    <h2>
+
+                        Gestion des utilisateurs
+
+                    </h2>
+
+
+                    <p>
+
+                        Consultez les comptes, soldes et
+                        informations des utilisateurs.
+
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- RECHERCHE -->
+
+            <div class="admin-search-bar">
+
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+
+                <input type="text"
+                       id="userSearchInput"
+                       placeholder="Rechercher un utilisateur...">
+
+
+            </div>
+
+
+            <div id="adminUsersList"
+                 class="admin-users-list">
+
+            </div>
+
+
+        </section>
+
+
+        <!-- =================================
+             DEPOTS
+        ================================== -->
+
+        <section class="dashboard-section"
+                 id="adminDepositsSection">
+
+
+            <div class="section-intro">
+
+
+                <div>
+
+
+                    <span class="page-eyebrow">
+
+                        TRANSACTIONS
+
+                    </span>
+
+
+                    <h2>
+
+                        Demandes de dépôt
+
+                    </h2>
+
+
+                    <p>
+
+                        Vous êtes le seul à pouvoir valider
+                        ou refuser les demandes de dépôt.
+
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+            <div class="admin-filter-tabs">
+
+
+                <button class="admin-filter-tab active"
+                        data-deposit-filter="all">
+
+                    Tous
 
                 </button>
 
 
-            </form>
+                <button class="admin-filter-tab"
+                        data-deposit-filter="pending">
+
+                    En attente
+
+                </button>
 
 
-        </div>
+                <button class="admin-filter-tab"
+                        data-deposit-filter="approved">
+
+                    Validés
+
+                </button>
 
 
-    </div>
+                <button class="admin-filter-tab"
+                        data-deposit-filter="rejected">
 
-
-
-    <!-- =========================================
-         MODAL NOTIFICATIONS
-    ========================================== -->
-
-    <div
-        class="modal"
-        id="adminNotificationsModal"
-    >
-
-
-        <div class="modal-box">
-
-
-            <div class="modal-header">
-
-
-                <h3>
-
-                    Notifications administrateur
-
-                </h3>
-
-
-                <button
-                    type="button"
-                    class="modal-close"
-                    data-close-modal="adminNotificationsModal"
-                >
-
-                    <i class="fa-solid fa-xmark"></i>
+                    Refusés
 
                 </button>
 
@@ -1699,20 +946,289 @@
             </div>
 
 
+            <div id="adminDepositsList"
+                 class="admin-transactions-list">
 
-            <div
-                id="adminNotificationsContent"
-            >
+            </div>
 
-                <p class="text-muted">
 
-                    Aucune nouvelle notification.
+        </section>
 
-                </p>
+
+        <!-- =================================
+             RETRAITS
+        ================================== -->
+
+        <section class="dashboard-section"
+                 id="adminWithdrawalsSection">
+
+
+            <div class="section-intro">
+
+
+                <div>
+
+
+                    <span class="page-eyebrow">
+
+                        TRANSACTIONS
+
+                    </span>
+
+
+                    <h2>
+
+                        Demandes de retrait
+
+                    </h2>
+
+
+                    <p>
+
+                        Validez ou refusez personnellement
+                        chaque demande de retrait.
+
+                    </p>
+
+
+                </div>
 
 
             </div>
 
+
+            <div class="admin-filter-tabs">
+
+
+                <button class="admin-withdraw-filter active"
+                        data-withdraw-filter="all">
+
+                    Tous
+
+                </button>
+
+
+                <button class="admin-withdraw-filter"
+                        data-withdraw-filter="pending">
+
+                    En attente
+
+                </button>
+
+
+                <button class="admin-withdraw-filter"
+                        data-withdraw-filter="approved">
+
+                    Validés
+
+                </button>
+
+
+                <button class="admin-withdraw-filter"
+                        data-withdraw-filter="rejected">
+
+                    Refusés
+
+                </button>
+
+
+            </div>
+
+
+            <div id="adminWithdrawalsList"
+                 class="admin-transactions-list">
+
+            </div>
+
+
+        </section>
+
+
+        <!-- =================================
+             INVESTISSEMENTS
+        ================================== -->
+
+        <section class="dashboard-section"
+                 id="adminInvestmentsSection">
+
+
+            <div class="section-intro">
+
+
+                <div>
+
+
+                    <span class="page-eyebrow">
+
+                        INVESTISSEMENTS
+
+                    </span>
+
+
+                    <h2>
+
+                        Investissements actifs
+
+                    </h2>
+
+
+                    <p>
+
+                        Consultez l'ensemble des investissements
+                        enregistrés sur la plateforme.
+
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+            <div id="adminInvestmentsList"
+                 class="admin-investments-list">
+
+            </div>
+
+
+        </section>
+
+
+        <!-- =================================
+             ASSISTANCE
+        ================================== -->
+
+        <section class="dashboard-section"
+                 id="adminTicketsSection">
+
+
+            <div class="section-intro">
+
+
+                <div>
+
+
+                    <span class="page-eyebrow">
+
+                        SUPPORT UTILISATEUR
+
+                    </span>
+
+
+                    <h2>
+
+                        Assistance et requêtes
+
+                    </h2>
+
+
+                    <p>
+
+                        Consultez et répondez aux demandes
+                        envoyées par les utilisateurs.
+
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+            <div id="adminTicketsList"
+                 class="admin-tickets-list">
+
+            </div>
+
+
+        </section>
+
+
+        <!-- =================================
+             HISTORIQUE
+        ================================== -->
+
+        <section class="dashboard-section"
+                 id="adminHistorySection">
+
+
+            <div class="section-intro">
+
+
+                <div>
+
+
+                    <span class="page-eyebrow">
+
+                        HISTORIQUE GLOBAL
+
+                    </span>
+
+
+                    <h2>
+
+                        Toutes les transactions
+
+                    </h2>
+
+
+                    <p>
+
+                        Historique complet des dépôts
+                        et retraits de la plateforme.
+
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+            <div id="adminHistoryList"
+                 class="admin-history-list">
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+</div>
+
+
+<!-- =========================================
+     MODAL DETAILS UTILISATEUR
+========================================= -->
+
+<div class="dashboard-modal"
+     id="userDetailsModal">
+
+
+    <div class="modal-backdrop"
+         id="userDetailsBackdrop">
+
+    </div>
+
+
+    <div class="modal-box admin-modal-box">
+
+
+        <button class="modal-close"
+                id="closeUserDetails">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+
+        <div id="userDetailsContent">
 
         </div>
 
@@ -1720,419 +1236,507 @@
     </div>
 
 
-
-    <!-- =========================================
-         LOADER
-    ========================================== -->
-
-    <div
-        id="pageLoader"
-        class="page-loader"
-        style="display: none;"
-    >
+</div>
 
 
-        <div class="loader-spinner"></div>
+<!-- =========================================
+     MODAL REPONSE TICKET
+========================================= -->
+
+<div class="dashboard-modal"
+     id="ticketReplyModal">
 
 
-        <span>
+    <div class="modal-backdrop"
+         id="ticketReplyBackdrop">
 
-            Chargement sécurisé...
+    </div>
 
-        </span>
+
+    <div class="modal-box admin-modal-box">
+
+
+        <button class="modal-close"
+                id="closeTicketReply">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+
+        <div class="modal-icon">
+
+            <i class="fa-solid fa-headset"></i>
+
+        </div>
+
+
+        <h2>
+
+            Répondre au ticket
+
+        </h2>
+
+
+        <div id="selectedTicketInfo"
+             class="selected-ticket-info">
+
+        </div>
+
+
+        <div class="form-group">
+
+
+            <label for="adminTicketReply">
+
+                Votre réponse
+
+            </label>
+
+
+            <textarea id="adminTicketReply"
+                      class="form-control"
+                      rows="6"
+                      placeholder="Saisissez votre réponse..."></textarea>
+
+
+        </div>
+
+
+        <div id="ticketReplyMessage"
+             class="form-message">
+
+        </div>
+
+
+        <button class="form-submit"
+                id="sendTicketReplyButton">
+
+            <i class="fa-solid fa-paper-plane"></i>
+
+            Envoyer la réponse
+
+        </button>
 
 
     </div>
 
 
-
-    <!-- =========================================
-         TOASTS
-    ========================================== -->
-
-    <div
-        id="toastContainer"
-        class="toast-container"
-    ></div>
+</div>
 
 
+<!-- =========================================
+     SCRIPT GLOBAL
+========================================= -->
 
-    <!-- =========================================
-         SCRIPT PRINCIPAL
-    ========================================== -->
-
-    <script src="script.js"></script>
-
+<script src="script.js"></script>
 
 
-    <!-- =========================================
-         NAVIGATION ADMIN
-    ========================================== -->
+<script>
 
-    <script>
 
-        document.addEventListener(
-            "DOMContentLoaded",
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        /* =====================================
+           VARIABLES
+        ====================================== */
+
+        let currentDepositFilter =
+            "all";
+
+
+        let currentWithdrawFilter =
+            "all";
+
+
+        let selectedTicket =
+            null;
+
+
+        /* =====================================
+           PROTECTION ADMIN
+
+           Le contrôle complet sera géré
+           par script.js.
+        ====================================== */
+
+        function initializeAdmin() {
+
+
+            if (
+                typeof isAdminAuthenticated ===
+                "function" &&
+                isAdminAuthenticated()
+            ) {
+
+                showAdminApplication();
+
+            }
+
+            else {
+
+                document.getElementById(
+                    "adminAccessScreen"
+                ).style.display =
+                    "flex";
+
+
+                document.getElementById(
+                    "adminApplication"
+                ).style.display =
+                    "none";
+
+            }
+
+        }
+
+
+        function showAdminApplication() {
+
+
+            document.getElementById(
+                "adminAccessScreen"
+            ).style.display =
+                "none";
+
+
+            document.getElementById(
+                "adminApplication"
+            ).style.display =
+                "block";
+
+
+            refreshAdminDashboard();
+
+        }
+
+
+        /* =====================================
+           AFFICHER / MASQUER CODE
+        ====================================== */
+
+        document.getElementById(
+            "toggleAdminCode"
+        ).addEventListener(
+            "click",
             function () {
 
 
-                const adminMenuLinks =
-                    document.querySelectorAll(
-                        "[data-admin-section]"
-                    );
-
-
-                const adminSections =
-                    document.querySelectorAll(
-                        ".admin-section"
-                    );
-
-
-                const adminPageTitle =
+                const input =
                     document.getElementById(
-                        "adminPageTitle"
+                        "adminCode"
                     );
 
 
-                const adminSidebar =
+                const icon =
+                    this.querySelector(
+                        "i"
+                    );
+
+
+                if (
+                    input.type ===
+                    "password"
+                ) {
+
+                    input.type =
+                        "text";
+
+
+                    icon.className =
+                        "fa-regular fa-eye-slash";
+
+                }
+
+                else {
+
+                    input.type =
+                        "password";
+
+
+                    icon.className =
+                        "fa-regular fa-eye";
+
+                }
+
+
+            }
+        );
+
+
+        /* =====================================
+           CONNEXION ADMIN
+        ====================================== */
+
+        document.getElementById(
+            "adminAccessForm"
+        ).addEventListener(
+            "submit",
+            function (event) {
+
+
+                event.preventDefault();
+
+
+                const code =
                     document.getElementById(
-                        "adminSidebar"
-                    );
+                        "adminCode"
+                    ).value
+                        .trim();
 
 
-                const mobileButton =
+                const messageBox =
                     document.getElementById(
-                        "adminMobileMenuButton"
+                        "adminAccessMessage"
                     );
 
 
-
-                /* =====================================
-                   AFFICHER UNE SECTION
-                ====================================== */
-
-                window.showAdminSection =
-                    function (
-                        sectionId
-                    ) {
+                let result;
 
 
-                        adminSections.forEach(
-                            function (
-                                section
-                            ) {
+                if (
+                    typeof authenticateAdmin ===
+                    "function"
+                ) {
 
-
-                                section.style.display =
-                                    section.id === sectionId
-                                        ? "block"
-                                        : "none";
-
-
-                            }
+                    result =
+                        authenticateAdmin(
+                            code
                         );
 
+                }
 
-                        adminMenuLinks.forEach(
-                            function (
-                                link
-                            ) {
+                else {
 
+                    result =
+                        {
+                            success: false,
+                            message:
+                                "Le système administratif n'est pas encore chargé."
+                        };
 
-                                link.classList.toggle(
-                                    "active",
-                                    link.dataset.adminSection === sectionId
-                                );
-
-
-                            }
-                        );
+                }
 
 
-                        const activeLink =
-                            document.querySelector(
-                                '[data-admin-section="' +
-                                sectionId +
-                                '"]'
-                            );
+                messageBox.textContent =
+                    result.message;
 
 
-                        if (
-                            activeLink
-                        ) {
+                messageBox.className =
+                    "form-message " +
+                    (
+                        result.success
+                            ? "success"
+                            : "error"
+                    );
 
 
-                            adminPageTitle.textContent =
-                                activeLink.textContent
-                                    .trim();
+                if (
+                    result.success
+                ) {
 
 
-                        }
+                    document.getElementById(
+                        "adminCode"
+                    ).value =
+                        "";
 
 
-                        window.scrollTo(
-                            {
-                                top: 0,
-                                behavior: "smooth"
-                            }
-                        );
+                    setTimeout(
+                        function () {
+
+                            showAdminApplication();
+
+                        },
+                        500
+                    );
 
 
-                        adminSidebar.classList.remove(
-                            "active"
-                        );
+                }
 
 
-                    };
+            }
+        );
 
 
+        /* =====================================
+           SECTIONS ADMIN
+        ====================================== */
 
-                /* =====================================
-                   MENU
-                ====================================== */
+        const adminSectionMap = {
 
-                adminMenuLinks.forEach(
-                    function (
-                        link
-                    ) {
+            overview:
+                "adminOverviewSection",
 
+            users:
+                "adminUsersSection",
 
-                        link.addEventListener(
-                            "click",
-                            function (
-                                event
-                            ) {
+            deposits:
+                "adminDepositsSection",
 
+            withdrawals:
+                "adminWithdrawalsSection",
 
-                                event.preventDefault();
+            investments:
+                "adminInvestmentsSection",
 
+            tickets:
+                "adminTicketsSection",
 
-                                window.showAdminSection(
-                                    link.dataset.adminSection
-                                );
+            history:
+                "adminHistorySection"
 
-
-                            }
-                        );
+        };
 
 
-                    }
+        const adminTitles = {
+
+            overview:
+                "Tableau de bord",
+
+            users:
+                "Utilisateurs",
+
+            deposits:
+                "Dépôts",
+
+            withdrawals:
+                "Retraits",
+
+            investments:
+                "Investissements",
+
+            tickets:
+                "Assistance",
+
+            history:
+                "Historique"
+
+        };
+
+
+        function showAdminSection(
+            sectionName
+        ) {
+
+
+            document.querySelectorAll(
+                "#adminApplication .dashboard-section"
+            ).forEach(
+                function (
+                    section
+                ) {
+
+
+                    section.classList.remove(
+                        "active"
+                    );
+
+
+                }
+            );
+
+
+            const target =
+                document.getElementById(
+                    adminSectionMap[
+                        sectionName
+                    ]
                 );
 
 
-
-                /* =====================================
-                   ACTIONS RAPIDES
-                ====================================== */
-
-                document.querySelectorAll(
-                    "[data-admin-target]"
-                ).forEach(
-                    function (
-                        element
-                    ) {
+            if (
+                target
+            ) {
 
 
-                        element.addEventListener(
-                            "click",
-                            function (
-                                event
-                            ) {
-
-
-                                event.preventDefault();
-
-
-                                window.showAdminSection(
-                                    element.dataset.adminTarget
-                                );
-
-
-                            }
-                        );
-
-
-                    }
+                target.classList.add(
+                    "active"
                 );
 
 
+            }
 
-                /* =====================================
-                   MENU MOBILE
-                ====================================== */
 
-                mobileButton.addEventListener(
+            document.querySelectorAll(
+                "#adminApplication .sidebar-link[data-admin-section]"
+            ).forEach(
+                function (
+                    link
+                ) {
+
+
+                    link.classList.remove(
+                        "active"
+                    );
+
+
+                }
+            );
+
+
+            const activeLink =
+                document.querySelector(
+                    '[data-admin-section="' +
+                    sectionName +
+                    '"]'
+                );
+
+
+            if (
+                activeLink
+            ) {
+
+
+                activeLink.classList.add(
+                    "active"
+                );
+
+
+            }
+
+
+            document.getElementById(
+                "adminPageTitle"
+            ).textContent =
+                adminTitles[
+                    sectionName
+                ];
+
+
+            closeAdminMobileMenu();
+
+
+            window.scrollTo(
+                {
+                    top: 0,
+                    behavior: "smooth"
+                }
+            );
+
+
+        }
+
+
+        document.querySelectorAll(
+            "[data-admin-section]"
+        ).forEach(
+            function (
+                button
+            ) {
+
+
+                button.addEventListener(
                     "click",
                     function () {
 
 
-                        adminSidebar.classList.toggle(
-                            "active"
-                        );
-
-
-                    }
-                );
-
-
-
-                /* =====================================
-                   AFFICHAGE CODE ADMIN
-                ====================================== */
-
-                const adminCodeInput =
-                    document.getElementById(
-                        "adminAccessCode"
-                    );
-
-
-                const toggleAdminCode =
-                    document.getElementById(
-                        "toggleAdminCode"
-                    );
-
-
-                toggleAdminCode.addEventListener(
-                    "click",
-                    function () {
-
-
-                        const icon =
-                            toggleAdminCode.querySelector(
-                                "i"
-                            );
-
-
-                        const isHidden =
-                            adminCodeInput.type === "password";
-
-
-                        adminCodeInput.type =
-                            isHidden
-                                ? "text"
-                                : "password";
-
-
-                        icon.className =
-                            isHidden
-                                ? "fa-solid fa-eye-slash"
-                                : "fa-solid fa-eye";
-
-
-                    }
-                );
-
-
-
-                /* =====================================
-                   FERMETURE MODALES
-                ====================================== */
-
-                document.querySelectorAll(
-                    "[data-close-modal]"
-                ).forEach(
-                    function (
-                        button
-                    ) {
-
-
-                        button.addEventListener(
-                            "click",
-                            function () {
-
-
-                                const modal =
-                                    document.getElementById(
-                                        button.dataset.closeModal
-                                    );
-
-
-                                if (
-                                    modal
-                                ) {
-
-
-                                    modal.classList.remove(
-                                        "active"
-                                    );
-
-
-                                }
-
-
-                            }
-                        );
-
-
-                    }
-                );
-
-
-
-                /* =====================================
-                   CLIC EXTERIEUR MODALE
-                ====================================== */
-
-                document.querySelectorAll(
-                    ".modal"
-                ).forEach(
-                    function (
-                        modal
-                    ) {
-
-
-                        modal.addEventListener(
-                            "click",
-                            function (
-                                event
-                            ) {
-
-
-                                if (
-                                    event.target === modal
-                                ) {
-
-
-                                    modal.classList.remove(
-                                        "active"
-                                    );
-
-
-                                }
-
-
-                            }
-                        );
-
-
-                    }
-                );
-
-
-
-                /* =====================================
-                   NOTIFICATIONS
-                ====================================== */
-
-                const notificationButton =
-                    document.getElementById(
-                        "adminNotificationButton"
-                    );
-
-
-                const notificationModal =
-                    document.getElementById(
-                        "adminNotificationsModal"
-                    );
-
-
-                notificationButton.addEventListener(
-                    "click",
-                    function () {
-
-
-                        notificationModal.classList.add(
-                            "active"
+                        showAdminSection(
+                            button.dataset
+                                .adminSection
                         );
 
 
@@ -2143,7 +1747,2850 @@
             }
         );
 
-    </script>
+
+        document.querySelectorAll(
+            "[data-admin-go]"
+        ).forEach(
+            function (
+                button
+            ) {
+
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+
+                        showAdminSection(
+                            button.dataset
+                                .adminGo
+                        );
+
+
+                    }
+                );
+
+
+            }
+        );
+
+
+        /* =====================================
+           MENU MOBILE
+        ====================================== */
+
+        const adminSidebar =
+            document.getElementById(
+                "adminSidebar"
+            );
+
+
+        const adminOverlay =
+            document.getElementById(
+                "adminOverlay"
+            );
+
+
+        function closeAdminMobileMenu() {
+
+
+            adminSidebar.classList.remove(
+                "mobile-open"
+            );
+
+
+            adminOverlay.classList.remove(
+                "active"
+            );
+
+
+        }
+
+
+        document.getElementById(
+            "adminMobileMenu"
+        ).addEventListener(
+            "click",
+            function () {
+
+
+                adminSidebar.classList.toggle(
+                    "mobile-open"
+                );
+
+
+                adminOverlay.classList.toggle(
+                    "active"
+                );
+
+
+            }
+        );
+
+
+        adminOverlay.addEventListener(
+            "click",
+            closeAdminMobileMenu
+        );
+
+
+        /* =====================================
+           FORMAT DATE
+        ====================================== */
+
+        function adminFormatDate(
+            value
+        ) {
+
+
+            if (
+                !value
+            ) {
+
+
+                return "-";
+
+
+            }
+
+
+            try {
+
+
+                return new Date(
+                    value
+                ).toLocaleString(
+                    "fr-FR"
+                );
+
+
+            }
+
+            catch (
+                error
+            ) {
+
+
+                return "-";
+
+
+            }
+
+
+        }
+
+
+        /* =====================================
+           OBTENIR UTILISATEURS
+        ====================================== */
+
+        function getAllUsers() {
+
+
+            if (
+                typeof getUsers ===
+                "function"
+            ) {
+
+
+                return getUsers();
+
+
+            }
+
+
+            return [];
+
+
+        }
+
+
+        /* =====================================
+           STATISTIQUES ADMIN
+        ====================================== */
+
+        function updateAdminStatistics() {
+
+
+            const users =
+                getAllUsers();
+
+
+            let pendingDeposits =
+                0;
+
+
+            let pendingWithdrawals =
+                0;
+
+
+            let activeInvestments =
+                0;
+
+
+            users.forEach(
+                function (
+                    user
+                ) {
+
+
+                    (
+                        user.transactions ||
+                        []
+                    ).forEach(
+                        function (
+                            transaction
+                        ) {
+
+
+                            if (
+                                transaction.type ===
+                                "deposit" &&
+                                transaction.status ===
+                                "pending"
+                            ) {
+
+
+                                pendingDeposits++;
+
+
+                            }
+
+
+                            if (
+                                transaction.type ===
+                                "withdraw" &&
+                                transaction.status ===
+                                "pending"
+                            ) {
+
+
+                                pendingWithdrawals++;
+
+
+                            }
+
+
+                        }
+                    );
+
+
+                    (
+                        user.investments ||
+                        []
+                    ).forEach(
+                        function (
+                            investment
+                        ) {
+
+
+                            if (
+                                investment.status ===
+                                "active"
+                            ) {
+
+
+                                activeInvestments++;
+
+
+                            }
+
+
+                        }
+                    );
+
+
+                }
+            );
+
+
+            document.getElementById(
+                "adminTotalUsers"
+            ).textContent =
+                users.length;
+
+
+            document.getElementById(
+                "adminPendingDeposits"
+            ).textContent =
+                pendingDeposits;
+
+
+            document.getElementById(
+                "adminPendingWithdrawals"
+            ).textContent =
+                pendingWithdrawals;
+
+
+            document.getElementById(
+                "adminActiveInvestments"
+            ).textContent =
+                activeInvestments;
+
+
+        }
+
+
+        /* =====================================
+           UTILISATEURS
+        ====================================== */
+
+        function renderAdminUsers(
+            searchValue = ""
+        ) {
+
+
+            const users =
+                getAllUsers();
+
+
+            const container =
+                document.getElementById(
+                    "adminUsersList"
+                );
+
+
+            const search =
+                searchValue
+                    .toLowerCase()
+                    .trim();
+
+
+            const filteredUsers =
+                users.filter(
+                    function (
+                        user
+                    ) {
+
+
+                        const name =
+                            (
+                                user.name ||
+                                ""
+                            )
+                            .toLowerCase();
+
+
+                        const phone =
+                            (
+                                user.phone ||
+                                ""
+                            )
+                            .toLowerCase();
+
+
+                        return (
+                            name.includes(
+                                search
+                            ) ||
+                            phone.includes(
+                                search
+                            )
+                        );
+
+
+                    }
+                );
+
+
+            if (
+                filteredUsers.length ===
+                0
+            ) {
+
+
+                container.innerHTML =
+                    `
+
+                    <div class="empty-state">
+
+                        <i class="fa-solid fa-users"></i>
+
+                        <h3>
+
+                            Aucun utilisateur trouvé
+
+                        </h3>
+
+                    </div>
+
+                    `;
+
+
+                return;
+
+
+            }
+
+
+            container.innerHTML =
+                filteredUsers.map(
+                    function (
+                        user
+                    ) {
+
+
+                        const name =
+                            user.name ||
+                            user.fullName ||
+                            "Utilisateur";
+
+
+                        const balance =
+                            Number(
+                                user.balance ||
+                                0
+                            );
+
+
+                        const investments =
+                            user.investments ||
+                            [];
+
+
+                        return `
+
+                        <article class="admin-user-card">
+
+
+                            <div class="admin-user-main">
+
+
+                                <div class="admin-user-avatar">
+
+                                    ${name
+                                        .charAt(
+                                            0
+                                        )
+                                        .toUpperCase()}
+
+                                </div>
+
+
+                                <div>
+
+
+                                    <h3>
+
+                                        ${name}
+
+                                    </h3>
+
+
+                                    <span>
+
+                                        +225
+                                        ${user.phone || "-"}
+
+                                    </span>
+
+
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="admin-user-stats">
+
+
+                                <div>
+
+
+                                    <span>
+
+                                        Solde
+
+                                    </span>
+
+
+                                    <strong>
+
+                                        ${formatFCFA(
+                                            balance
+                                        )}
+
+                                    </strong>
+
+
+                                </div>
+
+
+                                <div>
+
+
+                                    <span>
+
+                                        Investissements
+
+                                    </span>
+
+
+                                    <strong>
+
+                                        ${investments.length}
+
+                                    </strong>
+
+
+                                </div>
+
+
+                            </div>
+
+
+                            <button
+                                class="admin-view-user"
+                                data-user-id="${user.id}">
+
+
+                                <i class="fa-solid fa-eye"></i>
+
+                                Détails
+
+
+                            </button>
+
+
+                        </article>
+
+                        `;
+
+
+                    }
+                ).join(
+                    ""
+                );
+
+
+            document.querySelectorAll(
+                ".admin-view-user"
+            ).forEach(
+                function (
+                    button
+                ) {
+
+
+                    button.addEventListener(
+                        "click",
+                        function () {
+
+
+                            openUserDetails(
+                                button.dataset
+                                    .userId
+                            );
+
+
+                        }
+                    );
+
+
+                }
+            );
+
+
+        }
+
+
+        /* =====================================
+           DETAILS UTILISATEUR
+        ====================================== */
+
+        function openUserDetails(
+            userId
+        ) {
+
+
+            const users =
+                getAllUsers();
+
+
+            const user =
+                users.find(
+                    function (
+                        item
+                    ) {
+
+
+                        return item.id ===
+                            userId;
+
+
+                    }
+                );
+
+
+            if (
+                !user
+            ) {
+
+
+                return;
+
+
+            }
+
+
+            const name =
+                user.name ||
+                user.fullName ||
+                "Utilisateur";
+
+
+            const transactions =
+                user.transactions ||
+                [];
+
+
+            const investments =
+                user.investments ||
+                [];
+
+
+            document.getElementById(
+                "userDetailsContent"
+            ).innerHTML =
+                `
+
+                <div class="modal-icon">
+
+                    <i class="fa-solid fa-user"></i>
+
+                </div>
+
+
+                <h2>
+
+                    ${name}
+
+                </h2>
+
+
+                <div class="admin-user-details-grid">
+
+
+                    <div>
+
+                        <span>
+
+                            Téléphone
+
+                        </span>
+
+
+                        <strong>
+
+                            +225
+                            ${user.phone || "-"}
+
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+
+                            Solde
+
+                        </span>
+
+
+                        <strong>
+
+                            ${formatFCFA(
+                                Number(
+                                    user.balance ||
+                                    0
+                                )
+                            )}
+
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+
+                            Code de parrainage
+
+                        </span>
+
+
+                        <strong>
+
+                            ${user.referralCode || "-"}
+
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+
+                            Inscription
+
+                        </span>
+
+
+                        <strong>
+
+                            ${adminFormatDate(
+                                user.createdAt
+                            )}
+
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+
+                            Transactions
+
+                        </span>
+
+
+                        <strong>
+
+                            ${transactions.length}
+
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+
+                            Investissements
+
+                        </span>
+
+
+                        <strong>
+
+                            ${investments.length}
+
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="admin-user-detail-section">
+
+
+                    <h3>
+
+                        Investissements
+
+                    </h3>
+
+
+                    ${
+                        investments.length > 0
+
+                        ? investments.map(
+                            function (
+                                investment
+                            ) {
+
+
+                                return `
+
+                                <div class="admin-mini-row">
+
+                                    <span>
+
+                                        ${investment.packName}
+
+                                    </span>
+
+
+                                    <strong>
+
+                                        ${formatFCFA(
+                                            investment.amount
+                                        )}
+
+                                    </strong>
+
+                                </div>
+
+                                `;
+
+
+                            }
+                        ).join(
+                            ""
+                        )
+
+                        : `
+
+                        <p class="small-note">
+
+                            Aucun investissement.
+
+                        </p>
+
+                        `
+
+                    }
+
+
+                </div>
+
+                `;
+
+
+            document.getElementById(
+                "userDetailsModal"
+            ).classList.add(
+                "active"
+            );
+
+
+        }
+
+
+        function closeUserDetailsModal() {
+
+
+            document.getElementById(
+                "userDetailsModal"
+            ).classList.remove(
+                "active"
+            );
+
+
+        }
+
+
+        document.getElementById(
+            "closeUserDetails"
+        ).addEventListener(
+            "click",
+            closeUserDetailsModal
+        );
+
+
+        document.getElementById(
+            "userDetailsBackdrop"
+        ).addEventListener(
+            "click",
+            closeUserDetailsModal
+        );
+
+
+        /* =====================================
+           RECUPERER TRANSACTIONS
+        ====================================== */
+
+        function getTransactionsByType(
+            type
+        ) {
+
+
+            const users =
+                getAllUsers();
+
+
+            const transactions =
+                [];
+
+
+            users.forEach(
+                function (
+                    user
+                ) {
+
+
+                    (
+                        user.transactions ||
+                        []
+                    ).forEach(
+                        function (
+                            transaction
+                        ) {
+
+
+                            if (
+                                transaction.type ===
+                                type
+                            ) {
+
+
+                                transactions.push(
+                                    {
+                                        ...transaction,
+                                        userId:
+                                            user.id,
+                                        userName:
+                                            user.name ||
+                                            user.fullName ||
+                                            "Utilisateur",
+                                        userPhone:
+                                            user.phone
+                                    }
+                                );
+
+
+                            }
+
+
+                        }
+                    );
+
+
+                }
+            );
+
+
+            return transactions;
+
+
+        }
+
+
+        /* =====================================
+           DEPOTS ADMIN
+        ====================================== */
+
+        function renderAdminDeposits() {
+
+
+            const container =
+                document.getElementById(
+                    "adminDepositsList"
+                );
+
+
+            let deposits =
+                getTransactionsByType(
+                    "deposit"
+                );
+
+
+            if (
+                currentDepositFilter !==
+                "all"
+            ) {
+
+
+                deposits =
+                    deposits.filter(
+                        function (
+                            deposit
+                        ) {
+
+
+                            return deposit.status ===
+                                currentDepositFilter;
+
+
+                        }
+                    );
+
+
+            }
+
+
+            deposits =
+                deposits.reverse();
+
+
+            if (
+                deposits.length ===
+                0
+            ) {
+
+
+                container.innerHTML =
+                    `
+
+                    <div class="empty-state">
+
+                        <i class="fa-solid fa-arrow-down"></i>
+
+                        <h3>
+
+                            Aucun dépôt
+
+                        </h3>
+
+                    </div>
+
+                    `;
+
+
+                return;
+
+
+            }
+
+
+            container.innerHTML =
+                deposits.map(
+                    function (
+                        deposit
+                    ) {
+
+
+                        return `
+
+                        <article class="admin-transaction-card">
+
+
+                            <div class="admin-transaction-main">
+
+
+                                <div class="transaction-user-avatar">
+
+                                    ${deposit.userName
+                                        .charAt(
+                                            0
+                                        )
+                                        .toUpperCase()}
+
+                                </div>
+
+
+                                <div>
+
+
+                                    <strong>
+
+                                        ${deposit.userName}
+
+                                    </strong>
+
+
+                                    <span>
+
+                                        +225
+                                        ${deposit.userPhone || "-"}
+
+                                    </span>
+
+
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="admin-transaction-info">
+
+
+                                <span>
+
+                                    ${deposit.method || "Dépôt"}
+
+                                </span>
+
+
+                                <strong>
+
+                                    ${formatFCFA(
+                                        deposit.amount
+                                    )}
+
+                                </strong>
+
+
+                                <small>
+
+                                    Réf :
+                                    ${deposit.reference || "-"}
+
+                                </small>
+
+
+                            </div>
+
+
+                            <div class="admin-transaction-status">
+
+
+                                <span class="
+                                transaction-status
+                                ${deposit.status}
+                                ">
+
+
+                                    ${
+                                        deposit.status ===
+                                        "approved"
+
+                                        ? "Validé"
+
+                                        : deposit.status ===
+                                        "rejected"
+
+                                        ? "Refusé"
+
+                                        : "En attente"
+                                    }
+
+
+                                </span>
+
+
+                            </div>
+
+
+                            ${
+                                deposit.status ===
+                                "pending"
+
+                                ? `
+
+                                <div class="admin-transaction-actions">
+
+
+                                    <button
+                                        class="approve-button approve-deposit"
+                                        data-user-id="${deposit.userId}"
+                                        data-transaction-id="${deposit.id}">
+
+
+                                        <i class="fa-solid fa-check"></i>
+
+                                        Valider
+
+
+                                    </button>
+
+
+                                    <button
+                                        class="reject-button reject-deposit"
+                                        data-user-id="${deposit.userId}"
+                                        data-transaction-id="${deposit.id}">
+
+
+                                        <i class="fa-solid fa-xmark"></i>
+
+                                        Refuser
+
+
+                                    </button>
+
+
+                                </div>
+
+                                `
+
+                                : ""
+
+                            }
+
+
+                        </article>
+
+                        `;
+
+
+                    }
+                ).join(
+                    ""
+                );
+
+
+            document.querySelectorAll(
+                ".approve-deposit"
+            ).forEach(
+                function (
+                    button
+                ) {
+
+
+                    button.addEventListener(
+                        "click",
+                        function () {
+
+
+                            const result =
+                                adminProcessTransaction(
+                                    button.dataset.userId,
+                                    button.dataset.transactionId,
+                                    "approved"
+                                );
+
+
+                            if (
+                                result.success
+                            ) {
+
+
+                                refreshAdminDashboard();
+
+
+                            }
+
+
+                        }
+                    );
+
+
+                }
+            );
+
+
+            document.querySelectorAll(
+                ".reject-deposit"
+            ).forEach(
+                function (
+                    button
+                ) {
+
+
+                    button.addEventListener(
+                        "click",
+                        function () {
+
+
+                            const result =
+                                adminProcessTransaction(
+                                    button.dataset.userId,
+                                    button.dataset.transactionId,
+                                    "rejected"
+                                );
+
+
+                            if (
+                                result.success
+                            ) {
+
+
+                                refreshAdminDashboard();
+
+
+                            }
+
+
+                        }
+                    );
+
+
+                }
+            );
+
+
+        }
+
+
+        /* =====================================
+           RETRAITS ADMIN
+        ====================================== */
+
+        function renderAdminWithdrawals() {
+
+
+            const container =
+                document.getElementById(
+                    "adminWithdrawalsList"
+                );
+
+
+            let withdrawals =
+                getTransactionsByType(
+                    "withdraw"
+                );
+
+
+            if (
+                currentWithdrawFilter !==
+                "all"
+            ) {
+
+
+                withdrawals =
+                    withdrawals.filter(
+                        function (
+                            withdrawal
+                        ) {
+
+
+                            return withdrawal.status ===
+                                currentWithdrawFilter;
+
+
+                        }
+                    );
+
+
+            }
+
+
+            withdrawals =
+                withdrawals.reverse();
+
+
+            if (
+                withdrawals.length ===
+                0
+            ) {
+
+
+                container.innerHTML =
+                    `
+
+                    <div class="empty-state">
+
+                        <i class="fa-solid fa-arrow-up"></i>
+
+                        <h3>
+
+                            Aucun retrait
+
+                        </h3>
+
+                    </div>
+
+                    `;
+
+
+                return;
+
+
+            }
+
+
+            container.innerHTML =
+                withdrawals.map(
+                    function (
+                        withdrawal
+                    ) {
+
+
+                        return `
+
+                        <article class="admin-transaction-card">
+
+
+                            <div class="admin-transaction-main">
+
+
+                                <div class="transaction-user-avatar">
+
+                                    ${withdrawal.userName
+                                        .charAt(
+                                            0
+                                        )
+                                        .toUpperCase()}
+
+                                </div>
+
+
+                                <div>
+
+
+                                    <strong>
+
+                                        ${withdrawal.userName}
+
+                                    </strong>
+
+
+                                    <span>
+
+                                        +225
+                                        ${withdrawal.userPhone || "-"}
+
+                                    </span>
+
+
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="admin-transaction-info">
+
+
+                                <span>
+
+                                    ${withdrawal.method || "Retrait"}
+
+                                </span>
+
+
+                                <strong>
+
+                                    ${formatFCFA(
+                                        withdrawal.amount
+                                    )}
+
+                                </strong>
+
+
+                                <small>
+
+                                    ${withdrawal.phone || "-"}
+
+                                </small>
+
+
+                            </div>
+
+
+                            <div class="admin-transaction-status">
+
+
+                                <span class="
+                                transaction-status
+                                ${withdrawal.status}
+                                ">
+
+
+                                    ${
+                                        withdrawal.status ===
+                                        "approved"
+
+                                        ? "Validé"
+
+                                        : withdrawal.status ===
+                                        "rejected"
+
+                                        ? "Refusé"
+
+                                        : "En attente"
+                                    }
+
+
+                                </span>
+
+
+                            </div>
+
+
+                            ${
+                                withdrawal.status ===
+                                "pending"
+
+                                ? `
+
+                                <div class="admin-transaction-actions">
+
+
+                                    <button
+                                        class="approve-button approve-withdraw"
+                                        data-user-id="${withdrawal.userId}"
+                                        data-transaction-id="${withdrawal.id}">
+
+
+                                        <i class="fa-solid fa-check"></i>
+
+                                        Valider
+
+
+                                    </button>
+
+
+                                    <button
+                                        class="reject-button reject-withdraw"
+                                        data-user-id="${withdrawal.userId}"
+                                        data-transaction-id="${withdrawal.id}">
+
+
+                                        <i class="fa-solid fa-xmark"></i>
+
+                                        Refuser
+
+
+                                    </button>
+
+
+                                </div>
+
+                                `
+
+                                : ""
+
+                            }
+
+
+                        </article>
+
+                        `;
+
+
+                    }
+                ).join(
+                    ""
+                );
+
+
+            document.querySelectorAll(
+                ".approve-withdraw"
+            ).forEach(
+                function (
+                    button
+                ) {
+
+
+                    button.addEventListener(
+                        "click",
+                        function () {
+
+
+                            const result =
+                                adminProcessTransaction(
+                                    button.dataset.userId,
+                                    button.dataset.transactionId,
+                                    "approved"
+                                );
+
+
+                            if (
+                                result.success
+                            ) {
+
+
+                                refreshAdminDashboard();
+
+
+                            }
+
+
+                        }
+                    );
+
+
+                }
+            );
+
+
+            document.querySelectorAll(
+                ".reject-withdraw"
+            ).forEach(
+                function (
+                    button
+                ) {
+
+
+                    button.addEventListener(
+                        "click",
+                        function () {
+
+
+                            const result =
+                                adminProcessTransaction(
+                                    button.dataset.userId,
+                                    button.dataset.transactionId,
+                                    "rejected"
+                                );
+
+
+                            if (
+                                result.success
+                            ) {
+
+
+                                refreshAdminDashboard();
+
+
+                            }
+
+
+                        }
+                    );
+
+
+                }
+            );
+
+
+        }
+
+
+        /* =====================================
+           FILTRES DEPOTS
+        ====================================== */
+
+        document.querySelectorAll(
+            ".admin-filter-tab"
+        ).forEach(
+            function (
+                button
+            ) {
+
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+
+                        currentDepositFilter =
+                            button.dataset
+                                .depositFilter;
+
+
+                        document.querySelectorAll(
+                            ".admin-filter-tab"
+                        ).forEach(
+                            function (
+                                item
+                            ) {
+
+
+                                item.classList.remove(
+                                    "active"
+                                );
+
+
+                            }
+                        );
+
+
+                        button.classList.add(
+                            "active"
+                        );
+
+
+                        renderAdminDeposits();
+
+
+                    }
+                );
+
+
+            }
+        );
+
+
+        /* =====================================
+           FILTRES RETRAITS
+        ====================================== */
+
+        document.querySelectorAll(
+            ".admin-withdraw-filter"
+        ).forEach(
+            function (
+                button
+            ) {
+
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+
+                        currentWithdrawFilter =
+                            button.dataset
+                                .withdrawFilter;
+
+
+                        document.querySelectorAll(
+                            ".admin-withdraw-filter"
+                        ).forEach(
+                            function (
+                                item
+                            ) {
+
+
+                                item.classList.remove(
+                                    "active"
+                                );
+
+
+                            }
+                        );
+
+
+                        button.classList.add(
+                            "active"
+                        );
+
+
+                        renderAdminWithdrawals();
+
+
+                    }
+                );
+
+
+            }
+        );
+
+
+        /* =====================================
+           INVESTISSEMENTS
+        ====================================== */
+
+        function renderAdminInvestments() {
+
+
+            const users =
+                getAllUsers();
+
+
+            const container =
+                document.getElementById(
+                    "adminInvestmentsList"
+                );
+
+
+            const allInvestments =
+                [];
+
+
+            users.forEach(
+                function (
+                    user
+                ) {
+
+
+                    (
+                        user.investments ||
+                        []
+                    ).forEach(
+                        function (
+                            investment
+                        ) {
+
+
+                            allInvestments.push(
+                                {
+                                    ...investment,
+                                    userName:
+                                        user.name ||
+                                        user.fullName ||
+                                        "Utilisateur",
+                                    userPhone:
+                                        user.phone
+                                }
+                            );
+
+
+                        }
+                    );
+
+
+                }
+            );
+
+
+            if (
+                allInvestments.length ===
+                0
+            ) {
+
+
+                container.innerHTML =
+                    `
+
+                    <div class="empty-state">
+
+                        <i class="fa-solid fa-chart-line"></i>
+
+                        <h3>
+
+                            Aucun investissement
+
+                        </h3>
+
+                    </div>
+
+                    `;
+
+
+                return;
+
+
+            }
+
+
+            container.innerHTML =
+                allInvestments.map(
+                    function (
+                        investment
+                    ) {
+
+
+                        return `
+
+                        <article class="admin-investment-card">
+
+
+                            <div class="admin-investment-icon">
+
+                                <i class="fa-solid fa-house"></i>
+
+                            </div>
+
+
+                            <div class="admin-investment-main">
+
+
+                                <strong>
+
+                                    ${investment.packName}
+
+                                </strong>
+
+
+                                <span>
+
+                                    ${investment.userName}
+
+                                    ·
+
+                                    +225
+                                    ${investment.userPhone || "-"}
+
+                                </span>
+
+
+                            </div>
+
+
+                            <div class="admin-investment-value">
+
+
+                                <strong>
+
+                                    ${formatFCFA(
+                                        investment.amount
+                                    )}
+
+                                </strong>
+
+
+                                <span>
+
+                                    180 jours
+
+                                </span>
+
+
+                            </div>
+
+
+                            <span class="active-badge">
+
+                                Actif
+
+                            </span>
+
+
+                        </article>
+
+                        `;
+
+
+                    }
+                ).join(
+                    ""
+                );
+
+
+        }
+
+
+        /* =====================================
+           TICKETS ADMIN
+        ====================================== */
+
+        function getAllTickets() {
+
+
+            const users =
+                getAllUsers();
+
+
+            const tickets =
+                [];
+
+
+            users.forEach(
+                function (
+                    user
+                ) {
+
+
+                    (
+                        user.tickets ||
+                        []
+                    ).forEach(
+                        function (
+                            ticket
+                        ) {
+
+
+                            tickets.push(
+                                {
+                                    ...ticket,
+                                    userId:
+                                        user.id,
+                                    userName:
+                                        user.name ||
+                                        user.fullName ||
+                                        "Utilisateur"
+                                }
+                            );
+
+
+                        }
+                    );
+
+
+                }
+            );
+
+
+            return tickets;
+
+
+        }
+
+
+        function renderAdminTickets() {
+
+
+            const tickets =
+                getAllTickets()
+                    .reverse();
+
+
+            const container =
+                document.getElementById(
+                    "adminTicketsList"
+                );
+
+
+            if (
+                tickets.length ===
+                0
+            ) {
+
+
+                container.innerHTML =
+                    `
+
+                    <div class="empty-state">
+
+                        <i class="fa-solid fa-headset"></i>
+
+                        <h3>
+
+                            Aucun ticket
+
+                        </h3>
+
+                        <p>
+
+                            Les demandes des utilisateurs
+                            apparaîtront ici.
+
+                        </p>
+
+                    </div>
+
+                    `;
+
+
+                return;
+
+
+            }
+
+
+            container.innerHTML =
+                tickets.map(
+                    function (
+                        ticket
+                    ) {
+
+
+                        return `
+
+                        <article class="admin-ticket-card">
+
+
+                            <div class="admin-ticket-header">
+
+
+                                <div>
+
+
+                                    <span>
+
+                                        ${ticket.userName}
+
+                                    </span>
+
+
+                                    <h3>
+
+                                        ${ticket.subject}
+
+                                    </h3>
+
+
+                                </div>
+
+
+                                <span class="
+                                ticket-status
+                                ${
+                                    ticket.status ||
+                                    "open"
+                                }
+                                ">
+
+
+                                    ${
+                                        ticket.status ===
+                                        "answered"
+
+                                        ? "Répondu"
+
+                                        : "Ouvert"
+                                    }
+
+
+                                </span>
+
+
+                            </div>
+
+
+                            <p>
+
+                                ${ticket.message}
+
+                            </p>
+
+
+                            <small>
+
+                                ${adminFormatDate(
+                                    ticket.createdAt
+                                )}
+
+                            </small>
+
+
+                            ${
+                                ticket.adminReply
+
+                                ? `
+
+                                <div class="admin-ticket-reply">
+
+
+                                    <strong>
+
+                                        Votre réponse
+
+                                    </strong>
+
+
+                                    <p>
+
+                                        ${ticket.adminReply}
+
+                                    </p>
+
+
+                                </div>
+
+                                `
+
+                                : `
+
+                                <button
+                                    class="admin-reply-ticket"
+                                    data-user-id="${ticket.userId}"
+                                    data-ticket-id="${ticket.id}">
+
+
+                                    <i class="fa-solid fa-reply"></i>
+
+                                    Répondre
+
+
+                                </button>
+
+                                `
+
+                            }
+
+
+                        </article>
+
+                        `;
+
+
+                    }
+                ).join(
+                    ""
+                );
+
+
+            document.querySelectorAll(
+                ".admin-reply-ticket"
+            ).forEach(
+                function (
+                    button
+                ) {
+
+
+                    button.addEventListener(
+                        "click",
+                        function () {
+
+
+                            openTicketReply(
+                                button.dataset.userId,
+                                button.dataset.ticketId
+                            );
+
+
+                        }
+                    );
+
+
+                }
+            );
+
+
+        }
+
+
+        /* =====================================
+           REPONSE TICKET
+        ====================================== */
+
+        function openTicketReply(
+            userId,
+            ticketId
+        ) {
+
+
+            const users =
+                getAllUsers();
+
+
+            const user =
+                users.find(
+                    function (
+                        item
+                    ) {
+
+
+                        return item.id ===
+                            userId;
+
+
+                    }
+                );
+
+
+            if (
+                !user
+            ) {
+
+
+                return;
+
+
+            }
+
+
+            const ticket =
+                (
+                    user.tickets ||
+                    []
+                ).find(
+                    function (
+                        item
+                    ) {
+
+
+                        return item.id ===
+                            ticketId;
+
+
+                    }
+                );
+
+
+            if (
+                !ticket
+            ) {
+
+
+                return;
+
+
+            }
+
+
+            selectedTicket =
+                {
+                    userId:
+                        userId,
+
+                    ticketId:
+                        ticketId
+                };
+
+
+            document.getElementById(
+                "selectedTicketInfo"
+            ).innerHTML =
+                `
+
+                <strong>
+
+                    ${user.name || "Utilisateur"}
+
+                </strong>
+
+
+                <p>
+
+                    ${ticket.subject}
+
+                </p>
+
+                `;
+
+
+            document.getElementById(
+                "adminTicketReply"
+            ).value =
+                "";
+
+
+            document.getElementById(
+                "ticketReplyMessage"
+            ).className =
+                "form-message";
+
+
+            document.getElementById(
+                "ticketReplyModal"
+            ).classList.add(
+                "active"
+            );
+
+
+        }
+
+
+        function closeTicketReplyModal() {
+
+
+            selectedTicket =
+                null;
+
+
+            document.getElementById(
+                "ticketReplyModal"
+            ).classList.remove(
+                "active"
+            );
+
+
+        }
+
+
+        document.getElementById(
+            "closeTicketReply"
+        ).addEventListener(
+            "click",
+            closeTicketReplyModal
+        );
+
+
+        document.getElementById(
+            "ticketReplyBackdrop"
+        ).addEventListener(
+            "click",
+            closeTicketReplyModal
+        );
+
+
+        document.getElementById(
+            "sendTicketReplyButton"
+        ).addEventListener(
+            "click",
+            function () {
+
+
+                if (
+                    !selectedTicket
+                ) {
+
+
+                    return;
+
+
+                }
+
+
+                const reply =
+                    document.getElementById(
+                        "adminTicketReply"
+                    ).value
+                        .trim();
+
+
+                const messageBox =
+                    document.getElementById(
+                        "ticketReplyMessage"
+                    );
+
+
+                if (
+                    reply.length < 2
+                ) {
+
+
+                    messageBox.textContent =
+                        "Veuillez saisir une réponse.";
+
+
+                    messageBox.className =
+                        "form-message error";
+
+
+                    return;
+
+
+                }
+
+
+                const result =
+                    adminReplyToTicket(
+                        selectedTicket.userId,
+                        selectedTicket.ticketId,
+                        reply
+                    );
+
+
+                messageBox.textContent =
+                    result.message;
+
+
+                messageBox.className =
+                    "form-message " +
+                    (
+                        result.success
+                            ? "success"
+                            : "error"
+                    );
+
+
+                if (
+                    result.success
+                ) {
+
+
+                    setTimeout(
+                        function () {
+
+
+                            closeTicketReplyModal();
+
+
+                            refreshAdminDashboard();
+
+
+                        },
+                        700
+                    );
+
+
+                }
+
+
+            }
+        );
+
+
+        /* =====================================
+           HISTORIQUE GLOBAL
+        ====================================== */
+
+        function renderAdminHistory() {
+
+
+            const users =
+                getAllUsers();
+
+
+            const transactions =
+                [];
+
+
+            users.forEach(
+                function (
+                    user
+                ) {
+
+
+                    (
+                        user.transactions ||
+                        []
+                    ).forEach(
+                        function (
+                            transaction
+                        ) {
+
+
+                            transactions.push(
+                                {
+                                    ...transaction,
+                                    userName:
+                                        user.name ||
+                                        user.fullName ||
+                                        "Utilisateur",
+                                    userPhone:
+                                        user.phone
+                                }
+                            );
+
+
+                        }
+                    );
+
+
+                }
+            );
+
+
+            const container =
+                document.getElementById(
+                    "adminHistoryList"
+                );
+
+
+            if (
+                transactions.length ===
+                0
+            ) {
+
+
+                container.innerHTML =
+                    `
+
+                    <div class="empty-state">
+
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+
+                        <h3>
+
+                            Aucun historique
+
+                        </h3>
+
+                    </div>
+
+                    `;
+
+
+                return;
+
+
+            }
+
+
+            container.innerHTML =
+                transactions.reverse()
+                    .map(
+                        function (
+                            transaction
+                        ) {
+
+
+                            const isDeposit =
+                                transaction.type ===
+                                "deposit";
+
+
+                            return `
+
+                            <article class="history-item admin-history-item">
+
+
+                                <div class="
+                                history-icon
+                                ${
+                                    isDeposit
+
+                                    ? "deposit-history"
+
+                                    : "withdraw-history"
+                                }
+                                ">
+
+
+                                    <i class="
+                                    fa-solid
+                                    ${
+                                        isDeposit
+
+                                        ? "fa-arrow-down"
+
+                                        : "fa-arrow-up"
+                                    }
+                                    "></i>
+
+
+                                </div>
+
+
+                                <div class="history-main">
+
+
+                                    <strong>
+
+                                        ${transaction.userName}
+
+                                    </strong>
+
+
+                                    <span>
+
+                                        ${
+                                            isDeposit
+
+                                            ? "Dépôt"
+
+                                            : "Retrait"
+                                        }
+
+                                        ·
+
+                                        ${adminFormatDate(
+                                            transaction.createdAt
+                                        )}
+
+                                    </span>
+
+
+                                </div>
+
+
+                                <div class="history-right">
+
+
+                                    <strong>
+
+                                        ${formatFCFA(
+                                            transaction.amount
+                                        )}
+
+                                    </strong>
+
+
+                                    <span class="
+                                    transaction-status
+                                    ${
+                                        transaction.status ||
+                                        "pending"
+                                    }
+                                    ">
+
+
+                                        ${
+                                            transaction.status ===
+                                            "approved"
+
+                                            ? "Validé"
+
+                                            : transaction.status ===
+                                            "rejected"
+
+                                            ? "Refusé"
+
+                                            : "En attente"
+                                        }
+
+
+                                    </span>
+
+
+                                </div>
+
+
+                            </article>
+
+                            `;
+
+
+                        }
+                    ).join(
+                        ""
+                    );
+
+
+        }
+
+
+        /* =====================================
+           TRANSACTIONS RECENTES
+        ====================================== */
+
+        function renderRecentTransactions() {
+
+
+            const users =
+                getAllUsers();
+
+
+            const transactions =
+                [];
+
+
+            users.forEach(
+                function (
+                    user
+                ) {
+
+
+                    (
+                        user.transactions ||
+                        []
+                    ).forEach(
+                        function (
+                            transaction
+                        ) {
+
+
+                            transactions.push(
+                                {
+                                    ...transaction,
+                                    userName:
+                                        user.name ||
+                                        user.fullName ||
+                                        "Utilisateur"
+                                }
+                            );
+
+
+                        }
+                    );
+
+
+                }
+            );
+
+
+            const container =
+                document.getElementById(
+                    "adminRecentTransactions"
+                );
+
+
+            const recent =
+                transactions
+                    .reverse()
+                    .slice(
+                        0,
+                        6
+                    );
+
+
+            if (
+                recent.length ===
+                0
+            ) {
+
+
+                container.innerHTML =
+                    `
+
+                    <div class="empty-state">
+
+                        <i class="fa-solid fa-receipt"></i>
+
+                        <p>
+
+                            Aucune transaction récente.
+
+                        </p>
+
+                    </div>
+
+                    `;
+
+
+                return;
+
+
+            }
+
+
+            container.innerHTML =
+                recent.map(
+                    function (
+                        transaction
+                    ) {
+
+
+                        return `
+
+                        <div class="admin-recent-transaction">
+
+
+                            <div>
+
+
+                                <strong>
+
+                                    ${transaction.userName}
+
+                                </strong>
+
+
+                                <span>
+
+                                    ${
+                                        transaction.type ===
+                                        "deposit"
+
+                                        ? "Dépôt"
+
+                                        : "Retrait"
+                                    }
+
+                                </span>
+
+
+                            </div>
+
+
+                            <strong>
+
+                                ${formatFCFA(
+                                    transaction.amount
+                                )}
+
+                            </strong>
+
+
+                        </div>
+
+                        `;
+
+
+                    }
+                ).join(
+                    ""
+                );
+
+
+        }
+
+
+        /* =====================================
+           RECHERCHE UTILISATEURS
+        ====================================== */
+
+        document.getElementById(
+            "userSearchInput"
+        ).addEventListener(
+            "input",
+            function () {
+
+
+                renderAdminUsers(
+                    this.value
+                );
+
+
+            }
+        );
+
+
+        /* =====================================
+           DECONNEXION ADMIN
+        ====================================== */
+
+        document.getElementById(
+            "adminLogoutButton"
+        ).addEventListener(
+            "click",
+            function () {
+
+
+                if (
+                    typeof adminLogout ===
+                    "function"
+                ) {
+
+
+                    adminLogout();
+
+
+                }
+
+
+                window.location.href =
+                    "login.html";
+
+
+            }
+        );
+
+
+        /* =====================================
+           RAFRAICHIR ADMIN
+        ====================================== */
+
+        function refreshAdminDashboard() {
+
+
+            updateAdminStatistics();
+
+            renderAdminUsers();
+
+            renderAdminDeposits();
+
+            renderAdminWithdrawals();
+
+            renderAdminInvestments();
+
+            renderAdminTickets();
+
+            renderAdminHistory();
+
+            renderRecentTransactions();
+
+
+        }
+
+
+        /* =====================================
+           LANCEMENT
+        ====================================== */
+
+        initializeAdmin();
+
+
+    }
+);
+
+
+</script>
 
 
 </body>
