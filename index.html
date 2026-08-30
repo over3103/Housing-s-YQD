@@ -1,30 +1,39 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
+
     <meta charset="UTF-8">
 
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
     <meta name="description"
-          content="Housing's YQD - Plateforme moderne d'investissement immobilier.">
+          content="Housing's YQD - plateforme immobilière moderne">
 
-    <title>Housing's YQD | Investissement immobilier</title>
+    <title>
+        Housing's YQD | Immobilier & Investissement
+    </title>
 
     <link rel="stylesheet"
           href="style.css">
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
 </head>
+
 
 <body>
 
-<header class="main-header">
 
-    <div class="nav-container">
+<header class="header">
 
-        <a href="index.html" class="brand">
+    <div class="container header-container">
+
+
+        <a href="index.html"
+           class="brand">
 
             <div class="brand-logo">
                 <i class="fa-solid fa-building"></i>
@@ -38,131 +47,131 @@
         </a>
 
 
-        <nav class="desktop-nav">
+        <nav class="main-nav"
+             id="mainNav">
 
-            <a href="#accueil">Accueil</a>
-            <a href="#apropos">À propos</a>
-            <a href="#packs">Investissements</a>
-            <a href="#fonctionnement">Comment ça marche</a>
-            <a href="#contact">Contact</a>
+            <a href="#home">
+                Accueil
+            </a>
+
+            <a href="#about">
+                À propos
+            </a>
+
+            <a href="#advantages">
+                Nos engagements
+            </a>
+
+            <a href="#how">
+                Fonctionnement
+            </a>
+
+            <a href="#contact">
+                Contact
+            </a>
 
         </nav>
 
 
-        <div class="nav-actions">
+        <div class="header-actions">
 
             <a href="login.html"
-               class="btn-login">
-
-                <i class="fa-solid fa-right-to-bracket"></i>
+               class="btn btn-outline">
                 Connexion
-
             </a>
 
-
             <a href="register.html"
-               class="btn-register">
-
+               class="btn btn-primary">
                 Créer un compte
-
             </a>
 
         </div>
 
 
-        <button class="mobile-menu-btn"
+        <button class="mobile-menu-button"
                 id="mobileMenuButton"
-                type="button">
+                aria-label="Menu">
 
             <i class="fa-solid fa-bars"></i>
 
         </button>
 
-    </div>
-
-
-    <div class="mobile-menu"
-         id="mobileMenu">
-
-        <a href="#accueil">Accueil</a>
-        <a href="#apropos">À propos</a>
-        <a href="#packs">Investissements</a>
-        <a href="#fonctionnement">Fonctionnement</a>
-        <a href="#contact">Contact</a>
-
-        <a href="login.html"
-           class="mobile-login">
-
-            Connexion
-
-        </a>
-
-        <a href="register.html"
-           class="mobile-register">
-
-            Créer un compte
-
-        </a>
 
     </div>
 
 </header>
 
 
+<main>
+
+
 <!-- HERO -->
 
-<section class="hero-section"
-         id="accueil">
+<section class="hero"
+         id="home">
 
-    <div class="hero-container">
+    <div class="hero-overlay"></div>
+
+
+    <div class="container hero-container">
+
 
         <div class="hero-content">
 
-            <div class="hero-badge">
-
-                <i class="fa-solid fa-building-shield"></i>
-
-                Plateforme dédiée à l'investissement immobilier
-
-            </div>
-
+            <span class="hero-kicker">
+                IMMOBILIER • TECHNOLOGIE • OPPORTUNITÉS
+            </span>
 
             <h1>
-
-                Investissez dans
-                <span>l'immobilier</span>
-                avec une expérience moderne.
-
+                Une nouvelle façon d'explorer
+                l'investissement immobilier.
             </h1>
 
-
-            <p class="hero-description">
-
-                Découvrez Housing's YQD, une plateforme pensée pour présenter
-                des opportunités liées à l'immobilier et permettre aux utilisateurs
-                de suivre leurs opérations depuis un espace personnel.
-
+            <p>
+                Housing's YQD réunit immobilier,
+                technologie et gestion numérique
+                dans une expérience moderne,
+                simple et accessible.
             </p>
 
 
-            <div class="hero-buttons">
+            <div class="hero-actions">
 
                 <a href="register.html"
-                   class="hero-primary-btn">
+                   class="btn btn-primary btn-large">
 
-                    Commencer
+                    Créer mon compte
 
                     <i class="fa-solid fa-arrow-right"></i>
 
                 </a>
 
+                <a href="#about"
+                   class="btn btn-light btn-large">
 
-                <a href="#packs"
-                   class="hero-secondary-btn">
-
-                    Découvrir les packs
+                    Découvrir la plateforme
 
                 </a>
+
+            </div>
+
+
+            <div class="hero-trust">
+
+                <div>
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Gestion structurée</span>
+                </div>
+
+                <div>
+                    <i class="fa-solid fa-mobile-screen"></i>
+                    <span>Mobile & ordinateur</span>
+                </div>
+
+                <div>
+                    <i class="fa-solid fa-headset"></i>
+                    <span>Assistance intégrée</span>
+                </div>
 
             </div>
 
@@ -171,205 +180,134 @@
 
         <div class="hero-card">
 
-            <div class="hero-card-header">
+            <span class="page-eyebrow">
+                VOTRE ESPACE
+            </span>
+
+            <h2>
+                Tout votre compte dans un seul dashboard.
+            </h2>
+
+            <div class="hero-card-list">
 
                 <div>
-
-                    <span>Opportunité mise en avant</span>
-
-                    <h3>Résidence Premium</h3>
-
+                    <i class="fa-solid fa-wallet"></i>
+                    <span>Solde et transactions</span>
                 </div>
-
-
-                <div class="verified-icon">
-
-                    <i class="fa-solid fa-house"></i>
-
-                </div>
-
-            </div>
-
-
-            <div class="property-image">
-
-                <img
-                    src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=85"
-                    alt="Maison moderne">
-
-            </div>
-
-
-            <div class="property-info">
-
-                <span>IMMOBILIER MODERNE</span>
-
-                <h4>Une résidence conçue pour le confort</h4>
-
-            </div>
-
-
-            <div class="hero-card-details">
 
                 <div>
-
-                    <i class="fa-solid fa-calendar-days"></i>
-
-                    <span>Durée</span>
-
-                    <strong>180 jours</strong>
-
-                </div>
-
-
-                <div>
-
                     <i class="fa-solid fa-chart-line"></i>
+                    <span>Investissements actifs</span>
+                </div>
 
-                    <span>Suivi</span>
+                <div>
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span>Historique détaillé</span>
+                </div>
 
-                    <strong>Personnel</strong>
-
+                <div>
+                    <i class="fa-solid fa-users"></i>
+                    <span>Programme de parrainage</span>
                 </div>
 
             </div>
 
         </div>
 
+
     </div>
 
 </section>
 
 
-<!-- À PROPOS -->
+<!-- A PROPOS -->
 
-<section class="about-section"
-         id="apropos">
+<section class="section"
+         id="about">
 
-    <div class="section-container">
+    <div class="container">
+
+        <div class="section-heading centered">
+
+            <span class="page-eyebrow">
+                HOUSING'S YQD
+            </span>
+
+            <h2>
+                Une expérience immobilière pensée pour être simple.
+            </h2>
+
+            <p>
+                La plateforme centralise votre espace personnel,
+                vos opérations, vos investissements et votre
+                assistance dans une interface moderne.
+            </p>
+
+        </div>
+
 
         <div class="about-grid">
 
-            <div class="about-image-box">
+            <div class="about-image">
 
                 <img
-                    src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=85"
-                    alt="Immobilier moderne">
-
-
-                <div class="about-floating-card">
-
-                    <i class="fa-solid fa-building-circle-check"></i>
-
-                    <div>
-
-                        <strong>Immobilier</strong>
-
-                        <span>Une expérience digitale moderne</span>
-
-                    </div>
-
-                </div>
+                    src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85"
+                    alt="Maison moderne"
+                    loading="lazy">
 
             </div>
 
 
             <div class="about-content">
 
-                <div class="section-tag">
+                <span class="page-eyebrow">
+                    UNE PLATEFORME CENTRALISÉE
+                </span>
 
-                    <i class="fa-solid fa-circle-info"></i>
-
-                    NOTRE UNIVERS
-
-                </div>
-
-
-                <h3>
-
-                    Une plateforme inspirée par
-                    <span>l'immobilier moderne.</span>
-
-                </h3>
-
+                <h2>
+                    Une interface claire pour gérer vos opérations.
+                </h2>
 
                 <p>
-
-                    Housing's YQD met l'accent sur une présentation claire
-                    des opportunités, une expérience utilisateur moderne
-                    et un espace personnel permettant de suivre les opérations.
-
+                    Une fois connecté, chaque utilisateur dispose
+                    de son propre tableau de bord avec ses
+                    informations et son historique.
                 </p>
 
 
-                <div class="about-features">
+                <div class="feature-list">
 
-                    <div class="about-feature">
-
-                        <div class="feature-icon">
-
-                            <i class="fa-solid fa-house"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h4>Projets immobiliers</h4>
-
-                            <p>
-                                Des maisons et résidences présentées dans
-                                différents univers d'investissement.
-                            </p>
-
-                        </div>
-
+                    <div>
+                        <i class="fa-solid fa-circle-check"></i>
+                        Tableau de bord personnel
                     </div>
 
-
-                    <div class="about-feature">
-
-                        <div class="feature-icon">
-
-                            <i class="fa-solid fa-chart-pie"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h4>Suivi personnel</h4>
-
-                            <p>
-                                Un tableau de bord conçu pour suivre vos
-                                opérations et investissements.
-                            </p>
-
-                        </div>
-
+                    <div>
+                        <i class="fa-solid fa-circle-check"></i>
+                        Historique des opérations
                     </div>
 
+                    <div>
+                        <i class="fa-solid fa-circle-check"></i>
+                        Assistance intégrée
+                    </div>
 
-                    <div class="about-feature">
-
-                        <div class="feature-icon">
-
-                            <i class="fa-solid fa-headset"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h4>Assistance</h4>
-
-                            <p>
-                                Un système de communication et de tickets
-                                accessible depuis votre espace personnel.
-                            </p>
-
-                        </div>
-
+                    <div>
+                        <i class="fa-solid fa-circle-check"></i>
+                        Parrainage personnalisé
                     </div>
 
                 </div>
+
+
+                <a href="register.html"
+                   class="btn btn-primary">
+
+                    Commencer
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </a>
 
             </div>
 
@@ -380,37 +318,22 @@
 </section>
 
 
-<!-- AVANTAGES -->
+<!-- ENGAGEMENTS -->
 
-<section class="advantages-section">
+<section class="section section-soft"
+         id="advantages">
 
-    <div class="section-container">
+    <div class="container">
 
-        <div class="section-heading center-heading">
+        <div class="section-heading centered">
 
-            <div class="section-tag">
-
-                <i class="fa-solid fa-star"></i>
-
-                HOUSING'S YQD
-
-            </div>
-
+            <span class="page-eyebrow">
+                NOS ENGAGEMENTS
+            </span>
 
             <h2>
-
-                Une expérience
-                <span>simple et professionnelle.</span>
-
+                Une plateforme conçue autour de l'expérience utilisateur.
             </h2>
-
-
-            <p>
-
-                Une interface pensée pour faciliter la consultation des
-                informations et le suivi des activités.
-
-            </p>
 
         </div>
 
@@ -420,16 +343,16 @@
             <article class="advantage-card">
 
                 <div class="advantage-icon">
-
-                    <i class="fa-solid fa-mobile-screen-button"></i>
-
+                    <i class="fa-solid fa-layer-group"></i>
                 </div>
 
-                <h3>Accessible partout</h3>
+                <h3>
+                    Interface moderne
+                </h3>
 
                 <p>
-                    Une interface adaptée aux téléphones,
-                    tablettes et ordinateurs.
+                    Une expérience fluide sur téléphone,
+                    tablette et ordinateur.
                 </p>
 
             </article>
@@ -438,16 +361,16 @@
             <article class="advantage-card">
 
                 <div class="advantage-icon">
-
-                    <i class="fa-solid fa-user-shield"></i>
-
+                    <i class="fa-solid fa-eye"></i>
                 </div>
 
-                <h3>Espace personnel</h3>
+                <h3>
+                    Suivi transparent
+                </h3>
 
                 <p>
-                    Chaque utilisateur dispose de son propre
-                    espace de consultation.
+                    Consultez vos opérations et leur statut
+                    depuis votre compte.
                 </p>
 
             </article>
@@ -456,16 +379,16 @@
             <article class="advantage-card">
 
                 <div class="advantage-icon">
-
-                    <i class="fa-solid fa-chart-line"></i>
-
+                    <i class="fa-solid fa-headset"></i>
                 </div>
 
-                <h3>Suivi des activités</h3>
+                <h3>
+                    Assistance
+                </h3>
 
                 <p>
-                    Consultez vos dépôts, retraits,
-                    investissements et historiques.
+                    Un espace dédié permet d'envoyer
+                    et suivre vos demandes.
                 </p>
 
             </article>
@@ -477,658 +400,62 @@
 </section>
 
 
-<!-- PACKS -->
+<!-- COMMENT CA MARCHE -->
 
-<section class="investment-section"
-         id="packs">
+<section class="section"
+         id="how">
 
-    <div class="section-container">
+    <div class="container">
 
-        <div class="section-heading center-heading">
+        <div class="section-heading centered">
 
-            <div class="section-tag">
-
-                <i class="fa-solid fa-house-chimney"></i>
-
-                PACKS IMMOBILIERS
-
-            </div>
-
-
-            <h2>
-
-                Découvrez nos
-                <span>packs d'investissement.</span>
-
-            </h2>
-
-
-            <p>
-
-                Chaque pack est présenté avec son univers immobilier
-                et une durée indicative de 180 jours.
-
-            </p>
-
-        </div>
-
-
-        <div class="pack-grid">
-
-
-            <!-- PACK 1 -->
-
-            <article class="pack-card">
-
-                <div class="pack-image">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=700&q=85"
-                        alt="Pack Starter">
-
-                    <span class="pack-badge">
-                        STARTER
-                    </span>
-
-                </div>
-
-
-                <div class="pack-content">
-
-                    <h3>Pack Starter</h3>
-
-                    <p class="pack-subtitle">
-                        Votre première expérience immobilière.
-                    </p>
-
-
-                    <div class="pack-price">
-
-                        <span>À partir de</span>
-
-                        <strong>3 000 FCFA</strong>
-
-                    </div>
-
-
-                    <div class="pack-details">
-
-                        <div>
-
-                            <i class="fa-solid fa-calendar"></i>
-
-                            <span>Durée</span>
-
-                            <strong>180 jours</strong>
-
-                        </div>
-
-                    </div>
-
-
-                    <a href="register.html"
-                       class="pack-button">
-
-                        Découvrir
-
-                    </a>
-
-                </div>
-
-            </article>
-
-
-            <!-- PACK 2 -->
-
-            <article class="pack-card">
-
-                <div class="pack-image">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=700&q=85"
-                        alt="Pack Familial">
-
-                    <span class="pack-badge">
-                        FAMILIAL
-                    </span>
-
-                </div>
-
-
-                <div class="pack-content">
-
-                    <h3>Pack Familial</h3>
-
-                    <p class="pack-subtitle">
-                        Une solution pensée pour évoluer.
-                    </p>
-
-
-                    <div class="pack-price">
-
-                        <span>À partir de</span>
-
-                        <strong>10 000 FCFA</strong>
-
-                    </div>
-
-
-                    <div class="pack-details">
-
-                        <div>
-
-                            <i class="fa-solid fa-calendar"></i>
-
-                            <span>Durée</span>
-
-                            <strong>180 jours</strong>
-
-                        </div>
-
-                    </div>
-
-
-                    <a href="register.html"
-                       class="pack-button">
-
-                        Découvrir
-
-                    </a>
-
-                </div>
-
-            </article>
-
-
-            <!-- PACK 3 -->
-
-            <article class="pack-card">
-
-                <div class="pack-image">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=700&q=85"
-                        alt="Pack Confort">
-
-                    <span class="pack-badge">
-                        CONFORT
-                    </span>
-
-                </div>
-
-
-                <div class="pack-content">
-
-                    <h3>Pack Confort</h3>
-
-                    <p class="pack-subtitle">
-                        Un univers résidentiel confortable.
-                    </p>
-
-
-                    <div class="pack-price">
-
-                        <span>À partir de</span>
-
-                        <strong>20 000 FCFA</strong>
-
-                    </div>
-
-
-                    <div class="pack-details">
-
-                        <div>
-
-                            <i class="fa-solid fa-calendar"></i>
-
-                            <span>Durée</span>
-
-                            <strong>180 jours</strong>
-
-                        </div>
-
-                    </div>
-
-
-                    <a href="register.html"
-                       class="pack-button">
-
-                        Découvrir
-
-                    </a>
-
-                </div>
-
-            </article>
-
-
-            <!-- PACK 4 -->
-
-            <article class="pack-card featured-pack">
-
-                <div class="featured-label">
-                    POPULAIRE
-                </div>
-
-
-                <div class="pack-image">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1600585152915-d208bec867a1?auto=format&fit=crop&w=700&q=85"
-                        alt="Pack Premium">
-
-                    <span class="pack-badge">
-                        PREMIUM
-                    </span>
-
-                </div>
-
-
-                <div class="pack-content">
-
-                    <h3>Pack Premium</h3>
-
-                    <p class="pack-subtitle">
-                        Une résidence moderne et élégante.
-                    </p>
-
-
-                    <div class="pack-price">
-
-                        <span>À partir de</span>
-
-                        <strong>45 000 FCFA</strong>
-
-                    </div>
-
-
-                    <div class="pack-details">
-
-                        <div>
-
-                            <i class="fa-solid fa-calendar"></i>
-
-                            <span>Durée</span>
-
-                            <strong>180 jours</strong>
-
-                        </div>
-
-                    </div>
-
-
-                    <a href="register.html"
-                       class="pack-button">
-
-                        Découvrir
-
-                    </a>
-
-                </div>
-
-            </article>
-
-
-            <!-- PACK 5 -->
-
-            <article class="pack-card">
-
-                <div class="pack-image">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=700&q=85"
-                        alt="Pack Prestige">
-
-                    <span class="pack-badge">
-                        PRESTIGE
-                    </span>
-
-                </div>
-
-
-                <div class="pack-content">
-
-                    <h3>Pack Prestige</h3>
-
-                    <p class="pack-subtitle">
-                        Une approche haut de gamme.
-                    </p>
-
-
-                    <div class="pack-price">
-
-                        <span>À partir de</span>
-
-                        <strong>100 000 FCFA</strong>
-
-                    </div>
-
-
-                    <div class="pack-details">
-
-                        <div>
-
-                            <i class="fa-solid fa-calendar"></i>
-
-                            <span>Durée</span>
-
-                            <strong>180 jours</strong>
-
-                        </div>
-
-                    </div>
-
-
-                    <a href="register.html"
-                       class="pack-button">
-
-                        Découvrir
-
-                    </a>
-
-                </div>
-
-            </article>
-
-
-            <!-- PACK 6 -->
-
-            <article class="pack-card">
-
-                <div class="pack-image">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=700&q=85"
-                        alt="Pack Premium Plus">
-
-                    <span class="pack-badge">
-                        PREMIUM PLUS
-                    </span>
-
-                </div>
-
-
-                <div class="pack-content">
-
-                    <h3>Pack Premium Plus</h3>
-
-                    <p class="pack-subtitle">
-                        Une sélection immobilière avancée.
-                    </p>
-
-
-                    <div class="pack-price">
-
-                        <span>À partir de</span>
-
-                        <strong>200 000 FCFA</strong>
-
-                    </div>
-
-
-                    <div class="pack-details">
-
-                        <div>
-
-                            <i class="fa-solid fa-calendar"></i>
-
-                            <span>Durée</span>
-
-                            <strong>180 jours</strong>
-
-                        </div>
-
-                    </div>
-
-
-                    <a href="register.html"
-                       class="pack-button">
-
-                        Découvrir
-
-                    </a>
-
-                </div>
-
-            </article>
-
-
-            <!-- PACK 7 -->
-
-            <article class="pack-card">
-
-                <div class="pack-image">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1600573472550-8090b5e0745e?auto=format&fit=crop&w=700&q=85"
-                        alt="Pack Elite">
-
-                    <span class="pack-badge">
-                        ELITE
-                    </span>
-
-                </div>
-
-
-                <div class="pack-content">
-
-                    <h3>Pack Elite</h3>
-
-                    <p class="pack-subtitle">
-                        Une résidence pensée pour l'excellence.
-                    </p>
-
-
-                    <div class="pack-price">
-
-                        <span>À partir de</span>
-
-                        <strong>400 000 FCFA</strong>
-
-                    </div>
-
-
-                    <div class="pack-details">
-
-                        <div>
-
-                            <i class="fa-solid fa-calendar"></i>
-
-                            <span>Durée</span>
-
-                            <strong>180 jours</strong>
-
-                        </div>
-
-                    </div>
-
-
-                    <a href="register.html"
-                       class="pack-button">
-
-                        Découvrir
-
-                    </a>
-
-                </div>
-
-            </article>
-
-
-            <!-- PACK 8 -->
-
-            <article class="pack-card">
-
-                <div class="pack-image">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=700&q=85"
-                        alt="Pack Luxury">
-
-                    <span class="pack-badge">
-                        LUXURY
-                    </span>
-
-                </div>
-
-
-                <div class="pack-content">
-
-                    <h3>Pack Luxury</h3>
-
-                    <p class="pack-subtitle">
-                        L'univers immobilier le plus prestigieux.
-                    </p>
-
-
-                    <div class="pack-price">
-
-                        <span>À partir de</span>
-
-                        <strong>800 000 FCFA</strong>
-
-                    </div>
-
-
-                    <div class="pack-details">
-
-                        <div>
-
-                            <i class="fa-solid fa-calendar"></i>
-
-                            <span>Durée</span>
-
-                            <strong>180 jours</strong>
-
-                        </div>
-
-                    </div>
-
-
-                    <a href="register.html"
-                       class="pack-button">
-
-                        Découvrir
-
-                    </a>
-
-                </div>
-
-            </article>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- FONCTIONNEMENT -->
-
-<section class="how-section"
-         id="fonctionnement">
-
-    <div class="section-container">
-
-        <div class="section-heading center-heading">
-
-            <div class="section-tag">
-
-                <i class="fa-solid fa-list-check"></i>
-
+            <span class="page-eyebrow">
                 FONCTIONNEMENT
-
-            </div>
-
+            </span>
 
             <h2>
-
-                Une expérience en
-                <span>quatre étapes.</span>
-
+                Commencez en quelques étapes.
             </h2>
 
         </div>
 
 
-        <div class="steps-container">
-
+        <div class="steps-grid">
 
             <article class="step-card">
-
-                <span class="step-number">01</span>
-
-                <div class="step-icon">
-
-                    <i class="fa-solid fa-user-plus"></i>
-
-                </div>
-
+                <span>01</span>
                 <h3>Créer un compte</h3>
-
                 <p>
-                    Créez votre espace personnel.
+                    Renseignez vos informations
+                    pour créer votre espace.
                 </p>
-
             </article>
 
-
             <article class="step-card">
-
-                <span class="step-number">02</span>
-
-                <div class="step-icon">
-
-                    <i class="fa-solid fa-wallet"></i>
-
-                </div>
-
-                <h3>Alimenter le compte</h3>
-
+                <span>02</span>
+                <h3>Accéder au dashboard</h3>
                 <p>
-                    Effectuez une demande de dépôt.
+                    Retrouvez toutes les fonctions
+                    principales de votre compte.
                 </p>
-
             </article>
 
-
             <article class="step-card">
-
-                <span class="step-number">03</span>
-
-                <div class="step-icon">
-
-                    <i class="fa-solid fa-house"></i>
-
-                </div>
-
+                <span>03</span>
                 <h3>Choisir un pack</h3>
-
                 <p>
-                    Sélectionnez une opportunité correspondant
-                    à votre objectif.
+                    Les différentes offres sont
+                    accessibles depuis le dashboard.
                 </p>
-
             </article>
 
-
             <article class="step-card">
-
-                <span class="step-number">04</span>
-
-                <div class="step-icon">
-
-                    <i class="fa-solid fa-chart-column"></i>
-
-                </div>
-
-                <h3>Suivre</h3>
-
+                <span>04</span>
+                <h3>Suivre votre activité</h3>
                 <p>
-                    Consultez vos informations depuis votre tableau
-                    de bord.
+                    Consultez vos investissements
+                    et votre historique.
                 </p>
-
             </article>
 
         </div>
@@ -1142,57 +469,33 @@
 
 <section class="cta-section">
 
-    <div class="cta-container">
+    <div class="container">
 
-        <div class="cta-content">
+        <div class="cta-box">
 
-            <div class="section-tag light-tag">
+            <div>
+                <span class="page-eyebrow">
+                    HOUSING'S YQD
+                </span>
 
-                HOUSING'S YQD
+                <h2>
+                    Votre espace vous attend.
+                </h2>
 
+                <p>
+                    Créez votre compte et découvrez
+                    l'ensemble de la plateforme.
+                </p>
             </div>
 
+            <a href="register.html"
+               class="btn btn-light btn-large">
 
-            <h2>
+                Créer mon compte
 
-                Prêt à découvrir
-                <span>votre espace ?</span>
+                <i class="fa-solid fa-arrow-right"></i>
 
-            </h2>
-
-
-            <p>
-
-                Créez votre compte et accédez à votre espace personnel.
-
-            </p>
-
-
-            <div class="cta-buttons">
-
-                <a href="register.html"
-                   class="cta-primary">
-
-                    Créer un compte
-
-                </a>
-
-
-                <a href="login.html"
-                   class="cta-secondary">
-
-                    Se connecter
-
-                </a>
-
-            </div>
-
-        </div>
-
-
-        <div class="cta-visual">
-
-            <i class="fa-solid fa-city"></i>
+            </a>
 
         </div>
 
@@ -1203,112 +506,26 @@
 
 <!-- CONTACT -->
 
-<section class="contact-section"
+<section class="section section-soft"
          id="contact">
 
-    <div class="section-container">
+    <div class="container">
 
-        <div class="section-heading">
+        <div class="section-heading centered">
 
-            <div class="section-tag">
-
-                <i class="fa-solid fa-headset"></i>
-
+            <span class="page-eyebrow">
                 CONTACT
-
-            </div>
-
+            </span>
 
             <h2>
-
-                Besoin d'une
-                <span>assistance ?</span>
-
+                Besoin d'informations ?
             </h2>
 
-
             <p>
-
-                Notre espace utilisateur permet également
-                de transmettre une demande d'assistance.
-
+                Les utilisateurs enregistrés disposent également
+                d'un système d'assistance directement dans
+                leur tableau de bord.
             </p>
-
-        </div>
-
-
-        <div class="contact-grid">
-
-            <div class="contact-info">
-
-                <div class="contact-card">
-
-                    <div class="contact-icon">
-
-                        <i class="fa-solid fa-headset"></i>
-
-                    </div>
-
-                    <div>
-
-                        <h4>Assistance</h4>
-
-                        <p>
-                            Disponible depuis votre espace utilisateur.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div class="contact-card">
-
-                    <div class="contact-icon">
-
-                        <i class="fa-solid fa-shield-halved"></i>
-
-                    </div>
-
-                    <div>
-
-                        <h4>Compte personnel</h4>
-
-                        <p>
-                            Consultez vos opérations depuis votre dashboard.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="contact-action">
-
-                <i class="fa-solid fa-comments"></i>
-
-                <h3>Un problème ?</h3>
-
-                <p>
-
-                    Connectez-vous à votre compte et utilisez
-                    le système d'assistance.
-
-                </p>
-
-
-                <a href="login.html"
-                   class="contact-btn">
-
-                    Accéder à mon compte
-
-                    <i class="fa-solid fa-arrow-right"></i>
-
-                </a>
-
-            </div>
 
         </div>
 
@@ -1317,148 +534,134 @@
 </section>
 
 
-<!-- FOOTER -->
-
-<footer class="main-footer">
-
-    <div class="footer-container">
-
-        <div class="footer-main">
-
-            <div class="footer-brand">
-
-                <a href="index.html"
-                   class="brand footer-brand-link">
-
-                    <div class="brand-logo">
-
-                        <i class="fa-solid fa-building"></i>
-
-                    </div>
+</main>
 
 
-                    <div class="brand-text">
+<footer class="footer">
 
-                        <strong>Housing's YQD</strong>
+    <div class="container footer-grid">
 
-                        <span>IMMOBILIER</span>
+        <div>
 
-                    </div>
+            <a href="index.html"
+               class="brand">
 
-                </a>
-
-
-                <p>
-
-                    Une plateforme digitale orientée vers
-                    l'univers de l'investissement immobilier.
-
-                </p>
-
-            </div>
-
-
-            <div class="footer-links">
-
-                <div class="footer-column">
-
-                    <h4>Navigation</h4>
-
-                    <a href="#accueil">Accueil</a>
-                    <a href="#apropos">À propos</a>
-                    <a href="#packs">Packs</a>
-
+                <div class="brand-logo">
+                    <i class="fa-solid fa-building"></i>
                 </div>
 
-
-                <div class="footer-column">
-
-                    <h4>Compte</h4>
-
-                    <a href="register.html">Créer un compte</a>
-                    <a href="login.html">Connexion</a>
-                    <a href="forgot-password.html">Mot de passe oublié</a>
-
+                <div class="brand-text">
+                    <strong>Housing's YQD</strong>
+                    <span>IMMOBILIER</span>
                 </div>
 
+            </a>
 
-                <div class="footer-column">
-
-                    <h4>Support</h4>
-
-                    <a href="login.html">Assistance</a>
-                    <a href="admin.html">Administration</a>
-
-                </div>
-
-            </div>
+            <p>
+                Une expérience numérique moderne
+                autour de l'immobilier.
+            </p>
 
         </div>
 
 
-        <div class="footer-bottom">
+        <div>
 
-            <span>
-                © 2026 Housing's YQD. Tous droits réservés.
-            </span>
+            <h4>Navigation</h4>
 
+            <a href="#about">
+                À propos
+            </a>
 
-            <div class="footer-bottom-links">
+            <a href="#how">
+                Fonctionnement
+            </a>
 
-                <span>Plateforme digitale</span>
-
-                <span>Immobilier</span>
-
-            </div>
+            <a href="#contact">
+                Contact
+            </a>
 
         </div>
+
+
+        <div>
+
+            <h4>Compte</h4>
+
+            <a href="login.html">
+                Connexion
+            </a>
+
+            <a href="register.html">
+                Inscription
+            </a>
+
+        </div>
+
+
+        <div>
+
+            <h4>Administration</h4>
+
+            <a href="admin.html">
+                Espace administrateur
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="container footer-bottom">
+
+        <p>
+            © 2026 Housing's YQD.
+            Tous droits réservés.
+        </p>
 
     </div>
 
 </footer>
 
 
-<script src="script.js"></script>
-
 <script>
 
-document.addEventListener(
-    "DOMContentLoaded",
+const menuButton =
+    document.getElementById(
+        "mobileMenuButton"
+    );
+
+const mainNav =
+    document.getElementById(
+        "mainNav"
+    );
+
+menuButton.addEventListener(
+    "click",
     function () {
+        mainNav.classList.toggle(
+            "mobile-open"
+        );
+    }
+);
 
-        const button =
-            document.getElementById(
-                "mobileMenuButton"
-            );
-
-        const menu =
-            document.getElementById(
-                "mobileMenu"
-            );
-
-
-        if (
-            button &&
-            menu
-        ) {
-
-            button.addEventListener(
-                "click",
-                function () {
-
-                    menu.classList.toggle(
-                        "active"
-                    );
-
-                }
-            );
-
-        }
-
+document.querySelectorAll(
+    "#mainNav a"
+).forEach(
+    function (link) {
+        link.addEventListener(
+            "click",
+            function () {
+                mainNav.classList.remove(
+                    "mobile-open"
+                );
+            }
+        );
     }
 );
 
 </script>
+
 
 </body>
 </html>
