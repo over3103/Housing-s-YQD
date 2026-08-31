@@ -859,3 +859,4 @@ async function getSupabaseInvestmentPacks() {
     }
 
 }
+
