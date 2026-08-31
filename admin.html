@@ -20,24 +20,44 @@
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
             --secondary: #0ea5e9;
+
             --dark: #020617;
             --dark-soft: #0f172a;
+
             --text: #334155;
             --muted: #64748b;
             --border: #e2e8f0;
+
             --bg: #f4f7fb;
             --card: #ffffff;
+
             --success: #059669;
+            --success-soft: #ecfdf5;
+
             --danger: #dc2626;
+            --danger-soft: #fef2f2;
+
             --warning: #d97706;
+            --warning-soft: #fffbeb;
+
+            --purple: #7c3aed;
+            --purple-soft: #f5f3ff;
         }
 
         body {
             margin: 0;
             min-height: 100vh;
-            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background: var(--bg);
+
+            font-family:
+                Inter,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
             color: var(--text);
+            background: var(--bg);
         }
 
         button,
@@ -54,29 +74,46 @@
             display: none !important;
         }
 
-        /* LOADING */
+        /* =====================================================
+           LOADING
+        ===================================================== */
 
         .loading-screen {
             position: fixed;
-            z-index: 999999;
+            z-index: 9999999;
             inset: 0;
+
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+
             gap: 15px;
+
             color: white;
+
             background:
-                radial-gradient(circle at 75% 20%, rgba(14,165,233,.3), transparent 28%),
-                linear-gradient(145deg, #020617, #082f68);
+                radial-gradient(
+                    circle at 75% 20%,
+                    rgba(14,165,233,.35),
+                    transparent 28%
+                ),
+                linear-gradient(
+                    145deg,
+                    #020617,
+                    #082f68
+                );
         }
 
         .spinner {
-            width: 48px;
-            height: 48px;
+            width: 50px;
+            height: 50px;
+
             border: 4px solid rgba(255,255,255,.18);
             border-top-color: white;
+
             border-radius: 50%;
+
             animation: spin .8s linear infinite;
         }
 
@@ -86,25 +123,48 @@
             }
         }
 
-        /* ACCES REFUSE */
+        /* =====================================================
+           ACCESS DENIED
+        ===================================================== */
 
         .access-screen {
             min-height: 100vh;
+
             display: none;
             align-items: center;
             justify-content: center;
+
             padding: 25px;
-            background: linear-gradient(145deg, #020617, #0f172a);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #020617,
+                    #0f172a
+                );
         }
 
         .access-card {
             width: min(500px,100%);
-            padding: 30px;
-            border: 1px solid rgba(255,255,255,.1);
-            border-radius: 24px;
+
+            padding: 32px;
+
+            border:
+                1px solid
+                rgba(255,255,255,.1);
+
+            border-radius: 25px;
+
             color: white;
-            background: rgba(255,255,255,.06);
+
+            background:
+                rgba(255,255,255,.06);
+
             text-align: center;
+
+            box-shadow:
+                0 30px 100px
+                rgba(0,0,0,.4);
         }
 
         .access-card h1 {
@@ -116,43 +176,82 @@
             font-size: 13px;
         }
 
-        /* APP */
+        /* =====================================================
+           APPLICATION
+        ===================================================== */
 
         .admin-app {
             min-height: 100vh;
+
             display: none;
-            grid-template-columns: 270px minmax(0,1fr);
+
+            grid-template-columns:
+                270px
+                minmax(0,1fr);
         }
 
-        /* SIDEBAR */
+        /* =====================================================
+           SIDEBAR
+        ===================================================== */
 
         .sidebar {
             position: sticky;
             top: 0;
+
             height: 100vh;
+
             overflow-y: auto;
+
             padding: 20px 15px;
+
             color: white;
+
             background:
-                radial-gradient(circle at 20% 5%, rgba(37,99,235,.28), transparent 27%),
-                linear-gradient(170deg, #020617, #071c3f 60%, #082f68);
+                radial-gradient(
+                    circle at 20% 5%,
+                    rgba(37,99,235,.3),
+                    transparent 27%
+                ),
+                linear-gradient(
+                    170deg,
+                    #020617,
+                    #071c3f 60%,
+                    #082f68
+                );
         }
 
         .brand {
             display: flex;
-            gap: 12px;
             align-items: center;
-            padding: 5px 5px 22px;
+
+            gap: 12px;
+
+            padding:
+                5px 5px 22px;
         }
 
         .brand-icon {
             width: 48px;
             height: 48px;
+
+            flex-shrink: 0;
+
             display: flex;
             align-items: center;
             justify-content: center;
+
             border-radius: 15px;
-            background: linear-gradient(135deg,#2563eb,#0ea5e9);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #0ea5e9
+                );
+
+            box-shadow:
+                0 10px 30px
+                rgba(37,99,235,.35);
         }
 
         .brand strong {
@@ -161,76 +260,122 @@
 
         .brand span {
             display: block;
+
             margin-top: 3px;
+
             font-size: 9px;
+
             color: #94a3b8;
         }
 
         .admin-profile {
             padding: 14px;
+
             margin-bottom: 18px;
+
             border-radius: 16px;
-            background: rgba(255,255,255,.07);
-            border: 1px solid rgba(255,255,255,.08);
+
+            background:
+                rgba(255,255,255,.07);
+
+            border:
+                1px solid
+                rgba(255,255,255,.08);
         }
 
         .admin-profile small {
             color: #60a5fa;
+
             font-weight: 900;
         }
 
         .admin-profile strong,
         .admin-profile span {
             display: block;
+
             margin-top: 5px;
+
             overflow: hidden;
+
             text-overflow: ellipsis;
         }
 
         .admin-profile span {
             color: #cbd5e1;
+
             font-size: 11px;
         }
 
         .menu {
             display: grid;
+
             gap: 6px;
         }
 
         .menu button {
-            min-height: 45px;
+            min-height: 46px;
+
             width: 100%;
+
             padding: 0 13px;
+
             display: flex;
             align-items: center;
+
             gap: 11px;
+
             border: 0;
+
             border-radius: 12px;
+
             color: #cbd5e1;
+
             background: transparent;
+
             font-size: 12px;
             font-weight: 800;
+
             text-align: left;
         }
 
         .menu button:hover,
         .menu button.active {
             color: white;
-            background: rgba(255,255,255,.1);
+
+            background:
+                rgba(255,255,255,.1);
+        }
+
+        .menu button i {
+            width: 18px;
+
+            text-align: center;
         }
 
         .logout-side {
             width: 100%;
-            min-height: 43px;
+
+            min-height: 44px;
+
             margin-top: 18px;
-            border: 1px solid rgba(248,113,113,.3);
+
+            border:
+                1px solid
+                rgba(248,113,113,.3);
+
             border-radius: 12px;
+
             color: #fecaca;
-            background: rgba(220,38,38,.08);
+
+            background:
+                rgba(220,38,38,.08);
+
             font-weight: 800;
         }
 
-        /* TOPBAR */
+        /* =====================================================
+           MAIN
+        ===================================================== */
 
         .main {
             min-width: 0;
@@ -240,56 +385,82 @@
             position: sticky;
             z-index: 500;
             top: 0;
+
             min-height: 70px;
+
             padding: 12px 24px;
+
             display: flex;
             align-items: center;
             justify-content: space-between;
+
             gap: 15px;
-            border-bottom: 1px solid var(--border);
-            background: rgba(255,255,255,.96);
-            backdrop-filter: blur(15px);
+
+            border-bottom:
+                1px solid
+                var(--border);
+
+            background:
+                rgba(255,255,255,.96);
+
+            backdrop-filter:
+                blur(15px);
         }
 
         .top-left {
             display: flex;
             align-items: center;
+
             gap: 10px;
         }
 
         .topbar h1 {
             margin: 0;
+
             font-size: 20px;
+
             color: var(--dark-soft);
         }
 
         .topbar p {
             margin: 3px 0 0;
+
             font-size: 10px;
+
             color: var(--muted);
         }
 
         .top-actions {
             display: flex;
             align-items: center;
+
             gap: 8px;
         }
 
         .icon-btn {
             position: relative;
+
             width: 43px;
             height: 43px;
+
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid var(--border);
+
+            border:
+                1px solid
+                var(--border);
+
             border-radius: 12px;
+
             background: white;
+
             color: #475569;
         }
 
         .icon-btn:hover {
             color: var(--primary);
+
             background: #eff6ff;
         }
 
@@ -297,22 +468,34 @@
             display: none;
         }
 
-        /* NOTIFICATIONS */
+        /* =====================================================
+           NOTIFICATIONS
+        ===================================================== */
 
         .notification-badge {
             position: absolute;
+
             top: -5px;
             right: -5px;
+
             min-width: 20px;
             height: 20px;
+
             padding: 0 5px;
+
             display: none;
             align-items: center;
             justify-content: center;
-            border: 2px solid white;
+
+            border:
+                2px solid white;
+
             border-radius: 999px;
+
             color: white;
+
             background: #dc2626;
+
             font-size: 10px;
             font-weight: 900;
         }
@@ -323,17 +506,35 @@
 
         .notification-panel {
             position: fixed !important;
+
             z-index: 999999 !important;
+
             top: 76px !important;
             right: 20px !important;
-            width: min(410px,calc(100vw - 30px));
+
+            width:
+                min(
+                    410px,
+                    calc(100vw - 30px)
+                );
+
             max-height: 72vh;
+
             display: none;
+
             overflow: hidden;
-            border: 1px solid var(--border);
+
+            border:
+                1px solid
+                var(--border);
+
             border-radius: 19px;
+
             background: white;
-            box-shadow: 0 25px 80px rgba(15,23,42,.3);
+
+            box-shadow:
+                0 25px 80px
+                rgba(15,23,42,.3);
         }
 
         .notification-panel.show {
@@ -342,10 +543,14 @@
 
         .notification-head {
             padding: 14px 15px;
+
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid var(--border);
+
+            border-bottom:
+                1px solid
+                var(--border);
         }
 
         .notification-head strong {
@@ -354,24 +559,36 @@
 
         .notification-head button {
             border: 0;
+
             color: var(--primary);
+
             background: transparent;
+
             font-size: 11px;
             font-weight: 900;
         }
 
         .notification-list {
             max-height: 60vh;
+
             overflow-y: auto;
         }
 
         .notification-item {
             width: 100%;
+
             padding: 14px 15px;
+
             display: block;
+
             border: 0;
-            border-bottom: 1px solid #eef2f7;
+
+            border-bottom:
+                1px solid
+                #eef2f7;
+
             background: white;
+
             text-align: left;
         }
 
@@ -385,113 +602,189 @@
 
         .notification-item strong {
             display: block;
+
             margin-bottom: 5px;
+
             color: #0f172a;
+
             font-size: 12px;
         }
 
         .notification-item p {
             margin: 0;
+
             color: #64748b;
+
             font-size: 11px;
+
             line-height: 1.55;
         }
 
         .notification-item small {
             display: block;
+
             margin-top: 7px;
+
             color: #94a3b8;
+
             font-size: 9px;
         }
 
-        /* CONTENT */
+        /* =====================================================
+           CONTENT
+        ===================================================== */
 
         .content {
             width: min(1550px,100%);
+
             margin: 0 auto;
+
             padding: 24px;
         }
 
         .hero {
-            padding: 25px;
+            padding: 26px;
+
             border-radius: 24px;
+
             color: white;
+
             background:
-                radial-gradient(circle at 78% 20%,rgba(56,189,248,.32),transparent 25%),
-                linear-gradient(135deg,#020617,#0b4b94);
+                radial-gradient(
+                    circle at 78% 20%,
+                    rgba(56,189,248,.32),
+                    transparent 25%
+                ),
+                linear-gradient(
+                    135deg,
+                    #020617,
+                    #0b4b94
+                );
+
+            box-shadow:
+                0 16px 40px
+                rgba(15,23,42,.12);
         }
 
         .hero small {
             display: inline-flex;
-            gap: 7px;
             align-items: center;
+
+            gap: 7px;
+
             padding: 6px 10px;
+
             border-radius: 999px;
-            background: rgba(255,255,255,.1);
+
+            background:
+                rgba(255,255,255,.1);
+
             color: #bae6fd;
+
             font-size: 9px;
             font-weight: 900;
         }
 
         .hero h2 {
             margin: 13px 0 7px;
-            font-size: clamp(25px,4vw,38px);
+
+            font-size:
+                clamp(
+                    25px,
+                    4vw,
+                    38px
+                );
         }
 
         .hero p {
             max-width: 760px;
+
             margin: 0;
+
             color: #cbd5e1;
+
             font-size: 12px;
+
             line-height: 1.65;
         }
 
-        /* STATS */
+        /* =====================================================
+           STATS
+        ===================================================== */
 
         .stats {
             margin-top: 18px;
+
             display: grid;
-            grid-template-columns: repeat(5,minmax(0,1fr));
+
+            grid-template-columns:
+                repeat(
+                    5,
+                    minmax(0,1fr)
+                );
+
             gap: 12px;
         }
 
         .stat {
             padding: 17px;
-            border: 1px solid var(--border);
+
+            border:
+                1px solid
+                var(--border);
+
             border-radius: 17px;
+
             background: white;
+
+            box-shadow:
+                0 7px 24px
+                rgba(15,23,42,.04);
         }
 
         .stat-icon {
             width: 39px;
             height: 39px;
+
             display: flex;
             align-items: center;
             justify-content: center;
+
             border-radius: 11px;
+
             color: #1d4ed8;
+
             background: #eff6ff;
         }
 
         .stat span {
             display: block;
+
             margin-top: 12px;
+
             color: var(--muted);
+
             font-size: 10px;
             font-weight: 800;
         }
 
         .stat strong {
             display: block;
+
             margin-top: 5px;
+
             color: #0f172a;
-            font-size: 19px;
+
+            font-size: 20px;
         }
 
-        /* SECTIONS */
+        /* =====================================================
+           SECTIONS
+        ===================================================== */
 
         .admin-section {
             display: none;
+
             margin-top: 24px;
         }
 
@@ -501,38 +794,65 @@
 
         .section-head {
             margin-bottom: 13px;
+
             display: flex;
             align-items: flex-end;
             justify-content: space-between;
+
             gap: 12px;
+
             flex-wrap: wrap;
         }
 
         .section-head h3 {
             margin: 0;
+
             color: #0f172a;
         }
 
         .section-head p {
             margin: 4px 0 0;
+
             color: var(--muted);
+
             font-size: 11px;
         }
 
         .search {
             min-height: 40px;
+
             width: min(300px,100%);
+
             padding: 0 11px;
-            border: 1px solid var(--border);
+
+            border:
+                1px solid
+                var(--border);
+
             border-radius: 10px;
+
             outline: none;
+
             background: white;
+        }
+
+        .search:focus {
+            border-color: #60a5fa;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(37,99,235,.08);
         }
 
         .card {
             overflow: hidden;
-            border: 1px solid var(--border);
+
+            border:
+                1px solid
+                var(--border);
+
             border-radius: 18px;
+
             background: white;
         }
 
@@ -542,38 +862,61 @@
 
         table {
             width: 100%;
+
             min-width: 950px;
+
             border-collapse: collapse;
         }
 
         th,
         td {
             padding: 12px;
-            border-bottom: 1px solid #eef2f7;
+
+            border-bottom:
+                1px solid
+                #eef2f7;
+
             text-align: left;
+
             font-size: 11px;
+
             vertical-align: middle;
         }
 
         th {
             color: #64748b;
+
             background: #f8fafc;
         }
 
+        tbody tr:hover {
+            background: #fafcff;
+        }
+
+        /* =====================================================
+           STATUS
+        ===================================================== */
+
         .status {
             display: inline-flex;
-            min-height: 24px;
-            padding: 0 8px;
             align-items: center;
+
+            min-height: 25px;
+
+            padding: 0 8px;
+
             border-radius: 999px;
+
             font-size: 9px;
             font-weight: 900;
+
+            text-transform: uppercase;
         }
 
         .status.pending,
         .status.open {
             color: #92400e;
-            background: #fffbeb;
+            background: var(--warning-soft);
         }
 
         .status.approved,
@@ -595,52 +938,117 @@
             background: #eff6ff;
         }
 
+        /* =====================================================
+           ACTION BUTTONS
+        ===================================================== */
+
         .action-row {
             display: flex;
-            gap: 5px;
+
+            gap: 7px;
+
             flex-wrap: wrap;
         }
 
         .action-btn {
-            min-height: 31px;
-            padding: 0 10px;
+            min-height: 34px;
+
+            padding: 0 12px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            gap: 6px;
+
             border: 0;
-            border-radius: 8px;
+
+            border-radius: 9px;
+
             color: white;
-            font-size: 9px;
+
+            font-size: 10px;
             font-weight: 900;
+
+            transition:
+                transform .15s ease,
+                opacity .15s ease;
+        }
+
+        .action-btn:active {
+            transform: scale(.97);
+        }
+
+        .action-btn:disabled {
+            opacity: .55;
+            cursor: wait;
         }
 
         .approve {
-            background: var(--success);
+            background:
+                linear-gradient(
+                    135deg,
+                    #059669,
+                    #10b981
+                );
         }
 
         .reject {
-            background: var(--danger);
+            background:
+                linear-gradient(
+                    135deg,
+                    #dc2626,
+                    #ef4444
+                );
         }
 
         .reply {
-            background: #7c3aed;
+            background:
+                linear-gradient(
+                    135deg,
+                    #7c3aed,
+                    #8b5cf6
+                );
         }
 
         .empty {
             padding: 30px;
+
             color: #94a3b8;
+
             text-align: center;
+
             font-size: 11px;
         }
 
-        /* MODALS */
+        /* =====================================================
+           MOBILE ACTION AREA
+        ===================================================== */
+
+        .mobile-actions-box {
+            display: none;
+        }
+
+        /* =====================================================
+           MODALS
+        ===================================================== */
 
         .modal-overlay {
             position: fixed;
+
             z-index: 9999999;
+
             inset: 0;
+
             display: none;
             align-items: center;
             justify-content: center;
+
             padding: 20px;
-            background: rgba(2,6,23,.7);
+
+            background:
+                rgba(2,6,23,.72);
+
             backdrop-filter: blur(6px);
         }
 
@@ -650,25 +1058,46 @@
 
         .modal {
             width: min(530px,100%);
+
             max-height: 90vh;
+
             overflow-y: auto;
-            border-radius: 20px;
+
+            border-radius: 21px;
+
             background: white;
+
+            box-shadow:
+                0 35px 100px
+                rgba(0,0,0,.35);
         }
 
         .modal-head {
             padding: 17px 19px;
+
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--border);
+            justify-content: space-between;
+
+            border-bottom:
+                1px solid
+                var(--border);
+        }
+
+        .modal-head h3 {
+            margin: 0;
+
+            color: #0f172a;
         }
 
         .modal-close {
             width: 35px;
             height: 35px;
+
             border: 0;
+
             border-radius: 9px;
+
             background: #f1f5f9;
         }
 
@@ -677,12 +1106,17 @@
         }
 
         .detail-box {
-            padding: 13px;
+            padding: 14px;
+
             margin-bottom: 13px;
-            border-radius: 11px;
+
+            border-radius: 12px;
+
             background: #f8fafc;
+
             font-size: 11px;
-            line-height: 1.7;
+
+            line-height: 1.8;
         }
 
         .field {
@@ -691,45 +1125,82 @@
 
         .field label {
             display: block;
+
             margin-bottom: 6px;
+
             font-size: 10px;
             font-weight: 900;
         }
 
         .field textarea {
             width: 100%;
+
             min-height: 110px;
+
             padding: 11px;
-            border: 1px solid var(--border);
+
+            border:
+                1px solid
+                var(--border);
+
             border-radius: 10px;
+
+            outline: none;
+
             resize: vertical;
+        }
+
+        .field textarea:focus {
+            border-color: #60a5fa;
         }
 
         .modal-actions {
             display: flex;
+
             justify-content: flex-end;
+
             gap: 8px;
+
             flex-wrap: wrap;
         }
 
-        /* TOAST */
+        /* =====================================================
+           TOAST
+        ===================================================== */
 
         .toast-container {
             position: fixed;
+
             z-index: 10000000;
+
             right: 18px;
             bottom: 18px;
-            width: min(360px,calc(100vw - 30px));
+
+            width:
+                min(
+                    360px,
+                    calc(100vw - 30px)
+                );
+
             display: grid;
+
             gap: 8px;
         }
 
         .toast {
-            padding: 13px;
+            padding: 14px;
+
             border-radius: 12px;
+
             color: white;
+
             background: #0f172a;
+
             font-size: 11px;
+
+            box-shadow:
+                0 18px 45px
+                rgba(15,23,42,.25);
         }
 
         .toast.success {
@@ -740,25 +1211,48 @@
             background: #b91c1c;
         }
 
-        /* RESPONSIVE */
+        /* =====================================================
+           RESPONSIVE TABLET
+        ===================================================== */
 
         @media(max-width:1200px) {
+
             .stats {
-                grid-template-columns: repeat(3,minmax(0,1fr));
+                grid-template-columns:
+                    repeat(
+                        3,
+                        minmax(0,1fr)
+                    );
             }
+
         }
 
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
         @media(max-width:850px) {
+
             .admin-app {
                 grid-template-columns: 1fr;
             }
 
             .sidebar {
                 position: fixed;
+
                 z-index: 5000;
+
                 left: -290px;
+                top: 0;
+
                 width: 270px;
-                transition: left .25s ease;
+
+                transition:
+                    left .25s ease;
+
+                box-shadow:
+                    20px 0 60px
+                    rgba(2,6,23,.35);
             }
 
             .sidebar.show {
@@ -769,18 +1263,304 @@
                 display: flex;
             }
 
-            .stats {
-                grid-template-columns: repeat(2,minmax(0,1fr));
+            .topbar {
+                min-height: 66px;
+
+                padding: 10px 12px;
+            }
+
+            .topbar h1 {
+                font-size: 16px;
+            }
+
+            .topbar p {
+                display: none;
+            }
+
+            .icon-btn {
+                width: 40px;
+                height: 40px;
             }
 
             .content {
-                padding: 15px;
+                padding: 13px;
+            }
+
+            .hero {
+                padding: 20px;
+
+                border-radius: 19px;
+            }
+
+            .hero h2 {
+                font-size: 25px;
+            }
+
+            .hero p {
+                font-size: 11px;
+            }
+
+            .stats {
+                grid-template-columns:
+                    repeat(
+                        2,
+                        minmax(0,1fr)
+                    );
+
+                gap: 9px;
+            }
+
+            .stat {
+                padding: 13px;
+            }
+
+            .stat strong {
+                font-size: 18px;
             }
 
             .notification-panel {
                 top: 68px !important;
                 right: 10px !important;
-                width: calc(100vw - 20px);
+
+                width:
+                    calc(
+                        100vw - 20px
+                    );
+            }
+
+            .section-head {
+                align-items: stretch;
+            }
+
+            .search {
+                width: 100%;
+            }
+
+            /* ================================================
+               TRANSFORMATION DES TABLEAUX EN CARTES MOBILES
+            ================================================= */
+
+            .card.table-wrap {
+                overflow: visible;
+
+                border: 0;
+
+                background: transparent;
+            }
+
+            table {
+                min-width: 0;
+
+                width: 100%;
+
+                display: block;
+            }
+
+            thead {
+                display: none;
+            }
+
+            tbody {
+                display: grid;
+
+                gap: 13px;
+            }
+
+            tbody tr {
+                display: block;
+
+                overflow: hidden;
+
+                padding: 5px 15px 15px;
+
+                border:
+                    1px solid
+                    var(--border);
+
+                border-radius: 18px;
+
+                background: white;
+
+                box-shadow:
+                    0 8px 26px
+                    rgba(15,23,42,.06);
+            }
+
+            tbody tr:hover {
+                background: white;
+            }
+
+            tbody td {
+                position: relative;
+
+                width: 100%;
+
+                min-height: 42px;
+
+                padding:
+                    11px 0
+                    11px 46%;
+
+                display: block;
+
+                border-bottom:
+                    1px dashed
+                    #e5e7eb;
+
+                text-align: right;
+
+                font-size: 11px;
+
+                word-break: break-word;
+            }
+
+            tbody td::before {
+                content:
+                    attr(data-label);
+
+                position: absolute;
+
+                left: 0;
+                top: 11px;
+
+                width: 42%;
+
+                color: #64748b;
+
+                font-size: 10px;
+                font-weight: 900;
+
+                text-align: left;
+            }
+
+            tbody td:last-child {
+                padding:
+                    15px 0 0;
+
+                border-bottom: 0;
+
+                text-align: left;
+            }
+
+            tbody td:last-child::before {
+                position: static;
+
+                width: auto;
+
+                display: block;
+
+                margin-bottom: 10px;
+
+                font-size: 10px;
+            }
+
+            tbody td.empty {
+                min-height: auto;
+
+                padding: 25px 10px;
+
+                text-align: center;
+            }
+
+            tbody td.empty::before {
+                display: none;
+            }
+
+            /* Boutons visibles et larges */
+
+            .action-row {
+                display: grid;
+
+                grid-template-columns:
+                    repeat(
+                        2,
+                        minmax(0,1fr)
+                    );
+
+                width: 100%;
+
+                gap: 8px;
+            }
+
+            .action-btn {
+                min-height: 43px;
+
+                width: 100%;
+
+                padding: 0 12px;
+
+                font-size: 11px;
+
+                border-radius: 11px;
+            }
+
+            /* Support : bouton réponse large */
+
+            [data-ticket] {
+                width: 100%;
+            }
+
+            /* Les boutons traiter occupent toute la largeur */
+
+            [data-deposit],
+            [data-withdrawal] {
+                width: 100%;
+            }
+
+            .modal-overlay {
+                align-items: flex-end;
+
+                padding: 10px;
+            }
+
+            .modal {
+                width: 100%;
+
+                max-height: 92vh;
+
+                border-radius:
+                    23px 23px
+                    15px 15px;
+            }
+
+            .modal-actions {
+                display: grid;
+
+                grid-template-columns:
+                    1fr 1fr;
+            }
+
+            .toast-container {
+                right: 10px;
+                bottom: 10px;
+
+                width:
+                    calc(
+                        100vw - 20px
+                    );
+            }
+        }
+
+        @media(max-width:430px) {
+
+            .stats {
+                grid-template-columns:
+                    repeat(
+                        2,
+                        minmax(0,1fr)
+                    );
+            }
+
+            .stat span {
+                font-size: 9px;
+            }
+
+            tbody td {
+                padding-left: 44%;
+            }
+
+            tbody td::before {
+                width: 40%;
             }
         }
     </style>
@@ -788,15 +1568,40 @@
 
 <body>
 
-<div id="loadingScreen" class="loading-screen">
+<!-- ==========================================================
+     LOADING
+========================================================== -->
+
+<div
+    id="loadingScreen"
+    class="loading-screen"
+>
     <div class="spinner"></div>
-    <strong>Housing's YQD</strong>
-    <span>Chargement de l'administration sécurisée...</span>
+
+    <strong>
+        Housing's YQD
+    </strong>
+
+    <span>
+        Chargement de l'administration sécurisée...
+    </span>
 </div>
 
-<div id="accessDenied" class="access-screen">
+
+<!-- ==========================================================
+     ACCESS DENIED
+========================================================== -->
+
+<div
+    id="accessDenied"
+    class="access-screen"
+>
     <div class="access-card">
-        <h1>Accès refusé</h1>
+
+        <h1>
+            <i class="fa-solid fa-shield-halved"></i>
+            Accès refusé
+        </h1>
 
         <p id="accessDeniedMessage">
             Votre compte n'est pas autorisé.
@@ -807,70 +1612,126 @@
             class="action-btn approve"
             onclick="window.location.href='login.html'"
         >
+            <i class="fa-solid fa-right-to-bracket"></i>
             Connexion
         </button>
+
     </div>
 </div>
 
-<div id="adminApp" class="admin-app">
 
-    <aside id="sidebar" class="sidebar">
+<!-- ==========================================================
+     ADMIN APP
+========================================================== -->
+
+<div
+    id="adminApp"
+    class="admin-app"
+>
+
+    <!-- SIDEBAR -->
+
+    <aside
+        id="sidebar"
+        class="sidebar"
+    >
 
         <div class="brand">
+
             <div class="brand-icon">
                 <i class="fa-solid fa-shield-halved"></i>
             </div>
 
             <div>
-                <strong>Housing's YQD</strong>
-                <span>ADMINISTRATION SUPABASE</span>
+                <strong>
+                    Housing's YQD
+                </strong>
+
+                <span>
+                    ADMINISTRATION SUPABASE
+                </span>
             </div>
+
         </div>
+
 
         <div class="admin-profile">
-            <small id="adminRole">ADMIN</small>
-            <strong id="adminName">Administrateur</strong>
-            <span id="adminEmail">...</span>
+
+            <small id="adminRole">
+                ADMIN
+            </small>
+
+            <strong id="adminName">
+                Administrateur
+            </strong>
+
+            <span id="adminEmail">
+                ...
+            </span>
+
         </div>
 
+
         <nav class="menu">
-            <button class="active" data-section="overview">
+
+            <button
+                class="active"
+                data-section="overview"
+            >
                 <i class="fa-solid fa-chart-pie"></i>
                 Vue générale
             </button>
 
-            <button data-section="users">
+            <button
+                data-section="users"
+            >
                 <i class="fa-solid fa-users"></i>
                 Utilisateurs
             </button>
 
-            <button data-section="deposits">
+            <button
+                data-section="deposits"
+            >
                 <i class="fa-solid fa-arrow-down"></i>
                 Dépôts
             </button>
 
-            <button data-section="withdrawals">
+            <button
+                data-section="withdrawals"
+            >
                 <i class="fa-solid fa-arrow-up"></i>
                 Retraits
             </button>
 
-            <button data-section="investments">
+            <button
+                data-section="investments"
+            >
                 <i class="fa-solid fa-building"></i>
                 Investissements
             </button>
 
-            <button data-section="support">
+            <button
+                data-section="support"
+            >
                 <i class="fa-solid fa-headset"></i>
                 Assistance
             </button>
+
         </nav>
 
-        <button id="logoutSideButton" class="logout-side">
+
+        <button
+            id="logoutSideButton"
+            class="logout-side"
+        >
             <i class="fa-solid fa-right-from-bracket"></i>
             Déconnexion
         </button>
 
     </aside>
+
+
+    <!-- MAIN -->
 
     <main class="main">
 
@@ -878,16 +1739,28 @@
 
             <div class="top-left">
 
-                <button id="mobileMenuButton" class="icon-btn mobile-menu">
+                <button
+                    id="mobileMenuButton"
+                    class="icon-btn mobile-menu"
+                    type="button"
+                >
                     <i class="fa-solid fa-bars"></i>
                 </button>
 
                 <div>
-                    <h1 id="pageTitle">Administration</h1>
-                    <p>Gestion sécurisée Housing's YQD</p>
+
+                    <h1 id="pageTitle">
+                        Administration
+                    </h1>
+
+                    <p>
+                        Gestion sécurisée Housing's YQD
+                    </p>
+
                 </div>
 
             </div>
+
 
             <div class="top-actions">
 
@@ -907,11 +1780,23 @@
                     </span>
                 </button>
 
-                <button id="refreshButton" class="icon-btn">
+
+                <button
+                    id="refreshButton"
+                    class="icon-btn"
+                    type="button"
+                    title="Actualiser"
+                >
                     <i class="fa-solid fa-rotate"></i>
                 </button>
 
-                <button id="logoutButton" class="icon-btn">
+
+                <button
+                    id="logoutButton"
+                    class="icon-btn"
+                    type="button"
+                    title="Déconnexion"
+                >
                     <i class="fa-solid fa-right-from-bracket"></i>
                 </button>
 
@@ -919,7 +1804,10 @@
 
         </header>
 
+
         <div class="content">
+
+            <!-- HERO -->
 
             <section class="hero">
 
@@ -928,99 +1816,184 @@
                     ADMINISTRATION SÉCURISÉE
                 </small>
 
-                <h2>Centre de contrôle</h2>
+                <h2>
+                    Centre de contrôle
+                </h2>
 
                 <p>
-                    Suivez les comptes utilisateurs, les dépôts,
+                    Gérez les comptes utilisateurs, les dépôts,
                     les retraits, les investissements et les demandes
-                    d'assistance depuis une seule interface.
+                    d'assistance depuis une interface unique,
+                    optimisée pour ordinateur et téléphone.
                 </p>
 
             </section>
 
+
+            <!-- STATS -->
+
             <div class="stats">
 
                 <article class="stat">
+
                     <div class="stat-icon">
                         <i class="fa-solid fa-users"></i>
                     </div>
-                    <span>Utilisateurs</span>
-                    <strong id="statUsers">0</strong>
+
+                    <span>
+                        Utilisateurs
+                    </span>
+
+                    <strong id="statUsers">
+                        0
+                    </strong>
+
                 </article>
 
+
                 <article class="stat">
+
                     <div class="stat-icon">
                         <i class="fa-solid fa-arrow-down"></i>
                     </div>
-                    <span>Dépôts en attente</span>
-                    <strong id="statPendingDeposits">0</strong>
+
+                    <span>
+                        Dépôts en attente
+                    </span>
+
+                    <strong id="statPendingDeposits">
+                        0
+                    </strong>
+
                 </article>
 
+
                 <article class="stat">
+
                     <div class="stat-icon">
                         <i class="fa-solid fa-arrow-up"></i>
                     </div>
-                    <span>Retraits en attente</span>
-                    <strong id="statPendingWithdrawals">0</strong>
+
+                    <span>
+                        Retraits en attente
+                    </span>
+
+                    <strong id="statPendingWithdrawals">
+                        0
+                    </strong>
+
                 </article>
 
+
                 <article class="stat">
+
                     <div class="stat-icon">
                         <i class="fa-solid fa-building"></i>
                     </div>
-                    <span>Investissements actifs</span>
-                    <strong id="statActiveInvestments">0</strong>
+
+                    <span>
+                        Investissements actifs
+                    </span>
+
+                    <strong id="statActiveInvestments">
+                        0
+                    </strong>
+
                 </article>
 
+
                 <article class="stat">
+
                     <div class="stat-icon">
                         <i class="fa-solid fa-headset"></i>
                     </div>
-                    <span>Tickets ouverts</span>
-                    <strong id="statOpenTickets">0</strong>
+
+                    <span>
+                        Tickets ouverts
+                    </span>
+
+                    <strong id="statOpenTickets">
+                        0
+                    </strong>
+
                 </article>
 
             </div>
 
-            <!-- OVERVIEW -->
 
-            <section id="section-overview" class="admin-section active">
+            <!-- ==================================================
+                 OVERVIEW
+            ================================================== -->
+
+            <section
+                id="section-overview"
+                class="admin-section active"
+            >
 
                 <div class="section-head">
+
                     <div>
-                        <h3>Vue générale</h3>
-                        <p>Résumé des opérations en attente.</p>
+                        <h3>
+                            Vue générale
+                        </h3>
+
+                        <p>
+                            Résumé des opérations nécessitant votre attention.
+                        </p>
                     </div>
+
                 </div>
 
+
                 <div class="card">
-                    <div id="overviewContent" class="empty">
+
+                    <div
+                        id="overviewContent"
+                        class="empty"
+                    >
                         Chargement...
                     </div>
+
                 </div>
 
             </section>
 
-            <!-- USERS -->
 
-            <section id="section-users" class="admin-section">
+            <!-- ==================================================
+                 USERS
+            ================================================== -->
+
+            <section
+                id="section-users"
+                class="admin-section"
+            >
 
                 <div class="section-head">
+
                     <div>
-                        <h3>Utilisateurs</h3>
-                        <p>Comptes enregistrés.</p>
+                        <h3>
+                            Utilisateurs
+                        </h3>
+
+                        <p>
+                            Comptes enregistrés sur Housing's YQD.
+                        </p>
                     </div>
+
 
                     <input
                         id="usersSearch"
                         class="search"
-                        placeholder="Rechercher..."
+                        placeholder="Rechercher un utilisateur..."
                     >
+
                 </div>
+
 
                 <div class="card table-wrap">
 
                     <table>
+
                         <thead>
                             <tr>
                                 <th>Utilisateur</th>
@@ -1034,32 +2007,49 @@
                         </thead>
 
                         <tbody id="usersTableBody"></tbody>
+
                     </table>
 
                 </div>
 
             </section>
 
-            <!-- DEPOSITS -->
 
-            <section id="section-deposits" class="admin-section">
+            <!-- ==================================================
+                 DEPOSITS
+            ================================================== -->
+
+            <section
+                id="section-deposits"
+                class="admin-section"
+            >
 
                 <div class="section-head">
+
                     <div>
-                        <h3>Dépôts</h3>
-                        <p>Demandes de dépôts utilisateurs.</p>
+                        <h3>
+                            Dépôts
+                        </h3>
+
+                        <p>
+                            Validez ou refusez les demandes de dépôt.
+                        </p>
                     </div>
+
 
                     <input
                         id="depositsSearch"
                         class="search"
-                        placeholder="Rechercher..."
+                        placeholder="Rechercher un dépôt..."
                     >
+
                 </div>
+
 
                 <div class="card table-wrap">
 
                     <table>
+
                         <thead>
                             <tr>
                                 <th>Utilisateur</th>
@@ -1075,32 +2065,49 @@
                         </thead>
 
                         <tbody id="depositsTableBody"></tbody>
+
                     </table>
 
                 </div>
 
             </section>
 
-            <!-- WITHDRAWALS -->
 
-            <section id="section-withdrawals" class="admin-section">
+            <!-- ==================================================
+                 WITHDRAWALS
+            ================================================== -->
+
+            <section
+                id="section-withdrawals"
+                class="admin-section"
+            >
 
                 <div class="section-head">
+
                     <div>
-                        <h3>Retraits</h3>
-                        <p>Demandes de retraits utilisateurs.</p>
+                        <h3>
+                            Retraits
+                        </h3>
+
+                        <p>
+                            Validez ou refusez les demandes de retrait.
+                        </p>
                     </div>
+
 
                     <input
                         id="withdrawalsSearch"
                         class="search"
-                        placeholder="Rechercher..."
+                        placeholder="Rechercher un retrait..."
                     >
+
                 </div>
+
 
                 <div class="card table-wrap">
 
                     <table>
+
                         <thead>
                             <tr>
                                 <th>Utilisateur</th>
@@ -1115,32 +2122,49 @@
                         </thead>
 
                         <tbody id="withdrawalsTableBody"></tbody>
+
                     </table>
 
                 </div>
 
             </section>
 
-            <!-- INVESTMENTS -->
 
-            <section id="section-investments" class="admin-section">
+            <!-- ==================================================
+                 INVESTMENTS
+            ================================================== -->
+
+            <section
+                id="section-investments"
+                class="admin-section"
+            >
 
                 <div class="section-head">
+
                     <div>
-                        <h3>Investissements</h3>
-                        <p>Investissements enregistrés.</p>
+                        <h3>
+                            Investissements
+                        </h3>
+
+                        <p>
+                            Investissements actuellement enregistrés.
+                        </p>
                     </div>
+
 
                     <input
                         id="investmentsSearch"
                         class="search"
                         placeholder="Rechercher..."
                     >
+
                 </div>
+
 
                 <div class="card table-wrap">
 
                     <table>
+
                         <thead>
                             <tr>
                                 <th>Utilisateur</th>
@@ -1154,32 +2178,49 @@
                         </thead>
 
                         <tbody id="investmentsTableBody"></tbody>
+
                     </table>
 
                 </div>
 
             </section>
 
-            <!-- SUPPORT -->
 
-            <section id="section-support" class="admin-section">
+            <!-- ==================================================
+                 SUPPORT
+            ================================================== -->
+
+            <section
+                id="section-support"
+                class="admin-section"
+            >
 
                 <div class="section-head">
+
                     <div>
-                        <h3>Assistance</h3>
-                        <p>Tickets envoyés par les utilisateurs.</p>
+                        <h3>
+                            Assistance
+                        </h3>
+
+                        <p>
+                            Lisez et répondez aux demandes des utilisateurs.
+                        </p>
                     </div>
+
 
                     <input
                         id="supportSearch"
                         class="search"
-                        placeholder="Rechercher..."
+                        placeholder="Rechercher un ticket..."
                     >
+
                 </div>
+
 
                 <div class="card table-wrap">
 
                     <table>
+
                         <thead>
                             <tr>
                                 <th>Utilisateur</th>
@@ -1192,6 +2233,7 @@
                         </thead>
 
                         <tbody id="supportTableBody"></tbody>
+
                     </table>
 
                 </div>
@@ -1204,13 +2246,17 @@
 
 </div>
 
-<!-- NOTIFICATIONS -->
+
+<!-- ==========================================================
+     NOTIFICATION PANEL
+========================================================== -->
 
 <div
     id="notificationPanel"
     class="notification-panel"
     aria-hidden="true"
 >
+
     <div class="notification-head">
 
         <strong>
@@ -1226,20 +2272,29 @@
 
     </div>
 
+
     <div
         id="notificationList"
         class="notification-list"
     >
+
         <div class="empty">
             Chargement...
         </div>
+
     </div>
 
 </div>
 
-<!-- REVIEW MODAL -->
 
-<div id="reviewModal" class="modal-overlay">
+<!-- ==========================================================
+     FINANCIAL REVIEW MODAL
+========================================================== -->
+
+<div
+    id="reviewModal"
+    class="modal-overlay"
+>
 
     <div class="modal">
 
@@ -1251,12 +2306,14 @@
 
             <button
                 class="modal-close"
+                type="button"
                 onclick="closeModal('reviewModal')"
             >
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
         </div>
+
 
         <div class="modal-body">
 
@@ -1265,31 +2322,40 @@
                 class="detail-box"
             ></div>
 
+
             <div class="field">
+
                 <label>
                     Note administrateur
                 </label>
 
                 <textarea
                     id="reviewNote"
-                    placeholder="Facultatif..."
+                    placeholder="Facultatif : motif, commentaire..."
                 ></textarea>
+
             </div>
+
 
             <div class="modal-actions">
 
                 <button
                     id="rejectReviewButton"
                     class="action-btn reject"
+                    type="button"
                 >
+                    <i class="fa-solid fa-xmark"></i>
                     Refuser
                 </button>
+
 
                 <button
                     id="approveReviewButton"
                     class="action-btn approve"
+                    type="button"
                 >
-                    Approuver
+                    <i class="fa-solid fa-check"></i>
+                    Valider
                 </button>
 
             </div>
@@ -1300,9 +2366,15 @@
 
 </div>
 
-<!-- SUPPORT MODAL -->
 
-<div id="supportModal" class="modal-overlay">
+<!-- ==========================================================
+     SUPPORT MODAL
+========================================================== -->
+
+<div
+    id="supportModal"
+    class="modal-overlay"
+>
 
     <div class="modal">
 
@@ -1314,12 +2386,14 @@
 
             <button
                 class="modal-close"
+                type="button"
                 onclick="closeModal('supportModal')"
             >
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
         </div>
+
 
         <div class="modal-body">
 
@@ -1328,37 +2402,53 @@
                 class="detail-box"
             ></div>
 
+
             <div class="field">
 
                 <label>
-                    Réponse
+                    Votre réponse
                 </label>
 
                 <textarea
                     id="supportReply"
-                    placeholder="Votre réponse..."
+                    placeholder="Écrivez votre réponse à l'utilisateur..."
                 ></textarea>
 
             </div>
 
-            <label style="font-size:11px;font-weight:800;">
+
+            <label
+                style="
+                    display:flex;
+                    gap:8px;
+                    align-items:center;
+                    font-size:11px;
+                    font-weight:800;
+                "
+            >
                 <input
                     id="closeTicketCheckbox"
                     type="checkbox"
                 >
+
                 Fermer le ticket après réponse
             </label>
+
 
             <div
                 class="modal-actions"
                 style="margin-top:15px;"
             >
+
                 <button
                     id="sendSupportReplyButton"
                     class="action-btn reply"
+                    type="button"
                 >
-                    Envoyer
+                    <i class="fa-solid fa-paper-plane"></i>
+                    Envoyer la réponse
                 </button>
+
             </div>
 
         </div>
@@ -1367,17 +2457,25 @@
 
 </div>
 
-<div id="toastContainer" class="toast-container"></div>
+
+<div
+    id="toastContainer"
+    class="toast-container"
+></div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase.js?v=20260830-admin-notifications"></script>
+
+<script src="supabase.js?v=20260830-mobile-admin-v2"></script>
+
 
 <script>
 "use strict";
 
-/* =========================================================
+
+/* ============================================================
    STATE
-========================================================= */
+============================================================ */
 
 let adminUser = null;
 let adminRole = null;
@@ -1393,11 +2491,12 @@ let currentReview = null;
 let currentSupportTicket = null;
 
 
-/* =========================================================
+/* ============================================================
    HELPERS
-========================================================= */
+============================================================ */
 
 function escapeHtml(value) {
+
     return String(value ?? "")
         .replaceAll("&","&amp;")
         .replaceAll("<","&lt;")
@@ -1406,42 +2505,72 @@ function escapeHtml(value) {
         .replaceAll("'","&#039;");
 }
 
+
 function formatMoney(value) {
-    return new Intl.NumberFormat("fr-FR")
-        .format(Number(value || 0)) + " FCFA";
+
+    return new Intl.NumberFormat(
+        "fr-FR"
+    ).format(
+        Number(value || 0)
+    ) + " FCFA";
 }
 
+
 function formatDate(value) {
-    if (!value) return "-";
+
+    if (!value) {
+        return "-";
+    }
 
     try {
+
         return new Intl.DateTimeFormat(
             "fr-FR",
             {
                 dateStyle: "short",
                 timeStyle: "short"
             }
-        ).format(new Date(value));
+        ).format(
+            new Date(value)
+        );
+
     } catch {
+
         return "-";
     }
 }
 
+
 function normalizeSearch(value) {
-    return String(value || "")
+
+    return String(
+        value || ""
+    )
         .toLowerCase()
         .trim();
 }
 
-function showToast(message,type="success") {
 
-    const toast = document.createElement("div");
+function showToast(
+    message,
+    type = "success"
+) {
 
-    toast.className = "toast " + type;
-    toast.textContent = message;
+    const toast =
+        document.createElement(
+            "div"
+        );
+
+    toast.className =
+        "toast " + type;
+
+    toast.textContent =
+        message;
 
     document
-        .getElementById("toastContainer")
+        .getElementById(
+            "toastContainer"
+        )
         .appendChild(toast);
 
     setTimeout(
@@ -1450,26 +2579,32 @@ function showToast(message,type="success") {
     );
 }
 
+
 function openModal(id) {
+
     document
         .getElementById(id)
         ?.classList
         .add("show");
 }
 
+
 function closeModal(id) {
+
     document
         .getElementById(id)
         ?.classList
         .remove("show");
 }
 
-window.closeModal = closeModal;
+
+window.closeModal =
+    closeModal;
 
 
-/* =========================================================
+/* ============================================================
    AUTH ADMIN
-========================================================= */
+============================================================ */
 
 async function verifyAdminAccess() {
 
@@ -1478,56 +2613,81 @@ async function verifyAdminAccess() {
 
     if (!result?.authorized) {
 
-        document.getElementById(
-            "accessDenied"
-        ).style.display = "flex";
+        document
+            .getElementById(
+                "accessDenied"
+            )
+            .style.display =
+                "flex";
 
-        document.getElementById(
-            "accessDeniedMessage"
-        ).textContent =
-            result?.reason === "not_authenticated"
-                ? "Connectez-vous d'abord avec votre compte administrateur."
-                : "Votre compte ne possède pas le rôle administrateur.";
+        document
+            .getElementById(
+                "accessDeniedMessage"
+            )
+            .textContent =
+                result?.reason ===
+                "not_authenticated"
+                    ? "Connectez-vous d'abord avec votre compte administrateur."
+                    : "Votre compte ne possède pas le rôle administrateur.";
 
         return false;
     }
 
-    adminUser = result.user;
-    adminRole = result.role;
+    adminUser =
+        result.user;
 
-    document.getElementById(
-        "adminEmail"
-    ).textContent =
-        adminUser?.email || "";
+    adminRole =
+        result.role;
 
-    document.getElementById(
-        "adminRole"
-    ).textContent =
-        String(adminRole || "admin")
-            .toUpperCase();
+
+    document
+        .getElementById(
+            "adminEmail"
+        )
+        .textContent =
+            adminUser?.email || "";
+
+
+    document
+        .getElementById(
+            "adminRole"
+        )
+        .textContent =
+            String(
+                adminRole || "admin"
+            ).toUpperCase();
+
 
     const profileResult =
-        await getSupabaseProfile(adminUser.id);
+        await getSupabaseProfile(
+            adminUser.id
+        );
+
 
     const profile =
         profileResult?.profile ||
         profileResult?.data;
 
-    document.getElementById(
-        "adminName"
-    ).textContent =
-        profile?.full_name ||
-        "Administrateur";
+
+    document
+        .getElementById(
+            "adminName"
+        )
+        .textContent =
+            profile?.full_name ||
+            "Administrateur";
+
 
     return true;
 }
 
 
-/* =========================================================
+/* ============================================================
    LOAD DATA
-========================================================= */
+============================================================ */
 
 async function loadProfiles() {
+
     const result =
         await adminGetSupabaseProfiles();
 
@@ -1535,7 +2695,9 @@ async function loadProfiles() {
         result?.profiles || [];
 }
 
+
 async function loadDeposits() {
+
     const result =
         await adminGetSupabaseDeposits();
 
@@ -1543,7 +2705,9 @@ async function loadDeposits() {
         result?.deposits || [];
 }
 
+
 async function loadWithdrawals() {
+
     const result =
         await adminGetSupabaseWithdrawals();
 
@@ -1551,7 +2715,9 @@ async function loadWithdrawals() {
         result?.withdrawals || [];
 }
 
+
 async function loadInvestments() {
+
     const result =
         await adminGetSupabaseInvestments();
 
@@ -1559,7 +2725,9 @@ async function loadInvestments() {
         result?.investments || [];
 }
 
+
 async function loadSupport() {
+
     const result =
         await adminGetSupabaseSupportTickets();
 
@@ -1567,10 +2735,13 @@ async function loadSupport() {
         result?.tickets || [];
 }
 
+
 async function loadAdminNotifications() {
 
     const result =
-        await getSupabaseNotifications(100);
+        await getSupabaseNotifications(
+            100
+        );
 
     adminNotifications =
         result?.notifications || [];
@@ -1579,9 +2750,9 @@ async function loadAdminNotifications() {
 }
 
 
-/* =========================================================
+/* ============================================================
    NOTIFICATIONS
-========================================================= */
+============================================================ */
 
 function renderNotifications() {
 
@@ -1595,20 +2766,29 @@ function renderNotifications() {
             "notificationList"
         );
 
+
     const unread =
         adminNotifications.filter(
-            item => !item.is_read
+            item =>
+                !item.is_read
         ).length;
 
+
     badge.textContent =
-        unread > 99 ? "99+" : unread;
+        unread > 99
+            ? "99+"
+            : unread;
+
 
     badge.classList.toggle(
         "show",
         unread > 0
     );
 
-    if (!adminNotifications.length) {
+
+    if (
+        !adminNotifications.length
+    ) {
 
         list.innerHTML = `
             <div class="empty">
@@ -1619,87 +2799,134 @@ function renderNotifications() {
         return;
     }
 
+
     list.innerHTML =
         adminNotifications
-            .map(item => `
-                <button
-                    type="button"
-                    class="notification-item ${item.is_read ? "" : "unread"}"
-                    data-notification-id="${escapeHtml(item.id)}"
-                    data-related-type="${escapeHtml(item.related_type || "")}"
-                >
-                    <strong>
-                        ${escapeHtml(item.title || "Notification")}
-                    </strong>
+            .map(
+                item => `
+                    <button
+                        type="button"
+                        class="
+                            notification-item
+                            ${
+                                item.is_read
+                                    ? ""
+                                    : "unread"
+                            }
+                        "
+                        data-notification-id="${escapeHtml(item.id)}"
+                        data-related-type="${escapeHtml(item.related_type || "")}"
+                    >
 
-                    <p>
-                        ${escapeHtml(item.message || "")}
-                    </p>
+                        <strong>
+                            ${escapeHtml(
+                                item.title ||
+                                "Notification"
+                            )}
+                        </strong>
 
-                    <small>
-                        ${formatDate(item.created_at)}
-                    </small>
-                </button>
-            `)
+                        <p>
+                            ${escapeHtml(
+                                item.message || ""
+                            )}
+                        </p>
+
+                        <small>
+                            ${formatDate(
+                                item.created_at
+                            )}
+                        </small>
+
+                    </button>
+                `
+            )
             .join("");
+
 
     list
         .querySelectorAll(
             "[data-notification-id]"
         )
-        .forEach(button => {
+        .forEach(
+            button => {
 
-            button.addEventListener(
-                "click",
-                async () => {
+                button.addEventListener(
+                    "click",
+                    async () => {
 
-                    const notificationId =
-                        button.dataset.notificationId;
+                        const notificationId =
+                            button.dataset
+                                .notificationId;
 
-                    const relatedType =
-                        button.dataset.relatedType;
+                        const relatedType =
+                            button.dataset
+                                .relatedType;
 
-                    const notification =
-                        adminNotifications.find(
-                            item =>
-                                String(item.id) ===
-                                String(notificationId)
-                        );
 
-                    if (
-                        notification &&
-                        !notification.is_read
-                    ) {
-                        await markSupabaseNotificationRead(
-                            notificationId
-                        );
+                        const notification =
+                            adminNotifications.find(
+                                item =>
+                                    String(
+                                        item.id
+                                    ) ===
+                                    String(
+                                        notificationId
+                                    )
+                            );
 
-                        await loadAdminNotifications();
+
+                        if (
+                            notification &&
+                            !notification.is_read
+                        ) {
+
+                            await markSupabaseNotificationRead(
+                                notificationId
+                            );
+
+                            await loadAdminNotifications();
+                        }
+
+
+                        closeNotificationPanel();
+
+
+                        if (
+                            relatedType ===
+                            "deposit"
+                        ) {
+                            showSection(
+                                "deposits"
+                            );
+                        }
+
+
+                        else if (
+                            relatedType ===
+                            "withdrawal"
+                        ) {
+                            showSection(
+                                "withdrawals"
+                            );
+                        }
+
+
+                        else if (
+                            relatedType ===
+                            "support_ticket"
+                        ) {
+                            showSection(
+                                "support"
+                            );
+                        }
+
                     }
+                );
 
-                    closeNotificationPanel();
-
-                    if (
-                        relatedType === "deposit"
-                    ) {
-                        showSection("deposits");
-                    }
-
-                    else if (
-                        relatedType === "withdrawal"
-                    ) {
-                        showSection("withdrawals");
-                    }
-
-                    else if (
-                        relatedType === "support_ticket"
-                    ) {
-                        showSection("support");
-                    }
-                }
-            );
-        });
+            }
+        );
 }
+
 
 function openNotificationPanel() {
 
@@ -1708,13 +2935,16 @@ function openNotificationPanel() {
             "notificationPanel"
         );
 
-    panel.classList.add("show");
+    panel.classList.add(
+        "show"
+    );
 
     panel.setAttribute(
         "aria-hidden",
         "false"
     );
 }
+
 
 function closeNotificationPanel() {
 
@@ -1723,13 +2953,16 @@ function closeNotificationPanel() {
             "notificationPanel"
         );
 
-    panel.classList.remove("show");
+    panel.classList.remove(
+        "show"
+    );
 
     panel.setAttribute(
         "aria-hidden",
         "true"
     );
 }
+
 
 document
     .getElementById(
@@ -1747,17 +2980,21 @@ document
                     "notificationPanel"
                 );
 
+
             if (
                 panel.classList.contains(
                     "show"
                 )
             ) {
                 closeNotificationPanel();
-            } else {
+            }
+
+            else {
                 openNotificationPanel();
             }
         }
     );
+
 
 document
     .getElementById(
@@ -1770,12 +3007,14 @@ document
         }
     );
 
+
 document.addEventListener(
     "click",
     () => {
         closeNotificationPanel();
     }
 );
+
 
 document
     .getElementById(
@@ -1787,24 +3026,30 @@ document
 
             event.stopPropagation();
 
-            this.disabled = true;
+            this.disabled =
+                true;
+
             const oldText =
                 this.textContent;
 
             this.textContent =
                 "Lecture...";
 
+
             try {
 
                 const result =
                     await markAllSupabaseNotificationsRead();
 
+
                 if (!result?.success) {
+
                     throw new Error(
                         result?.message ||
                         "Impossible de mettre les notifications à jour."
                     );
                 }
+
 
                 await loadAdminNotifications();
 
@@ -1814,7 +3059,9 @@ document
                     "Toutes les notifications sont lues."
                 );
 
-            } catch(error) {
+            }
+
+            catch(error) {
 
                 showToast(
                     error?.message ||
@@ -1822,9 +3069,13 @@ document
                     "error"
                 );
 
-            } finally {
+            }
 
-                this.disabled = false;
+            finally {
+
+                this.disabled =
+                    false;
+
                 this.textContent =
                     oldText;
             }
@@ -1832,165 +3083,262 @@ document
     );
 
 
-/* =========================================================
+/* ============================================================
    STATS
-========================================================= */
+============================================================ */
 
 function renderStats() {
 
-    document.getElementById(
-        "statUsers"
-    ).textContent =
-        profiles.length;
+    document
+        .getElementById(
+            "statUsers"
+        )
+        .textContent =
+            profiles.length;
 
-    document.getElementById(
-        "statPendingDeposits"
-    ).textContent =
-        deposits.filter(
-            item =>
-                item.status === "pending"
-        ).length;
 
-    document.getElementById(
-        "statPendingWithdrawals"
-    ).textContent =
-        withdrawals.filter(
-            item =>
-                item.status === "pending"
-        ).length;
+    document
+        .getElementById(
+            "statPendingDeposits"
+        )
+        .textContent =
+            deposits.filter(
+                item =>
+                    item.status ===
+                    "pending"
+            ).length;
 
-    document.getElementById(
-        "statActiveInvestments"
-    ).textContent =
-        investments.filter(
-            item =>
-                item.status === "active"
-        ).length;
 
-    document.getElementById(
-        "statOpenTickets"
-    ).textContent =
-        supportTickets.filter(
-            item =>
-                item.status === "open"
-        ).length;
+    document
+        .getElementById(
+            "statPendingWithdrawals"
+        )
+        .textContent =
+            withdrawals.filter(
+                item =>
+                    item.status ===
+                    "pending"
+            ).length;
+
+
+    document
+        .getElementById(
+            "statActiveInvestments"
+        )
+        .textContent =
+            investments.filter(
+                item =>
+                    item.status ===
+                    "active"
+            ).length;
+
+
+    document
+        .getElementById(
+            "statOpenTickets"
+        )
+        .textContent =
+            supportTickets.filter(
+                item =>
+                    item.status ===
+                    "open"
+            ).length;
 }
 
 
-/* =========================================================
+/* ============================================================
    OVERVIEW
-========================================================= */
+============================================================ */
 
 function renderOverview() {
 
     const pendingDeposits =
         deposits.filter(
             item =>
-                item.status === "pending"
+                item.status ===
+                "pending"
         ).length;
+
 
     const pendingWithdrawals =
         withdrawals.filter(
             item =>
-                item.status === "pending"
+                item.status ===
+                "pending"
         ).length;
+
 
     const tickets =
         supportTickets.filter(
             item =>
-                item.status === "open"
+                item.status ===
+                "open"
         ).length;
 
-    document.getElementById(
-        "overviewContent"
-    ).innerHTML = `
-        <div style="
-            display:grid;
-            grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-            gap:12px;
-            padding:15px;
-        ">
 
-            <div style="
-                padding:16px;
-                border-radius:14px;
-                background:#eff6ff;
-            ">
-                <strong>Dépôts en attente</strong>
-                <div style="
-                    margin-top:8px;
-                    font-size:27px;
-                    font-weight:900;
-                ">
-                    ${pendingDeposits}
-                </div>
+    document
+        .getElementById(
+            "overviewContent"
+        )
+        .innerHTML = `
+
+            <div
+                style="
+                    display:grid;
+                    grid-template-columns:
+                        repeat(
+                            auto-fit,
+                            minmax(200px,1fr)
+                        );
+                    gap:12px;
+                    padding:15px;
+                "
+            >
+
+                <button
+                    type="button"
+                    onclick="showSection('deposits')"
+                    style="
+                        text-align:left;
+                        padding:17px;
+                        border:0;
+                        border-radius:14px;
+                        background:#eff6ff;
+                        color:#0f172a;
+                    "
+                >
+                    <strong>
+                        Dépôts en attente
+                    </strong>
+
+                    <div
+                        style="
+                            margin-top:8px;
+                            font-size:28px;
+                            font-weight:900;
+                        "
+                    >
+                        ${pendingDeposits}
+                    </div>
+
+                    <small>
+                        Appuyer pour ouvrir
+                    </small>
+                </button>
+
+
+                <button
+                    type="button"
+                    onclick="showSection('withdrawals')"
+                    style="
+                        text-align:left;
+                        padding:17px;
+                        border:0;
+                        border-radius:14px;
+                        background:#fff7ed;
+                        color:#0f172a;
+                    "
+                >
+                    <strong>
+                        Retraits en attente
+                    </strong>
+
+                    <div
+                        style="
+                            margin-top:8px;
+                            font-size:28px;
+                            font-weight:900;
+                        "
+                    >
+                        ${pendingWithdrawals}
+                    </div>
+
+                    <small>
+                        Appuyer pour ouvrir
+                    </small>
+                </button>
+
+
+                <button
+                    type="button"
+                    onclick="showSection('support')"
+                    style="
+                        text-align:left;
+                        padding:17px;
+                        border:0;
+                        border-radius:14px;
+                        background:#f5f3ff;
+                        color:#0f172a;
+                    "
+                >
+                    <strong>
+                        Tickets ouverts
+                    </strong>
+
+                    <div
+                        style="
+                            margin-top:8px;
+                            font-size:28px;
+                            font-weight:900;
+                        "
+                    >
+                        ${tickets}
+                    </div>
+
+                    <small>
+                        Appuyer pour répondre
+                    </small>
+                </button>
+
             </div>
-
-            <div style="
-                padding:16px;
-                border-radius:14px;
-                background:#fff7ed;
-            ">
-                <strong>Retraits en attente</strong>
-                <div style="
-                    margin-top:8px;
-                    font-size:27px;
-                    font-weight:900;
-                ">
-                    ${pendingWithdrawals}
-                </div>
-            </div>
-
-            <div style="
-                padding:16px;
-                border-radius:14px;
-                background:#f5f3ff;
-            ">
-                <strong>Tickets ouverts</strong>
-                <div style="
-                    margin-top:8px;
-                    font-size:27px;
-                    font-weight:900;
-                ">
-                    ${tickets}
-                </div>
-            </div>
-
-        </div>
-    `;
+        `;
 }
 
 
-/* =========================================================
+/* ============================================================
    USERS
-========================================================= */
+============================================================ */
 
-function renderUsers(search="") {
+function renderUsers(
+    search = ""
+) {
 
     const q =
         normalizeSearch(search);
+
 
     const body =
         document.getElementById(
             "usersTableBody"
         );
 
+
     const filtered =
-        profiles.filter(profile =>
-            (
-                `${profile.full_name || ""}
-                 ${profile.phone || ""}
-                 ${profile.referral_code || ""}`
-            )
-            .toLowerCase()
-            .includes(q)
+        profiles.filter(
+            profile => {
+
+                const searchable =
+                    `
+                        ${profile.full_name || ""}
+                        ${profile.phone || ""}
+                        ${profile.referral_code || ""}
+                    `;
+
+                return searchable
+                    .toLowerCase()
+                    .includes(q);
+            }
         );
+
 
     if (!filtered.length) {
 
         body.innerHTML = `
             <tr>
-                <td colspan="7" class="empty">
+                <td
+                    colspan="7"
+                    class="empty"
+                >
                     Aucun utilisateur.
                 </td>
             </tr>
@@ -1999,88 +3347,139 @@ function renderUsers(search="") {
         return;
     }
 
+
     body.innerHTML =
-        filtered.map(profile => `
-            <tr>
-                <td>
-                    <strong>
-                        ${escapeHtml(profile.full_name || "Utilisateur")}
-                    </strong>
-                </td>
+        filtered
+            .map(
+                profile => `
 
-                <td>
-                    ${escapeHtml(profile.phone || "-")}
-                </td>
+                    <tr>
 
-                <td>
-                    ${formatMoney(profile.balance)}
-                </td>
+                        <td data-label="Utilisateur">
+                            <strong>
+                                ${escapeHtml(
+                                    profile.full_name ||
+                                    "Utilisateur"
+                                )}
+                            </strong>
+                        </td>
 
-                <td>
-                    ${formatMoney(profile.total_deposited)}
-                </td>
 
-                <td>
-                    ${formatMoney(profile.total_invested)}
-                </td>
+                        <td data-label="Téléphone">
+                            ${escapeHtml(
+                                profile.phone ||
+                                "-"
+                            )}
+                        </td>
 
-                <td>
-                    ${formatMoney(profile.total_referral_bonus)}
-                </td>
 
-                <td>
-                    <span class="status ${
-                        profile.is_active
-                            ? "approved"
-                            : "rejected"
-                    }">
-                        ${
-                            profile.is_active
-                                ? "Actif"
-                                : "Désactivé"
-                        }
-                    </span>
-                </td>
-            </tr>
-        `).join("");
+                        <td data-label="Solde">
+                            ${formatMoney(
+                                profile.balance
+                            )}
+                        </td>
+
+
+                        <td data-label="Total déposé">
+                            ${formatMoney(
+                                profile.total_deposited
+                            )}
+                        </td>
+
+
+                        <td data-label="Total investi">
+                            ${formatMoney(
+                                profile.total_invested
+                            )}
+                        </td>
+
+
+                        <td data-label="Bonus parrainage">
+                            ${formatMoney(
+                                profile.total_referral_bonus
+                            )}
+                        </td>
+
+
+                        <td data-label="État">
+                            <span
+                                class="
+                                    status
+                                    ${
+                                        profile.is_active
+                                            ? "approved"
+                                            : "rejected"
+                                    }
+                                "
+                            >
+                                ${
+                                    profile.is_active
+                                        ? "Actif"
+                                        : "Désactivé"
+                                }
+                            </span>
+                        </td>
+
+                    </tr>
+
+                `
+            )
+            .join("");
 }
 
 
-/* =========================================================
+/* ============================================================
    DEPOSITS
-========================================================= */
+============================================================ */
 
-function renderDeposits(search="") {
+function renderDeposits(
+    search = ""
+) {
 
     const q =
         normalizeSearch(search);
+
 
     const body =
         document.getElementById(
             "depositsTableBody"
         );
 
+
     const filtered =
-        deposits.filter(item => {
+        deposits.filter(
+            item => {
 
-            const profile =
-                item.profiles || {};
+                const profile =
+                    item.profiles || {};
 
-            return (
-                `${profile.full_name || ""}
-                 ${profile.phone || ""}
-                 ${item.payment_reference || ""}
-                 ${item.status || ""}`
-            )
-            .toLowerCase()
-            .includes(q);
-        });
+
+                const searchable =
+                    `
+                        ${profile.full_name || ""}
+                        ${profile.phone || ""}
+                        ${item.payment_reference || ""}
+                        ${item.payment_method || ""}
+                        ${item.status || ""}
+                        ${item.gross_amount || ""}
+                    `;
+
+
+                return searchable
+                    .toLowerCase()
+                    .includes(q);
+            }
+        );
+
 
     if (!filtered.length) {
 
         body.innerHTML = `
             <tr>
-                <td colspan="9" class="empty">
+                <td
+                    colspan="9"
+                    class="empty"
+                >
                     Aucun dépôt.
                 </td>
             </tr>
@@ -2089,130 +3488,224 @@ function renderDeposits(search="") {
         return;
     }
 
+
     body.innerHTML =
-        filtered.map(item => {
+        filtered
+            .map(
+                item => {
 
-            const profile =
-                item.profiles || {};
+                    const profile =
+                        item.profiles || {};
 
-            return `
-                <tr>
 
-                    <td>
-                        <strong>
-                            ${escapeHtml(profile.full_name || "Utilisateur")}
-                        </strong>
-                        <br>
-                        <small>
-                            ${escapeHtml(profile.phone || "")}
-                        </small>
-                    </td>
+                    return `
 
-                    <td>
-                        ${formatMoney(item.gross_amount)}
-                    </td>
+                        <tr>
 
-                    <td>
-                        ${formatMoney(item.fee_amount)}
-                    </td>
+                            <td data-label="Utilisateur">
 
-                    <td>
-                        ${formatMoney(item.net_amount)}
-                    </td>
+                                <strong>
+                                    ${escapeHtml(
+                                        profile.full_name ||
+                                        "Utilisateur"
+                                    )}
+                                </strong>
 
-                    <td>
-                        ${escapeHtml(item.payment_method || "-")}
-                    </td>
+                                <br>
 
-                    <td>
-                        ${escapeHtml(item.payment_reference || "-")}
-                    </td>
+                                <small>
+                                    ${escapeHtml(
+                                        profile.phone ||
+                                        ""
+                                    )}
+                                </small>
 
-                    <td>
-                        <span class="status ${escapeHtml(item.status)}">
-                            ${escapeHtml(item.status)}
-                        </span>
-                    </td>
+                            </td>
 
-                    <td>
-                        ${formatDate(item.created_at)}
-                    </td>
 
-                    <td>
-                        ${
-                            item.status === "pending"
-                            ? `
-                                <div class="action-row">
-                                    <button
-                                        class="action-btn approve"
-                                        data-deposit="${escapeHtml(item.id)}"
-                                    >
-                                        Traiter
-                                    </button>
-                                </div>
-                            `
-                            : "-"
-                        }
-                    </td>
+                            <td data-label="Montant brut">
+                                <strong>
+                                    ${formatMoney(
+                                        item.gross_amount
+                                    )}
+                                </strong>
+                            </td>
 
-                </tr>
-            `;
-        }).join("");
+
+                            <td data-label="Frais">
+                                ${formatMoney(
+                                    item.fee_amount
+                                )}
+                            </td>
+
+
+                            <td data-label="Montant net">
+                                ${formatMoney(
+                                    item.net_amount
+                                )}
+                            </td>
+
+
+                            <td data-label="Méthode">
+                                ${escapeHtml(
+                                    item.payment_method ||
+                                    "-"
+                                )}
+                            </td>
+
+
+                            <td data-label="Référence">
+                                ${escapeHtml(
+                                    item.payment_reference ||
+                                    "-"
+                                )}
+                            </td>
+
+
+                            <td data-label="Statut">
+
+                                <span
+                                    class="
+                                        status
+                                        ${escapeHtml(
+                                            item.status
+                                        )}
+                                    "
+                                >
+                                    ${escapeHtml(
+                                        item.status
+                                    )}
+                                </span>
+
+                            </td>
+
+
+                            <td data-label="Date">
+                                ${formatDate(
+                                    item.created_at
+                                )}
+                            </td>
+
+
+                            <td data-label="Actions">
+
+                                ${
+                                    item.status ===
+                                    "pending"
+
+                                    ? `
+                                        <div class="action-row">
+
+                                            <button
+                                                class="action-btn approve"
+                                                data-deposit="${escapeHtml(item.id)}"
+                                                type="button"
+                                            >
+                                                <i class="fa-solid fa-check"></i>
+                                                Valider / Refuser
+                                            </button>
+
+                                        </div>
+                                    `
+
+                                    : `
+                                        <span
+                                            style="
+                                                color:#64748b;
+                                                font-size:10px;
+                                            "
+                                        >
+                                            Déjà traité
+                                        </span>
+                                    `
+                                }
+
+                            </td>
+
+                        </tr>
+
+                    `;
+                }
+            )
+            .join("");
+
 
     body
         .querySelectorAll(
             "[data-deposit]"
         )
-        .forEach(button => {
+        .forEach(
+            button => {
 
-            button.addEventListener(
-                "click",
-                () => {
-                    openFinancialReview(
-                        "deposit",
-                        button.dataset.deposit
-                    );
-                }
-            );
-        });
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        openFinancialReview(
+                            "deposit",
+                            button.dataset
+                                .deposit
+                        );
+
+                    }
+                );
+
+            }
+        );
 }
 
 
-/* =========================================================
+/* ============================================================
    WITHDRAWALS
-========================================================= */
+============================================================ */
 
-function renderWithdrawals(search="") {
+function renderWithdrawals(
+    search = ""
+) {
 
     const q =
         normalizeSearch(search);
+
 
     const body =
         document.getElementById(
             "withdrawalsTableBody"
         );
 
+
     const filtered =
-        withdrawals.filter(item => {
+        withdrawals.filter(
+            item => {
 
-            const profile =
-                item.profiles || {};
+                const profile =
+                    item.profiles || {};
 
-            return (
-                `${profile.full_name || ""}
-                 ${profile.phone || ""}
-                 ${item.destination_phone || ""}
-                 ${item.status || ""}`
-            )
-            .toLowerCase()
-            .includes(q);
-        });
+
+                const searchable =
+                    `
+                        ${profile.full_name || ""}
+                        ${profile.phone || ""}
+                        ${item.destination_phone || ""}
+                        ${item.payment_method || ""}
+                        ${item.status || ""}
+                    `;
+
+
+                return searchable
+                    .toLowerCase()
+                    .includes(q);
+            }
+        );
+
 
     if (!filtered.length) {
 
         body.innerHTML = `
             <tr>
-                <td colspan="8" class="empty">
+                <td
+                    colspan="8"
+                    class="empty"
+                >
                     Aucun retrait.
                 </td>
             </tr>
@@ -2221,119 +3714,215 @@ function renderWithdrawals(search="") {
         return;
     }
 
+
     body.innerHTML =
-        filtered.map(item => {
+        filtered
+            .map(
+                item => {
 
-            const profile =
-                item.profiles || {};
+                    const profile =
+                        item.profiles || {};
 
-            return `
-                <tr>
 
-                    <td>
-                        <strong>
-                            ${escapeHtml(profile.full_name || "Utilisateur")}
-                        </strong>
-                    </td>
+                    return `
 
-                    <td>
-                        ${formatMoney(item.gross_amount)}
-                    </td>
+                        <tr>
 
-                    <td>
-                        ${formatMoney(item.fee_amount)}
-                    </td>
+                            <td data-label="Utilisateur">
 
-                    <td>
-                        ${formatMoney(item.net_amount)}
-                    </td>
+                                <strong>
+                                    ${escapeHtml(
+                                        profile.full_name ||
+                                        "Utilisateur"
+                                    )}
+                                </strong>
 
-                    <td>
-                        ${escapeHtml(item.destination_phone || "-")}
-                    </td>
+                                <br>
 
-                    <td>
-                        <span class="status ${escapeHtml(item.status)}">
-                            ${escapeHtml(item.status)}
-                        </span>
-                    </td>
+                                <small>
+                                    ${escapeHtml(
+                                        profile.phone ||
+                                        ""
+                                    )}
+                                </small>
 
-                    <td>
-                        ${formatDate(item.created_at)}
-                    </td>
+                            </td>
 
-                    <td>
-                        ${
-                            item.status === "pending"
-                            ? `
-                                <button
-                                    class="action-btn approve"
-                                    data-withdrawal="${escapeHtml(item.id)}"
+
+                            <td data-label="Montant brut">
+                                <strong>
+                                    ${formatMoney(
+                                        item.gross_amount
+                                    )}
+                                </strong>
+                            </td>
+
+
+                            <td data-label="Frais">
+                                ${formatMoney(
+                                    item.fee_amount
+                                )}
+                            </td>
+
+
+                            <td data-label="Montant net">
+                                ${formatMoney(
+                                    item.net_amount
+                                )}
+                            </td>
+
+
+                            <td data-label="Destination">
+                                ${escapeHtml(
+                                    item.destination_phone ||
+                                    "-"
+                                )}
+                            </td>
+
+
+                            <td data-label="Statut">
+
+                                <span
+                                    class="
+                                        status
+                                        ${escapeHtml(
+                                            item.status
+                                        )}
+                                    "
                                 >
-                                    Traiter
-                                </button>
-                            `
-                            : "-"
-                        }
-                    </td>
+                                    ${escapeHtml(
+                                        item.status
+                                    )}
+                                </span>
 
-                </tr>
-            `;
-        }).join("");
+                            </td>
+
+
+                            <td data-label="Date">
+                                ${formatDate(
+                                    item.created_at
+                                )}
+                            </td>
+
+
+                            <td data-label="Actions">
+
+                                ${
+                                    item.status ===
+                                    "pending"
+
+                                    ? `
+                                        <div class="action-row">
+
+                                            <button
+                                                class="action-btn approve"
+                                                data-withdrawal="${escapeHtml(item.id)}"
+                                                type="button"
+                                            >
+                                                <i class="fa-solid fa-check"></i>
+                                                Valider / Refuser
+                                            </button>
+
+                                        </div>
+                                    `
+
+                                    : `
+                                        <span
+                                            style="
+                                                color:#64748b;
+                                                font-size:10px;
+                                            "
+                                        >
+                                            Déjà traité
+                                        </span>
+                                    `
+                                }
+
+                            </td>
+
+                        </tr>
+
+                    `;
+                }
+            )
+            .join("");
+
 
     body
         .querySelectorAll(
             "[data-withdrawal]"
         )
-        .forEach(button => {
+        .forEach(
+            button => {
 
-            button.addEventListener(
-                "click",
-                () => {
-                    openFinancialReview(
-                        "withdrawal",
-                        button.dataset.withdrawal
-                    );
-                }
-            );
-        });
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        openFinancialReview(
+                            "withdrawal",
+                            button.dataset
+                                .withdrawal
+                        );
+
+                    }
+                );
+
+            }
+        );
 }
 
 
-/* =========================================================
+/* ============================================================
    INVESTMENTS
-========================================================= */
+============================================================ */
 
-function renderInvestments(search="") {
+function renderInvestments(
+    search = ""
+) {
 
     const q =
         normalizeSearch(search);
+
 
     const body =
         document.getElementById(
             "investmentsTableBody"
         );
 
+
     const filtered =
-        investments.filter(item => {
+        investments.filter(
+            item => {
 
-            const profile =
-                item.profiles || {};
+                const profile =
+                    item.profiles || {};
 
-            return (
-                `${profile.full_name || ""}
-                 ${item.pack_name || ""}
-                 ${item.status || ""}`
-            )
-            .toLowerCase()
-            .includes(q);
-        });
+
+                const searchable =
+                    `
+                        ${profile.full_name || ""}
+                        ${item.pack_name || ""}
+                        ${item.pack_id || ""}
+                        ${item.status || ""}
+                    `;
+
+
+                return searchable
+                    .toLowerCase()
+                    .includes(q);
+            }
+        );
+
 
     if (!filtered.length) {
 
         body.innerHTML = `
             <tr>
-                <td colspan="7" class="empty">
+                <td
+                    colspan="7"
+                    class="empty"
+                >
                     Aucun investissement.
                 </td>
             </tr>
@@ -2342,86 +3931,147 @@ function renderInvestments(search="") {
         return;
     }
 
+
     body.innerHTML =
-        filtered.map(item => {
+        filtered
+            .map(
+                item => {
 
-            const profile =
-                item.profiles || {};
+                    const profile =
+                        item.profiles || {};
 
-            return `
-                <tr>
-                    <td>
-                        ${escapeHtml(profile.full_name || "Utilisateur")}
-                    </td>
 
-                    <td>
-                        ${escapeHtml(item.pack_name || item.pack_id || "-")}
-                    </td>
+                    return `
 
-                    <td>
-                        ${formatMoney(item.amount)}
-                    </td>
+                        <tr>
 
-                    <td>
-                        ${formatMoney(item.daily_income)}
-                    </td>
+                            <td data-label="Utilisateur">
+                                ${escapeHtml(
+                                    profile.full_name ||
+                                    "Utilisateur"
+                                )}
+                            </td>
 
-                    <td>
-                        ${Number(item.credited_days || 0)}
-                        /
-                        ${Number(item.duration_days || 0)}
-                    </td>
 
-                    <td>
-                        ${formatMoney(item.total_credited)}
-                    </td>
+                            <td data-label="Pack">
+                                ${escapeHtml(
+                                    item.pack_name ||
+                                    item.pack_id ||
+                                    "-"
+                                )}
+                            </td>
 
-                    <td>
-                        <span class="status ${escapeHtml(item.status)}">
-                            ${escapeHtml(item.status)}
-                        </span>
-                    </td>
-                </tr>
-            `;
-        }).join("");
+
+                            <td data-label="Montant">
+                                ${formatMoney(
+                                    item.amount
+                                )}
+                            </td>
+
+
+                            <td data-label="Gain journalier">
+                                ${formatMoney(
+                                    item.daily_income
+                                )}
+                            </td>
+
+
+                            <td data-label="Jours crédités">
+                                ${Number(
+                                    item.credited_days ||
+                                    0
+                                )}
+                                /
+                                ${Number(
+                                    item.duration_days ||
+                                    0
+                                )}
+                            </td>
+
+
+                            <td data-label="Total crédité">
+                                ${formatMoney(
+                                    item.total_credited
+                                )}
+                            </td>
+
+
+                            <td data-label="Statut">
+
+                                <span
+                                    class="
+                                        status
+                                        ${escapeHtml(
+                                            item.status
+                                        )}
+                                    "
+                                >
+                                    ${escapeHtml(
+                                        item.status
+                                    )}
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                    `;
+                }
+            )
+            .join("");
 }
 
 
-/* =========================================================
+/* ============================================================
    SUPPORT
-========================================================= */
+============================================================ */
 
-function renderSupport(search="") {
+function renderSupport(
+    search = ""
+) {
 
     const q =
         normalizeSearch(search);
+
 
     const body =
         document.getElementById(
             "supportTableBody"
         );
 
+
     const filtered =
-        supportTickets.filter(item => {
+        supportTickets.filter(
+            item => {
 
-            const profile =
-                item.profiles || {};
+                const profile =
+                    item.profiles || {};
 
-            return (
-                `${profile.full_name || ""}
-                 ${item.subject || ""}
-                 ${item.message || ""}
-                 ${item.status || ""}`
-            )
-            .toLowerCase()
-            .includes(q);
-        });
+
+                const searchable =
+                    `
+                        ${profile.full_name || ""}
+                        ${item.subject || ""}
+                        ${item.message || ""}
+                        ${item.status || ""}
+                    `;
+
+
+                return searchable
+                    .toLowerCase()
+                    .includes(q);
+            }
+        );
+
 
     if (!filtered.length) {
 
         body.innerHTML = `
             <tr>
-                <td colspan="6" class="empty">
+                <td
+                    colspan="6"
+                    class="empty"
+                >
                     Aucun ticket.
                 </td>
             </tr>
@@ -2430,114 +4080,183 @@ function renderSupport(search="") {
         return;
     }
 
+
     body.innerHTML =
-        filtered.map(item => {
+        filtered
+            .map(
+                item => {
 
-            const profile =
-                item.profiles || {};
+                    const profile =
+                        item.profiles || {};
 
-            const message =
-                String(item.message || "");
+                    const message =
+                        String(
+                            item.message || ""
+                        );
 
-            return `
-                <tr>
 
-                    <td>
-                        ${escapeHtml(profile.full_name || "Utilisateur")}
-                    </td>
+                    return `
 
-                    <td>
-                        ${escapeHtml(item.subject || "-")}
-                    </td>
+                        <tr>
 
-                    <td>
-                        ${escapeHtml(
-                            message.length > 70
-                                ? message.slice(0,70) + "..."
-                                : message
-                        )}
-                    </td>
+                            <td data-label="Utilisateur">
+                                <strong>
+                                    ${escapeHtml(
+                                        profile.full_name ||
+                                        "Utilisateur"
+                                    )}
+                                </strong>
+                            </td>
 
-                    <td>
-                        <span class="status ${escapeHtml(item.status)}">
-                            ${escapeHtml(item.status)}
-                        </span>
-                    </td>
 
-                    <td>
-                        ${formatDate(item.created_at)}
-                    </td>
+                            <td data-label="Sujet">
+                                ${escapeHtml(
+                                    item.subject ||
+                                    "-"
+                                )}
+                            </td>
 
-                    <td>
-                        <button
-                            class="action-btn reply"
-                            data-ticket="${escapeHtml(item.id)}"
-                        >
-                            Répondre
-                        </button>
-                    </td>
 
-                </tr>
-            `;
-        }).join("");
+                            <td data-label="Message">
+
+                                ${escapeHtml(
+                                    message.length > 100
+                                        ? message.slice(
+                                            0,
+                                            100
+                                        ) + "..."
+                                        : message
+                                )}
+
+                            </td>
+
+
+                            <td data-label="Statut">
+
+                                <span
+                                    class="
+                                        status
+                                        ${escapeHtml(
+                                            item.status
+                                        )}
+                                    "
+                                >
+                                    ${escapeHtml(
+                                        item.status
+                                    )}
+                                </span>
+
+                            </td>
+
+
+                            <td data-label="Date">
+                                ${formatDate(
+                                    item.created_at
+                                )}
+                            </td>
+
+
+                            <td data-label="Action">
+
+                                <button
+                                    class="action-btn reply"
+                                    data-ticket="${escapeHtml(item.id)}"
+                                    type="button"
+                                >
+                                    <i class="fa-solid fa-comment-dots"></i>
+                                    Répondre
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+                    `;
+                }
+            )
+            .join("");
+
 
     body
         .querySelectorAll(
             "[data-ticket]"
         )
-        .forEach(button => {
+        .forEach(
+            button => {
 
-            button.addEventListener(
-                "click",
-                () => {
-                    openSupportReply(
-                        button.dataset.ticket
-                    );
-                }
-            );
-        });
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        openSupportReply(
+                            button.dataset
+                                .ticket
+                        );
+
+                    }
+                );
+
+            }
+        );
 }
 
 
-/* =========================================================
-   REFRESH ALL
-========================================================= */
+/* ============================================================
+   RENDER EVERYTHING
+============================================================ */
 
 function renderEverything() {
 
     renderStats();
+
     renderOverview();
 
+
     renderUsers(
-        document.getElementById(
-            "usersSearch"
-        ).value
+        document
+            .getElementById(
+                "usersSearch"
+            )
+            .value
     );
+
 
     renderDeposits(
-        document.getElementById(
-            "depositsSearch"
-        ).value
+        document
+            .getElementById(
+                "depositsSearch"
+            )
+            .value
     );
+
 
     renderWithdrawals(
-        document.getElementById(
-            "withdrawalsSearch"
-        ).value
+        document
+            .getElementById(
+                "withdrawalsSearch"
+            )
+            .value
     );
+
 
     renderInvestments(
-        document.getElementById(
-            "investmentsSearch"
-        ).value
+        document
+            .getElementById(
+                "investmentsSearch"
+            )
+            .value
     );
 
+
     renderSupport(
-        document.getElementById(
-            "supportSearch"
-        ).value
+        document
+            .getElementById(
+                "supportSearch"
+            )
+            .value
     );
 }
+
 
 async function refreshAdminData() {
 
@@ -2550,92 +4269,202 @@ async function refreshAdminData() {
         loadAdminNotifications()
     ]);
 
+
     renderEverything();
 }
 
 
-/* =========================================================
+/* ============================================================
    FINANCIAL REVIEW
-========================================================= */
+============================================================ */
 
-function openFinancialReview(type,id) {
+function openFinancialReview(
+    type,
+    id
+) {
 
     let operation;
+
 
     if (type === "deposit") {
 
         operation =
             deposits.find(
                 item =>
-                    String(item.id) ===
+                    String(
+                        item.id
+                    ) ===
                     String(id)
             );
 
-    } else {
+    }
+
+    else {
 
         operation =
             withdrawals.find(
                 item =>
-                    String(item.id) ===
+                    String(
+                        item.id
+                    ) ===
                     String(id)
             );
+
     }
 
-    if (!operation) return;
+
+    if (!operation) {
+        return;
+    }
+
 
     currentReview = {
         type,
         operation
     };
 
+
     const profile =
         operation.profiles || {};
 
-    document.getElementById(
-        "reviewModalTitle"
-    ).textContent =
-        type === "deposit"
-            ? "Traiter le dépôt"
-            : "Traiter le retrait";
 
-    document.getElementById(
-        "reviewDetails"
-    ).innerHTML = `
-        <strong>Utilisateur :</strong>
-        ${escapeHtml(profile.full_name || "Utilisateur")}
-        <br>
+    document
+        .getElementById(
+            "reviewModalTitle"
+        )
+        .textContent =
+            type === "deposit"
+                ? "Traiter le dépôt"
+                : "Traiter le retrait";
 
-        <strong>Montant brut :</strong>
-        ${formatMoney(operation.gross_amount)}
-        <br>
 
-        <strong>Frais :</strong>
-        ${formatMoney(operation.fee_amount)}
-        <br>
+    document
+        .getElementById(
+            "reviewDetails"
+        )
+        .innerHTML = `
 
-        <strong>Net :</strong>
-        ${formatMoney(operation.net_amount)}
-    `;
+            <strong>
+                Utilisateur :
+            </strong>
 
-    document.getElementById(
-        "reviewNote"
-    ).value = "";
+            ${escapeHtml(
+                profile.full_name ||
+                "Utilisateur"
+            )}
 
-    openModal("reviewModal");
+            <br>
+
+
+            <strong>
+                Téléphone :
+            </strong>
+
+            ${escapeHtml(
+                profile.phone ||
+                operation.destination_phone ||
+                "-"
+            )}
+
+            <br>
+
+
+            <strong>
+                Montant brut :
+            </strong>
+
+            ${formatMoney(
+                operation.gross_amount
+            )}
+
+            <br>
+
+
+            <strong>
+                Frais :
+            </strong>
+
+            ${formatMoney(
+                operation.fee_amount
+            )}
+
+            <br>
+
+
+            <strong>
+                Montant net :
+            </strong>
+
+            ${formatMoney(
+                operation.net_amount
+            )}
+
+            <br>
+
+
+            <strong>
+                Statut :
+            </strong>
+
+            ${escapeHtml(
+                operation.status ||
+                "-"
+            )}
+        `;
+
+
+    document
+        .getElementById(
+            "reviewNote"
+        )
+        .value = "";
+
+
+    openModal(
+        "reviewModal"
+    );
 }
 
-async function processCurrentReview(approve) {
 
-    if (!currentReview) return;
+async function processCurrentReview(
+    approve
+) {
+
+    if (!currentReview) {
+        return;
+    }
+
+
+    const approveButton =
+        document.getElementById(
+            "approveReviewButton"
+        );
+
+    const rejectButton =
+        document.getElementById(
+            "rejectReviewButton"
+        );
+
+
+    approveButton.disabled =
+        true;
+
+    rejectButton.disabled =
+        true;
+
 
     try {
 
         const note =
-            document.getElementById(
-                "reviewNote"
-            ).value;
+            document
+                .getElementById(
+                    "reviewNote"
+                )
+                .value;
+
 
         let result;
+
 
         if (
             currentReview.type ===
@@ -2645,49 +4474,83 @@ async function processCurrentReview(approve) {
             result =
                 await adminReviewSupabaseDeposit({
                     depositId:
-                        currentReview.operation.id,
+                        currentReview
+                            .operation
+                            .id,
+
                     approve,
+
                     note
                 });
 
-        } else {
+        }
+
+        else {
 
             result =
                 await adminReviewSupabaseWithdrawal({
                     withdrawalId:
-                        currentReview.operation.id,
+                        currentReview
+                            .operation
+                            .id,
+
                     approve,
+
                     note
                 });
+
         }
 
+
         if (!result?.success) {
+
             throw new Error(
                 result?.message ||
                 "Impossible de traiter l'opération."
             );
         }
 
-        closeModal("reviewModal");
 
-        showToast(
-            result.message ||
-            "Opération traitée."
+        closeModal(
+            "reviewModal"
         );
 
-        currentReview = null;
+
+        showToast(
+            approve
+                ? "Opération validée avec succès."
+                : "Opération refusée."
+        );
+
+
+        currentReview =
+            null;
+
 
         await refreshAdminData();
 
-    } catch(error) {
+    }
+
+    catch(error) {
 
         showToast(
             error?.message ||
             "Erreur de traitement.",
             "error"
         );
+
+    }
+
+    finally {
+
+        approveButton.disabled =
+            false;
+
+        rejectButton.disabled =
+            false;
     }
 }
+
 
 document
     .getElementById(
@@ -2695,8 +4558,13 @@ document
     )
     .addEventListener(
         "click",
-        () => processCurrentReview(true)
+        () => {
+            processCurrentReview(
+                true
+            );
+        }
     );
+
 
 document
     .getElementById(
@@ -2704,56 +4572,129 @@ document
     )
     .addEventListener(
         "click",
-        () => processCurrentReview(false)
+        () => {
+            processCurrentReview(
+                false
+            );
+        }
     );
 
 
-/* =========================================================
+/* ============================================================
    SUPPORT REPLY
-========================================================= */
+============================================================ */
 
 function openSupportReply(id) {
 
     currentSupportTicket =
         supportTickets.find(
             item =>
-                String(item.id) ===
+                String(
+                    item.id
+                ) ===
                 String(id)
         );
 
-    if (!currentSupportTicket) return;
+
+    if (!currentSupportTicket) {
+        return;
+    }
+
 
     const profile =
-        currentSupportTicket.profiles || {};
+        currentSupportTicket
+            .profiles || {};
 
-    document.getElementById(
-        "supportDetails"
-    ).innerHTML = `
-        <strong>Utilisateur :</strong>
-        ${escapeHtml(profile.full_name || "Utilisateur")}
-        <br>
 
-        <strong>Sujet :</strong>
-        ${escapeHtml(currentSupportTicket.subject || "-")}
-        <br><br>
+    document
+        .getElementById(
+            "supportDetails"
+        )
+        .innerHTML = `
 
-        <strong>Message :</strong>
-        <br>
-        ${escapeHtml(currentSupportTicket.message || "")}
-    `;
+            <strong>
+                Utilisateur :
+            </strong>
 
-    document.getElementById(
-        "supportReply"
-    ).value =
-        currentSupportTicket.admin_reply || "";
+            ${escapeHtml(
+                profile.full_name ||
+                "Utilisateur"
+            )}
 
-    document.getElementById(
-        "closeTicketCheckbox"
-    ).checked =
-        currentSupportTicket.status === "closed";
+            <br>
 
-    openModal("supportModal");
+
+            <strong>
+                Sujet :
+            </strong>
+
+            ${escapeHtml(
+                currentSupportTicket.subject ||
+                "-"
+            )}
+
+            <br><br>
+
+
+            <strong>
+                Message :
+            </strong>
+
+            <br>
+
+            ${escapeHtml(
+                currentSupportTicket.message ||
+                ""
+            )}
+
+            ${
+                currentSupportTicket.admin_reply
+
+                ? `
+
+                    <br><br>
+
+                    <strong>
+                        Dernière réponse administrateur :
+                    </strong>
+
+                    <br>
+
+                    ${escapeHtml(
+                        currentSupportTicket
+                            .admin_reply
+                    )}
+
+                `
+
+                : ""
+            }
+        `;
+
+
+    document
+        .getElementById(
+            "supportReply"
+        )
+        .value =
+            currentSupportTicket
+                .admin_reply || "";
+
+
+    document
+        .getElementById(
+            "closeTicketCheckbox"
+        )
+        .checked =
+            currentSupportTicket.status ===
+            "closed";
+
+
+    openModal(
+        "supportModal"
+    );
 }
+
 
 document
     .getElementById(
@@ -2763,22 +4704,46 @@ document
         "click",
         async function() {
 
-            if (!currentSupportTicket) return;
+            if (
+                !currentSupportTicket
+            ) {
+                return;
+            }
+
 
             const reply =
-                document.getElementById(
-                    "supportReply"
-                ).value.trim();
+                document
+                    .getElementById(
+                        "supportReply"
+                    )
+                    .value
+                    .trim();
+
 
             if (!reply) {
 
                 showToast(
-                    "Écrivez une réponse.",
+                    "Écrivez une réponse avant l'envoi.",
                     "error"
                 );
 
                 return;
             }
+
+
+            this.disabled =
+                true;
+
+
+            const oldHtml =
+                this.innerHTML;
+
+
+            this.innerHTML = `
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                Envoi...
+            `;
+
 
             try {
 
@@ -2786,12 +4751,17 @@ document
                     await adminReplySupabaseSupportTicket({
                         ticketId:
                             currentSupportTicket.id,
+
                         reply,
+
                         close:
-                            document.getElementById(
-                                "closeTicketCheckbox"
-                            ).checked
+                            document
+                                .getElementById(
+                                    "closeTicketCheckbox"
+                                )
+                                .checked
                     });
+
 
                 if (!result?.success) {
 
@@ -2801,41 +4771,72 @@ document
                     );
                 }
 
-                closeModal("supportModal");
 
-                showToast(
-                    result.message ||
-                    "Réponse envoyée."
+                closeModal(
+                    "supportModal"
                 );
 
-                currentSupportTicket = null;
+
+                showToast(
+                    "Réponse envoyée à l'utilisateur."
+                );
+
+
+                currentSupportTicket =
+                    null;
+
 
                 await refreshAdminData();
 
-            } catch(error) {
+            }
+
+            catch(error) {
 
                 showToast(
                     error?.message ||
                     "Erreur assistance.",
                     "error"
                 );
+
             }
+
+            finally {
+
+                this.disabled =
+                    false;
+
+                this.innerHTML =
+                    oldHtml;
+            }
+
         }
     );
 
 
-/* =========================================================
+/* ============================================================
    NAVIGATION
-========================================================= */
+============================================================ */
 
 const pageTitles = {
-    overview: "Vue générale",
-    users: "Utilisateurs",
-    deposits: "Dépôts",
-    withdrawals: "Retraits",
-    investments: "Investissements",
-    support: "Assistance"
+    overview:
+        "Vue générale",
+
+    users:
+        "Utilisateurs",
+
+    deposits:
+        "Dépôts",
+
+    withdrawals:
+        "Retraits",
+
+    investments:
+        "Investissements",
+
+    support:
+        "Assistance"
 };
+
 
 function showSection(section) {
 
@@ -2843,59 +4844,102 @@ function showSection(section) {
         .querySelectorAll(
             ".admin-section"
         )
-        .forEach(item => {
-            item.classList.remove("active");
-        });
+        .forEach(
+            item => {
+
+                item.classList.remove(
+                    "active"
+                );
+
+            }
+        );
+
 
     document
         .querySelectorAll(
             "[data-section]"
         )
-        .forEach(item => {
-            item.classList.remove("active");
-        });
+        .forEach(
+            item => {
 
-    document.getElementById(
-        "section-" + section
-    )?.classList.add("active");
+                item.classList.remove(
+                    "active"
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "section-" + section
+        )
+        ?.classList
+        .add("active");
+
 
     document
         .querySelector(
             `[data-section="${section}"]`
         )
-        ?.classList.add("active");
+        ?.classList
+        .add("active");
 
-    document.getElementById(
-        "pageTitle"
-    ).textContent =
-        pageTitles[section] ||
-        "Administration";
 
-    document.getElementById(
-        "sidebar"
-    ).classList.remove("show");
+    document
+        .getElementById(
+            "pageTitle"
+        )
+        .textContent =
+            pageTitles[section] ||
+            "Administration";
+
+
+    document
+        .getElementById(
+            "sidebar"
+        )
+        .classList
+        .remove("show");
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 }
+
+
+window.showSection =
+    showSection;
+
 
 document
     .querySelectorAll(
         "[data-section]"
     )
-    .forEach(button => {
+    .forEach(
+        button => {
 
-        button.addEventListener(
-            "click",
-            () => {
-                showSection(
-                    button.dataset.section
-                );
-            }
-        );
-    });
+            button.addEventListener(
+                "click",
+                () => {
+
+                    showSection(
+                        button.dataset
+                            .section
+                    );
+
+                }
+            );
+
+        }
+    );
 
 
-/* =========================================================
+/* ============================================================
    SEARCH
-========================================================= */
+============================================================ */
 
 document
     .getElementById(
@@ -2903,8 +4947,15 @@ document
     )
     .addEventListener(
         "input",
-        e => renderUsers(e.target.value)
+        event => {
+
+            renderUsers(
+                event.target.value
+            );
+
+        }
     );
+
 
 document
     .getElementById(
@@ -2912,8 +4963,15 @@ document
     )
     .addEventListener(
         "input",
-        e => renderDeposits(e.target.value)
+        event => {
+
+            renderDeposits(
+                event.target.value
+            );
+
+        }
     );
+
 
 document
     .getElementById(
@@ -2921,8 +4979,15 @@ document
     )
     .addEventListener(
         "input",
-        e => renderWithdrawals(e.target.value)
+        event => {
+
+            renderWithdrawals(
+                event.target.value
+            );
+
+        }
     );
+
 
 document
     .getElementById(
@@ -2930,8 +4995,15 @@ document
     )
     .addEventListener(
         "input",
-        e => renderInvestments(e.target.value)
+        event => {
+
+            renderInvestments(
+                event.target.value
+            );
+
+        }
     );
+
 
 document
     .getElementById(
@@ -2939,13 +5011,19 @@ document
     )
     .addEventListener(
         "input",
-        e => renderSupport(e.target.value)
+        event => {
+
+            renderSupport(
+                event.target.value
+            );
+
+        }
     );
 
 
-/* =========================================================
-   MOBILE
-========================================================= */
+/* ============================================================
+   MOBILE MENU
+============================================================ */
 
 document
     .getElementById(
@@ -2957,16 +5035,21 @@ document
 
             event.stopPropagation();
 
-            document.getElementById(
-                "sidebar"
-            ).classList.toggle("show");
+
+            document
+                .getElementById(
+                    "sidebar"
+                )
+                .classList
+                .toggle("show");
+
         }
     );
 
 
-/* =========================================================
+/* ============================================================
    REFRESH
-========================================================= */
+============================================================ */
 
 document
     .getElementById(
@@ -2976,17 +5059,33 @@ document
         "click",
         async function() {
 
-            this.disabled = true;
+            this.disabled =
+                true;
+
+
+            const icon =
+                this.querySelector(
+                    "i"
+                );
+
+
+            icon?.classList.add(
+                "fa-spin"
+            );
+
 
             try {
 
                 await refreshAdminData();
 
+
                 showToast(
                     "Administration actualisée."
                 );
 
-            } catch(error) {
+            }
+
+            catch(error) {
 
                 showToast(
                     error?.message ||
@@ -2994,28 +5093,45 @@ document
                     "error"
                 );
 
-            } finally {
-
-                this.disabled = false;
             }
+
+            finally {
+
+                this.disabled =
+                    false;
+
+
+                icon?.classList.remove(
+                    "fa-spin"
+                );
+
+            }
+
         }
     );
 
 
-/* =========================================================
+/* ============================================================
    LOGOUT
-========================================================= */
+============================================================ */
 
 async function logoutAdmin() {
 
     try {
+
         await logoutSupabaseUser();
-    } finally {
+
+    }
+
+    finally {
+
         window.location.replace(
             "login.html?logout=1"
         );
+
     }
 }
+
 
 document
     .getElementById(
@@ -3025,6 +5141,7 @@ document
         "click",
         logoutAdmin
     );
+
 
 document
     .getElementById(
@@ -3036,9 +5153,42 @@ document
     );
 
 
-/* =========================================================
+/* ============================================================
+   CLOSE MODAL ON BACKDROP
+============================================================ */
+
+document
+    .querySelectorAll(
+        ".modal-overlay"
+    )
+    .forEach(
+        modal => {
+
+            modal.addEventListener(
+                "click",
+                event => {
+
+                    if (
+                        event.target ===
+                        modal
+                    ) {
+
+                        modal.classList.remove(
+                            "show"
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+/* ============================================================
    START
-========================================================= */
+============================================================ */
 
 async function startAdmin() {
 
@@ -3047,35 +5197,61 @@ async function startAdmin() {
         const allowed =
             await verifyAdminAccess();
 
-        if (!allowed) return;
+
+        if (!allowed) {
+            return;
+        }
+
 
         await refreshAdminData();
 
-        document.getElementById(
-            "adminApp"
-        ).style.display = "grid";
 
-    } catch(error) {
+        document
+            .getElementById(
+                "adminApp"
+            )
+            .style.display =
+                "grid";
 
-        console.error(error);
+    }
 
-        document.getElementById(
-            "accessDenied"
-        ).style.display = "flex";
+    catch(error) {
 
-        document.getElementById(
-            "accessDeniedMessage"
-        ).textContent =
-            error?.message ||
-            "Impossible de charger l'administration.";
+        console.error(
+            error
+        );
 
-    } finally {
 
-        document.getElementById(
-            "loadingScreen"
-        ).style.display = "none";
+        document
+            .getElementById(
+                "accessDenied"
+            )
+            .style.display =
+                "flex";
+
+
+        document
+            .getElementById(
+                "accessDeniedMessage"
+            )
+            .textContent =
+                error?.message ||
+                "Impossible de charger l'administration.";
+
+    }
+
+    finally {
+
+        document
+            .getElementById(
+                "loadingScreen"
+            )
+            .style.display =
+                "none";
+
     }
 }
+
 
 document.addEventListener(
     "DOMContentLoaded",
