@@ -410,7 +410,14 @@ async function logoutSupabaseUser() {
 }
 
 
-async function requireSupabaseAuth() {
+/* ============================================================
+   CORRECTION IMPORTANTE DE LA SESSION DASHBOARD
+============================================================ */
+
+async function requireSupabaseAuth(options = {}) {
+
+    const redirect =
+        Boolean(options && options.redirect);
 
     const result =
         await getSupabaseUser();
@@ -419,22 +426,66 @@ async function requireSupabaseAuth() {
         !result.success ||
         !result.user
     ) {
+
+        if (
+            redirect &&
+            typeof window !== "undefined"
+        ) {
+
+            const currentPage =
+                window.location.pathname
+                    .split("/")
+                    .pop()
+                    .toLowerCase();
+
+            if (
+                currentPage !==
+                HYQD_SUPABASE_CONFIG.LOGIN_PAGE
+            ) {
+
+                window.location.replace(
+                    HYQD_SUPABASE_CONFIG.LOGIN_PAGE +
+                    "?auth=required"
+                );
+            }
+
+            return null;
+        }
+
         return {
             authorized: false,
-            reason:
-                "not_authenticated",
+            reason: "not_authenticated",
             user: null
         };
     }
 
-    return {
-        authorized: true,
-        user:
-            result.user
-    };
+    /*
+       Compatibilité avec les deux architectures du projet.
 
+       Le dashboard peut maintenant utiliser :
+           authUser.id
+           authUser.email
+
+       tandis que les anciennes fonctions peuvent utiliser :
+           auth.authorized
+           auth.user.id
+    */
+
+    return Object.assign(
+        {},
+        result.user,
+        {
+            authorized: true,
+            reason: null,
+            user: result.user
+        }
+    );
 }
 
+
+/* ============================================================
+   ROLES
+============================================================ */
 
 async function getSupabaseCurrentUserRole() {
 
@@ -443,7 +494,10 @@ async function getSupabaseCurrentUserRole() {
         const auth =
             await requireSupabaseAuth();
 
-        if (!auth.authorized) {
+        if (
+            !auth ||
+            !auth.authorized
+        ) {
 
             return {
                 success: false,
@@ -451,7 +505,6 @@ async function getSupabaseCurrentUserRole() {
                 message:
                     "Utilisateur non connecté."
             };
-
         }
 
         const {
@@ -496,7 +549,10 @@ async function requireSupabaseAdmin() {
     const auth =
         await requireSupabaseAuth();
 
-    if (!auth.authorized) {
+    if (
+        !auth ||
+        !auth.authorized
+    ) {
 
         return {
             authorized: false,
@@ -505,7 +561,6 @@ async function requireSupabaseAdmin() {
             user: null,
             role: null
         };
-
     }
 
     const roleResult =
@@ -649,7 +704,10 @@ async function getSupabaseProfile(
             const auth =
                 await requireSupabaseAuth();
 
-            if (!auth.authorized) {
+            if (
+                !auth ||
+                !auth.authorized
+            ) {
 
                 throw new Error(
                     "Utilisateur non connecté."
@@ -715,10 +773,14 @@ async function updateSupabaseProfile({
                     "update_my_profile",
                     {
                         p_full_name:
-                            hyqdCleanText(fullName),
+                            hyqdCleanText(
+                                fullName
+                            ),
 
                         p_phone:
-                            hyqdNormalizePhone(phone)
+                            hyqdNormalizePhone(
+                                phone
+                            )
                     }
                 );
 
@@ -748,7 +810,7 @@ async function updateSupabaseProfile({
 
 
 /* ============================================================
-   PACKS
+   PACKS D'INVESTISSEMENT
 ============================================================ */
 
 async function getSupabaseInvestmentPacks() {
@@ -790,1255 +852,6 @@ async function getSupabaseInvestmentPacks() {
         return {
             success: false,
             packs: [],
-            message:
-                hyqdSafeMessage(error)
-        };
-
-    }
-
-}
-
-
-/* ============================================================
-   DEMANDES FINANCIERES
-============================================================ */
-
-async function requestSupabaseDeposit({
-    amount,
-    method,
-    reference
-}) {
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "request_deposit",
-                    {
-                        p_amount:
-                            Number(amount),
-
-                        p_method:
-                            hyqdCleanText(method),
-
-                        p_reference:
-                            hyqdCleanText(reference) ||
-                            null
-                    }
-                );
-
-        if (error) {
-            throw error;
-        }
-
-        return {
-            success: true,
-            data,
-            message:
-                data?.message ||
-                "Demande de dépôt enregistrée."
-        };
-
-    } catch (error) {
-
-        return {
-            success: false,
-            message:
-                hyqdSafeMessage(error)
-        };
-
-    }
-
-}
-
-
-async function requestSupabaseWithdrawal({
-    amount,
-    method,
-    destinationPhone
-}) {
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "request_withdrawal",
-                    {
-                        p_amount:
-                            Number(amount),
-
-                        p_method:
-                            hyqdCleanText(method),
-
-                        p_destination_phone:
-                            hyqdNormalizePhone(
-                                destinationPhone
-                            )
-                    }
-                );
-
-        if (error) {
-            throw error;
-        }
-
-        return {
-            success: true,
-            data,
-            message:
-                data?.message ||
-                "Demande de retrait enregistrée."
-        };
-
-    } catch (error) {
-
-        return {
-            success: false,
-            message:
-                hyqdSafeMessage(error)
-        };
-
-    }
-
-}
-
-
-async function investSupabasePack(
-    packId
-) {
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "invest_in_pack",
-                    {
-                        p_pack_id:
-                            packId
-                    }
-                );
-
-        if (error) {
-            throw error;
-        }
-
-        return {
-            success: true,
-            data,
-            message:
-                data?.message ||
-                "Investissement enregistré."
-        };
-
-    } catch (error) {
-
-        return {
-            success: false,
-            message:
-                hyqdSafeMessage(error)
-        };
-
-    }
-
-}
-
-
-/* ============================================================
-   DONNEES UTILISATEUR
-============================================================ */
-
-async function getSupabaseDeposits(
-    limit = 100
-) {
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await HYQD_SUPABASE_CLIENT
-                .from("deposits")
-                .select("*")
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
-                )
-                .limit(limit);
-
-        if (error) {
-            throw error;
-        }
-
-        return {
-            success: true,
-            deposits:
-                data || []
-        };
-
-    } catch (error) {
-
-        return {
-            success: false,
-            deposits: [],
-            message:
-                hyqdSafeMessage(error)
-        };
-
-    }
-
-}
-
-
-async function getSupabaseWithdrawals(
-    limit = 100
-) {
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await HYQD_SUPABASE_CLIENT
-                .from("withdrawals")
-                .select("*")
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
-                )
-                .limit(limit);
-
-        if (error) {
-            throw error;
-        }
-
-        return {
-            success: true,
-            withdrawals:
-                data || []
-        };
-
-    } catch (error) {
-
-        return {
-            success: false,
-            withdrawals: [],
-            message:
-                hyqdSafeMessage(error)
-        };
-
-    }
-
-}
-
-
-async function getSupabaseInvestments(
-    limit = 100
-) {
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await HYQD_SUPABASE_CLIENT
-                .from("investments")
-                .select("*")
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
-                )
-                .limit(limit);
-
-        if (error) {
-            throw error;
-        }
-
-        return {
-            success: true,
-            investments:
-                data || []
-        };
-
-    } catch (error) {
-
-        return {
-            success: false,
-            investments: [],
-            message:
-                hyqdSafeMessage(error)
-        };
-
-    }
-
-}
-
-
-async function getSupabaseReferralRewards(
-    limit = 100
-) {
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await HYQD_SUPABASE_CLIENT
-                .from(
-                    "referral_rewards"
-                )
-                .select("*")
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
-                )
-                .limit(limit);
-
-        if (error) {
-            throw error;
-        }
-
-        return {
-            success: true,
-            rewards:
-                data || []
-        };
-
-    } catch (error) {
-
-        return {
-            success: false,
-            rewards: [],
-            message:
-                hyqdSafeMessage(error)
-        };
-
-    }
-
-}
-
-
-/* ============================================================
-   SUPPORT
-============================================================ */
-
-async function createSupabaseSupportTicket({
-    subject,
-    message
-}) {
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "create_support_ticket",
-                    {
-                        p_subject:
-                            hyqdCleanText(subject),
-
-                        p_message:
-                            hyqdCleanText(message)
-                    }
-                );
-
-        if (error) {
-            throw error;
-        }
-
-        return {
-            success: true,
-            data,
-            message:
-                data?.message ||
-                "Ticket envoyé."
-        };
-
-    } catch (error) {
-
-        return {
-            success: false,
-            message:
-                hyqdSafeMessage(error)
-        };
-
-    }
-
-}
-
-
-async function getSupabaseSupportTickets(
-    limit = 100
-) {
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await HYQD_SUPABASE_CLIENT
-                .from(
-                    "support_tickets"
-                )
-                .select("*")
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
-                )
-                .limit(limit);
-
-        if (error) {
-            throw error;
-        }
-
-        return {
-            success: true,
-            tickets:
-                data || []
-        };
-
-    } catch (error) {
-
-        return {
-            success: false,
-            tickets: [],
-            message:
-                hyqdSafeMessage(error)
-        };
-
-    }
-
-}
-
-
-/* ============================================================
-   NOTIFICATIONS
-============================================================ */
-
-async function getSupabaseNotifications(
-    limit = 100
-) {
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await HYQD_SUPABASE_CLIENT
-                .from(
-                    "notifications"
-                )
-                .select("*")
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
-                )
-                .limit(limit);
-
-        if (error) {
-            throw error;
-        }
-
-        return {
-            success: true,
-            notifications:
-                data || []
-        };
-
-    } catch (error) {
-
-        return {
-            success: false,
-            notifications: [],
-            message:
-                hyqdSafeMessage(error)
-        };
-
-    }
-
-}
-
-
-async function markSupabaseNotificationRead(
-    notificationId
-) {
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "mark_notification_read",
-                    {
-                        p_notification_id:
-                            notificationId
-                    }
-                );
-
-        if (error) {
-            throw error;
-        }
-
-        return {
-            success: true,
-            data,
-            message:
-                "Notification lue."
-        };
-
-    } catch (error) {
-
-        return {
-            success: false,
-            message:
-                hyqdSafeMessage(error)
-        };
-
-    }
-
-}
-
-
-async function markAllSupabaseNotificationsRead() {
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "mark_all_notifications_read"
-                );
-
-        if (error) {
-            throw error;
-        }
-
-        return {
-            success: true,
-            data,
-            message:
-                "Notifications mises à jour."
-        };
-
-    } catch (error) {
-
-        return {
-            success: false,
-            message:
-                hyqdSafeMessage(error)
-        };
-
-    }
-
-}
-
-
-/* ============================================================
-   TICKER DES DEPOTS APPROUVES
-============================================================ */
-
-async function getApprovedDepositTicker(
-    limit = 20
-) {
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "get_approved_deposit_ticker",
-                    {
-                        p_limit:
-                            Number(limit)
-                    }
-                );
-
-        if (error) {
-            throw error;
-        }
-
-        return {
-            success: true,
-            deposits:
-                data || [],
-            ticker:
-                data || []
-        };
-
-    } catch (error) {
-
-        return {
-            success: false,
-            deposits: [],
-            ticker: [],
-            message:
-                hyqdSafeMessage(error)
-        };
-
-    }
-
-}
-
-
-/* ============================================================
-   ADMIN - AIDE POUR RATTACHER LES PROFILS
-============================================================ */
-
-async function adminAttachProfiles(
-    rows
-) {
-
-    if (
-        !Array.isArray(rows) ||
-        !rows.length
-    ) {
-        return rows || [];
-    }
-
-    const userIds =
-        [
-            ...new Set(
-                rows
-                    .map(
-                        item =>
-                            item.user_id
-                    )
-                    .filter(Boolean)
-            )
-        ];
-
-    if (!userIds.length) {
-        return rows;
-    }
-
-    const {
-        data: profileRows,
-        error
-    } =
-        await HYQD_SUPABASE_CLIENT
-            .from("profiles")
-            .select(
-                "id, full_name, phone, referral_code"
-            )
-            .in(
-                "id",
-                userIds
-            );
-
-    if (error) {
-
-        console.warn(
-            "Impossible de rattacher les profils :",
-            error
-        );
-
-        return rows;
-    }
-
-    const profileMap =
-        new Map(
-            (profileRows || [])
-                .map(
-                    profile => [
-                        profile.id,
-                        profile
-                    ]
-                )
-        );
-
-    return rows.map(
-        row => ({
-            ...row,
-
-            profiles:
-                profileMap.get(
-                    row.user_id
-                ) || null
-        })
-    );
-}
-
-
-/* ============================================================
-   ADMIN - UTILISATEURS
-============================================================ */
-
-async function adminGetSupabaseProfiles(
-    limit = 500
-) {
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await HYQD_SUPABASE_CLIENT
-                .from("profiles")
-                .select("*")
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
-                )
-                .limit(limit);
-
-        if (error) {
-            throw error;
-        }
-
-        return {
-            success: true,
-            profiles:
-                data || []
-        };
-
-    } catch (error) {
-
-        console.error(
-            "adminGetSupabaseProfiles:",
-            error
-        );
-
-        return {
-            success: false,
-            profiles: [],
-            message:
-                hyqdSafeMessage(error)
-        };
-
-    }
-
-}
-
-
-/* ============================================================
-   ADMIN - DEPOTS
-============================================================ */
-
-async function adminGetSupabaseDeposits(
-    limit = 500
-) {
-
-    try {
-
-        /*
-         * IMPORTANT :
-         * On ne fait plus de jointure automatique
-         * profiles(...) ici.
-         *
-         * On lit d'abord les dépôts.
-         * Ensuite on rattache les profils.
-         */
-
-        const {
-            data,
-            error
-        } =
-            await HYQD_SUPABASE_CLIENT
-                .from("deposits")
-                .select("*")
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
-                )
-                .limit(limit);
-
-        if (error) {
-            throw error;
-        }
-
-        const deposits =
-            await adminAttachProfiles(
-                data || []
-            );
-
-        return {
-            success: true,
-            deposits
-        };
-
-    } catch (error) {
-
-        console.error(
-            "adminGetSupabaseDeposits:",
-            error
-        );
-
-        return {
-            success: false,
-            deposits: [],
-            message:
-                hyqdSafeMessage(error)
-        };
-
-    }
-
-}
-
-
-/* ============================================================
-   ADMIN - RETRAITS
-============================================================ */
-
-async function adminGetSupabaseWithdrawals(
-    limit = 500
-) {
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await HYQD_SUPABASE_CLIENT
-                .from("withdrawals")
-                .select("*")
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
-                )
-                .limit(limit);
-
-        if (error) {
-            throw error;
-        }
-
-        const withdrawals =
-            await adminAttachProfiles(
-                data || []
-            );
-
-        return {
-            success: true,
-            withdrawals
-        };
-
-    } catch (error) {
-
-        console.error(
-            "adminGetSupabaseWithdrawals:",
-            error
-        );
-
-        return {
-            success: false,
-            withdrawals: [],
-            message:
-                hyqdSafeMessage(error)
-        };
-
-    }
-
-}
-
-
-/* ============================================================
-   ADMIN - INVESTISSEMENTS
-============================================================ */
-
-async function adminGetSupabaseInvestments(
-    limit = 500
-) {
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await HYQD_SUPABASE_CLIENT
-                .from("investments")
-                .select("*")
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
-                )
-                .limit(limit);
-
-        if (error) {
-            throw error;
-        }
-
-        const investments =
-            await adminAttachProfiles(
-                data || []
-            );
-
-        return {
-            success: true,
-            investments
-        };
-
-    } catch (error) {
-
-        console.error(
-            "adminGetSupabaseInvestments:",
-            error
-        );
-
-        return {
-            success: false,
-            investments: [],
-            message:
-                hyqdSafeMessage(error)
-        };
-
-    }
-
-}
-
-
-/* ============================================================
-   ADMIN - SUPPORT
-============================================================ */
-
-async function adminGetSupabaseSupportTickets(
-    limit = 500
-) {
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await HYQD_SUPABASE_CLIENT
-                .from("support_tickets")
-                .select("*")
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
-                )
-                .limit(limit);
-
-        if (error) {
-            throw error;
-        }
-
-        const tickets =
-            await adminAttachProfiles(
-                data || []
-            );
-
-        return {
-            success: true,
-            tickets
-        };
-
-    } catch (error) {
-
-        console.error(
-            "adminGetSupabaseSupportTickets:",
-            error
-        );
-
-        return {
-            success: false,
-            tickets: [],
-            message:
-                hyqdSafeMessage(error)
-        };
-
-    }
-
-}
-
-
-/* ============================================================
-   ADMIN - TRAITEMENT DEPOT
-============================================================ */
-
-async function adminReviewSupabaseDeposit({
-    depositId,
-    approve,
-    note
-}) {
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "admin_review_deposit",
-                    {
-                        p_deposit_id:
-                            depositId,
-
-                        p_approve:
-                            Boolean(approve),
-
-                        p_note:
-                            hyqdCleanText(note) ||
-                            null
-                    }
-                );
-
-        if (error) {
-            throw error;
-        }
-
-        return {
-            success: true,
-            data,
-            message:
-                data?.message ||
-                (
-                    approve
-                        ? "Dépôt approuvé."
-                        : "Dépôt refusé."
-                )
-        };
-
-    } catch (error) {
-
-        return {
-            success: false,
-            message:
-                hyqdSafeMessage(error)
-        };
-
-    }
-
-}
-
-
-/* ============================================================
-   ADMIN - TRAITEMENT RETRAIT
-============================================================ */
-
-async function adminReviewSupabaseWithdrawal({
-    withdrawalId,
-    approve,
-    note
-}) {
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "admin_review_withdrawal",
-                    {
-                        p_withdrawal_id:
-                            withdrawalId,
-
-                        p_approve:
-                            Boolean(approve),
-
-                        p_note:
-                            hyqdCleanText(note) ||
-                            null
-                    }
-                );
-
-        if (error) {
-            throw error;
-        }
-
-        return {
-            success: true,
-            data,
-            message:
-                data?.message ||
-                (
-                    approve
-                        ? "Retrait approuvé."
-                        : "Retrait refusé."
-                )
-        };
-
-    } catch (error) {
-
-        return {
-            success: false,
-            message:
-                hyqdSafeMessage(error)
-        };
-
-    }
-
-}
-
-
-/* ============================================================
-   ADMIN - REPONSE SUPPORT
-============================================================ */
-
-async function adminReplySupabaseSupportTicket({
-    ticketId,
-    reply,
-    close = false
-}) {
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "admin_reply_support_ticket",
-                    {
-                        p_ticket_id:
-                            ticketId,
-
-                        p_reply:
-                            hyqdCleanText(reply),
-
-                        p_close:
-                            Boolean(close)
-                    }
-                );
-
-        if (error) {
-            throw error;
-        }
-
-        return {
-            success: true,
-            data,
-            message:
-                data?.message ||
-                "Réponse envoyée."
-        };
-
-    } catch (error) {
-
-        return {
-            success: false,
-            message:
-                hyqdSafeMessage(error)
-        };
-
-    }
-
-}
-
-
-/* ============================================================
-   ECOUTE AUTH
-============================================================ */
-
-function onHousingAuthStateChange(
-    callback
-) {
-
-    return HYQD_SUPABASE_CLIENT
-        .auth
-        .onAuthStateChange(
-            (
-                event,
-                session
-            ) => {
-
-                if (
-                    typeof callback ===
-                    "function"
-                ) {
-
-                    callback(
-                        event,
-                        session
-                    );
-                }
-
-            }
-        );
-
-}
-
-
-/* ============================================================
-   TEST CONNEXION
-============================================================ */
-
-async function testHousingSupabaseConnection() {
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await HYQD_SUPABASE_CLIENT
-                .from(
-                    "investment_packs"
-                )
-                .select(
-                    "id,name"
-                )
-                .limit(1);
-
-        if (error) {
-            throw error;
-        }
-
-        return {
-            success: true,
-            data
-        };
-
-    } catch (error) {
-
-        return {
-            success: false,
             message:
                 hyqdSafeMessage(error)
         };
