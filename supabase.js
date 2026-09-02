@@ -753,3 +753,155 @@ async function getSupabaseInvestmentPacks() {
         };
     }
 }
+/* ============================================================
+   DÉPÔTS, RETRAITS ET INVESTISSEMENTS
+============================================================ */
+
+function normalizeRpcResult(data, defaultMessage) {
+
+    if (
+        data &&
+        typeof data === "object" &&
+        data.success === false
+    ) {
+        return data;
+    }
+
+    return {
+        success: true,
+        ...(data && typeof data === "object"
+            ? data
+            : { data }),
+        message:
+            data?.message ||
+            defaultMessage
+    };
+}
+
+
+async function requestSupabaseDeposit({
+    amount,
+    method,
+    reference
+}) {
+
+    try {
+
+        const { data, error } =
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "request_deposit",
+                {
+                    p_amount: Number(amount),
+                    p_method: String(method || ""),
+                    p_reference:
+                        String(reference || "") || null
+                }
+            );
+
+        if (error) {
+            throw error;
+        }
+
+        return normalizeRpcResult(
+            data,
+            "Demande de dépôt enregistrée."
+        );
+
+    } catch (error) {
+
+        return {
+            success: false,
+            message: hyqdSafeMessage(
+                error,
+                "Impossible d'enregistrer le dépôt."
+            )
+        };
+    }
+}
+
+
+async function requestSupabaseWithdrawal({
+    amount,
+    method,
+    destinationPhone
+}) {
+
+    try {
+
+        const { data, error } =
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "request_withdrawal",
+                {
+                    p_amount: Number(amount),
+                    p_method: String(method || ""),
+                    p_destination_phone:
+                        hyqdNormalizePhone(destinationPhone)
+                }
+            );
+
+        if (error) {
+            throw error;
+        }
+
+        return normalizeRpcResult(
+            data,
+            "Demande de retrait enregistrée."
+        );
+
+    } catch (error) {
+
+        return {
+            success: false,
+            message: hyqdSafeMessage(
+                error,
+                "Impossible d'enregistrer le retrait."
+            )
+        };
+    }
+}
+
+
+async
+
+
+async function investSupabasePack(packId) {
+
+    try {
+
+        const cleanPackId =
+            String(packId || "").trim();
+
+        if (!cleanPackId) {
+            throw new Error(
+                "Pack non défini."
+            );
+        }
+
+        const { data, error } =
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "invest_in_pack",
+                {
+                    p_pack_id: cleanPackId
+                }
+            );
+
+        if (error) {
+            throw error;
+        }
+
+        return normalizeRpcResult(
+            data,
+            "Investissement activé avec succès."
+        );
+
+    } catch (error) {
+
+        return {
+            success: false,
+            message: hyqdSafeMessage(
+                error,
+                "Impossible d'effectuer l'investissement."
+            )
+        };
+    }
+}
