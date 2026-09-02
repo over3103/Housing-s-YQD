@@ -31,10 +31,9 @@ function initializeHousingSupabase() {
         );
     }
 
-    const key =
-        String(
-            HYQD_SUPABASE_CONFIG.PUBLISHABLE_KEY || ""
-        );
+    const key = String(
+        HYQD_SUPABASE_CONFIG.PUBLISHABLE_KEY || ""
+    );
 
     if (
         key.includes("service_role") ||
@@ -83,27 +82,19 @@ function getHousingSupabaseClient() {
 ============================================================ */
 
 function hyqdCleanText(value) {
-
-    return String(
-        value ?? ""
-    ).trim();
-
+    return String(value ?? "").trim();
 }
 
 
 function hyqdNormalizeEmail(value) {
-
-    return hyqdCleanText(value)
-        .toLowerCase();
-
+    return hyqdCleanText(value).toLowerCase();
 }
 
 
 function hyqdNormalizePhone(value) {
 
-    let phone =
-        hyqdCleanText(value)
-            .replace(/\s+/g, "");
+    let phone = hyqdCleanText(value)
+        .replace(/\s+/g, "");
 
     if (!phone) {
         return "";
@@ -113,8 +104,7 @@ function hyqdNormalizePhone(value) {
         return phone;
     }
 
-    phone =
-        phone.replace(/^0+/, "");
+    phone = phone.replace(/^0+/, "");
 
     return "+225" + phone;
 }
@@ -148,7 +138,6 @@ function hyqdFormatNumber(value) {
     ).format(
         Number(value || 0)
     );
-
 }
 
 
@@ -160,10 +149,7 @@ async function getSupabaseSession() {
 
     try {
 
-        const {
-            data,
-            error
-        } =
+        const { data, error } =
             await HYQD_SUPABASE_CLIENT
                 .auth
                 .getSession();
@@ -174,8 +160,7 @@ async function getSupabaseSession() {
 
         return {
             success: true,
-            session:
-                data?.session || null
+            session: data?.session || null
         };
 
     } catch (error) {
@@ -183,12 +168,9 @@ async function getSupabaseSession() {
         return {
             success: false,
             session: null,
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
-
     }
-
 }
 
 
@@ -196,10 +178,7 @@ async function getSupabaseUser() {
 
     try {
 
-        const {
-            data,
-            error
-        } =
+        const { data, error } =
             await HYQD_SUPABASE_CLIENT
                 .auth
                 .getUser();
@@ -210,8 +189,7 @@ async function getSupabaseUser() {
 
         return {
             success: true,
-            user:
-                data?.user || null
+            user: data?.user || null
         };
 
     } catch (error) {
@@ -219,12 +197,9 @@ async function getSupabaseUser() {
         return {
             success: false,
             user: null,
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
-
     }
-
 }
 
 
@@ -269,26 +244,17 @@ async function registerSupabaseUser({
             );
         }
 
-        const {
-            data,
-            error
-        } =
+        const { data, error } =
             await HYQD_SUPABASE_CLIENT
                 .auth
                 .signUp({
-                    email:
-                        cleanEmail,
-
+                    email: cleanEmail,
                     password,
 
                     options: {
                         data: {
-                            full_name:
-                                cleanName,
-
-                            phone:
-                                cleanPhone,
-
+                            full_name: cleanName,
+                            phone: cleanPhone,
                             referral_code_entered:
                                 cleanReferral || null
                         }
@@ -301,10 +267,8 @@ async function registerSupabaseUser({
 
         return {
             success: true,
-            user:
-                data?.user || null,
-            session:
-                data?.session || null,
+            user: data?.user || null,
+            session: data?.session || null,
             requiresEmailConfirmation:
                 !data?.session,
             message:
@@ -317,15 +281,12 @@ async function registerSupabaseUser({
 
         return {
             success: false,
-            message:
-                hyqdSafeMessage(
-                    error,
-                    "Inscription impossible."
-                )
+            message: hyqdSafeMessage(
+                error,
+                "Inscription impossible."
+            )
         };
-
     }
-
 }
 
 
@@ -336,10 +297,7 @@ async function loginSupabaseUser(
 
     try {
 
-        const {
-            data,
-            error
-        } =
+        const { data, error } =
             await HYQD_SUPABASE_CLIENT
                 .auth
                 .signInWithPassword({
@@ -354,27 +312,21 @@ async function loginSupabaseUser(
 
         return {
             success: true,
-            user:
-                data?.user || null,
-            session:
-                data?.session || null,
-            message:
-                "Connexion réussie."
+            user: data?.user || null,
+            session: data?.session || null,
+            message: "Connexion réussie."
         };
 
     } catch (error) {
 
         return {
             success: false,
-            message:
-                hyqdSafeMessage(
-                    error,
-                    "Connexion impossible."
-                )
+            message: hyqdSafeMessage(
+                error,
+                "Connexion impossible."
+            )
         };
-
     }
-
 }
 
 
@@ -382,9 +334,7 @@ async function logoutSupabaseUser() {
 
     try {
 
-        const {
-            error
-        } =
+        const { error } =
             await HYQD_SUPABASE_CLIENT
                 .auth
                 .signOut();
@@ -401,17 +351,14 @@ async function logoutSupabaseUser() {
 
         return {
             success: false,
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
-
     }
-
 }
 
 
 /* ============================================================
-   CORRECTION IMPORTANTE DE LA SESSION DASHBOARD
+   VÉRIFICATION DE LA SESSION
 ============================================================ */
 
 async function requireSupabaseAuth(options = {}) {
@@ -453,6 +400,7 @@ async function requireSupabaseAuth(options = {}) {
         }
 
         return {
+            success: false,
             authorized: false,
             reason: "not_authenticated",
             user: null
@@ -460,21 +408,15 @@ async function requireSupabaseAuth(options = {}) {
     }
 
     /*
-       Compatibilité avec les deux architectures du projet.
-
-       Le dashboard peut maintenant utiliser :
-           authUser.id
-           authUser.email
-
-       tandis que les anciennes fonctions peuvent utiliser :
-           auth.authorized
-           auth.user.id
+       Cette réponse est compatible avec le dashboard
+       et l'espace administrateur.
     */
 
     return Object.assign(
         {},
         result.user,
         {
+            success: true,
             authorized: true,
             reason: null,
             user: result.user
@@ -484,7 +426,7 @@ async function requireSupabaseAuth(options = {}) {
 
 
 /* ============================================================
-   ROLES
+   RÔLES
 ============================================================ */
 
 async function getSupabaseCurrentUserRole() {
@@ -507,10 +449,7 @@ async function getSupabaseCurrentUserRole() {
             };
         }
 
-        const {
-            data,
-            error
-        } =
+        const { data, error } =
             await HYQD_SUPABASE_CLIENT
                 .from("user_roles")
                 .select("role")
@@ -526,8 +465,7 @@ async function getSupabaseCurrentUserRole() {
 
         return {
             success: true,
-            role:
-                data?.role || "user"
+            role: data?.role || "user"
         };
 
     } catch (error) {
@@ -535,12 +473,9 @@ async function getSupabaseCurrentUserRole() {
         return {
             success: false,
             role: null,
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
-
     }
-
 }
 
 
@@ -556,8 +491,7 @@ async function requireSupabaseAdmin() {
 
         return {
             authorized: false,
-            reason:
-                "not_authenticated",
+            reason: "not_authenticated",
             user: null,
             role: null
         };
@@ -579,11 +513,9 @@ async function requireSupabaseAdmin() {
             authorized
                 ? null
                 : "not_admin",
-        user:
-            auth.user,
+        user: auth.user,
         role
     };
-
 }
 
 
@@ -603,9 +535,7 @@ async function requestSupabasePasswordReset(
                 window.location.href
             ).href;
 
-        const {
-            error
-        } =
+        const { error } =
             await HYQD_SUPABASE_CLIENT
                 .auth
                 .resetPasswordForEmail(
@@ -629,12 +559,9 @@ async function requestSupabasePasswordReset(
 
         return {
             success: false,
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
-
     }
-
 }
 
 
@@ -653,14 +580,11 @@ async function updateSupabasePassword(
             );
         }
 
-        const {
-            error
-        } =
+        const { error } =
             await HYQD_SUPABASE_CLIENT
                 .auth
                 .updateUser({
-                    password:
-                        newPassword
+                    password: newPassword
                 });
 
         if (error) {
@@ -677,12 +601,9 @@ async function updateSupabasePassword(
 
         return {
             success: false,
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
-
     }
-
 }
 
 
@@ -718,10 +639,7 @@ async function getSupabaseProfile(
                 auth.user.id;
         }
 
-        const {
-            data,
-            error
-        } =
+        const { data, error } =
             await HYQD_SUPABASE_CLIENT
                 .from("profiles")
                 .select("*")
@@ -737,10 +655,8 @@ async function getSupabaseProfile(
 
         return {
             success: true,
-            profile:
-                data || null,
-            data:
-                data || null
+            profile: data || null,
+            data: data || null
         };
 
     } catch (error) {
@@ -748,12 +664,9 @@ async function getSupabaseProfile(
         return {
             success: false,
             profile: null,
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
-
     }
-
 }
 
 
@@ -764,23 +677,16 @@ async function updateSupabaseProfile({
 
     try {
 
-        const {
-            data,
-            error
-        } =
+        const { data, error } =
             await HYQD_SUPABASE_CLIENT
                 .rpc(
                     "update_my_profile",
                     {
                         p_full_name:
-                            hyqdCleanText(
-                                fullName
-                            ),
+                            hyqdCleanText(fullName),
 
                         p_phone:
-                            hyqdNormalizePhone(
-                                phone
-                            )
+                            hyqdNormalizePhone(phone)
                     }
                 );
 
@@ -800,31 +706,23 @@ async function updateSupabaseProfile({
 
         return {
             success: false,
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
-
     }
-
 }
 
 
 /* ============================================================
-   PACKS D'INVESTISSEMENT
+   PACKS D’INVESTISSEMENT
 ============================================================ */
 
 async function getSupabaseInvestmentPacks() {
 
     try {
 
-        const {
-            data,
-            error
-        } =
+        const { data, error } =
             await HYQD_SUPABASE_CLIENT
-                .from(
-                    "investment_packs"
-                )
+                .from("investment_packs")
                 .select("*")
                 .eq(
                     "is_active",
@@ -843,8 +741,7 @@ async function getSupabaseInvestmentPacks() {
 
         return {
             success: true,
-            packs:
-                data || []
+            packs: data || []
         };
 
     } catch (error) {
@@ -852,11 +749,7 @@ async function getSupabaseInvestmentPacks() {
         return {
             success: false,
             packs: [],
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
-
     }
-
 }
-
