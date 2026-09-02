@@ -1,5 +1,9 @@
 "use strict";
 
+/* ============================================================
+   HOUSING'S YQD — CONFIGURATION SUPABASE
+============================================================ */
+
 const HYQD_SUPABASE_CONFIG = Object.freeze({
     URL: "https://qcvagkialoztluqxpmcq.supabase.co",
     PUBLISHABLE_KEY: "sb_publishable_J_fhucIX6-Fdals6lVQvvA_yCmUkwVy",
@@ -11,6 +15,10 @@ const HYQD_SUPABASE_CONFIG = Object.freeze({
     ADMIN_PAGE: "admin.html"
 });
 
+
+/* ============================================================
+   INITIALISATION
+============================================================ */
 
 function initializeHousingSupabase() {
 
@@ -64,6 +72,10 @@ function getHousingSupabaseClient() {
     return HYQD_SUPABASE_CLIENT;
 }
 
+
+/* ============================================================
+   OUTILS
+============================================================ */
 
 function hyqdCleanText(value) {
     return String(value ?? "").trim();
@@ -137,7 +149,9 @@ function hyqdRpcResult(
 }
 
 
-/* AUTHENTIFICATION */
+/* ============================================================
+   SESSION ET AUTHENTIFICATION
+============================================================ */
 
 async function getSupabaseSession() {
 
@@ -232,7 +246,10 @@ async function registerSupabaseUser({
             );
         }
 
-        if (!password || password.length < 6) {
+        if (
+            !password ||
+            password.length < 6
+        ) {
             throw new Error(
                 "Le mot de passe doit contenir au moins 6 caractères."
             );
@@ -246,8 +263,10 @@ async function registerSupabaseUser({
                     password,
                     options: {
                         data: {
-                            full_name: cleanName,
-                            phone: cleanPhone,
+                            full_name:
+                                cleanName,
+                            phone:
+                                cleanPhone,
                             referral_code_entered:
                                 cleanReferral || null
                         }
@@ -307,7 +326,8 @@ async function loginSupabaseUser(
             success: true,
             user: data?.user || null,
             session: data?.session || null,
-            message: "Connexion réussie."
+            message:
+                "Connexion réussie."
         };
 
     } catch (error) {
@@ -410,7 +430,9 @@ async function requireSupabaseAuth(
 }
 
 
-/* ADMINISTRATION */
+/* ============================================================
+   RÔLES ET ACCÈS ADMINISTRATEUR
+============================================================ */
 
 async function getSupabaseCurrentUserRole() {
 
@@ -476,11 +498,14 @@ async function requireSupabaseAdmin() {
         await getSupabaseCurrentUserRole();
 
     const role =
-        roleResult?.role || "user";
+        String(
+            roleResult?.role || "user"
+        ).toLowerCase();
 
     const authorized =
         role === "admin" ||
-        role === "super_admin";
+        role === "super_admin" ||
+        role === "administrateur";
 
     return {
         authorized,
@@ -494,7 +519,9 @@ async function requireSupabaseAdmin() {
 }
 
 
-/* MOT DE PASSE */
+/* ============================================================
+   MOT DE PASSE
+============================================================ */
 
 async function requestSupabasePasswordReset(
     email
@@ -555,7 +582,8 @@ async function updateSupabasePassword(
             await HYQD_SUPABASE_CLIENT
                 .auth
                 .updateUser({
-                    password: newPassword
+                    password:
+                        newPassword
                 });
 
         if (error) {
@@ -578,7 +606,9 @@ async function updateSupabasePassword(
 }
 
 
-/* PROFIL */
+/* ============================================================
+   PROFIL
+============================================================ */
 
 async function getSupabaseProfile(
     userId = null
@@ -672,9 +702,9 @@ async function updateSupabaseProfile({
         };
     }
 }
-
-
-/* PACKS */
+/* ============================================================
+   PACKS D’INVESTISSEMENT
+============================================================ */
 
 async function getSupabaseInvestmentPacks() {
 
@@ -684,10 +714,7 @@ async function getSupabaseInvestmentPacks() {
             await HYQD_SUPABASE_CLIENT
                 .from("investment_packs")
                 .select("*")
-                .eq(
-                    "is_active",
-                    true
-                )
+                .eq("is_active", true)
                 .order(
                     "sort_order",
                     { ascending: true }
@@ -715,7 +742,9 @@ async function getSupabaseInvestmentPacks() {
 }
 
 
-/* DÉPÔT */
+/* ============================================================
+   DÉPÔTS
+============================================================ */
 
 async function requestSupabaseDeposit({
     amount,
@@ -737,25 +766,18 @@ async function requestSupabaseDeposit({
             );
         }
 
-        if (!hyqdCleanText(method)) {
-            throw new Error(
-                "Sélectionnez un moyen de paiement."
-            );
-        }
-
         const { data, error } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "request_deposit",
-                    {
-                        p_amount: numericAmount,
-                        p_method:
-                            hyqdCleanText(method),
-                        p_reference:
-                            hyqdCleanText(reference) ||
-                            null
-                    }
-                );
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "request_deposit",
+                {
+                    p_amount: numericAmount,
+                    p_method:
+                        hyqdCleanText(method),
+                    p_reference:
+                        hyqdCleanText(reference) ||
+                        null
+                }
+            );
 
         if (error) {
             throw error;
@@ -779,7 +801,9 @@ async function requestSupabaseDeposit({
 }
 
 
-/* RETRAIT */
+/* ============================================================
+   RETRAITS
+============================================================ */
 
 async function requestSupabaseWithdrawal({
     amount,
@@ -801,32 +825,19 @@ async function requestSupabaseWithdrawal({
             );
         }
 
-        if (!hyqdCleanText(method)) {
-            throw new Error(
-                "Sélectionnez un moyen de retrait."
-            );
-        }
-
-        if (!hyqdCleanText(destinationPhone)) {
-            throw new Error(
-                "Entrez le numéro de destination."
-            );
-        }
-
         const { data, error } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "request_withdrawal",
-                    {
-                        p_amount: numericAmount,
-                        p_method:
-                            hyqdCleanText(method),
-                        p_destination_phone:
-                            hyqdNormalizePhone(
-                                destinationPhone
-                            )
-                    }
-                );
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "request_withdrawal",
+                {
+                    p_amount: numericAmount,
+                    p_method:
+                        hyqdCleanText(method),
+                    p_destination_phone:
+                        hyqdNormalizePhone(
+                            destinationPhone
+                        )
+                }
+            );
 
         if (error) {
             throw error;
@@ -850,7 +861,9 @@ async function requestSupabaseWithdrawal({
 }
 
 
-/* INVESTISSEMENT */
+/* ============================================================
+   INVESTISSEMENTS
+============================================================ */
 
 async function investSupabasePack(packId) {
 
@@ -866,14 +879,12 @@ async function investSupabasePack(packId) {
         }
 
         const { data, error } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "invest_in_pack",
-                    {
-                        p_pack_id:
-                            cleanPackId
-                    }
-                );
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "invest_in_pack",
+                {
+                    p_pack_id: cleanPackId
+                }
+            );
 
         if (error) {
             throw error;
@@ -897,7 +908,9 @@ async function investSupabasePack(packId) {
 }
 
 
-/* LECTURE DES DONNÉES DE L’UTILISATEUR */
+/* ============================================================
+   LECTURE DES DONNÉES UTILISATEUR
+============================================================ */
 
 async function hyqdSelectMine(
     table,
@@ -987,7 +1000,9 @@ async function getSupabaseInvestments() {
 async function getSupabaseSupportTickets() {
 
     const result =
-        await hyqdSelectMine("support_tickets");
+        await hyqdSelectMine(
+            "support_tickets"
+        );
 
     return {
         ...result,
@@ -999,7 +1014,9 @@ async function getSupabaseSupportTickets() {
 async function getSupabaseNotifications() {
 
     const result =
-        await hyqdSelectMine("notifications");
+        await hyqdSelectMine(
+            "notifications"
+        );
 
     return {
         ...result,
@@ -1008,7 +1025,9 @@ async function getSupabaseNotifications() {
 }
 
 
-/* ASSISTANCE */
+/* ============================================================
+   ASSISTANCE UTILISATEUR
+============================================================ */
 
 async function createSupabaseSupportTicket({
     subject,
@@ -1030,14 +1049,13 @@ async function createSupabaseSupportTicket({
         }
 
         const { data, error } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "create_support_ticket",
-                    {
-                        p_subject: cleanSubject,
-                        p_message: cleanMessage
-                    }
-                );
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "create_support_ticket",
+                {
+                    p_subject: cleanSubject,
+                    p_message: cleanMessage
+                }
+            );
 
         if (error) {
             throw error;
@@ -1061,7 +1079,9 @@ async function createSupabaseSupportTicket({
 }
 
 
-/* NOTIFICATIONS */
+/* ============================================================
+   NOTIFICATIONS
+============================================================ */
 
 async function markSupabaseNotificationRead(
     notificationId
@@ -1070,14 +1090,13 @@ async function markSupabaseNotificationRead(
     try {
 
         const { data, error } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "mark_notification_read",
-                    {
-                        p_notification_id:
-                            notificationId
-                    }
-                );
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "mark_notification_read",
+                {
+                    p_notification_id:
+                        notificationId
+                }
+            );
 
         if (error) {
             throw error;
@@ -1103,10 +1122,9 @@ async function markAllSupabaseNotificationsRead() {
     try {
 
         const { data, error } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "mark_all_notifications_read"
-                );
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "mark_all_notifications_read"
+            );
 
         if (error) {
             throw error;
@@ -1127,8 +1145,6 @@ async function markAllSupabaseNotificationsRead() {
 }
 
 
-/* DÉPÔTS VALIDÉS DÉFILANTS */
-
 async function getApprovedDepositTicker(
     limit = 20
 ) {
@@ -1136,14 +1152,12 @@ async function getApprovedDepositTicker(
     try {
 
         const { data, error } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "get_approved_deposit_ticker",
-                    {
-                        p_limit:
-                            Number(limit)
-                    }
-                );
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "get_approved_deposit_ticker",
+                {
+                    p_limit: Number(limit)
+                }
+            );
 
         if (error) {
             throw error;
@@ -1170,6 +1184,295 @@ async function getApprovedDepositTicker(
             success: false,
             ticker: [],
             deposits: [],
+            message: hyqdSafeMessage(error)
+        };
+    }
+}
+
+
+/* ============================================================
+   OUTIL DE LECTURE ADMINISTRATEUR
+============================================================ */
+
+async function hyqdAdminSelect(table) {
+
+    try {
+
+        const admin =
+            await requireSupabaseAdmin();
+
+        if (!admin?.authorized) {
+            throw new Error(
+                "Accès administrateur refusé."
+            );
+        }
+
+        const { data, error } =
+            await HYQD_SUPABASE_CLIENT
+                .from(table)
+                .select("*")
+                .order(
+                    "created_at",
+                    { ascending: false }
+                );
+
+        if (error) {
+            throw error;
+        }
+
+        return {
+            success: true,
+            data: data || []
+        };
+
+    } catch (error) {
+
+        return {
+            success: false,
+            data: [],
+            message: hyqdSafeMessage(error)
+        };
+    }
+}
+
+
+/* ============================================================
+   LISTES ADMINISTRATEUR
+============================================================ */
+
+async function adminGetSupabaseProfiles() {
+
+    try {
+
+        const admin =
+            await requireSupabaseAdmin();
+
+        if (!admin?.authorized) {
+            throw new Error(
+                "Accès administrateur refusé."
+            );
+        }
+
+        const { data, error } =
+            await HYQD_SUPABASE_CLIENT
+                .from("profiles")
+                .select("*")
+                .order(
+                    "created_at",
+                    { ascending: false }
+                );
+
+        if (error) {
+            throw error;
+        }
+
+        return {
+            success: true,
+            profiles: data || []
+        };
+
+    } catch (error) {
+
+        return {
+            success: false,
+            profiles: [],
+            message: hyqdSafeMessage(error)
+        };
+    }
+}
+
+
+async function adminGetSupabaseDeposits() {
+
+    const result =
+        await hyqdAdminSelect("deposits");
+
+    return {
+        ...result,
+        deposits: result.data || []
+    };
+}
+
+
+async function adminGetSupabaseWithdrawals() {
+
+    const result =
+        await hyqdAdminSelect("withdrawals");
+
+    return {
+        ...result,
+        withdrawals: result.data || []
+    };
+}
+
+
+async function adminGetSupabaseInvestments() {
+
+    const result =
+        await hyqdAdminSelect("investments");
+
+    return {
+        ...result,
+        investments: result.data || []
+    };
+}
+
+
+async function adminGetSupabaseSupportTickets() {
+
+    const result =
+        await hyqdAdminSelect(
+            "support_tickets"
+        );
+
+    return {
+        ...result,
+        tickets: result.data || []
+    };
+}
+
+
+/* ============================================================
+   VALIDATION DES DÉPÔTS
+============================================================ */
+
+async function adminReviewSupabaseDeposit({
+    depositId,
+    approve,
+    note
+}) {
+
+    try {
+
+        const { data, error } =
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "admin_review_deposit",
+                {
+                    p_deposit_id:
+                        depositId,
+                    p_approve:
+                        Boolean(approve),
+                    p_note:
+                        hyqdCleanText(note) ||
+                        null
+                }
+            );
+
+        if (error) {
+            throw error;
+        }
+
+        return hyqdRpcResult(
+            data,
+            approve
+                ? "Dépôt validé."
+                : "Dépôt refusé."
+        );
+
+    } catch (error) {
+
+        return {
+            success: false,
+            message: hyqdSafeMessage(error)
+        };
+    }
+}
+
+
+/* ============================================================
+   VALIDATION DES RETRAITS
+============================================================ */
+
+async function adminReviewSupabaseWithdrawal({
+    withdrawalId,
+    approve,
+    note
+}) {
+
+    try {
+
+        const { data, error } =
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "admin_review_withdrawal",
+                {
+                    p_withdrawal_id:
+                        withdrawalId,
+                    p_approve:
+                        Boolean(approve),
+                    p_note:
+                        hyqdCleanText(note) ||
+                        null
+                }
+            );
+
+        if (error) {
+            throw error;
+        }
+
+        return hyqdRpcResult(
+            data,
+            approve
+                ? "Retrait validé."
+                : "Retrait refusé."
+        );
+
+    } catch (error) {
+
+        return {
+            success: false,
+            message: hyqdSafeMessage(error)
+        };
+    }
+}
+
+
+/* ============================================================
+   RÉPONSE AUX TICKETS
+============================================================ */
+
+async function adminReplySupabaseSupportTicket({
+    ticketId,
+    reply,
+    close
+}) {
+
+    try {
+
+        const cleanReply =
+            hyqdCleanText(reply);
+
+        if (!cleanReply) {
+            throw new Error(
+                "Écrivez une réponse."
+            );
+        }
+
+        const { data, error } =
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "admin_reply_support_ticket",
+                {
+                    p_ticket_id:
+                        ticketId,
+                    p_reply:
+                        cleanReply,
+                    p_close:
+                        Boolean(close)
+                }
+            );
+
+        if (error) {
+            throw error;
+        }
+
+        return hyqdRpcResult(
+            data,
+            "Réponse envoyée."
+        );
+
+    } catch (error) {
+
+        return {
+            success: false,
             message: hyqdSafeMessage(error)
         };
     }
