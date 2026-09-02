@@ -1,5263 +1,2460 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Administration | Housing's YQD</title>
-
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    >
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --secondary: #0ea5e9;
-
-            --dark: #020617;
-            --dark-soft: #0f172a;
-
-            --text: #334155;
-            --muted: #64748b;
-            --border: #e2e8f0;
-
-            --bg: #f4f7fb;
-            --card: #ffffff;
-
-            --success: #059669;
-            --success-soft: #ecfdf5;
-
-            --danger: #dc2626;
-            --danger-soft: #fef2f2;
-
-            --warning: #d97706;
-            --warning-soft: #fffbeb;
-
-            --purple: #7c3aed;
-            --purple-soft: #f5f3ff;
-        }
-
-        body {
-            margin: 0;
-            min-height: 100vh;
-
-            font-family:
-                Inter,
-                system-ui,
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                sans-serif;
-
-            color: var(--text);
-            background: var(--bg);
-        }
-
-        button,
-        input,
-        textarea {
-            font: inherit;
-        }
 
-        button {
-            cursor: pointer;
-        }
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+Administration | Housing's YQD
+</title>
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+>
+
+<style>
+
+* {
+box-sizing: border-box;
+}
+
+:root {
+--primary: #2563eb;
+--primary-dark: #1d4ed8;
+--secondary: #0ea5e9;
+--dark: #020617;
+--dark-soft: #0f172a;
+--text: #334155;
+--muted: #64748b;
+--border: #e2e8f0;
+--bg: #f4f7fb;
+--card: #ffffff;
+--success: #059669;
+--success-soft: #ecfdf5;
+--danger: #dc2626;
+--danger-soft: #fef2f2;
+--warning: #d97706;
+--warning-soft: #fffbeb;
+--purple: #7c3aed;
+--purple-soft: #f5f3ff;
+}
+
+body {
+margin: 0;
+min-height: 100vh;
+font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+color: var(--text);
+background: var(--bg);
+}
+
+button,
+input,
+textarea {
+font: inherit;
+}
+
+button {
+cursor: pointer;
+}
+
+.hidden {
+display: none !important;
+}
+
+/* CHARGEMENT */
+
+.loading-screen {
+position: fixed;
+z-index: 9999999;
+inset: 0;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 15px;
+color: white;
+background:
+radial-gradient(circle at 75% 20%, rgba(14,165,233,.35), transparent 28%),
+linear-gradient(145deg, #020617, #082f68);
+}
+
+.spinner {
+width: 50px;
+height: 50px;
+border: 4px solid rgba(255,255,255,.18);
+border-top-color: white;
+border-radius: 50%;
+animation: spin .8s linear infinite;
+}
+
+@keyframes spin {
+to {
+transform: rotate(360deg);
+}
+}
+
+/* ACCÈS REFUSÉ */
+
+.access-screen {
+min-height: 100vh;
+display: none;
+align-items: center;
+justify-content: center;
+padding: 25px;
+background: linear-gradient(145deg, #020617, #0f172a);
+}
+
+.access-card {
+width: min(500px,100%);
+padding: 32px;
+border: 1px solid rgba(255,255,255,.1);
+border-radius: 25px;
+color: white;
+background: rgba(255,255,255,.06);
+text-align: center;
+box-shadow: 0 30px 100px rgba(0,0,0,.4);
+}
+
+.access-card h1 {
+margin: 0 0 12px;
+}
+
+.access-card p {
+color: #cbd5e1;
+font-size: 13px;
+}
+
+/* APPLICATION */
+
+.admin-app {
+min-height: 100vh;
+display: none;
+grid-template-columns: 270px minmax(0,1fr);
+}
+
+/* MENU LATÉRAL */
+
+.sidebar {
+position: sticky;
+top: 0;
+height: 100vh;
+overflow-y: auto;
+padding: 20px 15px;
+color: white;
+background:
+radial-gradient(circle at 20% 5%, rgba(37,99,235,.3), transparent 27%),
+linear-gradient(170deg, #020617, #071c3f 60%, #082f68);
+}
+
+.brand {
+display: flex;
+align-items: center;
+gap: 12px;
+padding: 5px 5px 22px;
+}
+
+.brand-icon {
+width: 48px;
+height: 48px;
+flex-shrink: 0;
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 15px;
+background: linear-gradient(135deg, #2563eb, #0ea5e9);
+box-shadow: 0 10px 30px rgba(37,99,235,.35);
+}
+
+.brand strong {
+font-size: 17px;
+}
+
+.brand span {
+display: block;
+margin-top: 3px;
+font-size: 9px;
+color: #94a3b8;
+}
+
+.admin-profile {
+padding: 14px;
+margin-bottom: 18px;
+border-radius: 16px;
+background: rgba(255,255,255,.07);
+border: 1px solid rgba(255,255,255,.08);
+}
+
+.admin-profile small {
+color: #60a5fa;
+font-weight: 900;
+}
+
+.admin-profile strong,
+.admin-profile span {
+display: block;
+margin-top: 5px;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+.admin-profile span {
+color: #cbd5e1;
+font-size: 11px;
+}
+
+.menu {
+display: grid;
+gap: 6px;
+}
+
+.menu button {
+min-height: 46px;
+width: 100%;
+padding: 0 13px;
+display: flex;
+align-items: center;
+gap: 11px;
+border: 0;
+border-radius: 12px;
+color: #cbd5e1;
+background: transparent;
+font-size: 12px;
+font-weight: 800;
+text-align: left;
+}
+
+.menu button:hover,
+.menu button.active {
+color: white;
+background: rgba(255,255,255,.1);
+}
+
+.menu button i {
+width: 18px;
+text-align: center;
+}
+
+.logout-side {
+width: 100%;
+min-height: 44px;
+margin-top: 18px;
+border: 1px solid rgba(248,113,113,.3);
+border-radius: 12px;
+color: #fecaca;
+background: rgba(220,38,38,.08);
+font-weight: 800;
+}
+
+/* PARTIE PRINCIPALE */
+
+.main {
+min-width: 0;
+}
+
+.topbar {
+position: sticky;
+z-index: 500;
+top: 0;
+min-height: 70px;
+padding: 12px 24px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 15px;
+border-bottom: 1px solid var(--border);
+background: rgba(255,255,255,.96);
+backdrop-filter: blur(15px);
+}
+
+.top-left {
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.topbar h1 {
+margin: 0;
+font-size: 20px;
+color: var(--dark-soft);
+}
+
+.topbar p {
+margin: 3px 0 0;
+font-size: 10px;
+color: var(--muted);
+}
+
+.top-actions {
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.icon-btn {
+position: relative;
+width: 43px;
+height: 43px;
+display: flex;
+align-items: center;
+justify-content: center;
+border: 1px solid var(--border);
+border-radius: 12px;
+background: white;
+color: #475569;
+}
+
+.icon-btn:hover {
+color: var(--primary);
+background: #eff6ff;
+}
+
+.mobile-menu {
+display: none;
+}
+
+/* NOTIFICATIONS */
+
+.notification-badge {
+position: absolute;
+top: -5px;
+right: -5px;
+min-width: 20px;
+height: 20px;
+padding: 0 5px;
+display: none;
+align-items: center;
+justify-content: center;
+border: 2px solid white;
+border-radius: 999px;
+color: white;
+background: #dc2626;
+font-size: 10px;
+font-weight: 900;
+}
+
+.notification-badge.show {
+display: flex;
+}
+
+.notification-panel {
+position: fixed !important;
+z-index: 999999 !important;
+top: 76px !important;
+right: 20px !important;
+width: min(410px, calc(100vw - 30px));
+max-height: 72vh;
+display: none;
+overflow: hidden;
+border: 1px solid var(--border);
+border-radius: 19px;
+background: white;
+box-shadow: 0 25px 80px rgba(15,23,42,.3);
+}
+
+.notification-panel.show {
+display: block !important;
+}
+
+.notification-head {
+padding: 14px 15px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+border-bottom: 1px solid var(--border);
+}
+
+.notification-head strong {
+color: #0f172a;
+}
+
+.notification-head button {
+border: 0;
+color: var(--primary);
+background: transparent;
+font-size: 11px;
+font-weight: 900;
+}
+
+.notification-list {
+max-height: 60vh;
+overflow-y: auto;
+}
+
+.notification-item {
+width: 100%;
+padding: 14px 15px;
+display: block;
+border: 0;
+border-bottom: 1px solid #eef2f7;
+background: white;
+text-align: left;
+}
+
+.notification-item.unread {
+background: #eff6ff;
+}
+
+.notification-item:hover {
+background: #f8fafc;
+}
+
+.notification-item strong {
+display: block;
+margin-bottom: 5px;
+color: #0f172a;
+font-size: 12px;
+}
+
+.notification-item p {
+margin: 0;
+color: #64748b;
+font-size: 11px;
+line-height: 1.55;
+}
+
+.notification-item small {
+display: block;
+margin-top: 7px;
+color: #94a3b8;
+font-size: 9px;
+}
+
+/* CONTENU */
+
+.content {
+width: min(1550px,100%);
+margin: 0 auto;
+padding: 24px;
+}
+
+.hero {
+padding: 26px;
+border-radius: 24px;
+color: white;
+background:
+radial-gradient(circle at 78% 20%, rgba(56,189,248,.32), transparent 25%),
+linear-gradient(135deg, #020617, #0b4b94);
+box-shadow: 0 16px 40px rgba(15,23,42,.12);
+}
+
+.hero small {
+display: inline-flex;
+align-items: center;
+gap: 7px;
+padding: 6px 10px;
+border-radius: 999px;
+background: rgba(255,255,255,.1);
+color: #bae6fd;
+font-size: 9px;
+font-weight: 900;
+}
+
+.hero h2 {
+margin: 13px 0 7px;
+font-size: clamp(25px, 4vw, 38px);
+}
+
+.hero p {
+max-width: 760px;
+margin: 0;
+color: #cbd5e1;
+font-size: 12px;
+line-height: 1.65;
+}
+
+/* STATISTIQUES */
+
+.stats {
+margin-top: 18px;
+display: grid;
+grid-template-columns: repeat(5, minmax(0,1fr));
+gap: 12px;
+}
+
+.stat {
+padding: 17px;
+border: 1px solid var(--border);
+border-radius: 17px;
+background: white;
+box-shadow: 0 7px 24px rgba(15,23,42,.04);
+}
+
+.stat-icon {
+width: 39px;
+height: 39px;
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 11px;
+color: #1d4ed8;
+background: #eff6ff;
+}
+
+.stat span {
+display: block;
+margin-top: 12px;
+color: var(--muted);
+font-size: 10px;
+font-weight: 800;
+}
+
+.stat strong {
+display: block;
+margin-top: 5px;
+color: #0f172a;
+font-size: 20px;
+}
+
+/* SECTIONS */
+
+.admin-section {
+display: none;
+margin-top: 24px;
+}
+
+.admin-section.active {
+display: block;
+}
+
+.section-head {
+margin-bottom: 13px;
+display: flex;
+align-items: flex-end;
+justify-content: space-between;
+gap: 12px;
+flex-wrap: wrap;
+}
+
+.section-head h3 {
+margin: 0;
+color: #0f172a;
+}
+
+.section-head p {
+margin: 4px 0 0;
+color: var(--muted);
+font-size: 11px;
+}
+
+.search {
+min-height: 40px;
+width: min(300px,100%);
+padding: 0 11px;
+border: 1px solid var(--border);
+border-radius: 10px;
+outline: none;
+background: white;
+}
+
+.search:focus {
+border-color: #60a5fa;
+box-shadow: 0 0 0 3px rgba(37,99,235,.08);
+}
+
+.card {
+overflow: hidden;
+border: 1px solid var(--border);
+border-radius: 18px;
+background: white;
+}
+
+.table-wrap {
+overflow-x: auto;
+}
+
+table {
+width: 100%;
+min-width: 950px;
+border-collapse: collapse;
+}
+
+th,
+td {
+padding: 12px;
+border-bottom: 1px solid #eef2f7;
+text-align: left;
+font-size: 11px;
+vertical-align: middle;
+}
+
+th {
+color: #64748b;
+background: #f8fafc;
+}
+
+tbody tr:hover {
+background: #fafcff;
+}
+
+/* STATUTS */
+
+.status {
+display: inline-flex;
+align-items: center;
+min-height: 25px;
+padding: 0 8px;
+border-radius: 999px;
+font-size: 9px;
+font-weight: 900;
+text-transform: uppercase;
+}
+
+.status.pending,
+.status.open {
+color: #92400e;
+background: var(--warning-soft);
+}
+
+.status.approved,
+.status.active,
+.status.answered {
+color: #166534;
+background: #f0fdf4;
+}
+
+.status.rejected,
+.status.cancelled {
+color: #991b1b;
+background: #fef2f2;
+}
+
+.status.closed,
+.status.completed {
+color: #1e40af;
+background: #eff6ff;
+}
+
+/* ACTIONS */
+
+.action-row {
+display: flex;
+gap: 7px;
+flex-wrap: wrap;
+}
+
+.action-btn {
+min-height: 34px;
+padding: 0 12px;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+gap: 6px;
+border: 0;
+border-radius: 9px;
+color: white;
+font-size: 10px;
+font-weight: 900;
+transition: transform .15s ease, opacity .15s ease;
+}
+
+.action-btn:active {
+transform: scale(.97);
+}
+
+.action-btn:disabled {
+opacity: .55;
+cursor: wait;
+}
+
+.approve {
+background: linear-gradient(135deg, #059669, #10b981);
+}
+
+.reject {
+background: linear-gradient(135deg, #dc2626, #ef4444);
+}
+
+.reply {
+background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+}
+
+.empty {
+padding: 30px;
+color: #94a3b8;
+text-align: center;
+font-size: 11px;
+}
+
+.mobile-actions-box {
+display: none;
+}
+
+/* FENÊTRES */
+
+.modal-overlay {
+position: fixed;
+z-index: 9999999;
+inset: 0;
+display: none;
+align-items: center;
+justify-content: center;
+padding: 20px;
+background: rgba(2,6,23,.72);
+backdrop-filter: blur(6px);
+}
+
+.modal-overlay.show {
+display: flex;
+}
+
+.modal {
+width: min(530px,100%);
+max-height: 90vh;
+overflow-y: auto;
+border-radius: 21px;
+background: white;
+box-shadow: 0 35px 100px rgba(0,0,0,.35);
+}
+
+.modal-head {
+padding: 17px 19px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+border-bottom: 1px solid var(--border);
+}
+
+.modal-head h3 {
+margin: 0;
+color: #0f172a;
+}
+
+.modal-close {
+width: 35px;
+height: 35px;
+border: 0;
+border-radius: 9px;
+background: #f1f5f9;
+}
+
+.modal-body {
+padding: 19px;
+}
+
+.detail-box {
+padding: 14px;
+margin-bottom: 13px;
+border-radius: 12px;
+background: #f8fafc;
+font-size: 11px;
+line-height: 1.8;
+}
+
+.field {
+margin-bottom: 13px;
+}
+
+.field label {
+display: block;
+margin-bottom: 6px;
+font-size: 10px;
+font-weight: 900;
+}
+
+.field textarea {
+width: 100%;
+min-height: 110px;
+padding: 11px;
+border: 1px solid var(--border);
+border-radius: 10px;
+outline: none;
+resize: vertical;
+}
+
+.field textarea:focus {
+border-color: #60a5fa;
+}
+
+.modal-actions {
+display: flex;
+justify-content: flex-end;
+gap: 8px;
+flex-wrap: wrap;
+}
+
+/* MESSAGES */
+
+.toast-container {
+position: fixed;
+z-index: 10000000;
+right: 18px;
+bottom: 18px;
+width: min(360px, calc(100vw - 30px));
+display: grid;
+gap: 8px;
+}
+
+.toast {
+padding: 14px;
+border-radius: 12px;
+color: white;
+background: #0f172a;
+font-size: 11px;
+box-shadow: 0 18px 45px rgba(15,23,42,.25);
+}
+
+.toast.success {
+background: #047857;
+}
+
+.toast.error {
+background: #b91c1c;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1200px) {
+.stats {
+grid-template-columns: repeat(3, minmax(0,1fr));
+}
+}
+
+@media(max-width:850px) {
+
+.admin-app {
+grid-template-columns: 1fr;
+}
+
+.sidebar {
+position: fixed;
+z-index: 5000;
+left: -290px;
+top: 0;
+width: 270px;
+transition: left .25s ease;
+box-shadow: 20px 0 60px rgba(2,6,23,.35);
+}
+
+.sidebar.show {
+left: 0;
+}
+
+.mobile-menu {
+display: flex;
+}
+
+.topbar {
+min-height: 66px;
+padding: 10px 12px;
+}
+
+.topbar h1 {
+font-size: 16px;
+}
+
+.topbar p {
+display: none;
+}
+
+.icon-btn {
+width: 40px;
+height: 40px;
+}
+
+.content {
+padding: 13px;
+}
+
+.hero {
+padding: 20px;
+border-radius: 19px;
+}
+
+.hero h2 {
+font-size: 25px;
+}
+
+.hero p {
+font-size: 11px;
+}
+
+.stats {
+grid-template-columns: repeat(2, minmax(0,1fr));
+gap: 9px;
+}
+
+.stat {
+padding: 13px;
+}
+
+.stat strong {
+font-size: 18px;
+}
+
+.notification-panel {
+top: 68px !important;
+right: 10px !important;
+width: calc(100vw - 20px);
+}
+
+.section-head {
+align-items: stretch;
+}
+
+.search {
+width: 100%;
+}
+
+.card.table-wrap {
+overflow: visible;
+border: 0;
+background: transparent;
+}
+
+table {
+min-width: 0;
+width: 100%;
+display: block;
+}
+
+thead {
+display: none;
+}
+
+tbody {
+display: grid;
+gap: 13px;
+}
+
+tbody tr {
+display: block;
+overflow: hidden;
+padding: 5px 15px 15px;
+border: 1px solid var(--border);
+border-radius: 18px;
+background: white;
+box-shadow: 0 8px 26px rgba(15,23,42,.06);
+}
+
+tbody tr:hover {
+background: white;
+}
+
+tbody td {
+position: relative;
+width: 100%;
+min-height: 42px;
+padding: 11px 0 11px 46%;
+display: block;
+border-bottom: 1px dashed #e5e7eb;
+text-align: right;
+font-size: 11px;
+word-break: break-word;
+}
+
+tbody td::before {
+content: attr(data-label);
+position: absolute;
+left: 0;
+top: 11px;
+width: 42%;
+color: #64748b;
+font-size: 10px;
+font-weight: 900;
+text-align: left;
+}
+
+tbody td:last-child {
+padding: 15px 0 0;
+border-bottom: 0;
+text-align: left;
+}
+
+tbody td:last-child::before {
+position: static;
+width: auto;
+display: block;
+margin-bottom: 10px;
+font-size: 10px;
+}
+
+tbody td.empty {
+min-height: auto;
+padding: 25px 10px;
+text-align: center;
+}
+
+tbody td.empty::before {
+display: none;
+}
+
+.action-row {
+display: grid;
+grid-template-columns: repeat(2, minmax(0,1fr));
+width: 100%;
+gap: 8px;
+}
+
+.action-btn {
+min-height: 43px;
+width: 100%;
+padding: 0 12px;
+font-size: 11px;
+border-radius: 11px;
+}
+
+[data-ticket],
+[data-deposit],
+[data-withdrawal] {
+width: 100%;
+}
+
+.modal-overlay {
+align-items: flex-end;
+padding: 10px;
+}
+
+.modal {
+width: 100%;
+max-height: 92vh;
+border-radius: 23px 23px 15px 15px;
+}
+
+.modal-actions {
+display: grid;
+grid-template-columns: 1fr 1fr;
+}
+
+.toast-container {
+right: 10px;
+bottom: 10px;
+width: calc(100vw - 20px);
+}
+}
+
+@media(max-width:430px) {
+
+.stats {
+grid-template-columns: repeat(2, minmax(0,1fr));
+}
+
+.stat span {
+font-size: 9px;
+}
+
+tbody td {
+padding-left: 44%;
+}
+
+tbody td::before {
+width: 40%;
+}
+}
+
+</style>
 
-        .hidden {
-            display: none !important;
-        }
-
-        /* =====================================================
-           LOADING
-        ===================================================== */
-
-        .loading-screen {
-            position: fixed;
-            z-index: 9999999;
-            inset: 0;
-
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-
-            gap: 15px;
-
-            color: white;
-
-            background:
-                radial-gradient(
-                    circle at 75% 20%,
-                    rgba(14,165,233,.35),
-                    transparent 28%
-                ),
-                linear-gradient(
-                    145deg,
-                    #020617,
-                    #082f68
-                );
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-
-            border: 4px solid rgba(255,255,255,.18);
-            border-top-color: white;
-
-            border-radius: 50%;
-
-            animation: spin .8s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* =====================================================
-           ACCESS DENIED
-        ===================================================== */
-
-        .access-screen {
-            min-height: 100vh;
-
-            display: none;
-            align-items: center;
-            justify-content: center;
-
-            padding: 25px;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    #020617,
-                    #0f172a
-                );
-        }
-
-        .access-card {
-            width: min(500px,100%);
-
-            padding: 32px;
-
-            border:
-                1px solid
-                rgba(255,255,255,.1);
-
-            border-radius: 25px;
-
-            color: white;
-
-            background:
-                rgba(255,255,255,.06);
-
-            text-align: center;
-
-            box-shadow:
-                0 30px 100px
-                rgba(0,0,0,.4);
-        }
-
-        .access-card h1 {
-            margin: 0 0 12px;
-        }
-
-        .access-card p {
-            color: #cbd5e1;
-            font-size: 13px;
-        }
-
-        /* =====================================================
-           APPLICATION
-        ===================================================== */
-
-        .admin-app {
-            min-height: 100vh;
-
-            display: none;
-
-            grid-template-columns:
-                270px
-                minmax(0,1fr);
-        }
-
-        /* =====================================================
-           SIDEBAR
-        ===================================================== */
-
-        .sidebar {
-            position: sticky;
-            top: 0;
-
-            height: 100vh;
-
-            overflow-y: auto;
-
-            padding: 20px 15px;
-
-            color: white;
-
-            background:
-                radial-gradient(
-                    circle at 20% 5%,
-                    rgba(37,99,235,.3),
-                    transparent 27%
-                ),
-                linear-gradient(
-                    170deg,
-                    #020617,
-                    #071c3f 60%,
-                    #082f68
-                );
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-
-            gap: 12px;
-
-            padding:
-                5px 5px 22px;
-        }
-
-        .brand-icon {
-            width: 48px;
-            height: 48px;
-
-            flex-shrink: 0;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 15px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #2563eb,
-                    #0ea5e9
-                );
-
-            box-shadow:
-                0 10px 30px
-                rgba(37,99,235,.35);
-        }
-
-        .brand strong {
-            font-size: 17px;
-        }
-
-        .brand span {
-            display: block;
-
-            margin-top: 3px;
-
-            font-size: 9px;
-
-            color: #94a3b8;
-        }
-
-        .admin-profile {
-            padding: 14px;
-
-            margin-bottom: 18px;
-
-            border-radius: 16px;
-
-            background:
-                rgba(255,255,255,.07);
-
-            border:
-                1px solid
-                rgba(255,255,255,.08);
-        }
-
-        .admin-profile small {
-            color: #60a5fa;
-
-            font-weight: 900;
-        }
-
-        .admin-profile strong,
-        .admin-profile span {
-            display: block;
-
-            margin-top: 5px;
-
-            overflow: hidden;
-
-            text-overflow: ellipsis;
-        }
-
-        .admin-profile span {
-            color: #cbd5e1;
-
-            font-size: 11px;
-        }
-
-        .menu {
-            display: grid;
-
-            gap: 6px;
-        }
-
-        .menu button {
-            min-height: 46px;
-
-            width: 100%;
-
-            padding: 0 13px;
-
-            display: flex;
-            align-items: center;
-
-            gap: 11px;
-
-            border: 0;
-
-            border-radius: 12px;
-
-            color: #cbd5e1;
-
-            background: transparent;
-
-            font-size: 12px;
-            font-weight: 800;
-
-            text-align: left;
-        }
-
-        .menu button:hover,
-        .menu button.active {
-            color: white;
-
-            background:
-                rgba(255,255,255,.1);
-        }
-
-        .menu button i {
-            width: 18px;
-
-            text-align: center;
-        }
-
-        .logout-side {
-            width: 100%;
-
-            min-height: 44px;
-
-            margin-top: 18px;
-
-            border:
-                1px solid
-                rgba(248,113,113,.3);
-
-            border-radius: 12px;
-
-            color: #fecaca;
-
-            background:
-                rgba(220,38,38,.08);
-
-            font-weight: 800;
-        }
-
-        /* =====================================================
-           MAIN
-        ===================================================== */
-
-        .main {
-            min-width: 0;
-        }
-
-        .topbar {
-            position: sticky;
-            z-index: 500;
-            top: 0;
-
-            min-height: 70px;
-
-            padding: 12px 24px;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            gap: 15px;
-
-            border-bottom:
-                1px solid
-                var(--border);
-
-            background:
-                rgba(255,255,255,.96);
-
-            backdrop-filter:
-                blur(15px);
-        }
-
-        .top-left {
-            display: flex;
-            align-items: center;
-
-            gap: 10px;
-        }
-
-        .topbar h1 {
-            margin: 0;
-
-            font-size: 20px;
-
-            color: var(--dark-soft);
-        }
-
-        .topbar p {
-            margin: 3px 0 0;
-
-            font-size: 10px;
-
-            color: var(--muted);
-        }
-
-        .top-actions {
-            display: flex;
-            align-items: center;
-
-            gap: 8px;
-        }
-
-        .icon-btn {
-            position: relative;
-
-            width: 43px;
-            height: 43px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            border:
-                1px solid
-                var(--border);
-
-            border-radius: 12px;
-
-            background: white;
-
-            color: #475569;
-        }
-
-        .icon-btn:hover {
-            color: var(--primary);
-
-            background: #eff6ff;
-        }
-
-        .mobile-menu {
-            display: none;
-        }
-
-        /* =====================================================
-           NOTIFICATIONS
-        ===================================================== */
-
-        .notification-badge {
-            position: absolute;
-
-            top: -5px;
-            right: -5px;
-
-            min-width: 20px;
-            height: 20px;
-
-            padding: 0 5px;
-
-            display: none;
-            align-items: center;
-            justify-content: center;
-
-            border:
-                2px solid white;
-
-            border-radius: 999px;
-
-            color: white;
-
-            background: #dc2626;
-
-            font-size: 10px;
-            font-weight: 900;
-        }
-
-        .notification-badge.show {
-            display: flex;
-        }
-
-        .notification-panel {
-            position: fixed !important;
-
-            z-index: 999999 !important;
-
-            top: 76px !important;
-            right: 20px !important;
-
-            width:
-                min(
-                    410px,
-                    calc(100vw - 30px)
-                );
-
-            max-height: 72vh;
-
-            display: none;
-
-            overflow: hidden;
-
-            border:
-                1px solid
-                var(--border);
-
-            border-radius: 19px;
-
-            background: white;
-
-            box-shadow:
-                0 25px 80px
-                rgba(15,23,42,.3);
-        }
-
-        .notification-panel.show {
-            display: block !important;
-        }
-
-        .notification-head {
-            padding: 14px 15px;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            border-bottom:
-                1px solid
-                var(--border);
-        }
-
-        .notification-head strong {
-            color: #0f172a;
-        }
-
-        .notification-head button {
-            border: 0;
-
-            color: var(--primary);
-
-            background: transparent;
-
-            font-size: 11px;
-            font-weight: 900;
-        }
-
-        .notification-list {
-            max-height: 60vh;
-
-            overflow-y: auto;
-        }
-
-        .notification-item {
-            width: 100%;
-
-            padding: 14px 15px;
-
-            display: block;
-
-            border: 0;
-
-            border-bottom:
-                1px solid
-                #eef2f7;
-
-            background: white;
-
-            text-align: left;
-        }
-
-        .notification-item.unread {
-            background: #eff6ff;
-        }
-
-        .notification-item:hover {
-            background: #f8fafc;
-        }
-
-        .notification-item strong {
-            display: block;
-
-            margin-bottom: 5px;
-
-            color: #0f172a;
-
-            font-size: 12px;
-        }
-
-        .notification-item p {
-            margin: 0;
-
-            color: #64748b;
-
-            font-size: 11px;
-
-            line-height: 1.55;
-        }
-
-        .notification-item small {
-            display: block;
-
-            margin-top: 7px;
-
-            color: #94a3b8;
-
-            font-size: 9px;
-        }
-
-        /* =====================================================
-           CONTENT
-        ===================================================== */
-
-        .content {
-            width: min(1550px,100%);
-
-            margin: 0 auto;
-
-            padding: 24px;
-        }
-
-        .hero {
-            padding: 26px;
-
-            border-radius: 24px;
-
-            color: white;
-
-            background:
-                radial-gradient(
-                    circle at 78% 20%,
-                    rgba(56,189,248,.32),
-                    transparent 25%
-                ),
-                linear-gradient(
-                    135deg,
-                    #020617,
-                    #0b4b94
-                );
-
-            box-shadow:
-                0 16px 40px
-                rgba(15,23,42,.12);
-        }
-
-        .hero small {
-            display: inline-flex;
-            align-items: center;
-
-            gap: 7px;
-
-            padding: 6px 10px;
-
-            border-radius: 999px;
-
-            background:
-                rgba(255,255,255,.1);
-
-            color: #bae6fd;
-
-            font-size: 9px;
-            font-weight: 900;
-        }
-
-        .hero h2 {
-            margin: 13px 0 7px;
-
-            font-size:
-                clamp(
-                    25px,
-                    4vw,
-                    38px
-                );
-        }
-
-        .hero p {
-            max-width: 760px;
-
-            margin: 0;
-
-            color: #cbd5e1;
-
-            font-size: 12px;
-
-            line-height: 1.65;
-        }
-
-        /* =====================================================
-           STATS
-        ===================================================== */
-
-        .stats {
-            margin-top: 18px;
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(
-                    5,
-                    minmax(0,1fr)
-                );
-
-            gap: 12px;
-        }
-
-        .stat {
-            padding: 17px;
-
-            border:
-                1px solid
-                var(--border);
-
-            border-radius: 17px;
-
-            background: white;
-
-            box-shadow:
-                0 7px 24px
-                rgba(15,23,42,.04);
-        }
-
-        .stat-icon {
-            width: 39px;
-            height: 39px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 11px;
-
-            color: #1d4ed8;
-
-            background: #eff6ff;
-        }
-
-        .stat span {
-            display: block;
-
-            margin-top: 12px;
-
-            color: var(--muted);
-
-            font-size: 10px;
-            font-weight: 800;
-        }
-
-        .stat strong {
-            display: block;
-
-            margin-top: 5px;
-
-            color: #0f172a;
-
-            font-size: 20px;
-        }
-
-        /* =====================================================
-           SECTIONS
-        ===================================================== */
-
-        .admin-section {
-            display: none;
-
-            margin-top: 24px;
-        }
-
-        .admin-section.active {
-            display: block;
-        }
-
-        .section-head {
-            margin-bottom: 13px;
-
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-
-            gap: 12px;
-
-            flex-wrap: wrap;
-        }
-
-        .section-head h3 {
-            margin: 0;
-
-            color: #0f172a;
-        }
-
-        .section-head p {
-            margin: 4px 0 0;
-
-            color: var(--muted);
-
-            font-size: 11px;
-        }
-
-        .search {
-            min-height: 40px;
-
-            width: min(300px,100%);
-
-            padding: 0 11px;
-
-            border:
-                1px solid
-                var(--border);
-
-            border-radius: 10px;
-
-            outline: none;
-
-            background: white;
-        }
-
-        .search:focus {
-            border-color: #60a5fa;
-
-            box-shadow:
-                0 0 0 3px
-                rgba(37,99,235,.08);
-        }
-
-        .card {
-            overflow: hidden;
-
-            border:
-                1px solid
-                var(--border);
-
-            border-radius: 18px;
-
-            background: white;
-        }
-
-        .table-wrap {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-
-            min-width: 950px;
-
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            padding: 12px;
-
-            border-bottom:
-                1px solid
-                #eef2f7;
-
-            text-align: left;
-
-            font-size: 11px;
-
-            vertical-align: middle;
-        }
-
-        th {
-            color: #64748b;
-
-            background: #f8fafc;
-        }
-
-        tbody tr:hover {
-            background: #fafcff;
-        }
-
-        /* =====================================================
-           STATUS
-        ===================================================== */
-
-        .status {
-            display: inline-flex;
-            align-items: center;
-
-            min-height: 25px;
-
-            padding: 0 8px;
-
-            border-radius: 999px;
-
-            font-size: 9px;
-            font-weight: 900;
-
-            text-transform: uppercase;
-        }
-
-        .status.pending,
-        .status.open {
-            color: #92400e;
-            background: var(--warning-soft);
-        }
-
-        .status.approved,
-        .status.active,
-        .status.answered {
-            color: #166534;
-            background: #f0fdf4;
-        }
-
-        .status.rejected,
-        .status.cancelled {
-            color: #991b1b;
-            background: #fef2f2;
-        }
-
-        .status.closed,
-        .status.completed {
-            color: #1e40af;
-            background: #eff6ff;
-        }
-
-        /* =====================================================
-           ACTION BUTTONS
-        ===================================================== */
-
-        .action-row {
-            display: flex;
-
-            gap: 7px;
-
-            flex-wrap: wrap;
-        }
-
-        .action-btn {
-            min-height: 34px;
-
-            padding: 0 12px;
-
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-
-            gap: 6px;
-
-            border: 0;
-
-            border-radius: 9px;
-
-            color: white;
-
-            font-size: 10px;
-            font-weight: 900;
-
-            transition:
-                transform .15s ease,
-                opacity .15s ease;
-        }
-
-        .action-btn:active {
-            transform: scale(.97);
-        }
-
-        .action-btn:disabled {
-            opacity: .55;
-            cursor: wait;
-        }
-
-        .approve {
-            background:
-                linear-gradient(
-                    135deg,
-                    #059669,
-                    #10b981
-                );
-        }
-
-        .reject {
-            background:
-                linear-gradient(
-                    135deg,
-                    #dc2626,
-                    #ef4444
-                );
-        }
-
-        .reply {
-            background:
-                linear-gradient(
-                    135deg,
-                    #7c3aed,
-                    #8b5cf6
-                );
-        }
-
-        .empty {
-            padding: 30px;
-
-            color: #94a3b8;
-
-            text-align: center;
-
-            font-size: 11px;
-        }
-
-        /* =====================================================
-           MOBILE ACTION AREA
-        ===================================================== */
-
-        .mobile-actions-box {
-            display: none;
-        }
-
-        /* =====================================================
-           MODALS
-        ===================================================== */
-
-        .modal-overlay {
-            position: fixed;
-
-            z-index: 9999999;
-
-            inset: 0;
-
-            display: none;
-            align-items: center;
-            justify-content: center;
-
-            padding: 20px;
-
-            background:
-                rgba(2,6,23,.72);
-
-            backdrop-filter: blur(6px);
-        }
-
-        .modal-overlay.show {
-            display: flex;
-        }
-
-        .modal {
-            width: min(530px,100%);
-
-            max-height: 90vh;
-
-            overflow-y: auto;
-
-            border-radius: 21px;
-
-            background: white;
-
-            box-shadow:
-                0 35px 100px
-                rgba(0,0,0,.35);
-        }
-
-        .modal-head {
-            padding: 17px 19px;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            border-bottom:
-                1px solid
-                var(--border);
-        }
-
-        .modal-head h3 {
-            margin: 0;
-
-            color: #0f172a;
-        }
-
-        .modal-close {
-            width: 35px;
-            height: 35px;
-
-            border: 0;
-
-            border-radius: 9px;
-
-            background: #f1f5f9;
-        }
-
-        .modal-body {
-            padding: 19px;
-        }
-
-        .detail-box {
-            padding: 14px;
-
-            margin-bottom: 13px;
-
-            border-radius: 12px;
-
-            background: #f8fafc;
-
-            font-size: 11px;
-
-            line-height: 1.8;
-        }
-
-        .field {
-            margin-bottom: 13px;
-        }
-
-        .field label {
-            display: block;
-
-            margin-bottom: 6px;
-
-            font-size: 10px;
-            font-weight: 900;
-        }
-
-        .field textarea {
-            width: 100%;
-
-            min-height: 110px;
-
-            padding: 11px;
-
-            border:
-                1px solid
-                var(--border);
-
-            border-radius: 10px;
-
-            outline: none;
-
-            resize: vertical;
-        }
-
-        .field textarea:focus {
-            border-color: #60a5fa;
-        }
-
-        .modal-actions {
-            display: flex;
-
-            justify-content: flex-end;
-
-            gap: 8px;
-
-            flex-wrap: wrap;
-        }
-
-        /* =====================================================
-           TOAST
-        ===================================================== */
-
-        .toast-container {
-            position: fixed;
-
-            z-index: 10000000;
-
-            right: 18px;
-            bottom: 18px;
-
-            width:
-                min(
-                    360px,
-                    calc(100vw - 30px)
-                );
-
-            display: grid;
-
-            gap: 8px;
-        }
-
-        .toast {
-            padding: 14px;
-
-            border-radius: 12px;
-
-            color: white;
-
-            background: #0f172a;
-
-            font-size: 11px;
-
-            box-shadow:
-                0 18px 45px
-                rgba(15,23,42,.25);
-        }
-
-        .toast.success {
-            background: #047857;
-        }
-
-        .toast.error {
-            background: #b91c1c;
-        }
-
-        /* =====================================================
-           RESPONSIVE TABLET
-        ===================================================== */
-
-        @media(max-width:1200px) {
-
-            .stats {
-                grid-template-columns:
-                    repeat(
-                        3,
-                        minmax(0,1fr)
-                    );
-            }
-
-        }
-
-        /* =====================================================
-           MOBILE
-        ===================================================== */
-
-        @media(max-width:850px) {
-
-            .admin-app {
-                grid-template-columns: 1fr;
-            }
-
-            .sidebar {
-                position: fixed;
-
-                z-index: 5000;
-
-                left: -290px;
-                top: 0;
-
-                width: 270px;
-
-                transition:
-                    left .25s ease;
-
-                box-shadow:
-                    20px 0 60px
-                    rgba(2,6,23,.35);
-            }
-
-            .sidebar.show {
-                left: 0;
-            }
-
-            .mobile-menu {
-                display: flex;
-            }
-
-            .topbar {
-                min-height: 66px;
-
-                padding: 10px 12px;
-            }
-
-            .topbar h1 {
-                font-size: 16px;
-            }
-
-            .topbar p {
-                display: none;
-            }
-
-            .icon-btn {
-                width: 40px;
-                height: 40px;
-            }
-
-            .content {
-                padding: 13px;
-            }
-
-            .hero {
-                padding: 20px;
-
-                border-radius: 19px;
-            }
-
-            .hero h2 {
-                font-size: 25px;
-            }
-
-            .hero p {
-                font-size: 11px;
-            }
-
-            .stats {
-                grid-template-columns:
-                    repeat(
-                        2,
-                        minmax(0,1fr)
-                    );
-
-                gap: 9px;
-            }
-
-            .stat {
-                padding: 13px;
-            }
-
-            .stat strong {
-                font-size: 18px;
-            }
-
-            .notification-panel {
-                top: 68px !important;
-                right: 10px !important;
-
-                width:
-                    calc(
-                        100vw - 20px
-                    );
-            }
-
-            .section-head {
-                align-items: stretch;
-            }
-
-            .search {
-                width: 100%;
-            }
-
-            /* ================================================
-               TRANSFORMATION DES TABLEAUX EN CARTES MOBILES
-            ================================================= */
-
-            .card.table-wrap {
-                overflow: visible;
-
-                border: 0;
-
-                background: transparent;
-            }
-
-            table {
-                min-width: 0;
-
-                width: 100%;
-
-                display: block;
-            }
-
-            thead {
-                display: none;
-            }
-
-            tbody {
-                display: grid;
-
-                gap: 13px;
-            }
-
-            tbody tr {
-                display: block;
-
-                overflow: hidden;
-
-                padding: 5px 15px 15px;
-
-                border:
-                    1px solid
-                    var(--border);
-
-                border-radius: 18px;
-
-                background: white;
-
-                box-shadow:
-                    0 8px 26px
-                    rgba(15,23,42,.06);
-            }
-
-            tbody tr:hover {
-                background: white;
-            }
-
-            tbody td {
-                position: relative;
-
-                width: 100%;
-
-                min-height: 42px;
-
-                padding:
-                    11px 0
-                    11px 46%;
-
-                display: block;
-
-                border-bottom:
-                    1px dashed
-                    #e5e7eb;
-
-                text-align: right;
-
-                font-size: 11px;
-
-                word-break: break-word;
-            }
-
-            tbody td::before {
-                content:
-                    attr(data-label);
-
-                position: absolute;
-
-                left: 0;
-                top: 11px;
-
-                width: 42%;
-
-                color: #64748b;
-
-                font-size: 10px;
-                font-weight: 900;
-
-                text-align: left;
-            }
-
-            tbody td:last-child {
-                padding:
-                    15px 0 0;
-
-                border-bottom: 0;
-
-                text-align: left;
-            }
-
-            tbody td:last-child::before {
-                position: static;
-
-                width: auto;
-
-                display: block;
-
-                margin-bottom: 10px;
-
-                font-size: 10px;
-            }
-
-            tbody td.empty {
-                min-height: auto;
-
-                padding: 25px 10px;
-
-                text-align: center;
-            }
-
-            tbody td.empty::before {
-                display: none;
-            }
-
-            /* Boutons visibles et larges */
-
-            .action-row {
-                display: grid;
-
-                grid-template-columns:
-                    repeat(
-                        2,
-                        minmax(0,1fr)
-                    );
-
-                width: 100%;
-
-                gap: 8px;
-            }
-
-            .action-btn {
-                min-height: 43px;
-
-                width: 100%;
-
-                padding: 0 12px;
-
-                font-size: 11px;
-
-                border-radius: 11px;
-            }
-
-            /* Support : bouton réponse large */
-
-            [data-ticket] {
-                width: 100%;
-            }
-
-            /* Les boutons traiter occupent toute la largeur */
-
-            [data-deposit],
-            [data-withdrawal] {
-                width: 100%;
-            }
-
-            .modal-overlay {
-                align-items: flex-end;
-
-                padding: 10px;
-            }
-
-            .modal {
-                width: 100%;
-
-                max-height: 92vh;
-
-                border-radius:
-                    23px 23px
-                    15px 15px;
-            }
-
-            .modal-actions {
-                display: grid;
-
-                grid-template-columns:
-                    1fr 1fr;
-            }
-
-            .toast-container {
-                right: 10px;
-                bottom: 10px;
-
-                width:
-                    calc(
-                        100vw - 20px
-                    );
-            }
-        }
-
-        @media(max-width:430px) {
-
-            .stats {
-                grid-template-columns:
-                    repeat(
-                        2,
-                        minmax(0,1fr)
-                    );
-            }
-
-            .stat span {
-                font-size: 9px;
-            }
-
-            tbody td {
-                padding-left: 44%;
-            }
-
-            tbody td::before {
-                width: 40%;
-            }
-        }
-    </style>
 </head>
 
 <body>
 
-<!-- ==========================================================
-     LOADING
-========================================================== -->
+<div id="loadingScreen" class="loading-screen">
 
-<div
-    id="loadingScreen"
-    class="loading-screen"
->
-    <div class="spinner"></div>
+<div class="spinner"></div>
 
-    <strong>
-        Housing's YQD
-    </strong>
+<strong>
+Housing's YQD
+</strong>
 
-    <span>
-        Chargement de l'administration sécurisée...
-    </span>
-</div>
-
-
-<!-- ==========================================================
-     ACCESS DENIED
-========================================================== -->
-
-<div
-    id="accessDenied"
-    class="access-screen"
->
-    <div class="access-card">
-
-        <h1>
-            <i class="fa-solid fa-shield-halved"></i>
-            Accès refusé
-        </h1>
-
-        <p id="accessDeniedMessage">
-            Votre compte n'est pas autorisé.
-        </p>
-
-        <button
-            type="button"
-            class="action-btn approve"
-            onclick="window.location.href='login.html'"
-        >
-            <i class="fa-solid fa-right-to-bracket"></i>
-            Connexion
-        </button>
-
-    </div>
-</div>
-
-
-<!-- ==========================================================
-     ADMIN APP
-========================================================== -->
-
-<div
-    id="adminApp"
-    class="admin-app"
->
-
-    <!-- SIDEBAR -->
-
-    <aside
-        id="sidebar"
-        class="sidebar"
-    >
-
-        <div class="brand">
-
-            <div class="brand-icon">
-                <i class="fa-solid fa-shield-halved"></i>
-            </div>
-
-            <div>
-                <strong>
-                    Housing's YQD
-                </strong>
-
-                <span>
-                    ADMINISTRATION SUPABASE
-                </span>
-            </div>
-
-        </div>
-
-
-        <div class="admin-profile">
-
-            <small id="adminRole">
-                ADMIN
-            </small>
-
-            <strong id="adminName">
-                Administrateur
-            </strong>
-
-            <span id="adminEmail">
-                ...
-            </span>
-
-        </div>
-
-
-        <nav class="menu">
-
-            <button
-                class="active"
-                data-section="overview"
-            >
-                <i class="fa-solid fa-chart-pie"></i>
-                Vue générale
-            </button>
-
-            <button
-                data-section="users"
-            >
-                <i class="fa-solid fa-users"></i>
-                Utilisateurs
-            </button>
-
-            <button
-                data-section="deposits"
-            >
-                <i class="fa-solid fa-arrow-down"></i>
-                Dépôts
-            </button>
-
-            <button
-                data-section="withdrawals"
-            >
-                <i class="fa-solid fa-arrow-up"></i>
-                Retraits
-            </button>
-
-            <button
-                data-section="investments"
-            >
-                <i class="fa-solid fa-building"></i>
-                Investissements
-            </button>
-
-            <button
-                data-section="support"
-            >
-                <i class="fa-solid fa-headset"></i>
-                Assistance
-            </button>
-
-        </nav>
-
-
-        <button
-            id="logoutSideButton"
-            class="logout-side"
-        >
-            <i class="fa-solid fa-right-from-bracket"></i>
-            Déconnexion
-        </button>
-
-    </aside>
-
-
-    <!-- MAIN -->
-
-    <main class="main">
-
-        <header class="topbar">
-
-            <div class="top-left">
-
-                <button
-                    id="mobileMenuButton"
-                    class="icon-btn mobile-menu"
-                    type="button"
-                >
-                    <i class="fa-solid fa-bars"></i>
-                </button>
-
-                <div>
-
-                    <h1 id="pageTitle">
-                        Administration
-                    </h1>
-
-                    <p>
-                        Gestion sécurisée Housing's YQD
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="top-actions">
-
-                <button
-                    id="notificationButton"
-                    class="icon-btn"
-                    type="button"
-                    aria-label="Notifications"
-                >
-                    <i class="fa-regular fa-bell"></i>
-
-                    <span
-                        id="notificationBadge"
-                        class="notification-badge"
-                    >
-                        0
-                    </span>
-                </button>
-
-
-                <button
-                    id="refreshButton"
-                    class="icon-btn"
-                    type="button"
-                    title="Actualiser"
-                >
-                    <i class="fa-solid fa-rotate"></i>
-                </button>
-
-
-                <button
-                    id="logoutButton"
-                    class="icon-btn"
-                    type="button"
-                    title="Déconnexion"
-                >
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                </button>
-
-            </div>
-
-        </header>
-
-
-        <div class="content">
-
-            <!-- HERO -->
-
-            <section class="hero">
-
-                <small>
-                    <i class="fa-solid fa-shield"></i>
-                    ADMINISTRATION SÉCURISÉE
-                </small>
-
-                <h2>
-                    Centre de contrôle
-                </h2>
-
-                <p>
-                    Gérez les comptes utilisateurs, les dépôts,
-                    les retraits, les investissements et les demandes
-                    d'assistance depuis une interface unique,
-                    optimisée pour ordinateur et téléphone.
-                </p>
-
-            </section>
-
-
-            <!-- STATS -->
-
-            <div class="stats">
-
-                <article class="stat">
-
-                    <div class="stat-icon">
-                        <i class="fa-solid fa-users"></i>
-                    </div>
-
-                    <span>
-                        Utilisateurs
-                    </span>
-
-                    <strong id="statUsers">
-                        0
-                    </strong>
-
-                </article>
-
-
-                <article class="stat">
-
-                    <div class="stat-icon">
-                        <i class="fa-solid fa-arrow-down"></i>
-                    </div>
-
-                    <span>
-                        Dépôts en attente
-                    </span>
-
-                    <strong id="statPendingDeposits">
-                        0
-                    </strong>
-
-                </article>
-
-
-                <article class="stat">
-
-                    <div class="stat-icon">
-                        <i class="fa-solid fa-arrow-up"></i>
-                    </div>
-
-                    <span>
-                        Retraits en attente
-                    </span>
-
-                    <strong id="statPendingWithdrawals">
-                        0
-                    </strong>
-
-                </article>
-
-
-                <article class="stat">
-
-                    <div class="stat-icon">
-                        <i class="fa-solid fa-building"></i>
-                    </div>
-
-                    <span>
-                        Investissements actifs
-                    </span>
-
-                    <strong id="statActiveInvestments">
-                        0
-                    </strong>
-
-                </article>
-
-
-                <article class="stat">
-
-                    <div class="stat-icon">
-                        <i class="fa-solid fa-headset"></i>
-                    </div>
-
-                    <span>
-                        Tickets ouverts
-                    </span>
-
-                    <strong id="statOpenTickets">
-                        0
-                    </strong>
-
-                </article>
-
-            </div>
-
-
-            <!-- ==================================================
-                 OVERVIEW
-            ================================================== -->
-
-            <section
-                id="section-overview"
-                class="admin-section active"
-            >
-
-                <div class="section-head">
-
-                    <div>
-                        <h3>
-                            Vue générale
-                        </h3>
-
-                        <p>
-                            Résumé des opérations nécessitant votre attention.
-                        </p>
-                    </div>
-
-                </div>
-
-
-                <div class="card">
-
-                    <div
-                        id="overviewContent"
-                        class="empty"
-                    >
-                        Chargement...
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- ==================================================
-                 USERS
-            ================================================== -->
-
-            <section
-                id="section-users"
-                class="admin-section"
-            >
-
-                <div class="section-head">
-
-                    <div>
-                        <h3>
-                            Utilisateurs
-                        </h3>
-
-                        <p>
-                            Comptes enregistrés sur Housing's YQD.
-                        </p>
-                    </div>
-
-
-                    <input
-                        id="usersSearch"
-                        class="search"
-                        placeholder="Rechercher un utilisateur..."
-                    >
-
-                </div>
-
-
-                <div class="card table-wrap">
-
-                    <table>
-
-                        <thead>
-                            <tr>
-                                <th>Utilisateur</th>
-                                <th>Téléphone</th>
-                                <th>Solde</th>
-                                <th>Total déposé</th>
-                                <th>Total investi</th>
-                                <th>Parrainage</th>
-                                <th>État</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="usersTableBody"></tbody>
-
-                    </table>
-
-                </div>
-
-            </section>
-
-
-            <!-- ==================================================
-                 DEPOSITS
-            ================================================== -->
-
-            <section
-                id="section-deposits"
-                class="admin-section"
-            >
-
-                <div class="section-head">
-
-                    <div>
-                        <h3>
-                            Dépôts
-                        </h3>
-
-                        <p>
-                            Validez ou refusez les demandes de dépôt.
-                        </p>
-                    </div>
-
-
-                    <input
-                        id="depositsSearch"
-                        class="search"
-                        placeholder="Rechercher un dépôt..."
-                    >
-
-                </div>
-
-
-                <div class="card table-wrap">
-
-                    <table>
-
-                        <thead>
-                            <tr>
-                                <th>Utilisateur</th>
-                                <th>Brut</th>
-                                <th>Frais</th>
-                                <th>Net</th>
-                                <th>Méthode</th>
-                                <th>Référence</th>
-                                <th>Statut</th>
-                                <th>Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="depositsTableBody"></tbody>
-
-                    </table>
-
-                </div>
-
-            </section>
-
-
-            <!-- ==================================================
-                 WITHDRAWALS
-            ================================================== -->
-
-            <section
-                id="section-withdrawals"
-                class="admin-section"
-            >
-
-                <div class="section-head">
-
-                    <div>
-                        <h3>
-                            Retraits
-                        </h3>
-
-                        <p>
-                            Validez ou refusez les demandes de retrait.
-                        </p>
-                    </div>
-
-
-                    <input
-                        id="withdrawalsSearch"
-                        class="search"
-                        placeholder="Rechercher un retrait..."
-                    >
-
-                </div>
-
-
-                <div class="card table-wrap">
-
-                    <table>
-
-                        <thead>
-                            <tr>
-                                <th>Utilisateur</th>
-                                <th>Brut</th>
-                                <th>Frais</th>
-                                <th>Net</th>
-                                <th>Destination</th>
-                                <th>Statut</th>
-                                <th>Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="withdrawalsTableBody"></tbody>
-
-                    </table>
-
-                </div>
-
-            </section>
-
-
-            <!-- ==================================================
-                 INVESTMENTS
-            ================================================== -->
-
-            <section
-                id="section-investments"
-                class="admin-section"
-            >
-
-                <div class="section-head">
-
-                    <div>
-                        <h3>
-                            Investissements
-                        </h3>
-
-                        <p>
-                            Investissements actuellement enregistrés.
-                        </p>
-                    </div>
-
-
-                    <input
-                        id="investmentsSearch"
-                        class="search"
-                        placeholder="Rechercher..."
-                    >
-
-                </div>
-
-
-                <div class="card table-wrap">
-
-                    <table>
-
-                        <thead>
-                            <tr>
-                                <th>Utilisateur</th>
-                                <th>Pack</th>
-                                <th>Montant</th>
-                                <th>Gain journalier</th>
-                                <th>Jours crédités</th>
-                                <th>Total crédité</th>
-                                <th>Statut</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="investmentsTableBody"></tbody>
-
-                    </table>
-
-                </div>
-
-            </section>
-
-
-            <!-- ==================================================
-                 SUPPORT
-            ================================================== -->
-
-            <section
-                id="section-support"
-                class="admin-section"
-            >
-
-                <div class="section-head">
-
-                    <div>
-                        <h3>
-                            Assistance
-                        </h3>
-
-                        <p>
-                            Lisez et répondez aux demandes des utilisateurs.
-                        </p>
-                    </div>
-
-
-                    <input
-                        id="supportSearch"
-                        class="search"
-                        placeholder="Rechercher un ticket..."
-                    >
-
-                </div>
-
-
-                <div class="card table-wrap">
-
-                    <table>
-
-                        <thead>
-                            <tr>
-                                <th>Utilisateur</th>
-                                <th>Sujet</th>
-                                <th>Message</th>
-                                <th>Statut</th>
-                                <th>Date</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="supportTableBody"></tbody>
-
-                    </table>
-
-                </div>
-
-            </section>
-
-        </div>
-
-    </main>
+<span>
+Chargement de l'administration sécurisée...
+</span>
 
 </div>
 
+<div id="accessDenied" class="access-screen">
 
-<!-- ==========================================================
-     NOTIFICATION PANEL
-========================================================== -->
+<div class="access-card">
 
-<div
-    id="notificationPanel"
-    class="notification-panel"
-    aria-hidden="true"
+<h1>
+<i class="fa-solid fa-shield-halved"></i>
+Accès refusé
+</h1>
+
+<p id="accessDeniedMessage">
+Votre compte n'est pas autorisé.
+</p>
+
+<button
+type="button"
+class="action-btn approve"
+onclick="window.location.href='login.html'"
 >
+<i class="fa-solid fa-right-to-bracket"></i>
+Connexion
+</button>
 
-    <div class="notification-head">
+</div>
+</div>
 
-        <strong>
-            Notifications administrateur
-        </strong>
+<div id="adminApp" class="admin-app">
 
-        <button
-            id="markAllNotificationsButton"
-            type="button"
-        >
-            Tout lire
-        </button>
+<aside id="sidebar" class="sidebar">
 
-    </div>
+<div class="brand">
 
+<div class="brand-icon">
+<i class="fa-solid fa-shield-halved"></i>
+</div>
 
-    <div
-        id="notificationList"
-        class="notification-list"
-    >
-
-        <div class="empty">
-            Chargement...
-        </div>
-
-    </div>
+<div>
+<strong>Housing's YQD</strong>
+<span>ADMINISTRATION SUPABASE</span>
+</div>
 
 </div>
 
+<div class="admin-profile">
 
-<!-- ==========================================================
-     FINANCIAL REVIEW MODAL
-========================================================== -->
+<small id="adminRole">
+ADMIN
+</small>
 
-<div
-    id="reviewModal"
-    class="modal-overlay"
->
+<strong id="adminName">
+Administrateur
+</strong>
 
-    <div class="modal">
-
-        <div class="modal-head">
-
-            <h3 id="reviewModalTitle">
-                Traiter l'opération
-            </h3>
-
-            <button
-                class="modal-close"
-                type="button"
-                onclick="closeModal('reviewModal')"
-            >
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
-        </div>
-
-
-        <div class="modal-body">
-
-            <div
-                id="reviewDetails"
-                class="detail-box"
-            ></div>
-
-
-            <div class="field">
-
-                <label>
-                    Note administrateur
-                </label>
-
-                <textarea
-                    id="reviewNote"
-                    placeholder="Facultatif : motif, commentaire..."
-                ></textarea>
-
-            </div>
-
-
-            <div class="modal-actions">
-
-                <button
-                    id="rejectReviewButton"
-                    class="action-btn reject"
-                    type="button"
-                >
-                    <i class="fa-solid fa-xmark"></i>
-                    Refuser
-                </button>
-
-
-                <button
-                    id="approveReviewButton"
-                    class="action-btn approve"
-                    type="button"
-                >
-                    <i class="fa-solid fa-check"></i>
-                    Valider
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
+<span id="adminEmail">
+...
+</span>
 
 </div>
 
+<nav class="menu">
 
-<!-- ==========================================================
-     SUPPORT MODAL
-========================================================== -->
+<button class="active" data-section="overview">
+<i class="fa-solid fa-chart-pie"></i>
+Vue générale
+</button>
 
-<div
-    id="supportModal"
-    class="modal-overlay"
+<button data-section="users">
+<i class="fa-solid fa-users"></i>
+Utilisateurs
+</button>
+
+<button data-section="deposits">
+<i class="fa-solid fa-arrow-down"></i>
+Dépôts
+</button>
+
+<button data-section="withdrawals">
+<i class="fa-solid fa-arrow-up"></i>
+Retraits
+</button>
+
+<button data-section="investments">
+<i class="fa-solid fa-building"></i>
+Investissements
+</button>
+
+<button data-section="support">
+<i class="fa-solid fa-headset"></i>
+Assistance
+</button>
+
+</nav>
+
+<button id="logoutSideButton" class="logout-side">
+<i class="fa-solid fa-right-from-bracket"></i>
+Déconnexion
+</button>
+
+</aside>
+
+<main class="main">
+
+<header class="topbar">
+
+<div class="top-left">
+
+<button
+id="mobileMenuButton"
+class="icon-btn mobile-menu"
+type="button"
+>
+<i class="fa-solid fa-bars"></i>
+</button>
+
+<div>
+
+<h1 id="pageTitle">
+Administration
+</h1>
+
+<p>
+Gestion sécurisée Housing's YQD
+</p>
+
+</div>
+</div>
+
+<div class="top-actions">
+
+<button
+id="notificationButton"
+class="icon-btn"
+type="button"
+aria-label="Notifications"
+>
+<i class="fa-regular fa-bell"></i>
+
+<span
+id="notificationBadge"
+class="notification-badge"
+>
+0
+</span>
+
+</button>
+
+<button
+id="refreshButton"
+class="icon-btn"
+type="button"
+title="Actualiser"
+>
+<i class="fa-solid fa-rotate"></i>
+</button>
+
+<button(args omitted) id="logoutButton" class="icon-btn" type="button">
+<i class="fa-solid fa-right-from-bracket"></i>
+</button>
+
+</div>
+</header>
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
 >
 
-    <div class="modal">
+<title>
+Administration | Housing's YQD
+</title>
 
-        <div class="modal-head">
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+>
 
-            <h3>
-                Répondre au ticket
-            </h3>
+<style>
 
-            <button
-                class="modal-close"
-                type="button"
-                onclick="closeModal('supportModal')"
-            >
-                <i class="fa-solid fa-xmark"></i>
-            </button>
+* {
+box-sizing: border-box;
+}
 
-        </div>
+:root {
+--primary: #2563eb;
+--primary-dark: #1d4ed8;
+--secondary: #0ea5e9;
+--dark: #020617;
+--dark-soft: #0f172a;
+--text: #334155;
+--muted: #64748b;
+--border: #e2e8f0;
+--bg: #f4f7fb;
+--card: #ffffff;
+--success: #059669;
+--success-soft: #ecfdf5;
+--danger: #dc2626;
+--danger-soft: #fef2f2;
+--warning: #d97706;
+--warning-soft: #fffbeb;
+--purple: #7c3aed;
+--purple-soft: #f5f3ff;
+}
 
+body {
+margin: 0;
+min-height: 100vh;
+font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+color: var(--text);
+background: var(--bg);
+}
 
-        <div class="modal-body">
+button,
+input,
+textarea {
+font: inherit;
+}
 
-            <div
-                id="supportDetails"
-                class="detail-box"
-            ></div>
+button {
+cursor: pointer;
+}
 
+.hidden {
+display: none !important;
+}
 
-            <div class="field">
+/* CHARGEMENT */
 
-                <label>
-                    Votre réponse
-                </label>
+.loading-screen {
+position: fixed;
+z-index: 9999999;
+inset: 0;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 15px;
+color: white;
+background:
+radial-gradient(circle at 75% 20%, rgba(14,165,233,.35), transparent 28%),
+linear-gradient(145deg, #020617, #082f68);
+}
 
-                <textarea
-                    id="supportReply"
-                    placeholder="Écrivez votre réponse à l'utilisateur..."
-                ></textarea>
+.spinner {
+width: 50px;
+height: 50px;
+border: 4px solid rgba(255,255,255,.18);
+border-top-color: white;
+border-radius: 50%;
+animation: spin .8s linear infinite;
+}
 
-            </div>
+@keyframes spin {
+to {
+transform: rotate(360deg);
+}
+}
 
+/* ACCÈS REFUSÉ */
 
-            <label
-                style="
-                    display:flex;
-                    gap:8px;
-                    align-items:center;
-                    font-size:11px;
-                    font-weight:800;
-                "
-            >
-                <input
-                    id="closeTicketCheckbox"
-                    type="checkbox"
-                >
+.access-screen {
+min-height: 100vh;
+display: none;
+align-items: center;
+justify-content: center;
+padding: 25px;
+background: linear-gradient(145deg, #020617, #0f172a);
+}
 
-                Fermer le ticket après réponse
-            </label>
+.access-card {
+width: min(500px,100%);
+padding: 32px;
+border: 1px solid rgba(255,255,255,.1);
+border-radius: 25px;
+color: white;
+background: rgba(255,255,255,.06);
+text-align: center;
+box-shadow: 0 30px 100px rgba(0,0,0,.4);
+}
 
+.access-card h1 {
+margin: 0 0 12px;
+}
 
-            <div
-                class="modal-actions"
-                style="margin-top:15px;"
-            >
+.access-card p {
+color: #cbd5e1;
+font-size: 13px;
+}
 
-                <button
-                    id="sendSupportReplyButton"
-                    class="action-btn reply"
-                    type="button"
-                >
-                    <i class="fa-solid fa-paper-plane"></i>
-                    Envoyer la réponse
-                </button>
+/* APPLICATION */
 
-            </div>
+.admin-app {
+min-height: 100vh;
+display: none;
+grid-template-columns: 270px minmax(0,1fr);
+}
 
-        </div>
+/* MENU LATÉRAL */
 
-    </div>
+.sidebar {
+position: sticky;
+top: 0;
+height: 100vh;
+overflow-y: auto;
+padding: 20px 15px;
+color: white;
+background:
+radial-gradient(circle at 20% 5%, rgba(37,99,235,.3), transparent 27%),
+linear-gradient(170deg, #020617, #071c3f 60%, #082f68);
+}
+
+.brand {
+display: flex;
+align-items: center;
+gap: 12px;
+padding: 5px 5px 22px;
+}
+
+.brand-icon {
+width: 48px;
+height: 48px;
+flex-shrink: 0;
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 15px;
+background: linear-gradient(135deg, #2563eb, #0ea5e9);
+box-shadow: 0 10px 30px rgba(37,99,235,.35);
+}
+
+.brand strong {
+font-size: 17px;
+}
+
+.brand span {
+display: block;
+margin-top: 3px;
+font-size: 9px;
+color: #94a3b8;
+}
+
+.admin-profile {
+padding: 14px;
+margin-bottom: 18px;
+border-radius: 16px;
+background: rgba(255,255,255,.07);
+border: 1px solid rgba(255,255,255,.08);
+}
+
+.admin-profile small {
+color: #60a5fa;
+font-weight: 900;
+}
+
+.admin-profile strong,
+.admin-profile span {
+display: block;
+margin-top: 5px;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+.admin-profile span {
+color: #cbd5e1;
+font-size: 11px;
+}
+
+.menu {
+display: grid;
+gap: 6px;
+}
+
+.menu button {
+min-height: 46px;
+width: 100%;
+padding: 0 13px;
+display: flex;
+align-items: center;
+gap: 11px;
+border: 0;
+border-radius: 12px;
+color: #cbd5e1;
+background: transparent;
+font-size: 12px;
+font-weight: 800;
+text-align: left;
+}
+
+.menu button:hover,
+.menu button.active {
+color: white;
+background: rgba(255,255,255,.1);
+}
+
+.menu button i {
+width: 18px;
+text-align: center;
+}
+
+.logout-side {
+width: 100%;
+min-height: 44px;
+margin-top: 18px;
+border: 1px solid rgba(248,113,113,.3);
+border-radius: 12px;
+color: #fecaca;
+background: rgba(220,38,38,.08);
+font-weight: 800;
+}
+
+/* PARTIE PRINCIPALE */
+
+.main {
+min-width: 0;
+}
+
+.topbar {
+position: sticky;
+z-index: 500;
+top: 0;
+min-height: 70px;
+padding: 12px 24px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 15px;
+border-bottom: 1px solid var(--border);
+background: rgba(255,255,255,.96);
+backdrop-filter: blur(15px);
+}
+
+.top-left {
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.topbar h1 {
+margin: 0;
+font-size: 20px;
+color: var(--dark-soft);
+}
+
+.topbar p {
+margin: 3px 0 0;
+font-size: 10px;
+color: var(--muted);
+}
+
+.top-actions {
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.icon-btn {
+position: relative;
+width: 43px;
+height: 43px;
+display: flex;
+align-items: center;
+justify-content: center;
+border: 1px solid var(--border);
+border-radius: 12px;
+background: white;
+color: #475569;
+}
+
+.icon-btn:hover {
+color: var(--primary);
+background: #eff6ff;
+}
+
+.mobile-menu {
+display: none;
+}
+
+/* NOTIFICATIONS */
+
+.notification-badge {
+position: absolute;
+top: -5px;
+right: -5px;
+min-width: 20px;
+height: 20px;
+padding: 0 5px;
+display: none;
+align-items: center;
+justify-content: center;
+border: 2px solid white;
+border-radius: 999px;
+color: white;
+background: #dc2626;
+font-size: 10px;
+font-weight: 900;
+}
+
+.notification-badge.show {
+display: flex;
+}
+
+.notification-panel {
+position: fixed !important;
+z-index: 999999 !important;
+top: 76px !important;
+right: 20px !important;
+width: min(410px, calc(100vw - 30px));
+max-height: 72vh;
+display: none;
+overflow: hidden;
+border: 1px solid var(--border);
+border-radius: 19px;
+background: white;
+box-shadow: 0 25px 80px rgba(15,23,42,.3);
+}
+
+.notification-panel.show {
+display: block !important;
+}
+
+.notification-head {
+padding: 14px 15px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+border-bottom: 1px solid var(--border);
+}
+
+.notification-head strong {
+color: #0f172a;
+}
+
+.notification-head button {
+border: 0;
+color: var(--primary);
+background: transparent;
+font-size: 11px;
+font-weight: 900;
+}
+
+.notification-list {
+max-height: 60vh;
+overflow-y: auto;
+}
+
+.notification-item {
+width: 100%;
+padding: 14px 15px;
+display: block;
+border: 0;
+border-bottom: 1px solid #eef2f7;
+background: white;
+text-align: left;
+}
+
+.notification-item.unread {
+background: #eff6ff;
+}
+
+.notification-item:hover {
+background: #f8fafc;
+}
+
+.notification-item strong {
+display: block;
+margin-bottom: 5px;
+color: #0f172a;
+font-size: 12px;
+}
+
+.notification-item p {
+margin: 0;
+color: #64748b;
+font-size: 11px;
+line-height: 1.55;
+}
+
+.notification-item small {
+display: block;
+margin-top: 7px;
+color: #94a3b8;
+font-size: 9px;
+}
+
+/* CONTENU */
+
+.content {
+width: min(1550px,100%);
+margin: 0 auto;
+padding: 24px;
+}
+
+.hero {
+padding: 26px;
+border-radius: 24px;
+color: white;
+background:
+radial-gradient(circle at 78% 20%, rgba(56,189,248,.32), transparent 25%),
+linear-gradient(135deg, #020617, #0b4b94);
+box-shadow: 0 16px 40px rgba(15,23,42,.12);
+}
+
+.hero small {
+display: inline-flex;
+align-items: center;
+gap: 7px;
+padding: 6px 10px;
+border-radius: 999px;
+background: rgba(255,255,255,.1);
+color: #bae6fd;
+font-size: 9px;
+font-weight: 900;
+}
+
+.hero h2 {
+margin: 13px 0 7px;
+font-size: clamp(25px, 4vw, 38px);
+}
+
+.hero p {
+max-width: 760px;
+margin: 0;
+color: #cbd5e1;
+font-size: 12px;
+line-height: 1.65;
+}
+
+/* STATISTIQUES */
+
+.stats {
+margin-top: 18px;
+display: grid;
+grid-template-columns: repeat(5, minmax(0,1fr));
+gap: 12px;
+}
+
+.stat {
+padding: 17px;
+border: 1px solid var(--border);
+border-radius: 17px;
+background: white;
+box-shadow: 0 7px 24px rgba(15,23,42,.04);
+}
+
+.stat-icon {
+width: 39px;
+height: 39px;
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 11px;
+color: #1d4ed8;
+background: #eff6ff;
+}
+
+.stat span {
+display: block;
+margin-top: 12px;
+color: var(--muted);
+font-size: 10px;
+font-weight: 800;
+}
+
+.stat strong {
+display: block;
+margin-top: 5px;
+color: #0f172a;
+font-size: 20px;
+}
+
+/* SECTIONS */
+
+.admin-section {
+display: none;
+margin-top: 24px;
+}
+
+.admin-section.active {
+display: block;
+}
+
+.section-head {
+margin-bottom: 13px;
+display: flex;
+align-items: flex-end;
+justify-content: space-between;
+gap: 12px;
+flex-wrap: wrap;
+}
+
+.section-head h3 {
+margin: 0;
+color: #0f172a;
+}
+
+.section-head p {
+margin: 4px 0 0;
+color: var(--muted);
+font-size: 11px;
+}
+
+.search {
+min-height: 40px;
+width: min(300px,100%);
+padding: 0 11px;
+border: 1px solid var(--border);
+border-radius: 10px;
+outline: none;
+background: white;
+}
+
+.search:focus {
+border-color: #60a5fa;
+box-shadow: 0 0 0 3px rgba(37,99,235,.08);
+}
+
+.card {
+overflow: hidden;
+border: 1px solid var(--border);
+border-radius: 18px;
+background: white;
+}
+
+.table-wrap {
+overflow-x: auto;
+}
+
+table {
+width: 100%;
+min-width: 950px;
+border-collapse: collapse;
+}
+
+th,
+td {
+padding: 12px;
+border-bottom: 1px solid #eef2f7;
+text-align: left;
+font-size: 11px;
+vertical-align: middle;
+}
+
+th {
+color: #64748b;
+background: #f8fafc;
+}
+
+tbody tr:hover {
+background: #fafcff;
+}
+
+/* STATUTS */
+
+.status {
+display: inline-flex;
+align-items: center;
+min-height: 25px;
+padding: 0 8px;
+border-radius: 999px;
+font-size: 9px;
+font-weight: 900;
+text-transform: uppercase;
+}
+
+.status.pending,
+.status.open {
+color: #92400e;
+background: var(--warning-soft);
+}
+
+.status.approved,
+.status.active,
+.status.answered {
+color: #166534;
+background: #f0fdf4;
+}
+
+.status.rejected,
+.status.cancelled {
+color: #991b1b;
+background: #fef2f2;
+}
+
+.status.closed,
+.status.completed {
+color: #1e40af;
+background: #eff6ff;
+}
+
+/* ACTIONS */
+
+.action-row {
+display: flex;
+gap: 7px;
+flex-wrap: wrap;
+}
+
+.action-btn {
+min-height: 34px;
+padding: 0 12px;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+gap: 6px;
+border: 0;
+border-radius: 9px;
+color: white;
+font-size: 10px;
+font-weight: 900;
+transition: transform .15s ease, opacity .15s ease;
+}
+
+.action-btn:active {
+transform: scale(.97);
+}
+
+.action-btn:disabled {
+opacity: .55;
+cursor: wait;
+}
+
+.approve {
+background: linear-gradient(135deg, #059669, #10b981);
+}
+
+.reject {
+background: linear-gradient(135deg, #dc2626, #ef4444);
+}
+
+.reply {
+background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+}
+
+.empty {
+padding: 30px;
+color: #94a3b8;
+text-align: center;
+font-size: 11px;
+}
+
+.mobile-actions-box {
+display: none;
+}
+
+/* FENÊTRES */
+
+.modal-overlay {
+position: fixed;
+z-index: 9999999;
+inset: 0;
+display: none;
+align-items: center;
+justify-content: center;
+padding: 20px;
+background: rgba(2,6,23,.72);
+backdrop-filter: blur(6px);
+}
+
+.modal-overlay.show {
+display: flex;
+}
+
+.modal {
+width: min(530px,100%);
+max-height: 90vh;
+overflow-y: auto;
+border-radius: 21px;
+background: white;
+box-shadow: 0 35px 100px rgba(0,0,0,.35);
+}
+
+.modal-head {
+padding: 17px 19px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+border-bottom: 1px solid var(--border);
+}
+
+.modal-head h3 {
+margin: 0;
+color: #0f172a;
+}
+
+.modal-close {
+width: 35px;
+height: 35px;
+border: 0;
+border-radius: 9px;
+background: #f1f5f9;
+}
+
+.modal-body {
+padding: 19px;
+}
+
+.detail-box {
+padding: 14px;
+margin-bottom: 13px;
+border-radius: 12px;
+background: #f8fafc;
+font-size: 11px;
+line-height: 1.8;
+}
+
+.field {
+margin-bottom: 13px;
+}
+
+.field label {
+display: block;
+margin-bottom: 6px;
+font-size: 10px;
+font-weight: 900;
+}
+
+.field textarea {
+width: 100%;
+min-height: 110px;
+padding: 11px;
+border: 1px solid var(--border);
+border-radius: 10px;
+outline: none;
+resize: vertical;
+}
+
+.field textarea:focus {
+border-color: #60a5fa;
+}
+
+.modal-actions {
+display: flex;
+justify-content: flex-end;
+gap: 8px;
+flex-wrap: wrap;
+}
+
+/* MESSAGES */
+
+.toast-container {
+position: fixed;
+z-index: 10000000;
+right: 18px;
+bottom: 18px;
+width: min(360px, calc(100vw - 30px));
+display: grid;
+gap: 8px;
+}
+
+.toast {
+padding: 14px;
+border-radius: 12px;
+color: white;
+background: #0f172a;
+font-size: 11px;
+box-shadow: 0 18px 45px rgba(15,23,42,.25);
+}
+
+.toast.success {
+background: #047857;
+}
+
+.toast.error {
+background: #b91c1c;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1200px) {
+.stats {
+grid-template-columns: repeat(3, minmax(0,1fr));
+}
+}
+
+@media(max-width:850px) {
+
+.admin-app {
+grid-template-columns: 1fr;
+}
+
+.sidebar {
+position: fixed;
+z-index: 5000;
+left: -290px;
+top: 0;
+width: 270px;
+transition: left .25s ease;
+box-shadow: 20px 0 60px rgba(2,6,23,.35);
+}
+
+.sidebar.show {
+left: 0;
+}
+
+.mobile-menu {
+display: flex;
+}
+
+.topbar {
+min-height: 66px;
+padding: 10px 12px;
+}
+
+.topbar h1 {
+font-size: 16px;
+}
+
+.topbar p {
+display: none;
+}
+
+.icon-btn {
+width: 40px;
+height: 40px;
+}
+
+.content {
+padding: 13px;
+}
+
+.hero {
+padding: 20px;
+border-radius: 19px;
+}
+
+.hero h2 {
+font-size: 25px;
+}
+
+.hero p {
+font-size: 11px;
+}
+
+.stats {
+grid-template-columns: repeat(2, minmax(0,1fr));
+gap: 9px;
+}
+
+.stat {
+padding: 13px;
+}
+
+.stat strong {
+font-size: 18px;
+}
+
+.notification-panel {
+top: 68px !important;
+right: 10px !important;
+width: calc(100vw - 20px);
+}
+
+.section-head {
+align-items: stretch;
+}
+
+.search {
+width: 100%;
+}
+
+.card.table-wrap {
+overflow: visible;
+border: 0;
+background: transparent;
+}
+
+table {
+min-width: 0;
+width: 100%;
+display: block;
+}
+
+thead {
+display: none;
+}
+
+tbody {
+display: grid;
+gap: 13px;
+}
+
+tbody tr {
+display: block;
+overflow: hidden;
+padding: 5px 15px 15px;
+border: 1px solid var(--border);
+border-radius: 18px;
+background: white;
+box-shadow: 0 8px 26px rgba(15,23,42,.06);
+}
+
+tbody tr:hover {
+background: white;
+}
+
+tbody td {
+position: relative;
+width: 100%;
+min-height: 42px;
+padding: 11px 0 11px 46%;
+display: block;
+border-bottom: 1px dashed #e5e7eb;
+text-align: right;
+font-size: 11px;
+word-break: break-word;
+}
+
+tbody td::before {
+content: attr(data-label);
+position: absolute;
+left: 0;
+top: 11px;
+width: 42%;
+color: #64748b;
+font-size: 10px;
+font-weight: 900;
+text-align: left;
+}
+
+tbody td:last-child {
+padding: 15px 0 0;
+border-bottom: 0;
+text-align: left;
+}
+
+tbody td:last-child::before {
+position: static;
+width: auto;
+display: block;
+margin-bottom: 10px;
+font-size: 10px;
+}
+
+tbody td.empty {
+min-height: auto;
+padding: 25px 10px;
+text-align: center;
+}
+
+tbody td.empty::before {
+display: none;
+}
+
+.action-row {
+display: grid;
+grid-template-columns: repeat(2, minmax(0,1fr));
+width: 100%;
+gap: 8px;
+}
+
+.action-btn {
+min-height: 43px;
+width: 100%;
+padding: 0 12px;
+font-size: 11px;
+border-radius: 11px;
+}
+
+[data-ticket],
+[data-deposit],
+[data-withdrawal] {
+width: 100%;
+}
+
+.modal-overlay {
+align-items: flex-end;
+padding: 10px;
+}
+
+.modal {
+width: 100%;
+max-height: 92vh;
+border-radius: 23px 23px 15px 15px;
+}
+
+.modal-actions {
+display: grid;
+grid-template-columns: 1fr 1fr;
+}
+
+.toast-container {
+right: 10px;
+bottom: 10px;
+width: calc(100vw - 20px);
+}
+}
+
+@media(max-width:430px) {
+
+.stats {
+grid-template-columns: repeat(2, minmax(0,1fr));
+}
+
+.stat span {
+font-size: 9px;
+}
+
+tbody td {
+padding-left: 44%;
+}
+
+tbody td::before {
+width: 40%;
+}
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="loadingScreen" class="loading-screen">
+
+<div class="spinner"></div>
+
+<strong>
+Housing's YQD
+</strong>
+
+<span>
+Chargement de l'administration sécurisée...
+</span>
 
 </div>
 
+<div id="accessDenied" class="access-screen">
 
-<div
-    id="toastContainer"
-    class="toast-container"
-></div>
+<div class="access-card">
 
+<h1>
+<i class="fa-solid fa-shield-halved"></i>
+Accès refusé
+</h1>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<p id="accessDeniedMessage">
+Votre compte n'est pas autorisé.
+</p>
 
-<script src="supabase.js?v=20260830-mobile-admin-v2"></script>
+<button
+type="button"
+class="action-btn approve"
+onclick="window.location.href='login.html'"
+>
+<i class="fa-solid fa-right-to-bracket"></i>
+Connexion
+</button>
 
+</div>
+</div>
 
-<script>
-"use strict";
+<div id="adminApp" class="admin-app">
 
+<aside id="sidebar" class="sidebar">
 
-/* ============================================================
-   STATE
-============================================================ */
+<div class="brand">
 
-let adminUser = null;
-let adminRole = null;
+<div class="brand-icon">
+<i class="fa-solid fa-shield-halved"></i>
+</div>
 
-let profiles = [];
-let deposits = [];
-let withdrawals = [];
-let investments = [];
-let supportTickets = [];
-let adminNotifications = [];
+<div>
+<strong>Housing's YQD</strong>
+<span>ADMINISTRATION SUPABASE</span>
+</div>
 
-let currentReview = null;
-let currentSupportTicket = null;
+</div>
 
+<div class="admin-profile">
 
-/* ============================================================
-   HELPERS
-============================================================ */
+<small id="adminRole">
+ADMIN
+</small>
 
-function escapeHtml(value) {
+<strong id="adminName">
+Administrateur
+</strong>
 
-    return String(value ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-}
+<span id="adminEmail">
+...
+</span>
 
+</div>
 
-function formatMoney(value) {
+<nav class="menu">
 
-    return new Intl.NumberFormat(
-        "fr-FR"
-    ).format(
-        Number(value || 0)
-    ) + " FCFA";
-}
+<button class="active" data-section="overview">
+<i class="fa-solid fa-chart-pie"></i>
+Vue générale
+</button>
 
+<button data-section="users">
+<i class="fa-solid fa-users"></i>
+Utilisateurs
+</button>
 
-function formatDate(value) {
+<button data-section="deposits">
+<i class="fa-solid fa-arrow-down"></i>
+Dépôts
+</button>
 
-    if (!value) {
-        return "-";
-    }
+<button data-section="withdrawals">
+<i class="fa-solid fa-arrow-up"></i>
+Retraits
+</button>
 
-    try {
+<button data-section="investments">
+<i class="fa-solid fa-building"></i>
+Investissements
+</button>
 
-        return new Intl.DateTimeFormat(
-            "fr-FR",
-            {
-                dateStyle: "short",
-                timeStyle: "short"
-            }
-        ).format(
-            new Date(value)
-        );
+<button data-section="support">
+<i class="fa-solid fa-headset"></i>
+Assistance
+</button>
 
-    } catch {
+</nav>
 
-        return "-";
-    }
-}
+<button id="logoutSideButton" class="logout-side">
+<i class="fa-solid fa-right-from-bracket"></i>
+Déconnexion
+</button>
 
+</aside>
 
-function normalizeSearch(value) {
+<main class="main">
 
-    return String(
-        value || ""
-    )
-        .toLowerCase()
-        .trim();
-}
-
-
-function showToast(
-    message,
-    type = "success"
-) {
-
-    const toast =
-        document.createElement(
-            "div"
-        );
-
-    toast.className =
-        "toast " + type;
-
-    toast.textContent =
-        message;
-
-    document
-        .getElementById(
-            "toastContainer"
-        )
-        .appendChild(toast);
-
-    setTimeout(
-        () => toast.remove(),
-        4000
-    );
-}
-
-
-function openModal(id) {
-
-    document
-        .getElementById(id)
-        ?.classList
-        .add("show");
-}
-
-
-function closeModal(id) {
-
-    document
-        .getElementById(id)
-        ?.classList
-        .remove("show");
-}
-
-
-window.closeModal =
-    closeModal;
-
-
-/* ============================================================
-   AUTH ADMIN
-============================================================ */
-
-async function verifyAdminAccess() {
-
-    const result =
-        await requireSupabaseAdmin();
-
-    if (!result?.authorized) {
-
-        document
-            .getElementById(
-                "accessDenied"
-            )
-            .style.display =
-                "flex";
-
-        document
-            .getElementById(
-                "accessDeniedMessage"
-            )
-            .textContent =
-                result?.reason ===
-                "not_authenticated"
-                    ? "Connectez-vous d'abord avec votre compte administrateur."
-                    : "Votre compte ne possède pas le rôle administrateur.";
-
-        return false;
-    }
-
-    adminUser =
-        result.user;
-
-    adminRole =
-        result.role;
-
-
-    document
-        .getElementById(
-            "adminEmail"
-        )
-        .textContent =
-            adminUser?.email || "";
-
-
-    document
-        .getElementById(
-            "adminRole"
-        )
-        .textContent =
-            String(
-                adminRole || "admin"
-            ).toUpperCase();
-
-
-    const profileResult =
-        await getSupabaseProfile(
-            adminUser.id
-        );
-
-
-    const profile =
-        profileResult?.profile ||
-        profileResult?.data;
-
-
-    document
-        .getElementById(
-            "adminName"
-        )
-        .textContent =
-            profile?.full_name ||
-            "Administrateur";
-
-
-    return true;
-}
-
-
-/* ============================================================
-   LOAD DATA
-============================================================ */
-
-async function loadProfiles() {
-
-    const result =
-        await adminGetSupabaseProfiles();
-
-    profiles =
-        result?.profiles || [];
-}
-
-
-async function loadDeposits() {
-
-    const result =
-        await adminGetSupabaseDeposits();
-
-    deposits =
-        result?.deposits || [];
-}
-
-
-async function loadWithdrawals() {
-
-    const result =
-        await adminGetSupabaseWithdrawals();
-
-    withdrawals =
-        result?.withdrawals || [];
-}
-
-
-async function loadInvestments() {
-
-    const result =
-        await adminGetSupabaseInvestments();
-
-    investments =
-        result?.investments || [];
-}
-
-
-async function loadSupport() {
-
-    const result =
-        await adminGetSupabaseSupportTickets();
-
-    supportTickets =
-        result?.tickets || [];
-}
-
-
-async function loadAdminNotifications() {
-
-    const result =
-        await getSupabaseNotifications(
-            100
-        );
-
-    adminNotifications =
-        result?.notifications || [];
-
-    renderNotifications();
-}
-
-
-/* ============================================================
-   NOTIFICATIONS
-============================================================ */
-
-function renderNotifications() {
-
-    const badge =
-        document.getElementById(
-            "notificationBadge"
-        );
-
-    const list =
-        document.getElementById(
-            "notificationList"
-        );
-
-
-    const unread =
-        adminNotifications.filter(
-            item =>
-                !item.is_read
-        ).length;
-
-
-    badge.textContent =
-        unread > 99
-            ? "99+"
-            : unread;
-
-
-    badge.classList.toggle(
-        "show",
-        unread > 0
-    );
-
-
-    if (
-        !adminNotifications.length
-    ) {
-
-        list.innerHTML = `
-            <div class="empty">
-                Aucune notification.
-            </div>
-        `;
-
-        return;
-    }
-
-
-    list.innerHTML =
-        adminNotifications
-            .map(
-                item => `
-                    <button
-                        type="button"
-                        class="
-                            notification-item
-                            ${
-                                item.is_read
-                                    ? ""
-                                    : "unread"
-                            }
-                        "
-                        data-notification-id="${escapeHtml(item.id)}"
-                        data-related-type="${escapeHtml(item.related_type || "")}"
-                    >
-
-                        <strong>
-                            ${escapeHtml(
-                                item.title ||
-                                "Notification"
-                            )}
-                        </strong>
-
-                        <p>
-                            ${escapeHtml(
-                                item.message || ""
-                            )}
-                        </p>
-
-                        <small>
-                            ${formatDate(
-                                item.created_at
-                            )}
-                        </small>
-
-                    </button>
-                `
-            )
-            .join("");
-
-
-    list
-        .querySelectorAll(
-            "[data-notification-id]"
-        )
-        .forEach(
-            button => {
-
-                button.addEventListener(
-                    "click",
-                    async () => {
-
-                        const notificationId =
-                            button.dataset
-                                .notificationId;
-
-                        const relatedType =
-                            button.dataset
-                                .relatedType;
-
-
-                        const notification =
-                            adminNotifications.find(
-                                item =>
-                                    String(
-                                        item.id
-                                    ) ===
-                                    String(
-                                        notificationId
-                                    )
-                            );
-
-
-                        if (
-                            notification &&
-                            !notification.is_read
-                        ) {
-
-                            await markSupabaseNotificationRead(
-                                notificationId
-                            );
-
-                            await loadAdminNotifications();
-                        }
-
-
-                        closeNotificationPanel();
-
-
-                        if (
-                            relatedType ===
-                            "deposit"
-                        ) {
-                            showSection(
-                                "deposits"
-                            );
-                        }
-
-
-                        else if (
-                            relatedType ===
-                            "withdrawal"
-                        ) {
-                            showSection(
-                                "withdrawals"
-                            );
-                        }
-
-
-                        else if (
-                            relatedType ===
-                            "support_ticket"
-                        ) {
-                            showSection(
-                                "support"
-                            );
-                        }
-
-                    }
-                );
-
-            }
-        );
-}
-
-
-function openNotificationPanel() {
-
-    const panel =
-        document.getElementById(
-            "notificationPanel"
-        );
-
-    panel.classList.add(
-        "show"
-    );
-
-    panel.setAttribute(
-        "aria-hidden",
-        "false"
-    );
-}
-
-
-function closeNotificationPanel() {
-
-    const panel =
-        document.getElementById(
-            "notificationPanel"
-        );
-
-    panel.classList.remove(
-        "show"
-    );
-
-    panel.setAttribute(
-        "aria-hidden",
-        "true"
-    );
-}
-
-
-document
-    .getElementById(
-        "notificationButton"
-    )
-    .addEventListener(
-        "click",
-        event => {
-
-            event.preventDefault();
-            event.stopPropagation();
-
-            const panel =
-                document.getElementById(
-                    "notificationPanel"
-                );
-
-
-            if (
-                panel.classList.contains(
-                    "show"
-                )
-            ) {
-                closeNotificationPanel();
-            }
-
-            else {
-                openNotificationPanel();
-            }
-        }
-    );
-
-
-document
-    .getElementById(
-        "notificationPanel"
-    )
-    .addEventListener(
-        "click",
-        event => {
-            event.stopPropagation();
-        }
-    );
-
-
-document.addEventListener(
-    "click",
-    () => {
-        closeNotificationPanel();
-    }
-);
-
-
-document
-    .getElementById(
-        "markAllNotificationsButton"
-    )
-    .addEventListener(
-        "click",
-        async function(event) {
-
-            event.stopPropagation();
-
-            this.disabled =
-                true;
-
-            const oldText =
-                this.textContent;
-
-            this.textContent =
-                "Lecture...";
-
-
-            try {
-
-                const result =
-                    await markAllSupabaseNotificationsRead();
-
-
-                if (!result?.success) {
-
-                    throw new Error(
-                        result?.message ||
-                        "Impossible de mettre les notifications à jour."
-                    );
-                }
-
-
-                await loadAdminNotifications();
-
-                openNotificationPanel();
-
-                showToast(
-                    "Toutes les notifications sont lues."
-                );
-
-            }
-
-            catch(error) {
-
-                showToast(
-                    error?.message ||
-                    "Erreur notifications.",
-                    "error"
-                );
-
-            }
-
-            finally {
-
-                this.disabled =
-                    false;
-
-                this.textContent =
-                    oldText;
-            }
-        }
-    );
-
-
-/* ============================================================
-   STATS
-============================================================ */
-
-function renderStats() {
-
-    document
-        .getElementById(
-            "statUsers"
-        )
-        .textContent =
-            profiles.length;
-
-
-    document
-        .getElementById(
-            "statPendingDeposits"
-        )
-        .textContent =
-            deposits.filter(
-                item =>
-                    item.status ===
-                    "pending"
-            ).length;
-
-
-    document
-        .getElementById(
-            "statPendingWithdrawals"
-        )
-        .textContent =
-            withdrawals.filter(
-                item =>
-                    item.status ===
-                    "pending"
-            ).length;
-
-
-    document
-        .getElementById(
-            "statActiveInvestments"
-        )
-        .textContent =
-            investments.filter(
-                item =>
-                    item.status ===
-                    "active"
-            ).length;
-
-
-    document
-        .getElementById(
-            "statOpenTickets"
-        )
-        .textContent =
-            supportTickets.filter(
-                item =>
-                    item.status ===
-                    "open"
-            ).length;
-}
-
-
-/* ============================================================
-   OVERVIEW
-============================================================ */
-
-function renderOverview() {
-
-    const pendingDeposits =
-        deposits.filter(
-            item =>
-                item.status ===
-                "pending"
-        ).length;
-
-
-    const pendingWithdrawals =
-        withdrawals.filter(
-            item =>
-                item.status ===
-                "pending"
-        ).length;
-
-
-    const tickets =
-        supportTickets.filter(
-            item =>
-                item.status ===
-                "open"
-        ).length;
-
-
-    document
-        .getElementById(
-            "overviewContent"
-        )
-        .innerHTML = `
-
-            <div
-                style="
-                    display:grid;
-                    grid-template-columns:
-                        repeat(
-                            auto-fit,
-                            minmax(200px,1fr)
-                        );
-                    gap:12px;
-                    padding:15px;
-                "
-            >
-
-                <button
-                    type="button"
-                    onclick="showSection('deposits')"
-                    style="
-                        text-align:left;
-                        padding:17px;
-                        border:0;
-                        border-radius:14px;
-                        background:#eff6ff;
-                        color:#0f172a;
-                    "
-                >
-                    <strong>
-                        Dépôts en attente
-                    </strong>
-
-                    <div
-                        style="
-                            margin-top:8px;
-                            font-size:28px;
-                            font-weight:900;
-                        "
-                    >
-                        ${pendingDeposits}
-                    </div>
-
-                    <small>
-                        Appuyer pour ouvrir
-                    </small>
-                </button>
-
-
-                <button
-                    type="button"
-                    onclick="showSection('withdrawals')"
-                    style="
-                        text-align:left;
-                        padding:17px;
-                        border:0;
-                        border-radius:14px;
-                        background:#fff7ed;
-                        color:#0f172a;
-                    "
-                >
-                    <strong>
-                        Retraits en attente
-                    </strong>
-
-                    <div
-                        style="
-                            margin-top:8px;
-                            font-size:28px;
-                            font-weight:900;
-                        "
-                    >
-                        ${pendingWithdrawals}
-                    </div>
-
-                    <small>
-                        Appuyer pour ouvrir
-                    </small>
-                </button>
-
-
-                <button
-                    type="button"
-                    onclick="showSection('support')"
-                    style="
-                        text-align:left;
-                        padding:17px;
-                        border:0;
-                        border-radius:14px;
-                        background:#f5f3ff;
-                        color:#0f172a;
-                    "
-                >
-                    <strong>
-                        Tickets ouverts
-                    </strong>
-
-                    <div
-                        style="
-                            margin-top:8px;
-                            font-size:28px;
-                            font-weight:900;
-                        "
-                    >
-                        ${tickets}
-                    </div>
-
-                    <small>
-                        Appuyer pour répondre
-                    </small>
-                </button>
-
-            </div>
-        `;
-}
-
-
-/* ============================================================
-   USERS
-============================================================ */
-
-function renderUsers(
-    search = ""
-) {
-
-    const q =
-        normalizeSearch(search);
-
-
-    const body =
-        document.getElementById(
-            "usersTableBody"
-        );
-
-
-    const filtered =
-        profiles.filter(
-            profile => {
-
-                const searchable =
-                    `
-                        ${profile.full_name || ""}
-                        ${profile.phone || ""}
-                        ${profile.referral_code || ""}
-                    `;
-
-                return searchable
-                    .toLowerCase()
-                    .includes(q);
-            }
-        );
-
-
-    if (!filtered.length) {
-
-        body.innerHTML = `
-            <tr>
-                <td
-                    colspan="7"
-                    class="empty"
-                >
-                    Aucun utilisateur.
-                </td>
-            </tr>
-        `;
-
-        return;
-    }
-
-
-    body.innerHTML =
-        filtered
-            .map(
-                profile => `
-
-                    <tr>
-
-                        <td data-label="Utilisateur">
-                            <strong>
-                                ${escapeHtml(
-                                    profile.full_name ||
-                                    "Utilisateur"
-                                )}
-                            </strong>
-                        </td>
-
-
-                        <td data-label="Téléphone">
-                            ${escapeHtml(
-                                profile.phone ||
-                                "-"
-                            )}
-                        </td>
-
-
-                        <td data-label="Solde">
-                            ${formatMoney(
-                                profile.balance
-                            )}
-                        </td>
-
-
-                        <td data-label="Total déposé">
-                            ${formatMoney(
-                                profile.total_deposited
-                            )}
-                        </td>
-
-
-                        <td data-label="Total investi">
-                            ${formatMoney(
-                                profile.total_invested
-                            )}
-                        </td>
-
-
-                        <td data-label="Bonus parrainage">
-                            ${formatMoney(
-                                profile.total_referral_bonus
-                            )}
-                        </td>
-
-
-                        <td data-label="État">
-                            <span
-                                class="
-                                    status
-                                    ${
-                                        profile.is_active
-                                            ? "approved"
-                                            : "rejected"
-                                    }
-                                "
-                            >
-                                ${
-                                    profile.is_active
-                                        ? "Actif"
-                                        : "Désactivé"
-                                }
-                            </span>
-                        </td>
-
-                    </tr>
-
-                `
-            )
-            .join("");
-}
-
-
-/* ============================================================
-   DEPOSITS
-============================================================ */
-
-function renderDeposits(
-    search = ""
-) {
-
-    const q =
-        normalizeSearch(search);
-
-
-    const body =
-        document.getElementById(
-            "depositsTableBody"
-        );
-
-
-    const filtered =
-        deposits.filter(
-            item => {
-
-                const profile =
-                    item.profiles || {};
-
-
-                const searchable =
-                    `
-                        ${profile.full_name || ""}
-                        ${profile.phone || ""}
-                        ${item.payment_reference || ""}
-                        ${item.payment_method || ""}
-                        ${item.status || ""}
-                        ${item.gross_amount || ""}
-                    `;
-
-
-                return searchable
-                    .toLowerCase()
-                    .includes(q);
-            }
-        );
-
-
-    if (!filtered.length) {
-
-        body.innerHTML = `
-            <tr>
-                <td
-                    colspan="9"
-                    class="empty"
-                >
-                    Aucun dépôt.
-                </td>
-            </tr>
-        `;
-
-        return;
-    }
-
-
-    body.innerHTML =
-        filtered
-            .map(
-                item => {
-
-                    const profile =
-                        item.profiles || {};
-
-
-                    return `
-
-                        <tr>
-
-                            <td data-label="Utilisateur">
-
-                                <strong>
-                                    ${escapeHtml(
-                                        profile.full_name ||
-                                        "Utilisateur"
-                                    )}
-                                </strong>
-
-                                <br>
-
-                                <small>
-                                    ${escapeHtml(
-                                        profile.phone ||
-                                        ""
-                                    )}
-                                </small>
-
-                            </td>
-
-
-                            <td data-label="Montant brut">
-                                <strong>
-                                    ${formatMoney(
-                                        item.gross_amount
-                                    )}
-                                </strong>
-                            </td>
-
-
-                            <td data-label="Frais">
-                                ${formatMoney(
-                                    item.fee_amount
-                                )}
-                            </td>
-
-
-                            <td data-label="Montant net">
-                                ${formatMoney(
-                                    item.net_amount
-                                )}
-                            </td>
-
-
-                            <td data-label="Méthode">
-                                ${escapeHtml(
-                                    item.payment_method ||
-                                    "-"
-                                )}
-                            </td>
-
-
-                            <td data-label="Référence">
-                                ${escapeHtml(
-                                    item.payment_reference ||
-                                    "-"
-                                )}
-                            </td>
-
-
-                            <td data-label="Statut">
-
-                                <span
-                                    class="
-                                        status
-                                        ${escapeHtml(
-                                            item.status
-                                        )}
-                                    "
-                                >
-                                    ${escapeHtml(
-                                        item.status
-                                    )}
-                                </span>
-
-                            </td>
-
-
-                            <td data-label="Date">
-                                ${formatDate(
-                                    item.created_at
-                                )}
-                            </td>
-
-
-                            <td data-label="Actions">
-
-                                ${
-                                    item.status ===
-                                    "pending"
-
-                                    ? `
-                                        <div class="action-row">
-
-                                            <button
-                                                class="action-btn approve"
-                                                data-deposit="${escapeHtml(item.id)}"
-                                                type="button"
-                                            >
-                                                <i class="fa-solid fa-check"></i>
-                                                Valider / Refuser
-                                            </button>
-
-                                        </div>
-                                    `
-
-                                    : `
-                                        <span
-                                            style="
-                                                color:#64748b;
-                                                font-size:10px;
-                                            "
-                                        >
-                                            Déjà traité
-                                        </span>
-                                    `
-                                }
-
-                            </td>
-
-                        </tr>
-
-                    `;
-                }
-            )
-            .join("");
-
-
-    body
-        .querySelectorAll(
-            "[data-deposit]"
-        )
-        .forEach(
-            button => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        openFinancialReview(
-                            "deposit",
-                            button.dataset
-                                .deposit
-                        );
-
-                    }
-                );
-
-            }
-        );
-}
-
-
-/* ============================================================
-   WITHDRAWALS
-============================================================ */
-
-function renderWithdrawals(
-    search = ""
-) {
-
-    const q =
-        normalizeSearch(search);
-
-
-    const body =
-        document.getElementById(
-            "withdrawalsTableBody"
-        );
-
-
-    const filtered =
-        withdrawals.filter(
-            item => {
-
-                const profile =
-                    item.profiles || {};
-
-
-                const searchable =
-                    `
-                        ${profile.full_name || ""}
-                        ${profile.phone || ""}
-                        ${item.destination_phone || ""}
-                        ${item.payment_method || ""}
-                        ${item.status || ""}
-                    `;
-
-
-                return searchable
-                    .toLowerCase()
-                    .includes(q);
-            }
-        );
-
-
-    if (!filtered.length) {
-
-        body.innerHTML = `
-            <tr>
-                <td
-                    colspan="8"
-                    class="empty"
-                >
-                    Aucun retrait.
-                </td>
-            </tr>
-        `;
-
-        return;
-    }
-
-
-    body.innerHTML =
-        filtered
-            .map(
-                item => {
-
-                    const profile =
-                        item.profiles || {};
-
-
-                    return `
-
-                        <tr>
-
-                            <td data-label="Utilisateur">
-
-                                <strong>
-                                    ${escapeHtml(
-                                        profile.full_name ||
-                                        "Utilisateur"
-                                    )}
-                                </strong>
-
-                                <br>
-
-                                <small>
-                                    ${escapeHtml(
-                                        profile.phone ||
-                                        ""
-                                    )}
-                                </small>
-
-                            </td>
-
-
-                            <td data-label="Montant brut">
-                                <strong>
-                                    ${formatMoney(
-                                        item.gross_amount
-                                    )}
-                                </strong>
-                            </td>
-
-
-                            <td data-label="Frais">
-                                ${formatMoney(
-                                    item.fee_amount
-                                )}
-                            </td>
-
-
-                            <td data-label="Montant net">
-                                ${formatMoney(
-                                    item.net_amount
-                                )}
-                            </td>
-
-
-                            <td data-label="Destination">
-                                ${escapeHtml(
-                                    item.destination_phone ||
-                                    "-"
-                                )}
-                            </td>
-
-
-                            <td data-label="Statut">
-
-                                <span
-                                    class="
-                                        status
-                                        ${escapeHtml(
-                                            item.status
-                                        )}
-                                    "
-                                >
-                                    ${escapeHtml(
-                                        item.status
-                                    )}
-                                </span>
-
-                            </td>
-
-
-                            <td data-label="Date">
-                                ${formatDate(
-                                    item.created_at
-                                )}
-                            </td>
-
-
-                            <td data-label="Actions">
-
-                                ${
-                                    item.status ===
-                                    "pending"
-
-                                    ? `
-                                        <div class="action-row">
-
-                                            <button
-                                                class="action-btn approve"
-                                                data-withdrawal="${escapeHtml(item.id)}"
-                                                type="button"
-                                            >
-                                                <i class="fa-solid fa-check"></i>
-                                                Valider / Refuser
-                                            </button>
-
-                                        </div>
-                                    `
-
-                                    : `
-                                        <span
-                                            style="
-                                                color:#64748b;
-                                                font-size:10px;
-                                            "
-                                        >
-                                            Déjà traité
-                                        </span>
-                                    `
-                                }
-
-                            </td>
-
-                        </tr>
-
-                    `;
-                }
-            )
-            .join("");
-
-
-    body
-        .querySelectorAll(
-            "[data-withdrawal]"
-        )
-        .forEach(
-            button => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        openFinancialReview(
-                            "withdrawal",
-                            button.dataset
-                                .withdrawal
-                        );
-
-                    }
-                );
-
-            }
-        );
-}
-
-
-/* ============================================================
-   INVESTMENTS
-============================================================ */
-
-function renderInvestments(
-    search = ""
-) {
-
-    const q =
-        normalizeSearch(search);
-
-
-    const body =
-        document.getElementById(
-            "investmentsTableBody"
-        );
-
-
-    const filtered =
-        investments.filter(
-            item => {
-
-                const profile =
-                    item.profiles || {};
-
-
-                const searchable =
-                    `
-                        ${profile.full_name || ""}
-                        ${item.pack_name || ""}
-                        ${item.pack_id || ""}
-                        ${item.status || ""}
-                    `;
-
-
-                return searchable
-                    .toLowerCase()
-                    .includes(q);
-            }
-        );
-
-
-    if (!filtered.length) {
-
-        body.innerHTML = `
-            <tr>
-                <td
-                    colspan="7"
-                    class="empty"
-                >
-                    Aucun investissement.
-                </td>
-            </tr>
-        `;
-
-        return;
-    }
-
-
-    body.innerHTML =
-        filtered
-            .map(
-                item => {
-
-                    const profile =
-                        item.profiles || {};
-
-
-                    return `
-
-                        <tr>
-
-                            <td data-label="Utilisateur">
-                                ${escapeHtml(
-                                    profile.full_name ||
-                                    "Utilisateur"
-                                )}
-                            </td>
-
-
-                            <td data-label="Pack">
-                                ${escapeHtml(
-                                    item.pack_name ||
-                                    item.pack_id ||
-                                    "-"
-                                )}
-                            </td>
-
-
-                            <td data-label="Montant">
-                                ${formatMoney(
-                                    item.amount
-                                )}
-                            </td>
-
-
-                            <td data-label="Gain journalier">
-                                ${formatMoney(
-                                    item.daily_income
-                                )}
-                            </td>
-
-
-                            <td data-label="Jours crédités">
-                                ${Number(
-                                    item.credited_days ||
-                                    0
-                                )}
-                                /
-                                ${Number(
-                                    item.duration_days ||
-                                    0
-                                )}
-                            </td>
-
-
-                            <td data-label="Total crédité">
-                                ${formatMoney(
-                                    item.total_credited
-                                )}
-                            </td>
-
-
-                            <td data-label="Statut">
-
-                                <span
-                                    class="
-                                        status
-                                        ${escapeHtml(
-                                            item.status
-                                        )}
-                                    "
-                                >
-                                    ${escapeHtml(
-                                        item.status
-                                    )}
-                                </span>
-
-                            </td>
-
-                        </tr>
-
-                    `;
-                }
-            )
-            .join("");
-}
-
-
-/* ============================================================
-   SUPPORT
-============================================================ */
-
-function renderSupport(
-    search = ""
-) {
-
-    const q =
-        normalizeSearch(search);
-
-
-    const body =
-        document.getElementById(
-            "supportTableBody"
-        );
-
-
-    const filtered =
-        supportTickets.filter(
-            item => {
-
-                const profile =
-                    item.profiles || {};
-
-
-                const searchable =
-                    `
-                        ${profile.full_name || ""}
-                        ${item.subject || ""}
-                        ${item.message || ""}
-                        ${item.status || ""}
-                    `;
-
-
-                return searchable
-                    .toLowerCase()
-                    .includes(q);
-            }
-        );
-
-
-    if (!filtered.length) {
-
-        body.innerHTML = `
-            <tr>
-                <td
-                    colspan="6"
-                    class="empty"
-                >
-                    Aucun ticket.
-                </td>
-            </tr>
-        `;
-
-        return;
-    }
-
-
-    body.innerHTML =
-        filtered
-            .map(
-                item => {
-
-                    const profile =
-                        item.profiles || {};
-
-                    const message =
-                        String(
-                            item.message || ""
-                        );
-
-
-                    return `
-
-                        <tr>
-
-                            <td data-label="Utilisateur">
-                                <strong>
-                                    ${escapeHtml(
-                                        profile.full_name ||
-                                        "Utilisateur"
-                                    )}
-                                </strong>
-                            </td>
-
-
-                            <td data-label="Sujet">
-                                ${escapeHtml(
-                                    item.subject ||
-                                    "-"
-                                )}
-                            </td>
-
-
-                            <td data-label="Message">
-
-                                ${escapeHtml(
-                                    message.length > 100
-                                        ? message.slice(
-                                            0,
-                                            100
-                                        ) + "..."
-                                        : message
-                                )}
-
-                            </td>
-
-
-                            <td data-label="Statut">
-
-                                <span
-                                    class="
-                                        status
-                                        ${escapeHtml(
-                                            item.status
-                                        )}
-                                    "
-                                >
-                                    ${escapeHtml(
-                                        item.status
-                                    )}
-                                </span>
-
-                            </td>
-
-
-                            <td data-label="Date">
-                                ${formatDate(
-                                    item.created_at
-                                )}
-                            </td>
-
-
-                            <td data-label="Action">
-
-                                <button
-                                    class="action-btn reply"
-                                    data-ticket="${escapeHtml(item.id)}"
-                                    type="button"
-                                >
-                                    <i class="fa-solid fa-comment-dots"></i>
-                                    Répondre
-                                </button>
-
-                            </td>
-
-                        </tr>
-
-                    `;
-                }
-            )
-            .join("");
-
-
-    body
-        .querySelectorAll(
-            "[data-ticket]"
-        )
-        .forEach(
-            button => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        openSupportReply(
-                            button.dataset
-                                .ticket
-                        );
-
-                    }
-                );
-
-            }
-        );
-}
-
-
-/* ============================================================
-   RENDER EVERYTHING
-============================================================ */
-
-function renderEverything() {
-
-    renderStats();
-
-    renderOverview();
-
-
-    renderUsers(
-        document
-            .getElementById(
-                "usersSearch"
-            )
-            .value
-    );
-
-
-    renderDeposits(
-        document
-            .getElementById(
-                "depositsSearch"
-            )
-            .value
-    );
-
-
-    renderWithdrawals(
-        document
-            .getElementById(
-                "withdrawalsSearch"
-            )
-            .value
-    );
-
-
-    renderInvestments(
-        document
-            .getElementById(
-                "investmentsSearch"
-            )
-            .value
-    );
-
-
-    renderSupport(
-        document
-            .getElementById(
-                "supportSearch"
-            )
-            .value
-    );
-}
-
-
-async function refreshAdminData() {
-
-    await Promise.all([
-        loadProfiles(),
-        loadDeposits(),
-        loadWithdrawals(),
-        loadInvestments(),
-        loadSupport(),
-        loadAdminNotifications()
-    ]);
-
-
-    renderEverything();
-}
-
-
-/* ============================================================
-   FINANCIAL REVIEW
-============================================================ */
-
-function openFinancialReview(
-    type,
-    id
-) {
-
-    let operation;
-
-
-    if (type === "deposit") {
-
-        operation =
-            deposits.find(
-                item =>
-                    String(
-                        item.id
-                    ) ===
-                    String(id)
-            );
-
-    }
-
-    else {
-
-        operation =
-            withdrawals.find(
-                item =>
-                    String(
-                        item.id
-                    ) ===
-                    String(id)
-            );
-
-    }
-
-
-    if (!operation) {
-        return;
-    }
-
-
-    currentReview = {
-        type,
-        operation
-    };
-
-
-    const profile =
-        operation.profiles || {};
-
-
-    document
-        .getElementById(
-            "reviewModalTitle"
-        )
-        .textContent =
-            type === "deposit"
-                ? "Traiter le dépôt"
-                : "Traiter le retrait";
-
-
-    document
-        .getElementById(
-            "reviewDetails"
-        )
-        .innerHTML = `
-
-            <strong>
-                Utilisateur :
-            </strong>
-
-            ${escapeHtml(
-                profile.full_name ||
-                "Utilisateur"
-            )}
-
-            <br>
-
-
-            <strong>
-                Téléphone :
-            </strong>
-
-            ${escapeHtml(
-                profile.phone ||
-                operation.destination_phone ||
-                "-"
-            )}
-
-            <br>
-
-
-            <strong>
-                Montant brut :
-            </strong>
-
-            ${formatMoney(
-                operation.gross_amount
-            )}
-
-            <br>
-
-
-            <strong>
-                Frais :
-            </strong>
-
-            ${formatMoney(
-                operation.fee_amount
-            )}
-
-            <br>
-
-
-            <strong>
-                Montant net :
-            </strong>
-
-            ${formatMoney(
-                operation.net_amount
-            )}
-
-            <br>
-
-
-            <strong>
-                Statut :
-            </strong>
-
-            ${escapeHtml(
-                operation.status ||
-                "-"
-            )}
-        `;
-
-
-    document
-        .getElementById(
-            "reviewNote"
-        )
-        .value = "";
-
-
-    openModal(
-        "reviewModal"
-    );
-}
-
-
-async function processCurrentReview(
-    approve
-) {
-
-    if (!currentReview) {
-        return;
-    }
-
-
-    const approveButton =
-        document.getElementById(
-            "approveReviewButton"
-        );
-
-    const rejectButton =
-        document.getElementById(
-            "rejectReviewButton"
-        );
-
-
-    approveButton.disabled =
-        true;
-
-    rejectButton.disabled =
-        true;
-
-
-    try {
-
-        const note =
-            document
-                .getElementById(
-                    "reviewNote"
-                )
-                .value;
-
-
-        let result;
-
-
-        if (
-            currentReview.type ===
-            "deposit"
-        ) {
-
-            result =
-                await adminReviewSupabaseDeposit({
-                    depositId:
-                        currentReview
-                            .operation
-                            .id,
-
-                    approve,
-
-                    note
-                });
-
-        }
-
-        else {
-
-            result =
-                await adminReviewSupabaseWithdrawal({
-                    withdrawalId:
-                        currentReview
-                            .operation
-                            .id,
-
-                    approve,
-
-                    note
-                });
-
-        }
-
-
-        if (!result?.success) {
-
-            throw new Error(
-                result?.message ||
-                "Impossible de traiter l'opération."
-            );
-        }
-
-
-        closeModal(
-            "reviewModal"
-        );
-
-
-        showToast(
-            approve
-                ? "Opération validée avec succès."
-                : "Opération refusée."
-        );
-
-
-        currentReview =
-            null;
-
-
-        await refreshAdminData();
-
-    }
-
-    catch(error) {
-
-        showToast(
-            error?.message ||
-            "Erreur de traitement.",
-            "error"
-        );
-
-    }
-
-    finally {
-
-        approveButton.disabled =
-            false;
-
-        rejectButton.disabled =
-            false;
-    }
-}
-
-
-document
-    .getElementById(
-        "approveReviewButton"
-    )
-    .addEventListener(
-        "click",
-        () => {
-            processCurrentReview(
-                true
-            );
-        }
-    );
-
-
-document
-    .getElementById(
-        "rejectReviewButton"
-    )
-    .addEventListener(
-        "click",
-        () => {
-            processCurrentReview(
-                false
-            );
-        }
-    );
-
-
-/* ============================================================
-   SUPPORT REPLY
-============================================================ */
-
-function openSupportReply(id) {
-
-    currentSupportTicket =
-        supportTickets.find(
-            item =>
-                String(
-                    item.id
-                ) ===
-                String(id)
-        );
-
-
-    if (!currentSupportTicket) {
-        return;
-    }
-
-
-    const profile =
-        currentSupportTicket
-            .profiles || {};
-
-
-    document
-        .getElementById(
-            "supportDetails"
-        )
-        .innerHTML = `
-
-            <strong>
-                Utilisateur :
-            </strong>
-
-            ${escapeHtml(
-                profile.full_name ||
-                "Utilisateur"
-            )}
-
-            <br>
-
-
-            <strong>
-                Sujet :
-            </strong>
-
-            ${escapeHtml(
-                currentSupportTicket.subject ||
-                "-"
-            )}
-
-            <br><br>
-
-
-            <strong>
-                Message :
-            </strong>
-
-            <br>
-
-            ${escapeHtml(
-                currentSupportTicket.message ||
-                ""
-            )}
-
-            ${
-                currentSupportTicket.admin_reply
-
-                ? `
-
-                    <br><br>
-
-                    <strong>
-                        Dernière réponse administrateur :
-                    </strong>
-
-                    <br>
-
-                    ${escapeHtml(
-                        currentSupportTicket
-                            .admin_reply
-                    )}
-
-                `
-
-                : ""
-            }
-        `;
-
-
-    document
-        .getElementById(
-            "supportReply"
-        )
-        .value =
-            currentSupportTicket
-                .admin_reply || "";
-
-
-    document
-        .getElementById(
-            "closeTicketCheckbox"
-        )
-        .checked =
-            currentSupportTicket.status ===
-            "closed";
-
-
-    openModal(
-        "supportModal"
-    );
-}
-
-
-document
-    .getElementById(
-        "sendSupportReplyButton"
-    )
-    .addEventListener(
-        "click",
-        async function() {
-
-            if (
-                !currentSupportTicket
-            ) {
-                return;
-            }
-
-
-            const reply =
-                document
-                    .getElementById(
-                        "supportReply"
-                    )
-                    .value
-                    .trim();
-
-
-            if (!reply) {
-
-                showToast(
-                    "Écrivez une réponse avant l'envoi.",
-                    "error"
-                );
-
-                return;
-            }
-
-
-            this.disabled =
-                true;
-
-
-            const oldHtml =
-                this.innerHTML;
-
-
-            this.innerHTML = `
-                <i class="fa-solid fa-spinner fa-spin"></i>
-                Envoi...
-            `;
-
-
-            try {
-
-                const result =
-                    await adminReplySupabaseSupportTicket({
-                        ticketId:
-                            currentSupportTicket.id,
-
-                        reply,
-
-                        close:
-                            document
-                                .getElementById(
-                                    "closeTicketCheckbox"
-                                )
-                                .checked
-                    });
-
-
-                if (!result?.success) {
-
-                    throw new Error(
-                        result?.message ||
-                        "Impossible d'envoyer la réponse."
-                    );
-                }
-
-
-                closeModal(
-                    "supportModal"
-                );
-
-
-                showToast(
-                    "Réponse envoyée à l'utilisateur."
-                );
-
-
-                currentSupportTicket =
-                    null;
-
-
-                await refreshAdminData();
-
-            }
-
-            catch(error) {
-
-                showToast(
-                    error?.message ||
-                    "Erreur assistance.",
-                    "error"
-                );
-
-            }
-
-            finally {
-
-                this.disabled =
-                    false;
-
-                this.innerHTML =
-                    oldHtml;
-            }
-
-        }
-    );
-
-
-/* ============================================================
-   NAVIGATION
-============================================================ */
-
-const pageTitles = {
-    overview:
-        "Vue générale",
-
-    users:
-        "Utilisateurs",
-
-    deposits:
-        "Dépôts",
-
-    withdrawals:
-        "Retraits",
-
-    investments:
-        "Investissements",
-
-    support:
-        "Assistance"
-};
-
-
-function showSection(section) {
-
-    document
-        .querySelectorAll(
-            ".admin-section"
-        )
-        .forEach(
-            item => {
-
-                item.classList.remove(
-                    "active"
-                );
-
-            }
-        );
-
-
-    document
-        .querySelectorAll(
-            "[data-section]"
-        )
-        .forEach(
-            item => {
-
-                item.classList.remove(
-                    "active"
-                );
-
-            }
-        );
-
-
-    document
-        .getElementById(
-            "section-" + section
-        )
-        ?.classList
-        .add("active");
-
-
-    document
-        .querySelector(
-            `[data-section="${section}"]`
-        )
-        ?.classList
-        .add("active");
-
-
-    document
-        .getElementById(
-            "pageTitle"
-        )
-        .textContent =
-            pageTitles[section] ||
-            "Administration";
-
-
-    document
-        .getElementById(
-            "sidebar"
-        )
-        .classList
-        .remove("show");
-
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-}
-
-
-window.showSection =
-    showSection;
-
-
-document
-    .querySelectorAll(
-        "[data-section]"
-    )
-    .forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    showSection(
-                        button.dataset
-                            .section
-                    );
-
-                }
-            );
-
-        }
-    );
-
-
-/* ============================================================
-   SEARCH
-============================================================ */
-
-document
-    .getElementById(
-        "usersSearch"
-    )
-    .addEventListener(
-        "input",
-        event => {
-
-            renderUsers(
-                event.target.value
-            );
-
-        }
-    );
-
-
-document
-    .getElementById(
-        "depositsSearch"
-    )
-    .addEventListener(
-        "input",
-        event => {
-
-            renderDeposits(
-                event.target.value
-            );
-
-        }
-    );
-
-
-document
-    .getElementById(
-        "withdrawalsSearch"
-    )
-    .addEventListener(
-        "input",
-        event => {
-
-            renderWithdrawals(
-                event.target.value
-            );
-
-        }
-    );
-
-
-document
-    .getElementById(
-        "investmentsSearch"
-    )
-    .addEventListener(
-        "input",
-        event => {
-
-            renderInvestments(
-                event.target.value
-            );
-
-        }
-    );
-
-
-document
-    .getElementById(
-        "supportSearch"
-    )
-    .addEventListener(
-        "input",
-        event => {
-
-            renderSupport(
-                event.target.value
-            );
-
-        }
-    );
-
-
-/* ============================================================
-   MOBILE MENU
-============================================================ */
-
-document
-    .getElementById(
-        "mobileMenuButton"
-    )
-    .addEventListener(
-        "click",
-        event => {
-
-            event.stopPropagation();
-
-
-            document
-                .getElementById(
-                    "sidebar"
-                )
-                .classList
-                .toggle("show");
-
-        }
-    );
-
-
-/* ============================================================
-   REFRESH
-============================================================ */
-
-document
-    .getElementById(
-        "refreshButton"
-    )
-    .addEventListener(
-        "click",
-        async function() {
-
-            this.disabled =
-                true;
-
-
-            const icon =
-                this.querySelector(
-                    "i"
-                );
-
-
-            icon?.classList.add(
-                "fa-spin"
-            );
-
-
-            try {
-
-                await refreshAdminData();
-
-
-                showToast(
-                    "Administration actualisée."
-                );
-
-            }
-
-            catch(error) {
-
-                showToast(
-                    error?.message ||
-                    "Erreur d'actualisation.",
-                    "error"
-                );
-
-            }
-
-            finally {
-
-                this.disabled =
-                    false;
-
-
-                icon?.classList.remove(
-                    "fa-spin"
-                );
-
-            }
-
-        }
-    );
-
-
-/* ============================================================
-   LOGOUT
-============================================================ */
-
-async function logoutAdmin() {
-
-    try {
-
-        await logoutSupabaseUser();
-
-    }
-
-    finally {
-
-        window.location.replace(
-            "login.html?logout=1"
-        );
-
-    }
-}
-
-
-document
-    .getElementById(
-        "logoutButton"
-    )
-    .addEventListener(
-        "click",
-        logoutAdmin
-    );
-
-
-document
-    .getElementById(
-        "logoutSideButton"
-    )
-    .addEventListener(
-        "click",
-        logoutAdmin
-    );
-
-
-/* ============================================================
-   CLOSE MODAL ON BACKDROP
-============================================================ */
-
-document
-    .querySelectorAll(
-        ".modal-overlay"
-    )
-    .forEach(
-        modal => {
-
-            modal.addEventListener(
-                "click",
-                event => {
-
-                    if (
-                        event.target ===
-                        modal
-                    ) {
-
-                        modal.classList.remove(
-                            "show"
-                        );
-
-                    }
-
-                }
-            );
-
-        }
-    );
-
-
-/* ============================================================
-   START
-============================================================ */
-
-async function startAdmin() {
-
-    try {
-
-        const allowed =
-            await verifyAdminAccess();
-
-
-        if (!allowed) {
-            return;
-        }
-
-
-        await refreshAdminData();
-
-
-        document
-            .getElementById(
-                "adminApp"
-            )
-            .style.display =
-                "grid";
-
-    }
-
-    catch(error) {
-
-        console.error(
-            error
-        );
-
-
-        document
-            .getElementById(
-                "accessDenied"
-            )
-            .style.display =
-                "flex";
-
-
-        document
-            .getElementById(
-                "accessDeniedMessage"
-            )
-            .textContent =
-                error?.message ||
-                "Impossible de charger l'administration.";
-
-    }
-
-    finally {
-
-        document
-            .getElementById(
-                "loadingScreen"
-            )
-            .style.display =
-                "none";
-
-    }
-}
-
-
-document.addEventListener(
-    "DOMContentLoaded",
-    startAdmin
-);
-</script>
-
-</body>
-</html>
+<header class="topbar">
+
+<div class="top-left">
+
+<button
+id="mobileMenuButton"
+class="icon-btn mobile-menu"
+type="button"
+>
+<i class="fa-solid fa-bars"></i>
+</button>
+
+<div>
+
+<h1 id="pageTitle">
+Administration
+</h1>
+
+<p>
+Gestion sécurisée Housing's YQD
+</p>
+
+</div>
+</div>
+
+<div class="top-actions">
+
+<button
+id="notificationButton"
+class="icon-btn"
+type="button"
+aria-label="Notifications"
+>
+<i class="fa-regular fa-bell"></i>
+
+<span
+id="notificationBadge"
+class="notification-badge"
+>
+0
+</span>
+
+</button>
+
+<button
+id="refreshButton"
+class="icon-btn"
+type="button"
+title="Actualiser"
+>
+<i class="fa-solid fa-rotate"></i>
+</button>
+
+<button id="logoutButton" class="icon-btn" type="button">
+<i class="fa-solid fa-right-from-bracket"></i>
+</button>
+
+</div>
+</header>
