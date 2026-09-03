@@ -28,7 +28,7 @@ button,input,textarea{font:inherit}
 .content{padding:20px;max-width:1500px;margin:auto}
 .hero{padding:22px;border-radius:18px;background:linear-gradient(135deg,#020617,#0b5cab);color:#fff}
 .hero h2{margin:0 0 8px}
-.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:15px 0}
+.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:15px 0}
 .stat,.card{background:#fff;border:1px solid #e2e8f0;border-radius:14px}
 .stat{padding:15px}
 .stat small{color:#64748b}
@@ -118,6 +118,7 @@ Housing's YQD
 <button data-page="withdrawals"><i class="fa-solid fa-arrow-up"></i> Retraits</button>
 <button data-page="investments"><i class="fa-solid fa-building"></i> Investissements</button>
 <button data-page="support"><i class="fa-solid fa-headset"></i> Assistance</button>
+<button data-page="phoneChanges"><i class="fa-solid fa-mobile-screen-button"></i> Changements de numéro</button>
 <button id="logoutSide"><i class="fa-solid fa-right-from-bracket"></i> Déconnexion</button>
 </nav>
 
@@ -152,6 +153,7 @@ Housing's YQD
 <div class="stat"><small>Retraits en attente</small><strong id="sWithdrawals">0</strong></div>
 <div class="stat"><small>Investissements actifs</small><strong id="sInvestments">0</strong></div>
 <div class="stat"><small>Tickets ouverts</small><strong id="sTickets">0</strong></div>
+<div class="stat"><small>Numéros en attente</small><strong id="sPhoneChanges">0</strong></div>
 </div>
 
 <section id="overview" class="section active">
@@ -224,6 +226,19 @@ Housing's YQD
 </div>
 </section>
 
+<section id="phoneChanges" class="section">
+<div class="section-head">
+<h3>Changements de numéro</h3>
+<input class="search" data-search="phoneChanges" placeholder="Rechercher">
+</div>
+<div class="card table">
+<table>
+<thead><tr><th>Utilisateur</th><th>Ancien numéro</th><th>Nouveau numéro</th><th>Date</th><th>Statut</th><th>Note</th><th>Action</th></tr></thead>
+<tbody id="phoneChangesBody"></tbody>
+</table>
+</div>
+</section>
+
 </div>
 </main>
 </div>
@@ -264,6 +279,19 @@ Housing's YQD
 <button id="sendReply" class="btn reply">Envoyer</button>
 </div>
 </div>
+
+<div id="phoneReviewModal" class="modal">
+<div class="box">
+<h3>Traiter le changement de numéro</h3>
+<div id="phoneReviewInfo" class="proof-box"></div>
+<textarea id="phoneReviewNote" placeholder="Note facultative"></textarea>
+<div class="modal-actions">
+<button class="btn no" data-close="phoneReviewModal">Annuler</button>
+<button id="rejectPhoneChange" class="btn no">Refuser</button>
+<button id="approvePhoneChange" class="btn ok">Valider</button>
+</div>
+</div>
+</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -277,8 +305,10 @@ let deposits=[];
 let withdrawals=[];
 let investments=[];
 let tickets=[];
+let phoneChanges=[];
 let review=null;
 let currentTicket=null;
+let currentPhoneChange=null;
 
 const $=id=>document.getElementById(id);
 
@@ -331,7 +361,8 @@ adminGetSupabaseProfiles(),
 adminGetSupabaseDeposits(),
 adminGetSupabaseWithdrawals(),
 adminGetSupabaseInvestments(),
-adminGetSupabaseSupportTickets()
+adminGetSupabaseSupportTickets(),
+adminGetSupabasePhoneChangeRequests()
 ]);
 
 profiles=results[0].profiles||[];
@@ -339,6 +370,7 @@ deposits=results[1].deposits||[];
 withdrawals=results[2].withdrawals||[];
 investments=results[3].investments||[];
 tickets=results[4].tickets||[];
+phoneChanges=results[5].requests||results[5].data||[];
 
 renderAdminData();
 }
@@ -358,6 +390,9 @@ investments.filter(item=>item.status==="active").length;
 
 $("sTickets").textContent=
 tickets.filter(item=>["open","pending"].includes(item.status)).length;
+
+$("sPhoneChanges").textContent=
+phoneChanges.filter(item=>item.status==="pending").length;
 
 rows(
 "usersBody",
@@ -448,6 +483,26 @@ tickets.map(item=>`
 </tr>
 `).join(""),
 5
+);
+
+rows(
+"phoneChangesBody",
+phoneChanges.map(item=>`
+<tr>
+<td data-label="Utilisateur">${esc(name(item.user_id))}</td>
+<td data-label="Ancien numéro">${esc(item.old_phone||"-")}</td>
+<td data-label="Nouveau numéro">${esc(item.new_phone||"-")}</td>
+<td data-label="Date">${date(item.created_at)}</td>
+<td data-label="Statut">${status(item.status)}</td>
+<td data-label="Note">${esc(item.admin_note||"-")}</td>
+<td data-label="Action">
+${item.status==="pending"
+?`<button class="btn" data-phone-review="${esc(item.id)}">Traiter</button>`
+:"-"}
+</td>
+</tr>
+`).join(""),
+7
 );
 
 bindTableButtons();
@@ -568,6 +623,30 @@ openModal("replyModal");
 };
 
 });
+
+document.querySelectorAll("[data-phone-review]").forEach(button=>{
+
+button.onclick=()=>{
+
+currentPhoneChange=phoneChanges.find(
+item=>String(item.id)===button.dataset.phoneReview
+);
+
+if(!currentPhoneChange){
+toast("Demande introuvable.");
+return;
+}
+
+$("phoneReviewInfo").innerHTML=`
+<strong>${esc(name(currentPhoneChange.user_id))}</strong>
+<p>${esc(currentPhoneChange.old_phone||"-")} → ${esc(currentPhoneChange.new_phone||"-")}</p>
+`;
+
+$("phoneReviewNote").value="";
+openModal("phoneReviewModal");
+};
+
+});
 }
 
 async function reviewOperation(approve){
@@ -637,6 +716,54 @@ toast("Réponse envoyée.");
 
 await loadAdminData();
 };
+
+async function reviewPhoneChange(approve){
+
+if(!currentPhoneChange){
+return;
+}
+
+const approveButton=$("approvePhoneChange");
+const rejectButton=$("rejectPhoneChange");
+
+approveButton.disabled=true;
+rejectButton.disabled=true;
+
+try{
+
+const result=await adminReviewSupabasePhoneChange({
+requestId:currentPhoneChange.id,
+approve,
+note:$("phoneReviewNote").value
+});
+
+if(!result?.success){
+throw new Error(result?.message||"Traitement impossible.");
+}
+
+closeModal("phoneReviewModal");
+toast(
+approve
+?"Changement de numéro validé."
+:"Changement de numéro refusé."
+);
+
+currentPhoneChange=null;
+await loadAdminData();
+
+}catch(error){
+toast(error?.message||"Traitement impossible.");
+}finally{
+approveButton.disabled=false;
+rejectButton.disabled=false;
+}
+}
+
+$("approvePhoneChange").onclick=
+()=>reviewPhoneChange(true);
+
+$("rejectPhoneChange").onclick=
+()=>reviewPhoneChange(false);
 
 document
 .querySelectorAll("[data-close]")
