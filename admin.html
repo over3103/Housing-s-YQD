@@ -55,6 +55,12 @@ th{background:#f8fafc}
 .box{background:#fff;width:min(500px,100%);border-radius:16px;padding:20px}
 .box textarea{width:100%;min-height:100px;padding:10px;margin:10px 0;border:1px solid #cbd5e1;border-radius:9px}
 .modal-actions{display:flex;justify-content:flex-end;gap:8px}
+.proof-box{margin:12px 0;padding:12px;border:1px solid #dbeafe;border-radius:12px;background:#eff6ff}
+.proof-box strong{display:block;margin-bottom:7px;color:#1e3a8a}
+.proof-box p{margin:0;color:#64748b;font-size:12px;line-height:1.5}
+.proof-image{display:block;width:100%;max-height:70vh;object-fit:contain;border-radius:10px;background:#f8fafc}
+.proof-missing{color:#991b1b!important;background:#fef2f2;border-color:#fecaca}
+.btn:disabled{opacity:.5;cursor:not-allowed}
 .toast{position:fixed;right:15px;bottom:15px;z-index:200;padding:12px 16px;border-radius:10px;background:#0f172a;color:#fff}
 .menu-mobile{display:none}
 
@@ -173,7 +179,7 @@ Housing's YQD
 </div>
 <div class="card table">
 <table>
-<thead><tr><th>Utilisateur</th><th>Brut</th><th>Frais</th><th>Net</th><th>Méthode</th><th>Statut</th><th>Action</th></tr></thead>
+<thead><tr><th>Utilisateur</th><th>Brut</th><th>Frais</th><th>Net</th><th>Méthode</th><th>Référence</th><th>Preuve</th><th>Statut</th><th>Action</th></tr></thead>
 <tbody id="depositsBody"></tbody>
 </table>
 </div>
@@ -226,11 +232,23 @@ Housing's YQD
 <div class="box">
 <h3>Traiter l'opération</h3>
 <div id="reviewInfo"></div>
+<div id="reviewProofStatus" class="proof-box"></div>
 <textarea id="reviewNote" placeholder="Note facultative"></textarea>
 <div class="modal-actions">
 <button class="btn no" data-close="reviewModal">Annuler</button>
 <button id="rejectReview" class="btn no">Refuser</button>
 <button id="approveReview" class="btn ok">Valider</button>
+</div>
+</div>
+
+<div id="proofModal" class="modal">
+<div class="box">
+<h3>Preuve de paiement</h3>
+<div id="proofLoading" class="proof-box">Chargement sécurisé...</div>
+<img id="proofImage" class="proof-image" alt="Preuve de paiement">
+<div class="modal-actions" style="margin-top:14px">
+<button class="btn no" data-close="proofModal">Fermer</button>
+</div>
 </div>
 </div>
 </div>
@@ -363,7 +381,13 @@ deposits.map(item=>`
 <td data-label="Brut">${money(item.gross_amount)}</td>
 <td data-label="Frais">${money(item.fee_amount)}</td>
 <td data-label="Net">${money(item.net_amount)}</td>
-<td data-label="Méthode">${esc(item.method)}</td>
+<td data-label="Méthode">${esc(item.payment_method||item.method)}</td>
+<td data-label="Référence">${esc(item.payment_reference||"-")}</td>
+<td data-label="Preuve">
+${item.proof_path
+?`<button class="btn" data-proof-id="${esc(item.id)}">Voir la preuve</button>`
+:`<span class="status rejected">Absente</span>`}
+</td>
 <td data-label="Statut">${status(item.status)}</td>
 <td data-label="Action">
 ${item.status==="pending"
@@ -372,7 +396,7 @@ ${item.status==="pending"
 </td>
 </tr>
 `).join(""),
-7
+9
 );
 
 rows(
@@ -448,12 +472,80 @@ String(operation.id)===button.dataset.id
 )
 };
 
+const hasProof=
+review.type!=="deposit"||Boolean(review.item?.proof_path);
+
 $("reviewInfo").textContent=
 `${review.type==="deposit"?"Dépôt":"Retrait"} : ${money(review.item?.gross_amount)}`;
+
+$("reviewProofStatus").style.display=
+review.type==="deposit"?"block":"none";
+
+if(review.type==="deposit"){
+
+$("reviewProofStatus").classList.toggle(
+"proof-missing",
+!hasProof
+);
+
+$("reviewProofStatus").innerHTML=
+hasProof
+?"<strong>Preuve reçue</strong><p>Consultez le reçu avant de valider cette opération.</p>"
+:"<strong>Preuve absente</strong><p>Ce dépôt ne peut pas être validé.</p>";
+
+}
+
+$("approveReview").disabled=!hasProof;
 
 $("reviewNote").value="";
 
 openModal("reviewModal");
+};
+
+});
+
+document.querySelectorAll("[data-proof-id]").forEach(button=>{
+
+button.onclick=async()=>{
+
+const deposit=deposits.find(
+item=>String(item.id)===button.dataset.proofId
+);
+
+if(!deposit?.proof_path){
+toast("Aucune preuve disponible.");
+return;
+}
+
+$("proofImage").removeAttribute("src");
+$("proofImage").style.display="none";
+$("proofLoading").style.display="block";
+$("proofLoading").textContent="Chargement sécurisé...";
+
+openModal("proofModal");
+
+try{
+
+const {data,error}=await getHousingSupabaseClient()
+.storage
+.from("deposit-proofs")
+.createSignedUrl(deposit.proof_path,300);
+
+if(error||!data?.signedUrl){
+throw error||new Error("Lien de preuve indisponible.");
+}
+
+$("proofImage").src=data.signedUrl;
+$("proofImage").style.display="block";
+$("proofLoading").style.display="none";
+
+}catch(error){
+
+$("proofLoading").textContent=
+error?.message||"Impossible d'afficher la preuve.";
+
+}
+
 };
 
 });
