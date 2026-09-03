@@ -1,5 +1,9 @@
 "use strict";
 
+/* ============================================================
+   HOUSING'S YQD — CONFIGURATION SUPABASE
+============================================================ */
+
 const HYQD_SUPABASE_CONFIG = Object.freeze({
     URL: "https://qcvagkialoztluqxpmcq.supabase.co",
     PUBLISHABLE_KEY: "sb_publishable_J_fhucIX6-Fdals6lVQvvA_yCmUkwVy",
@@ -11,15 +15,12 @@ const HYQD_SUPABASE_CONFIG = Object.freeze({
     ADMIN_PAGE: "admin.html"
 });
 
-const HYQD_TURNSTILE_SITE_KEY =
-    "0x4AAAAAAElQt4Kyd4P5xIqe";
-
+const HYQD_TURNSTILE_SITE_KEY = "0x4AAAAAAElQt4Kyd4P5xIqe";
 let HYQD_CAPTCHA_TOKEN = "";
 let HYQD_CAPTCHA_WIDGET_ID = null;
 
 function hyqdGetCaptchaToken() {
-    const token =
-        String(HYQD_CAPTCHA_TOKEN || "").trim();
+    const token = String(HYQD_CAPTCHA_TOKEN || "").trim();
 
     if (!token) {
         throw new Error(
@@ -52,9 +53,7 @@ function hyqdResetCaptcha() {
 
 function hyqdRenderTurnstile() {
     const container =
-        document.getElementById(
-            "hyqd-turnstile"
-        );
+        document.getElementById("hyqd-turnstile");
 
     if (
         !container ||
@@ -75,18 +74,15 @@ function hyqdRenderTurnstile() {
                 language: "fr",
 
                 callback(token) {
-                    HYQD_CAPTCHA_TOKEN =
-                        token;
+                    HYQD_CAPTCHA_TOKEN = token;
                 },
 
                 "expired-callback"() {
-                    HYQD_CAPTCHA_TOKEN =
-                        "";
+                    HYQD_CAPTCHA_TOKEN = "";
                 },
 
                 "error-callback"() {
-                    HYQD_CAPTCHA_TOKEN =
-                        "";
+                    HYQD_CAPTCHA_TOKEN = "";
                 }
             }
         );
@@ -99,35 +95,27 @@ function hyqdInitializeTurnstile() {
             .pop()
             .toLowerCase();
 
-    const protectedPages = [
-        "register.html",
-        "login.html",
-        "forgot-password.html"
-    ];
-
-    if (!protectedPages.includes(page)) {
+    if (
+        ![
+            "register.html",
+            "login.html",
+            "forgot-password.html"
+        ].includes(page)
+    ) {
         return;
     }
 
     const form =
-        document.getElementById(
-            "registerForm"
-        ) ||
-        document.getElementById(
-            "loginForm"
-        ) ||
-        document.getElementById(
-            "requestForm"
-        );
+        document.getElementById("registerForm") ||
+        document.getElementById("loginForm") ||
+        document.getElementById("requestForm");
 
     if (!form) {
         return;
     }
 
     const firstSubmit =
-        form.querySelector(
-            '[type="submit"]'
-        );
+        form.querySelector('[type="submit"]');
 
     if (!firstSubmit) {
         return;
@@ -136,11 +124,12 @@ function hyqdInitializeTurnstile() {
     const container =
         document.createElement("div");
 
-    container.id =
-        "hyqd-turnstile";
+    container.id = "hyqd-turnstile";
 
     container.style.cssText =
-        "width:100%;min-height:70px;margin:14px 0;display:flex;align-items:center;justify-content:center;overflow:hidden";
+        "width:100%;min-height:70px;margin:14px 0;" +
+        "display:flex;align-items:center;" +
+        "justify-content:center;overflow:hidden";
 
     firstSubmit.parentNode.insertBefore(
         container,
@@ -159,7 +148,8 @@ function hyqdInitializeTurnstile() {
         document.createElement("script");
 
     script.src =
-        "https://challenges.cloudflare.com/turnstile/v0/api.js?onload=hyqdTurnstileLoaded&render=explicit";
+        "https://challenges.cloudflare.com/turnstile/v0/api.js" +
+        "?onload=hyqdTurnstileLoaded&render=explicit";
 
     script.async = true;
     script.defer = true;
@@ -177,18 +167,22 @@ if (document.readyState === "loading") {
     hyqdInitializeTurnstile();
 }
 
+
+/* ============================================================
+   INITIALISATION
+============================================================ */
+
 function initializeHousingSupabase() {
+
     if (!window.supabase) {
         throw new Error(
             "La bibliothèque Supabase n'est pas chargée."
         );
     }
 
-    const key =
-        String(
-            HYQD_SUPABASE_CONFIG
-                .PUBLISHABLE_KEY || ""
-        );
+    const key = String(
+        HYQD_SUPABASE_CONFIG.PUBLISHABLE_KEY || ""
+    );
 
     if (
         key.includes("service_role") ||
@@ -201,8 +195,7 @@ function initializeHousingSupabase() {
 
     return window.supabase.createClient(
         HYQD_SUPABASE_CONFIG.URL,
-        HYQD_SUPABASE_CONFIG
-            .PUBLISHABLE_KEY,
+        HYQD_SUPABASE_CONFIG.PUBLISHABLE_KEY,
         {
             auth: {
                 persistSession: true,
@@ -212,6 +205,7 @@ function initializeHousingSupabase() {
         }
     );
 }
+
 
 const HYQD_SUPABASE_CLIENT =
     initializeHousingSupabase();
@@ -225,23 +219,28 @@ window.hyqdSupabase =
 window.housingSupabase =
     HYQD_SUPABASE_CLIENT;
 
+
 function getHousingSupabaseClient() {
     return HYQD_SUPABASE_CLIENT;
 }
 
+
+/* ============================================================
+   OUTILS
+============================================================ */
+
 function hyqdCleanText(value) {
-    return String(
-        value ?? ""
-    ).trim();
+    return String(value ?? "").trim();
 }
+
 
 function hyqdNormalizeEmail(value) {
-    return hyqdCleanText(
-        value
-    ).toLowerCase();
+    return hyqdCleanText(value).toLowerCase();
 }
 
+
 function hyqdNormalizePhone(value) {
+
     let phone =
         hyqdCleanText(value)
             .replace(/\s+/g, "");
@@ -254,16 +253,17 @@ function hyqdNormalizePhone(value) {
         return phone;
     }
 
-    phone =
-        phone.replace(/^0+/, "");
+    phone = phone.replace(/^0+/, "");
 
     return "+225" + phone;
 }
+
 
 function hyqdSafeMessage(
     error,
     fallback = "Une erreur est survenue."
 ) {
+
     if (!error) {
         return fallback;
     }
@@ -275,10 +275,12 @@ function hyqdSafeMessage(
     return error.message || fallback;
 }
 
+
 function hyqdRpcResult(
     data,
     fallbackMessage
 ) {
+
     if (
         data &&
         typeof data === "object" &&
@@ -289,8 +291,7 @@ function hyqdRpcResult(
 
     return {
         success: true,
-        ...(data &&
-        typeof data === "object"
+        ...(data && typeof data === "object"
             ? data
             : { data }),
         message:
@@ -299,8 +300,15 @@ function hyqdRpcResult(
     };
 }
 
+
+/* ============================================================
+   SESSION ET AUTHENTIFICATION
+============================================================ */
+
 async function getSupabaseSession() {
+
     try {
+
         const { data, error } =
             await HYQD_SUPABASE_CLIENT
                 .auth
@@ -312,21 +320,24 @@ async function getSupabaseSession() {
 
         return {
             success: true,
-            session:
-                data?.session || null
+            session: data?.session || null
         };
+
     } catch (error) {
+
         return {
             success: false,
             session: null,
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
     }
 }
 
+
 async function getSupabaseUser() {
+
     try {
+
         const { data, error } =
             await HYQD_SUPABASE_CLIENT
                 .auth
@@ -338,18 +349,19 @@ async function getSupabaseUser() {
 
         return {
             success: true,
-            user:
-                data?.user || null
+            user: data?.user || null
         };
+
     } catch (error) {
+
         return {
             success: false,
             user: null,
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
     }
 }
+
 
 async function registerSupabaseUser({
     fullName,
@@ -358,7 +370,9 @@ async function registerSupabaseUser({
     password,
     referralCode
 }) {
+
     try {
+
         const captchaToken =
             hyqdGetCaptchaToken();
 
@@ -372,9 +386,8 @@ async function registerSupabaseUser({
             hyqdNormalizePhone(phone);
 
         const cleanReferral =
-            hyqdCleanText(
-                referralCode
-            ).toUpperCase();
+            hyqdCleanText(referralCode)
+                .toUpperCase();
 
         if (!cleanName) {
             throw new Error(
@@ -403,23 +416,17 @@ async function registerSupabaseUser({
                 .signUp({
                     email: cleanEmail,
                     password,
-
                     options: {
                         captchaToken,
-
                         emailRedirectTo:
                             "https://over3103.github.io/Housing-s-YQD/login.html",
-
                         data: {
                             full_name:
                                 cleanName,
-
                             phone:
                                 cleanPhone,
-
                             referral_code_entered:
-                                cleanReferral ||
-                                null
+                                cleanReferral || null
                         }
                     }
                 });
@@ -432,38 +439,38 @@ async function registerSupabaseUser({
 
         return {
             success: true,
-            user:
-                data?.user || null,
-            session:
-                data?.session || null,
-
+            user: data?.user || null,
+            session: data?.session || null,
             requiresEmailConfirmation:
                 !data?.session,
-
             message:
                 data?.session
                     ? "Inscription réussie."
                     : "Inscription réussie. Vérifiez votre e-mail pour confirmer votre compte."
         };
+
     } catch (error) {
+
         hyqdResetCaptcha();
 
         return {
             success: false,
-            message:
-                hyqdSafeMessage(
-                    error,
-                    "Inscription impossible."
-                )
+            message: hyqdSafeMessage(
+                error,
+                "Inscription impossible."
+            )
         };
     }
 }
+
 
 async function loginSupabaseUser(
     email,
     password
 ) {
+
     try {
+
         const captchaToken =
             hyqdGetCaptchaToken();
 
@@ -472,12 +479,8 @@ async function loginSupabaseUser(
                 .auth
                 .signInWithPassword({
                     email:
-                        hyqdNormalizeEmail(
-                            email
-                        ),
-
+                        hyqdNormalizeEmail(email),
                     password,
-
                     options: {
                         captchaToken
                     }
@@ -491,29 +494,31 @@ async function loginSupabaseUser(
 
         return {
             success: true,
-            user:
-                data?.user || null,
-            session:
-                data?.session || null,
+            user: data?.user || null,
+            session: data?.session || null,
             message:
                 "Connexion réussie."
         };
+
     } catch (error) {
+
         hyqdResetCaptcha();
 
         return {
             success: false,
-            message:
-                hyqdSafeMessage(
-                    error,
-                    "Connexion impossible."
-                )
+            message: hyqdSafeMessage(
+                error,
+                "Connexion impossible."
+            )
         };
     }
 }
 
+
 async function logoutSupabaseUser() {
+
     try {
+
         const { error } =
             await HYQD_SUPABASE_CLIENT
                 .auth
@@ -526,18 +531,21 @@ async function logoutSupabaseUser() {
         return {
             success: true
         };
+
     } catch (error) {
+
         return {
             success: false,
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
     }
 }
 
+
 async function requireSupabaseAuth(
     options = {}
 ) {
+
     const redirect =
         Boolean(options?.redirect);
 
@@ -548,11 +556,12 @@ async function requireSupabaseAuth(
         !result.success ||
         !result.user
     ) {
+
         if (
             redirect &&
-            typeof window !==
-                "undefined"
+            typeof window !== "undefined"
         ) {
+
             const currentPage =
                 window.location.pathname
                     .split("/")
@@ -561,12 +570,10 @@ async function requireSupabaseAuth(
 
             if (
                 currentPage !==
-                HYQD_SUPABASE_CONFIG
-                    .LOGIN_PAGE
+                HYQD_SUPABASE_CONFIG.LOGIN_PAGE
             ) {
                 window.location.replace(
-                    HYQD_SUPABASE_CONFIG
-                        .LOGIN_PAGE +
+                    HYQD_SUPABASE_CONFIG.LOGIN_PAGE +
                     "?auth=required"
                 );
             }
@@ -577,8 +584,7 @@ async function requireSupabaseAuth(
         return {
             success: false,
             authorized: false,
-            reason:
-                "not_authenticated",
+            reason: "not_authenticated",
             user: null
         };
     }
@@ -595,8 +601,15 @@ async function requireSupabaseAuth(
     );
 }
 
+
+/* ============================================================
+   RÔLES ET ACCÈS ADMINISTRATEUR
+============================================================ */
+
 async function getSupabaseCurrentUserRole() {
+
     try {
+
         const auth =
             await requireSupabaseAuth();
 
@@ -625,40 +638,40 @@ async function getSupabaseCurrentUserRole() {
 
         return {
             success: true,
-            role:
-                data?.role || "user"
+            role: data?.role || "user"
         };
+
     } catch (error) {
+
         return {
             success: false,
             role: null,
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
     }
 }
 
+
 async function requireSupabaseAdmin() {
+
     const auth =
         await requireSupabaseAuth();
 
     if (!auth?.authorized) {
         return {
             authorized: false,
-            reason:
-                "not_authenticated",
+            reason: "not_authenticated",
             user: null,
             role: null
         };
     }
 
     const roleResult =
-        await getSupabaseCurrentUserRole();
+              await getSupabaseCurrentUserRole();
 
     const role =
         String(
-            roleResult?.role ||
-            "user"
+            roleResult?.role || "user"
         ).toLowerCase();
 
     const authorized =
@@ -677,10 +690,17 @@ async function requireSupabaseAdmin() {
     };
 }
 
+
+/* ============================================================
+   MOT DE PASSE
+============================================================ */
+
 async function requestSupabasePasswordReset(
     email
 ) {
+
     try {
+
         const captchaToken =
             hyqdGetCaptchaToken();
 
@@ -694,9 +714,7 @@ async function requestSupabasePasswordReset(
             await HYQD_SUPABASE_CLIENT
                 .auth
                 .resetPasswordForEmail(
-                    hyqdNormalizeEmail(
-                        email
-                    ),
+                    hyqdNormalizeEmail(email),
                     {
                         redirectTo,
                         captchaToken
@@ -714,21 +732,25 @@ async function requestSupabasePasswordReset(
             message:
                 "E-mail de réinitialisation envoyé."
         };
+
     } catch (error) {
+
         hyqdResetCaptcha();
 
         return {
             success: false,
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
     }
 }
 
+
 async function updateSupabasePassword(
     newPassword
 ) {
+
     try {
+
         if (
             !newPassword ||
             newPassword.length < 6
@@ -755,23 +777,32 @@ async function updateSupabasePassword(
             message:
                 "Mot de passe mis à jour."
         };
+
     } catch (error) {
+
         return {
             success: false,
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
     }
 }
 
+
+/* ============================================================
+   PROFIL
+============================================================ */
+
 async function getSupabaseProfile(
     userId = null
 ) {
+
     try {
+
         let targetUserId =
             userId;
 
         if (!targetUserId) {
+
             const auth =
                 await requireSupabaseAuth();
 
@@ -801,41 +832,38 @@ async function getSupabaseProfile(
 
         return {
             success: true,
-            profile:
-                data || null,
-            data:
-                data || null
+            profile: data || null,
+            data: data || null
         };
+
     } catch (error) {
+
         return {
             success: false,
             profile: null,
             data: null,
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
     }
 }
+
 
 async function updateSupabaseProfile({
     fullName,
     phone
 }) {
+
     try {
+
         const { data, error } =
             await HYQD_SUPABASE_CLIENT
                 .rpc(
                     "update_my_profile",
                     {
                         p_full_name:
-                            hyqdCleanText(
-                                fullName
-                            ),
-
+                            hyqdCleanText(fullName),
                         p_phone:
-                            hyqdNormalizePhone(
-                                phone
-                            )
+                            hyqdNormalizePhone(phone)
                     }
                 );
 
@@ -847,32 +875,84 @@ async function updateSupabaseProfile({
             data,
             "Profil mis à jour."
         );
+
     } catch (error) {
+
         return {
             success: false,
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
     }
 }
 
-async function getSupabaseInvestmentPacks() {
+
+/* ============================================================
+   CHANGEMENT SÉCURISÉ DU NUMÉRO DE TÉLÉPHONE
+============================================================ */
+
+async function requestSupabasePhoneChange(
+    newPhone
+) {
+
     try {
+
+        const cleanPhone =
+            hyqdNormalizePhone(newPhone);
+
+        if (!cleanPhone) {
+            throw new Error(
+                "Entrez un nouveau numéro de téléphone."
+            );
+        }
+
+        const { data, error } =
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "request_phone_change",
+                {
+                    p_new_phone: cleanPhone
+                }
+            );
+
+        if (error) {
+            throw error;        return hyqdRpcResult(
+            data,
+            "Demande de changement envoyée à l’administrateur."
+        );
+
+    } catch (error) {
+
+        return {
+            success: false,
+            message: hyqdSafeMessage(
+                error,
+                "Demande de changement impossible."
+            )
+        };
+    }
+}
+
+
+async function getSupabasePhoneChangeRequests() {
+
+    try {
+
+        const auth =
+            await requireSupabaseAuth();
+
+        if (!auth?.authorized) {
+            throw new Error(
+                "Utilisateur non connecté."
+            );
+        }
+
         const { data, error } =
             await HYQD_SUPABASE_CLIENT
-                .from(
-                    "investment_packs"
-                )
+                .from("phone_change_requests")
                 .select("*")
-                .eq(
-                    "is_active",
-                    true
-                )
+                .eq("user_id", auth.user.id)
                 .order(
-                    "sort_order",
-                    {
-                        ascending: true
-                    }
+                    "created_at",
+                    { ascending: false }
                 );
 
         if (error) {
@@ -881,35 +961,136 @@ async function getSupabaseInvestmentPacks() {
 
         return {
             success: true,
-            packs:
-                data || [],
-            data:
-                data || []
+            requests: data || [],
+            data: data || []
         };
+
     } catch (error) {
+
+        return {
+            success: false,
+            requests: [],
+            data: [],
+            message: hyqdSafeMessage(error)
+        };
+    }
+}
+
+
+async function adminGetSupabasePhoneChangeRequests() {
+
+    const result =
+        await hyqdAdminSelect(
+            "phone_change_requests"
+        );
+
+    return {
+        ...result,
+        requests: result.data || []
+    };
+}
+
+
+async function adminReviewSupabasePhoneChange({
+    requestId,
+    approve,
+    note
+}) {
+
+    try {
+
+        const { data, error } =
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "admin_review_phone_change",
+                {
+                    p_request_id: requestId,
+                    p_approve: Boolean(approve),
+                    p_note:
+                        hyqdCleanText(note) ||
+                        null
+                }
+            );
+
+        if (error) {
+            throw error;
+        }
+
+        return hyqdRpcResult(
+            data,
+            approve
+                ? "Changement de numéro validé."
+                : "Changement de numéro refusé."
+        );
+
+    } catch (error) {
+
+        return {
+            success: false,
+            message: hyqdSafeMessage(
+                error,
+                "Traitement du changement impossible."
+            )
+        };
+    }
+}
+
+/* ============================================================
+   PACKS D’INVESTISSEMENT
+============================================================ */
+
+async function getSupabaseInvestmentPacks() {
+
+    try {
+
+        const { data, error } =
+            await HYQD_SUPABASE_CLIENT
+                .from("investment_packs")
+                .select("*")
+                .eq("is_active", true)
+                .order(
+                    "sort_order",
+                    { ascending: true }
+                );
+
+        if (error) {
+            throw error;
+        }
+
+        return {
+            success: true,
+            packs: data || [],
+            data: data || []
+        };
+
+    } catch (error) {
+
         return {
             success: false,
             packs: [],
             data: [],
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
     }
 }
+
+
+/* ============================================================
+   DÉPÔTS
+============================================================ */
 
 async function requestSupabaseDeposit({
     amount,
     method,
     reference
 }) {
+
     try {
+
         const numericAmount =
             Number(amount);
 
         if (
-            !Number.isFinite(
-                numericAmount
-            ) ||
+            !Number.isFinite(numericAmount) ||
             numericAmount <= 0
         ) {
             throw new Error(
@@ -918,24 +1099,17 @@ async function requestSupabaseDeposit({
         }
 
         const { data, error } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "request_deposit",
-                    {
-                        p_amount:
-                            numericAmount,
-
-                        p_method:
-                            hyqdCleanText(
-                                method
-                            ),
-
-                        p_reference:
-                            hyqdCleanText(
-                                reference
-                            ) || null
-                    }
-                );
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "request_deposit",
+                {
+                    p_amount: numericAmount,
+                    p_method:
+                        hyqdCleanText(method),
+                    p_reference:
+                        hyqdCleanText(reference) ||
+                        null
+                }
+            );
 
         if (error) {
             throw error;
@@ -945,31 +1119,37 @@ async function requestSupabaseDeposit({
             data,
             "Demande de dépôt enregistrée."
         );
+
     } catch (error) {
+
         return {
             success: false,
-            message:
-                hyqdSafeMessage(
-                    error,
-                    "Dépôt impossible."
-                )
+            message: hyqdSafeMessage(
+                error,
+                "Dépôt impossible."
+            )
         };
     }
 }
+
+
+/* ============================================================
+   RETRAITS
+============================================================ */
 
 async function requestSupabaseWithdrawal({
     amount,
     method,
     destinationPhone
 }) {
+
     try {
+
         const numericAmount =
             Number(amount);
 
         if (
-            !Number.isFinite(
-                numericAmount
-            ) ||
+            !Number.isFinite(numericAmount) ||
             numericAmount <= 0
         ) {
             throw new Error(
@@ -978,24 +1158,20 @@ async function requestSupabaseWithdrawal({
         }
 
         const { data, error } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "request_withdrawal",
-                    {
-                        p_amount:
-                            numericAmount,
-
-                        p_method:
-                            hyqdCleanText(
-                                method
-                            ),
-
-                        p_destination_phone:
-                            hyqdNormalizePhone(
-                                destinationPhone
-                            )
-                    }
-                );
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "request_withdrawal",
+                {
+                    p_amount: numericAmount,
+                    p_method:
+                        hyqdCleanText(method),
+            
+        }
+                         p_destination_phone:
+                        hyqdNormalizePhone(
+                            destinationPhone
+                        )
+                }
+            );
 
         if (error) {
             throw error;
@@ -1005,22 +1181,28 @@ async function requestSupabaseWithdrawal({
             data,
             "Demande de retrait enregistrée."
         );
+
     } catch (error) {
+
         return {
             success: false,
-            message:
-                hyqdSafeMessage(
-                    error,
-                    "Retrait impossible."
-                )
+            message: hyqdSafeMessage(
+                error,
+                "Retrait impossible."
+            )
         };
     }
 }
 
-async function investSupabasePack(
-    packId
-) {
+
+/* ============================================================
+   INVESTISSEMENTS
+============================================================ */
+
+async function investSupabasePack(packId) {
+
     try {
+
         const cleanPackId =
             hyqdCleanText(packId);
 
@@ -1031,14 +1213,12 @@ async function investSupabasePack(
         }
 
         const { data, error } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "invest_in_pack",
-                    {
-                        p_pack_id:
-                            cleanPackId
-                    }
-                );
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "invest_in_pack",
+                {
+                    p_pack_id: cleanPackId
+                }
+            );
 
         if (error) {
             throw error;
@@ -1048,23 +1228,31 @@ async function investSupabasePack(
             data,
             "Investissement activé avec succès."
         );
+
     } catch (error) {
+
         return {
             success: false,
-            message:
-                hyqdSafeMessage(
-                    error,
-                    "Investissement impossible."
-                )
+            message: hyqdSafeMessage(
+                error,
+                "Investissement impossible."
+            )
         };
     }
 }
+
+
+/* ============================================================
+   LECTURE DES DONNÉES UTILISATEUR
+============================================================ */
 
 async function hyqdSelectMine(
     table,
     orderColumn = "created_at"
 ) {
+
     try {
+
         const auth =
             await requireSupabaseAuth();
 
@@ -1084,9 +1272,7 @@ async function hyqdSelectMine(
                 )
                 .order(
                     orderColumn,
-                    {
-                        ascending: false
-                    }
+                    { ascending: false }
                 );
 
         if (error) {
@@ -1095,59 +1281,58 @@ async function hyqdSelectMine(
 
         return {
             success: true,
-            data:
-                data || []
+            data: data || []
         };
+
     } catch (error) {
+
         return {
             success: false,
             data: [],
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
     }
 }
 
+
 async function getSupabaseDeposits() {
+
     const result =
-        await hyqdSelectMine(
-            "deposits"
-        );
+        await hyqdSelectMine("deposits");
 
     return {
         ...result,
-        deposits:
-            result.data || []
+        deposits: result.data || []
     };
 }
+
 
 async function getSupabaseWithdrawals() {
+
     const result =
-        await hyqdSelectMine(
-            "withdrawals"
-        );
+        await hyqdSelectMine("withdrawals");
 
     return {
         ...result,
-        withdrawals:
-            result.data || []
+        withdrawals: result.data || []
     };
 }
+
 
 async function getSupabaseInvestments() {
+
     const result =
-        await hyqdSelectMine(
-            "investments"
-        );
+        await hyqdSelectMine("investments");
 
     return {
         ...result,
-        investments:
-            result.data || []
+        investments: result.data || []
     };
 }
 
+
 async function getSupabaseSupportTickets() {
+
     const result =
         await hyqdSelectMine(
             "support_tickets"
@@ -1155,12 +1340,13 @@ async function getSupabaseSupportTickets() {
 
     return {
         ...result,
-        tickets:
-            result.data || []
+        tickets: result.data || []
     };
 }
 
+
 async function getSupabaseNotifications() {
+
     const result =
         await hyqdSelectMine(
             "notifications"
@@ -1168,47 +1354,42 @@ async function getSupabaseNotifications() {
 
     return {
         ...result,
-        notifications:
-            result.data || []
+        notifications: result.data || []
     };
 }
+
+
+/* ============================================================
+   ASSISTANCE UTILISATEUR
+============================================================ */
 
 async function createSupabaseSupportTicket({
     subject,
     message
 }) {
+
     try {
+
         const cleanSubject =
-            hyqdCleanText(
-                subject
-            );
+            hyqdCleanText(subject);
 
         const cleanMessage =
-            hyqdCleanText(
-                message
-            );
+            hyqdCleanText(message);
 
-        if (
-            !cleanSubject ||
-            !cleanMessage
-        ) {
+        if (!cleanSubject || !cleanMessage) {
             throw new Error(
                 "Renseignez le sujet et le message."
             );
         }
 
         const { data, error } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "create_support_ticket",
-                    {
-                        p_subject:
-                            cleanSubject,
-
-                        p_message:
-                            cleanMessage
-                    }
-                );
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "create_support_ticket",
+                {
+                    p_subject: cleanSubject,
+                    p_message: cleanMessage
+                }
+            );
 
         if (error) {
             throw error;
@@ -1218,31 +1399,37 @@ async function createSupabaseSupportTicket({
             data,
             "Ticket envoyé."
         );
+
     } catch (error) {
+
         return {
             success: false,
-            message:
-                hyqdSafeMessage(
-                    error,
-                    "Envoi impossible."
-                )
+            message: hyqdSafeMessage(
+                error,
+                "Envoi impossible."
+            )
         };
     }
 }
 
+
+/* ============================================================
+   NOTIFICATIONS
+============================================================ */
 async function markSupabaseNotificationRead(
     notificationId
 ) {
+
     try {
+
         const { data, error } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "mark_notification_read",
-                    {
-                        p_notification_id:
-                            notificationId
-                    }
-                );
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "mark_notification_read",
+                {
+                    p_notification_id:
+                        notificationId
+                }
+            );
 
         if (error) {
             throw error;
@@ -1252,22 +1439,25 @@ async function markSupabaseNotificationRead(
             data,
             "Notification lue."
         );
+
     } catch (error) {
+
         return {
             success: false,
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
     }
 }
 
+
 async function markAllSupabaseNotificationsRead() {
+
     try {
+
         const { data, error } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "mark_all_notifications_read"
-                );
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "mark_all_notifications_read"
+            );
 
         if (error) {
             throw error;
@@ -1277,28 +1467,30 @@ async function markAllSupabaseNotificationsRead() {
             data,
             "Notifications lues."
         );
+
     } catch (error) {
+
         return {
             success: false,
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
     }
 }
 
+
 async function getApprovedDepositTicker(
     limit = 20
 ) {
+
     try {
+
         const { data, error } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "get_approved_deposit_ticker",
-                    {
-                        p_limit:
-                            Number(limit)
-                    }
-                );
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "get_approved_deposit_ticker",
+                {
+                    p_limit: Number(limit)
+                }
+            );
 
         if (error) {
             throw error;
@@ -1318,21 +1510,27 @@ async function getApprovedDepositTicker(
             ticker,
             deposits: ticker
         };
+
     } catch (error) {
+
         return {
             success: false,
             ticker: [],
             deposits: [],
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
     }
 }
 
-async function hyqdAdminSelect(
-    table
-) {
+
+/* ============================================================
+   OUTIL DE LECTURE ADMINISTRATEUR
+============================================================ */
+
+async function hyqdAdminSelect(table) {
+
     try {
+
         const admin =
             await requireSupabaseAdmin();
 
@@ -1348,9 +1546,7 @@ async function hyqdAdminSelect(
                 .select("*")
                 .order(
                     "created_at",
-                    {
-                        ascending: false
-                    }
+                    { ascending: false }
                 );
 
         if (error) {
@@ -1359,21 +1555,28 @@ async function hyqdAdminSelect(
 
         return {
             success: true,
-            data:
-                data || []
+            data: data || []
         };
+
     } catch (error) {
+
         return {
             success: false,
             data: [],
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
     }
 }
 
+
+/* ============================================================
+   LISTES ADMINISTRATEUR
+============================================================ */
+
 async function adminGetSupabaseProfiles() {
+
     try {
+
         const admin =
             await requireSupabaseAdmin();
 
@@ -1389,9 +1592,7 @@ async function adminGetSupabaseProfiles() {
                 .select("*")
                 .order(
                     "created_at",
-                    {
-                        ascending: false
-                    }
+                    { ascending: false }
                 );
 
         if (error) {
@@ -1400,59 +1601,58 @@ async function adminGetSupabaseProfiles() {
 
         return {
             success: true,
-            profiles:
-                data || []
+            profiles: data || []
         };
+
     } catch (error) {
+
         return {
             success: false,
             profiles: [],
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
     }
 }
 
+
 async function adminGetSupabaseDeposits() {
+
     const result =
-        await hyqdAdminSelect(
-            "deposits"
-        );
+        await hyqdAdminSelect("deposits");
 
     return {
         ...result,
-        deposits:
-            result.data || []
+        deposits: result.data || []
     };
 }
+
 
 async function adminGetSupabaseWithdrawals() {
+
     const result =
-        await hyqdAdminSelect(
-            "withdrawals"
-        );
+        await hyqdAdminSelect("withdrawals");
 
     return {
         ...result,
-        withdrawals:
-            result.data || []
+        withdrawals: result.data || []
     };
 }
+
 
 async function adminGetSupabaseInvestments() {
+
     const result =
-        await hyqdAdminSelect(
-            "investments"
-        );
+        await hyqdAdminSelect("investments");
 
     return {
         ...result,
-        investments:
-            result.data || []
+        investments: result.data || []
     };
 }
 
+
 async function adminGetSupabaseSupportTickets() {
+
     const result =
         await hyqdAdminSelect(
             "support_tickets"
@@ -1460,36 +1660,34 @@ async function adminGetSupabaseSupportTickets() {
 
     return {
         ...result,
-        tickets:
-            result.data || []
+        tickets: result.data || []
     };
 }
+/* ============================================================
+   VALIDATION DES DÉPÔTS
+============================================================ */
 
 async function adminReviewSupabaseDeposit({
     depositId,
     approve,
     note
 }) {
+
     try {
+
         const { data, error } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "admin_review_deposit",
-                    {
-                        p_deposit_id:
-                            depositId,
-
-                        p_approve:
-                            Boolean(
-                                approve
-                            ),
-
-                        p_note:
-                            hyqdCleanText(
-                                note
-                            ) || null
-                    }
-                );
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "admin_review_deposit",
+                {
+                    p_deposit_id:
+                        depositId,
+                    p_approve:
+                        Boolean(approve),
+                    p_note:
+                        hyqdCleanText(note) ||
+                        null
+                }
+            );
 
         if (error) {
             throw error;
@@ -1501,40 +1699,42 @@ async function adminReviewSupabaseDeposit({
                 ? "Dépôt validé."
                 : "Dépôt refusé."
         );
+
     } catch (error) {
+
         return {
             success: false,
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
     }
 }
+
+
+/* ============================================================
+   VALIDATION DES RETRAITS
+============================================================ */
 
 async function adminReviewSupabaseWithdrawal({
     withdrawalId,
     approve,
     note
 }) {
+
     try {
+
         const { data, error } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "admin_review_withdrawal",
-                    {
-                        p_withdrawal_id:
-                            withdrawalId,
-
-                        p_approve:
-                            Boolean(
-                                approve
-                            ),
-
-                        p_note:
-                            hyqdCleanText(
-                                note
-                            ) || null
-                    }
-                );
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "admin_review_withdrawal",
+                {
+                    p_withdrawal_id:
+                        withdrawalId,
+                    p_approve:
+                        Boolean(approve),
+                    p_note:
+                        hyqdCleanText(note) ||
+                        null
+                }
+            );
 
         if (error) {
             throw error;
@@ -1546,21 +1746,29 @@ async function adminReviewSupabaseWithdrawal({
                 ? "Retrait validé."
                 : "Retrait refusé."
         );
+
     } catch (error) {
+
         return {
             success: false,
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
     }
 }
+
+
+/* ============================================================
+   RÉPONSE AUX TICKETS
+============================================================ */
 
 async function adminReplySupabaseSupportTicket({
     ticketId,
     reply,
     close
 }) {
+
     try {
+
         const cleanReply =
             hyqdCleanText(reply);
 
@@ -1571,20 +1779,17 @@ async function adminReplySupabaseSupportTicket({
         }
 
         const { data, error } =
-            await HYQD_SUPABASE_CLIENT
-                .rpc(
-                    "admin_reply_support_ticket",
-                    {
-                        p_ticket_id:
-                            ticketId,
-
-                        p_reply:
-                            cleanReply,
-
-                        p_close:
-                            Boolean(close)
-                    }
-                );
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "admin_reply_support_ticket",
+                {
+                    p_ticket_id:
+                        ticketId,
+                    p_reply:
+                        cleanReply,
+                    p_close:
+                        Boolean(close)
+                }
+            );
 
         if (error) {
             throw error;
@@ -1594,11 +1799,13 @@ async function adminReplySupabaseSupportTicket({
             data,
             "Réponse envoyée."
         );
+
     } catch (error) {
+
         return {
             success: false,
-            message:
-                hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
     }
 }
+                
