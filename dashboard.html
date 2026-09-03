@@ -891,13 +891,14 @@ display: flex;
 
 .modal {
 width: min(480px, 100%);
-    
 max-height: 90vh;
 overflow-y: auto;
 border-radius: 20px;
 background: white;
 box-shadow: 0 30px 90px rgba(0, 0, 0, .3);
-}    .modal-head {
+}
+
+.modal-head {
 padding: 17px 19px;
 display: flex;
 align-items: center;
@@ -1483,7 +1484,7 @@ Envoyer
 <div class="section-head">
 <div>
 <h3>Profil</h3>
-<p>Modifiez votre nom et votre téléphone.</p>
+<p>Modifiez votre nom ou demandez un changement sécurisé de numéro.</p>
 </div>
 </div>
 
@@ -1499,8 +1500,8 @@ Envoyer
 </div>
 
 <div class="field">
-<label for="profilePhone">Téléphone</label>
-<input id="profilePhone" type="text" required>
+<label for="profilePhone">Numéro actuel</label>
+<input id="profilePhone" type="text" readonly>
 </div>
 
 </div>
@@ -1515,6 +1516,27 @@ Enregistrer les modifications
 </button>
 
 </form>
+</div>
+
+<div class="panel">
+<h4>Changer mon numéro de téléphone</h4>
+<p class="muted">Le nouveau numéro sera appliqué uniquement après validation par l’administrateur.</p>
+
+<form id="phoneChangeForm">
+<div class="field">
+<label for="newProfilePhone">Nouveau numéro</label>
+<input id="newProfilePhone" type="tel" placeholder="Ex. +2250700000000" required>
+</div>
+
+<button id="phoneChangeSubmitButton" type="submit" class="submit-btn">
+Envoyer la demande
+</button>
+</form>
+
+<h4>Mes demandes de changement</h4>
+<div id="phoneChangeRequestsList">
+<div class="empty">Chargement...</div>
+</div>
 </div>
 </section>
 
@@ -1797,7 +1819,7 @@ return String(value ?? "")
 .replaceAll("&", "&amp;")
 .replaceAll("<", "&lt;")
 .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
+.replaceAll('"', "&quot;")
 .replaceAll("'", "&#039;");
 
 }
@@ -2074,6 +2096,74 @@ referralCode
 document.getElementById("referralLinkInput").value =
 referralLink.href;
 
+}
+
+
+async function loadPhoneChangeRequests() {
+
+const container =
+document.getElementById(
+"phoneChangeRequestsList"
+);
+
+if (!container) return;
+
+const result =
+await getSupabasePhoneChangeRequests();
+
+if (!result?.success) {
+
+container.innerHTML =
+`<div class="empty">${escapeHtml(
+result?.message ||
+"Impossible de charger les demandes."
+)}</div>`;
+
+return;
+}
+
+const requests =
+result.requests || [];
+
+if (!requests.length) {
+
+container.innerHTML =
+'<div class="empty">Aucune demande de changement.</div>';
+
+return;
+}
+
+const statusLabels = {
+pending: "En attente",
+approved: "Validée",
+rejected: "Refusée"
+};
+
+container.innerHTML = requests
+.map(request => {
+
+const status =
+String(request.status || "pending")
+.toLowerCase();
+
+return `
+<div class="notification-item">
+<div>
+<strong>${escapeHtml(request.old_phone || "Non renseigné")}</strong>
+→
+<strong>${escapeHtml(request.new_phone || "")}</strong>
+</div>
+<span class="status ${escapeHtml(status)}">
+${escapeHtml(statusLabels[status] || status)}
+</span>
+<small>${formatDate(request.created_at)}</small>
+${request.admin_note
+? `<p>${escapeHtml(request.admin_note)}</p>`
+: ""}
+</div>`;
+
+})
+.join("");
 }
 
 
@@ -2618,6 +2708,7 @@ async function refreshDashboard() {
 
 await Promise.all([
 loadProfile(),
+loadPhoneChangeRequests(),
 loadInvestments(),
 loadHistory(),
 loadSupportTickets(),
@@ -2697,7 +2788,8 @@ throw new Error("Impossible d'envoyer la preuve de paiement.");
 }
 
 return path;
-    }
+
+}
 
 
 async function removeDepositProof(path) {
@@ -2726,6 +2818,7 @@ p_reference: reference,
 p_proof_path: proofPath
 }
 );
+
 
 if (error) {
 throw error;
@@ -3233,6 +3326,72 @@ button.textContent =
 );
 
 
+/* DEMANDE DE CHANGEMENT DE NUMÉRO */
+
+document
+.getElementById("phoneChangeForm")
+.addEventListener(
+"submit",
+async event => {
+
+event.preventDefault();
+
+const button =
+document.getElementById(
+"phoneChangeSubmitButton"
+);
+
+button.disabled = true;
+button.textContent = "Envoi...";
+
+try {
+
+const newPhone =
+document.getElementById(
+"newProfilePhone"
+).value;
+
+const result =
+await requestSupabasePhoneChange(
+newPhone
+);
+
+if (!result?.success) {
+throw new Error(
+result?.message ||
+"Demande de changement impossible."
+);
+}
+
+showToast(
+result.message,
+"success"
+);
+
+document
+.getElementById("phoneChangeForm")
+.reset();
+
+await loadPhoneChangeRequests();
+
+} catch (error) {
+
+showToast(
+error?.message ||
+"Demande de changement impossible.",
+"error"
+);
+
+} finally {
+
+button.disabled = false;
+button.textContent = "Envoyer la demande";
+
+}
+}
+);
+
+
 /* COPIE */
 
 async function copyText(text) {
@@ -3559,4 +3718,4 @@ startDashboard
 </script>
 
 </body>
-</html>
+</html>    
