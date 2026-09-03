@@ -21,148 +21,79 @@ let HYQD_CAPTCHA_WIDGET_ID = null;
 
 function hyqdGetCaptchaToken() {
     const token = String(HYQD_CAPTCHA_TOKEN || "").trim();
-
     if (!token) {
-        throw new Error(
-            "Veuillez terminer la vérification de sécurité."
-        );
+        throw new Error("Veuillez terminer la vérification de sécurité.");
     }
-
     return token;
 }
 
 function hyqdResetCaptcha() {
     HYQD_CAPTCHA_TOKEN = "";
-
-    if (
-        window.turnstile &&
-        HYQD_CAPTCHA_WIDGET_ID !== null
-    ) {
+    if (window.turnstile && HYQD_CAPTCHA_WIDGET_ID !== null) {
         try {
-            window.turnstile.reset(
-                HYQD_CAPTCHA_WIDGET_ID
-            );
+            window.turnstile.reset(HYQD_CAPTCHA_WIDGET_ID);
         } catch (error) {
-            console.warn(
-                "Réinitialisation Turnstile impossible.",
-                error
-            );
+            console.warn("Réinitialisation Turnstile impossible.", error);
         }
     }
 }
 
 function hyqdRenderTurnstile() {
-    const container =
-        document.getElementById("hyqd-turnstile");
-
-    if (
-        !container ||
-        !window.turnstile ||
-        HYQD_CAPTCHA_WIDGET_ID !== null
-    ) {
+    const container = document.getElementById("hyqd-turnstile");
+    if (!container || !window.turnstile || HYQD_CAPTCHA_WIDGET_ID !== null) {
         return;
     }
-
-    HYQD_CAPTCHA_WIDGET_ID =
-        window.turnstile.render(
-            container,
-            {
-                sitekey:
-                    HYQD_TURNSTILE_SITE_KEY,
-                theme: "light",
-                size: "flexible",
-                language: "fr",
-
-                callback(token) {
-                    HYQD_CAPTCHA_TOKEN = token;
-                },
-
-                "expired-callback"() {
-                    HYQD_CAPTCHA_TOKEN = "";
-                },
-
-                "error-callback"() {
-                    HYQD_CAPTCHA_TOKEN = "";
-                }
-            }
-        );
+    HYQD_CAPTCHA_WIDGET_ID = window.turnstile.render(container, {
+        sitekey: HYQD_TURNSTILE_SITE_KEY,
+        theme: "light",
+        size: "flexible",
+        language: "fr",
+        callback(token) {
+            HYQD_CAPTCHA_TOKEN = token;
+        },
+        "expired-callback"() {
+            HYQD_CAPTCHA_TOKEN = "";
+        },
+        "error-callback"() {
+            HYQD_CAPTCHA_TOKEN = "";
+        }
+    });
 }
 
 function hyqdInitializeTurnstile() {
-    const page =
-        window.location.pathname
-            .split("/")
-            .pop()
-            .toLowerCase();
-
-    if (
-        ![
-            "register.html",
-            "login.html",
-            "forgot-password.html"
-        ].includes(page)
-    ) {
+    const page = window.location.pathname.split("/").pop().toLowerCase();
+    if (!["register.html", "login.html", "forgot-password.html"].includes(page)) {
         return;
     }
-
     const form =
         document.getElementById("registerForm") ||
         document.getElementById("loginForm") ||
         document.getElementById("requestForm");
-
     if (!form) {
         return;
     }
-
-    const firstSubmit =
-        form.querySelector('[type="submit"]');
-
+    const firstSubmit = form.querySelector('[type="submit"]');
     if (!firstSubmit) {
         return;
     }
-
-    const container =
-        document.createElement("div");
-
+    const container = document.createElement("div");
     container.id = "hyqd-turnstile";
-
-    container.style.cssText =
-        "width:100%;min-height:70px;margin:14px 0;" +
-        "display:flex;align-items:center;" +
-        "justify-content:center;overflow:hidden";
-
-    firstSubmit.parentNode.insertBefore(
-        container,
-        firstSubmit
-    );
-
+    container.style.cssText = "width:100%;min-height:70px;margin:14px 0;display:flex;align-items:center;justify-content:center;overflow:hidden";
+    firstSubmit.parentNode.insertBefore(container, firstSubmit);
     if (window.turnstile) {
         hyqdRenderTurnstile();
         return;
     }
-
-    window.hyqdTurnstileLoaded =
-        hyqdRenderTurnstile;
-
-    const script =
-        document.createElement("script");
-
-    script.src =
-        "https://challenges.cloudflare.com/turnstile/v0/api.js" +
-        "?onload=hyqdTurnstileLoaded&render=explicit";
-
+    window.hyqdTurnstileLoaded = hyqdRenderTurnstile;
+    const script = document.createElement("script");
+    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?onload=hyqdTurnstileLoaded&render=explicit";
     script.async = true;
     script.defer = true;
-
     document.head.appendChild(script);
 }
 
 if (document.readyState === "loading") {
-    document.addEventListener(
-        "DOMContentLoaded",
-        hyqdInitializeTurnstile,
-        { once: true }
-    );
+    document.addEventListener("DOMContentLoaded", hyqdInitializeTurnstile, { once: true });
 } else {
     hyqdInitializeTurnstile();
 }
@@ -667,7 +598,7 @@ async function requireSupabaseAdmin() {
     }
 
     const roleResult =
-              await getSupabaseCurrentUserRole();
+        await getSupabaseCurrentUserRole();
 
     const role =
         String(
@@ -914,7 +845,10 @@ async function requestSupabasePhoneChange(
             );
 
         if (error) {
-            throw error;        return hyqdRpcResult(
+            throw error;
+        }
+
+        return hyqdRpcResult(
             data,
             "Demande de changement envoyée à l’administrateur."
         );
@@ -1164,9 +1098,7 @@ async function requestSupabaseWithdrawal({
                     p_amount: numericAmount,
                     p_method:
                         hyqdCleanText(method),
-            
-        }
-                         p_destination_phone:
+                    p_destination_phone:
                         hyqdNormalizePhone(
                             destinationPhone
                         )
@@ -1416,6 +1348,7 @@ async function createSupabaseSupportTicket({
 /* ============================================================
    NOTIFICATIONS
 ============================================================ */
+
 async function markSupabaseNotificationRead(
     notificationId
 ) {
@@ -1663,6 +1596,8 @@ async function adminGetSupabaseSupportTickets() {
         tickets: result.data || []
     };
 }
+
+
 /* ============================================================
    VALIDATION DES DÉPÔTS
 ============================================================ */
@@ -1808,4 +1743,3 @@ async function adminReplySupabaseSupportTicket({
         };
     }
 }
-                
