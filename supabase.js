@@ -924,6 +924,37 @@ async function adminGetSupabasePhoneChangeRequests() {
 }
 
 
+async function adminGetSupabaseAuditLogs() {
+
+    try {
+
+        const { data, error } =
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "admin_get_audit_logs"
+            );
+
+        if (error) {
+            throw error;
+        }
+
+        return {
+            success: true,
+            logs: data || [],
+            data: data || []
+        };
+
+    } catch (error) {
+
+        return {
+            success: false,
+            logs: [],
+            data: [],
+            message: hyqdSafeMessage(error)
+        };
+    }
+}
+
+
 async function adminReviewSupabasePhoneChange({
     requestId,
     approve,
@@ -965,9 +996,7 @@ async function adminReviewSupabasePhoneChange({
             )
         };
     }
-}
-
-
+           }
 /* ============================================================
    HISTORIQUE DES BONUS DE PARRAINAGE
 ============================================================ */
@@ -997,7 +1026,7 @@ async function getSupabaseReferralRewards() {
             success: false,
             rewards: [],
             data: [],
-                       message: hyqdSafeMessage(error)
+            message: hyqdSafeMessage(error)
         };
     }
 }
@@ -1465,8 +1494,7 @@ async function markAllSupabaseNotificationsRead() {
             data,
             "Notifications lues."
         );
-
-    } catch (error) {
+           } catch (error) {
 
         return {
             success: false,
@@ -1497,7 +1525,7 @@ async function getApprovedDepositTicker(
         const ticker =
             Array.isArray(data)
                 ? data
-                           : (
+                : (
                     data?.ticker ||
                     data?.deposits ||
                     []
@@ -1807,4 +1835,4 @@ async function adminReplySupabaseSupportTicket({
             message: hyqdSafeMessage(error)
         };
     }
-           }
+}
