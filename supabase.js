@@ -955,6 +955,70 @@ async function adminGetSupabaseAuditLogs() {
 }
 
 
+async function adminGetSupabaseFraudAlerts() {
+
+    try {
+
+        const { data, error } =
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "admin_get_fraud_alerts"
+            );
+
+        if (error) {
+            throw error;
+        }
+
+        return {
+            success: true,
+            alerts: data || [],
+            data: data || []
+        };
+
+    } catch (error) {
+
+        return {
+            success: false,
+            alerts: [],
+            data: [],
+            message: hyqdSafeMessage(error)
+        };
+    }
+}
+
+
+async function adminResolveSupabaseFraudAlert(
+    alertId
+) {
+
+    try {
+
+        const { data, error } =
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "admin_resolve_fraud_alert",
+                {
+                    p_alert_id: alertId
+                                   }
+            );
+
+        if (error) {
+            throw error;
+        }
+
+        return hyqdRpcResult(
+            data,
+            "Alerte clôturée."
+        );
+
+    } catch (error) {
+
+        return {
+            success: false,
+            message: hyqdSafeMessage(error)
+        };
+    }
+}
+
+
 async function adminReviewSupabasePhoneChange({
     requestId,
     approve,
@@ -996,7 +1060,9 @@ async function adminReviewSupabasePhoneChange({
             )
         };
     }
-           }
+}
+
+
 /* ============================================================
    HISTORIQUE DES BONUS DE PARRAINAGE
 ============================================================ */
@@ -1431,7 +1497,7 @@ async function createSupabaseSupportTicket({
         return {
             success: false,
             message: hyqdSafeMessage(
-                error,
+                               error,
                 "Envoi impossible."
             )
         };
@@ -1494,7 +1560,8 @@ async function markAllSupabaseNotificationsRead() {
             data,
             "Notifications lues."
         );
-           } catch (error) {
+
+    } catch (error) {
 
         return {
             success: false,
@@ -1835,4 +1902,4 @@ async function adminReplySupabaseSupportTicket({
             message: hyqdSafeMessage(error)
         };
     }
-}
+           }
