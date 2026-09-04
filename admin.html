@@ -118,6 +118,7 @@ Housing's YQD
 <button data-page="withdrawals"><i class="fa-solid fa-arrow-up"></i> Retraits</button>
 <button data-page="investments"><i class="fa-solid fa-building"></i> Investissements</button>
 <button data-page="referralRewards"><i class="fa-solid fa-gift"></i> Bonus parrainage</button>
+<button data-page="auditLogs"><i class="fa-solid fa-shield-halved"></i> Journal de sécurité</button>
 <button data-page="support"><i class="fa-solid fa-headset"></i> Assistance</button>
 <button data-page="phoneChanges"><i class="fa-solid fa-mobile-screen-button"></i> Changements de numéro</button>
 <button id="logoutSide"><i class="fa-solid fa-right-from-bracket"></i> Déconnexion</button>
@@ -240,6 +241,19 @@ Housing's YQD
 </div>
 </section>
 
+<section id="auditLogs" class="section">
+<div class="section-head">
+<h3>Journal de sécurité</h3>
+<input class="search" data-search="auditLogs" placeholder="Rechercher">
+</div>
+<div class="card table">
+<table>
+  <thead><tr><th>Administrateur</th><th>Action</th><th>Opération</th><th>Ancien statut</th><th>Nouveau statut</th><th>Note</th><th>Date</th></tr></thead>
+<tbody id="auditLogsBody"></tbody>
+</table>
+</div>
+</section>
+
 <section id="phoneChanges" class="section">
 <div class="section-head">
 <h3>Changements de numéro</h3>
@@ -319,6 +333,7 @@ let deposits=[];
 let withdrawals=[];
 let investments=[];
 let referralRewards=[];
+let auditLogs=[];
 let tickets=[];
 let phoneChanges=[];
 let review=null;
@@ -378,7 +393,8 @@ adminGetSupabaseWithdrawals(),
 adminGetSupabaseInvestments(),
 adminGetSupabaseSupportTickets(),
 adminGetSupabasePhoneChangeRequests(),
-adminGetSupabaseReferralRewards()
+adminGetSupabaseReferralRewards(),
+adminGetSupabaseAuditLogs()
 ]);
 
 profiles=results[0].profiles||[];
@@ -388,6 +404,7 @@ investments=results[3].investments||[];
 tickets=results[4].tickets||[];
 phoneChanges=results[5].requests||results[5].data||[];
 referralRewards=results[6].rewards||results[6].data||[];
+auditLogs=results[7].logs||results[7].data||[];
 
 renderAdminData();
 }
@@ -497,8 +514,8 @@ tickets.map(item=>`
 <td data-label="Action">
 <button class="btn reply" data-ticket="${esc(item.id)}">Répondre</button>
 </td>
-  </tr>
-  `).join(""),
+</tr>
+`).join(""),
 5
 );
 
@@ -532,6 +549,22 @@ ${item.status==="pending"
 ?`<button class="btn" data-phone-review="${esc(item.id)}">Traiter</button>`
 :"-"}
 </td>
+</tr>
+`).join(""),
+7
+);
+
+rows(
+"auditLogsBody",
+auditLogs.map(item=>`
+<tr>
+<td data-label="Administrateur">${esc(item.admin_name||"Administrateur")}</td>
+<td data-label="Action">${esc(item.action||"-")}</td>
+<td data-label="Opération">${esc(item.entity_type||"-")}</td>
+<td data-label="Ancien statut">${esc(item.previous_status||"-")}</td>
+<td data-label="Nouveau statut">${esc(item.new_status||"-")}</td>
+<td data-label="Note">${esc(item.admin_note||"-")}</td>
+<td data-label="Date">${date(item.created_at)}</td>
 </tr>
 `).join(""),
 7
@@ -715,15 +748,14 @@ approve
 ?"Opération validée."
 :"Opération refusée."
 );
-
-await loadAdminData();
+  await loadAdminData();
 }
 
 $("approveReview").onclick=
 ()=>reviewOperation(true);
 
 $("rejectReview").onclick=
-  ()=>reviewOperation(false);
+()=>reviewOperation(false);
 
 $("sendReply").onclick=async()=>{
 
