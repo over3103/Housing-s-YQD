@@ -548,8 +548,7 @@ font-size: 8px;
 .pack-detail strong {
 color: var(--dark);
 }
-
-.invest-btn {
+  .invest-btn {
 width: 100%;
 min-height: 39px;
 margin-top: 13px;
@@ -823,7 +822,7 @@ background: white;
 
 .notification-head strong {
 color: var(--dark);
-font-size: 12px;
+  font-size: 12px;
 }
 
 .notification-head button {
@@ -1098,7 +1097,6 @@ grid-template-columns: 1fr;
 }
 </style>
 </head>
-
 <body>
 
 <div id="loadingScreen" class="loading-screen">
@@ -1371,9 +1369,8 @@ Chargement...
 <th>Statut</th>
 <th>Date</th>
 </tr>
-</thead>
-
-<tbody id="historyTableBody">
+  </thead>
+  <tbody id="historyTableBody">
 <tr>
 <td colspan="6" class="empty">
 Chargement...
@@ -1431,6 +1428,25 @@ Copier le lien
 </div>
 
 </div>
+
+<div class="section-card table-wrap">
+<h4>Historique des bonus reçus</h4>
+<table>
+<thead>
+<tr>
+<th>Filleul</th>
+<th>Premier dépôt</th>
+<th>Taux</th>
+<th>Bonus reçu</th>
+<th>Date</th>
+</tr>
+</thead>
+<tbody id="referralRewardsTableBody">
+<tr><td colspan="5" class="empty">Chargement...</td></tr>
+</tbody>
+</table>
+</div>
+
 </section>
 
 <section id="supportSection" class="section">
@@ -1629,8 +1645,7 @@ required
 </div>
 
 <div class="field">
-
-<label for="depositProof">Preuve de paiement</label>
+  <label for="depositProof">Preuve de paiement</label>
 
 <input
 id="depositProof"
@@ -1904,7 +1919,7 @@ button.dataset.closeModal
 
 document
 .querySelectorAll(".modal-overlay")
-.forEach(
+  .forEach(
 overlay => {
 
 overlay.addEventListener(
@@ -2167,6 +2182,54 @@ ${request.admin_note
 }
 
 
+async function loadReferralRewards() {
+
+const body =
+document.getElementById(
+"referralRewardsTableBody"
+);
+
+if (!body) return;
+
+const result =
+await getSupabaseReferralRewards();
+  if (!result?.success) {
+
+body.innerHTML = `
+<tr>
+<td colspan="5" class="empty">
+${escapeHtml(result?.message || "Historique indisponible.")}
+</td>
+</tr>`;
+
+return;
+}
+
+const rewards = result.rewards || [];
+
+if (!rewards.length) {
+
+body.innerHTML = `
+<tr>
+<td colspan="5" class="empty">Aucun bonus reçu.</td>
+</tr>`;
+
+return;
+}
+
+body.innerHTML = rewards
+.map(item => `
+<tr>
+<td>${escapeHtml(item.referred_name || "Utilisateur")}</td>
+<td>${formatMoney(item.deposit_amount)}</td>
+<td>${escapeHtml(String(Number(item.reward_rate || 0) * 100))} %</td>
+<td>${formatMoney(item.reward_amount)}</td>
+<td>${formatDate(item.created_at)}</td>
+</tr>`)
+.join("");
+}
+
+
 /* PACKS */
 
 const fallbackImages = [
@@ -2405,7 +2468,7 @@ withdrawalResult
 await Promise.all([
 getSupabaseDeposits(),
 getSupabaseWithdrawals()
-]);
+  ]);
 
 const rows = [];
 
@@ -2680,7 +2743,7 @@ result?.deposits ||
 
 const container =
 document.getElementById(
-"depositTicker"
+  "depositTicker"
 );
 
 if (!ticker.length) {
@@ -2709,6 +2772,7 @@ async function refreshDashboard() {
 await Promise.all([
 loadProfile(),
 loadPhoneChangeRequests(),
+loadReferralRewards(),
 loadInvestments(),
 loadHistory(),
 loadSupportTickets(),
@@ -2954,8 +3018,7 @@ result.message,
 document
 .getElementById("depositForm")
 .reset();
-
-document
+  document
 .getElementById("depositProofPreview")
 .classList.remove("show");
 
@@ -3229,8 +3292,7 @@ document
 await loadSupportTickets();
 
 } catch (error) {
-
-showToast(
+  showToast(
 error?.message ||
 "Erreur assistance.",
 "error"
@@ -3474,8 +3536,7 @@ function openNotificationPanel() {
 notificationPanel
 .classList
 .add("show");
-
-notificationPanel.style.display =
+  notificationPanel.style.display =
 "block";
 
 notificationPanel.style.visibility =
@@ -3718,4 +3779,4 @@ startDashboard
 </script>
 
 </body>
-</html>    
+</html>
