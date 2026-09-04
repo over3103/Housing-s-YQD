@@ -498,8 +498,7 @@ async function requireSupabaseAuth(
                     .split("/")
                     .pop()
                     .toLowerCase();
-
-            if (
+                       if (
                 currentPage !==
                 HYQD_SUPABASE_CONFIG.LOGIN_PAGE
             ) {
@@ -968,6 +967,72 @@ async function adminReviewSupabasePhoneChange({
     }
 }
 
+
+/* ============================================================
+   HISTORIQUE DES BONUS DE PARRAINAGE
+============================================================ */
+
+async function getSupabaseReferralRewards() {
+
+    try {
+
+        const { data, error } =
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "get_my_referral_rewards"
+            );
+
+        if (error) {
+            throw error;
+        }
+
+        return {
+            success: true,
+            rewards: data || [],
+            data: data || []
+        };
+
+    } catch (error) {
+
+        return {
+            success: false,
+            rewards: [],
+            data: [],
+                       message: hyqdSafeMessage(error)
+        };
+    }
+}
+
+
+async function adminGetSupabaseReferralRewards() {
+
+    try {
+
+        const { data, error } =
+            await HYQD_SUPABASE_CLIENT.rpc(
+                "admin_get_referral_rewards"
+            );
+
+        if (error) {
+            throw error;
+        }
+
+        return {
+            success: true,
+            rewards: data || [],
+            data: data || []
+        };
+
+    } catch (error) {
+
+        return {
+            success: false,
+            rewards: [],
+            data: [],
+            message: hyqdSafeMessage(error)
+        };
+    }
+}
+
 /* ============================================================
    PACKS D’INVESTISSEMENT
 ============================================================ */
@@ -1432,7 +1497,7 @@ async function getApprovedDepositTicker(
         const ticker =
             Array.isArray(data)
                 ? data
-                : (
+                           : (
                     data?.ticker ||
                     data?.deposits ||
                     []
@@ -1742,4 +1807,4 @@ async function adminReplySupabaseSupportTicket({
             message: hyqdSafeMessage(error)
         };
     }
-}
+           }
