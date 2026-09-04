@@ -117,6 +117,7 @@ Housing's YQD
 <button data-page="deposits"><i class="fa-solid fa-arrow-down"></i> Dépôts</button>
 <button data-page="withdrawals"><i class="fa-solid fa-arrow-up"></i> Retraits</button>
 <button data-page="investments"><i class="fa-solid fa-building"></i> Investissements</button>
+<button data-page="referralRewards"><i class="fa-solid fa-gift"></i> Bonus parrainage</button>
 <button data-page="support"><i class="fa-solid fa-headset"></i> Assistance</button>
 <button data-page="phoneChanges"><i class="fa-solid fa-mobile-screen-button"></i> Changements de numéro</button>
 <button id="logoutSide"><i class="fa-solid fa-right-from-bracket"></i> Déconnexion</button>
@@ -213,6 +214,19 @@ Housing's YQD
 </div>
 </section>
 
+<section id="referralRewards" class="section">
+<div class="section-head">
+<h3>Historique des bonus de parrainage</h3>
+<input class="search" data-search="referralRewards" placeholder="Rechercher">
+</div>
+<div class="card table">
+<table>
+<thead><tr><th>Parrain</th><th>Filleul</th><th>Premier dépôt</th><th>Taux</th><th>Bonus versé</th><th>Date</th></tr></thead>
+<tbody id="referralRewardsBody"></tbody>
+</table>
+</div>
+</section>
+
 <section id="support" class="section">
 <div class="section-head">
 <h3>Assistance</h3>
@@ -304,6 +318,7 @@ let profiles=[];
 let deposits=[];
 let withdrawals=[];
 let investments=[];
+let referralRewards=[];
 let tickets=[];
 let phoneChanges=[];
 let review=null;
@@ -362,7 +377,8 @@ adminGetSupabaseDeposits(),
 adminGetSupabaseWithdrawals(),
 adminGetSupabaseInvestments(),
 adminGetSupabaseSupportTickets(),
-adminGetSupabasePhoneChangeRequests()
+adminGetSupabasePhoneChangeRequests(),
+adminGetSupabaseReferralRewards()
 ]);
 
 profiles=results[0].profiles||[];
@@ -371,6 +387,7 @@ withdrawals=results[2].withdrawals||[];
 investments=results[3].investments||[];
 tickets=results[4].tickets||[];
 phoneChanges=results[5].requests||results[5].data||[];
+referralRewards=results[6].rewards||results[6].data||[];
 
 renderAdminData();
 }
@@ -480,9 +497,24 @@ tickets.map(item=>`
 <td data-label="Action">
 <button class="btn reply" data-ticket="${esc(item.id)}">Répondre</button>
 </td>
+  </tr>
+  `).join(""),
+5
+);
+
+rows(
+"referralRewardsBody",
+referralRewards.map(item=>`
+<tr>
+<td data-label="Parrain">${esc(item.sponsor_name||"Utilisateur")}</td>
+<td data-label="Filleul">${esc(item.referred_name||"Utilisateur")}</td>
+<td data-label="Premier dépôt">${money(item.deposit_amount)}</td>
+<td data-label="Taux">${esc(String(Number(item.reward_rate||0)*100))} %</td>
+<td data-label="Bonus versé">${money(item.reward_amount)}</td>
+<td data-label="Date">${date(item.created_at)}</td>
 </tr>
 `).join(""),
-5
+6
 );
 
 rows(
@@ -691,7 +723,7 @@ $("approveReview").onclick=
 ()=>reviewOperation(true);
 
 $("rejectReview").onclick=
-()=>reviewOperation(false);
+  ()=>reviewOperation(false);
 
 $("sendReply").onclick=async()=>{
 
