@@ -28,7 +28,7 @@ button,input,textarea{font:inherit}
 .content{padding:20px;max-width:1500px;margin:auto}
 .hero{padding:22px;border-radius:18px;background:linear-gradient(135deg,#020617,#0b5cab);color:#fff}
 .hero h2{margin:0 0 8px}
-.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:15px 0}
+.stats{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin:15px 0}
 .stat,.card{background:#fff;border:1px solid #e2e8f0;border-radius:14px}
 .stat{padding:15px}
 .stat small{color:#64748b}
@@ -49,6 +49,10 @@ th{background:#f8fafc}
 .ok{background:#059669}
 .no{background:#dc2626}
 .reply{background:#7c3aed}
+.critical{background:#7f1d1d;color:#fff}
+.high{background:#fee2e2;color:#991b1b}
+.medium{background:#fef3c7;color:#92400e}
+.low{background:#dbeafe;color:#1e40af}
 .empty{text-align:center;color:#94a3b8;padding:25px}
 .modal{display:none;position:fixed;inset:0;z-index:100;background:#020617bb;align-items:center;justify-content:center;padding:15px}
 .modal.show{display:flex}
@@ -119,6 +123,7 @@ Housing's YQD
 <button data-page="investments"><i class="fa-solid fa-building"></i> Investissements</button>
 <button data-page="referralRewards"><i class="fa-solid fa-gift"></i> Bonus parrainage</button>
 <button data-page="auditLogs"><i class="fa-solid fa-shield-halved"></i> Journal de sécurité</button>
+<button data-page="fraudAlerts"><i class="fa-solid fa-triangle-exclamation"></i> Alertes antifraude</button>
 <button data-page="support"><i class="fa-solid fa-headset"></i> Assistance</button>
 <button data-page="phoneChanges"><i class="fa-solid fa-mobile-screen-button"></i> Changements de numéro</button>
 <button id="logoutSide"><i class="fa-solid fa-right-from-bracket"></i> Déconnexion</button>
@@ -156,6 +161,7 @@ Housing's YQD
 <div class="stat"><small>Investissements actifs</small><strong id="sInvestments">0</strong></div>
 <div class="stat"><small>Tickets ouverts</small><strong id="sTickets">0</strong></div>
 <div class="stat"><small>Numéros en attente</small><strong id="sPhoneChanges">0</strong></div>
+<div class="stat"><small>Alertes actives</small><strong id="sFraudAlerts">0</strong></div>
 </div>
 
 <section id="overview" class="section active">
@@ -248,8 +254,21 @@ Housing's YQD
 </div>
 <div class="card table">
 <table>
-  <thead><tr><th>Administrateur</th><th>Action</th><th>Opération</th><th>Ancien statut</th><th>Nouveau statut</th><th>Note</th><th>Date</th></tr></thead>
+<thead><tr><th>Administrateur</th><th>Action</th><th>Opération</th><th>Ancien statut</th><th>Nouveau statut</th><th>Note</th><th>Date</th></tr></thead>
 <tbody id="auditLogsBody"></tbody>
+</table>
+</div>
+</section>
+
+<section id="fraudAlerts" class="section">
+<div class="section-head">
+<h3>Alertes antifraude</h3>
+<input class="search" data-search="fraudAlerts" placeholder="Rechercher">
+</div>
+<div class="card table">
+<table>
+<thead><tr><th>Utilisateur</th><th>Gravité</th><th>Type</th><th>Opération</th><th>Message</th><th>Statut</th><th>Date</th><th>Action</th></tr></thead>
+<tbody id="fraudAlertsBody"></tbody>
 </table>
 </div>
 </section>
@@ -334,6 +353,7 @@ let withdrawals=[];
 let investments=[];
 let referralRewards=[];
 let auditLogs=[];
+let fraudAlerts=[];
 let tickets=[];
 let phoneChanges=[];
 let review=null;
@@ -394,7 +414,8 @@ adminGetSupabaseInvestments(),
 adminGetSupabaseSupportTickets(),
 adminGetSupabasePhoneChangeRequests(),
 adminGetSupabaseReferralRewards(),
-adminGetSupabaseAuditLogs()
+adminGetSupabaseAuditLogs(),
+adminGetSupabaseFraudAlerts()
 ]);
 
 profiles=results[0].profiles||[];
@@ -405,6 +426,7 @@ tickets=results[4].tickets||[];
 phoneChanges=results[5].requests||results[5].data||[];
 referralRewards=results[6].rewards||results[6].data||[];
 auditLogs=results[7].logs||results[7].data||[];
+fraudAlerts=results[8].alerts||results[8].data||[];
 
 renderAdminData();
 }
@@ -427,6 +449,9 @@ tickets.filter(item=>["open","pending"].includes(item.status)).length;
 
 $("sPhoneChanges").textContent=
 phoneChanges.filter(item=>item.status==="pending").length;
+
+$("sFraudAlerts").textContent=
+fraudAlerts.filter(item=>!item.is_resolved).length;
 
 rows(
 "usersBody",
@@ -568,6 +593,23 @@ auditLogs.map(item=>`
 </tr>
 `).join(""),
 7
+);
+
+rows(
+"fraudAlertsBody",
+fraudAlerts.map(item=>`
+<tr>
+<td data-label="Utilisateur">${esc(item.user_name||"Utilisateur")}</td>
+<td data-label="Gravité"><span class="status ${esc(item.severity||"medium")}">${esc(item.severity||"medium")}</span></td>
+<td data-label="Type">${esc(item.alert_type||"-")}</td>
+<td data-label="Opération">${esc(item.entity_type||"-")}</td>
+<td data-label="Message">${esc(item.message||"-")}</td>
+<td data-label="Statut">${item.is_resolved?'<span class="status approved">Clôturée</span>':'<span class="status rejected">Active</span>'}</td>
+<td data-label="Date">${date(item.created_at)}</td>
+<td data-label="Action">${item.is_resolved?"-":`<button class="btn ok" data-resolve-alert="${esc(item.id)}">Clôturer</button>`}</td>
+</tr>
+`).join(""),
+8
 );
 
 bindTableButtons();
@@ -712,9 +754,30 @@ openModal("phoneReviewModal");
 };
 
 });
+
+document.querySelectorAll("[data-resolve-alert]").forEach(button=>{
+
+button.onclick=async()=>{
+
+button.disabled=true;
+
+const result=await adminResolveSupabaseFraudAlert(
+button.dataset.resolveAlert
+);
+
+if(!result?.success){
+toast(result?.message||"Clôture impossible.");
+button.disabled=false;
+return;
 }
 
-async function reviewOperation(approve){
+toast("Alerte clôturée.");
+await loadAdminData();
+};
+
+});
+  }
+  async function reviewOperation(approve){
 
 if(!review){
 return;
@@ -748,7 +811,8 @@ approve
 ?"Opération validée."
 :"Opération refusée."
 );
-  await loadAdminData();
+
+await loadAdminData();
 }
 
 $("approveReview").onclick=
