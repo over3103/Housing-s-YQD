@@ -548,7 +548,8 @@ font-size: 8px;
 .pack-detail strong {
 color: var(--dark);
 }
-  .invest-btn {
+
+.invest-btn {
 width: 100%;
 min-height: 39px;
 margin-top: 13px;
@@ -822,7 +823,7 @@ background: white;
 
 .notification-head strong {
 color: var(--dark);
-  font-size: 12px;
+font-size: 12px;
 }
 
 .notification-head button {
@@ -1097,6 +1098,7 @@ grid-template-columns: 1fr;
 }
 </style>
 </head>
+
 <body>
 
 <div id="loadingScreen" class="loading-screen">
@@ -1369,8 +1371,9 @@ Chargement...
 <th>Statut</th>
 <th>Date</th>
 </tr>
-  </thead>
-  <tbody id="historyTableBody">
+</thead>
+
+<tbody id="historyTableBody">
 <tr>
 <td colspan="6" class="empty">
 Chargement...
@@ -1645,7 +1648,8 @@ required
 </div>
 
 <div class="field">
-  <label for="depositProof">Preuve de paiement</label>
+
+<label for="depositProof">Preuve de paiement</label>
 
 <input
 id="depositProof"
@@ -1919,7 +1923,7 @@ button.dataset.closeModal
 
 document
 .querySelectorAll(".modal-overlay")
-  .forEach(
+.forEach(
 overlay => {
 
 overlay.addEventListener(
@@ -2193,7 +2197,8 @@ if (!body) return;
 
 const result =
 await getSupabaseReferralRewards();
-  if (!result?.success) {
+
+if (!result?.success) {
 
 body.innerHTML = `
 <tr>
@@ -2468,7 +2473,7 @@ withdrawalResult
 await Promise.all([
 getSupabaseDeposits(),
 getSupabaseWithdrawals()
-  ]);
+]);
 
 const rows = [];
 
@@ -2743,7 +2748,7 @@ result?.deposits ||
 
 const container =
 document.getElementById(
-  "depositTicker"
+"depositTicker"
 );
 
 if (!ticker.length) {
@@ -3018,7 +3023,8 @@ result.message,
 document
 .getElementById("depositForm")
 .reset();
-  document
+
+document
 .getElementById("depositProofPreview")
 .classList.remove("show");
 
@@ -3292,7 +3298,8 @@ document
 await loadSupportTickets();
 
 } catch (error) {
-  showToast(
+
+showToast(
 error?.message ||
 "Erreur assistance.",
 "error"
@@ -3536,7 +3543,8 @@ function openNotificationPanel() {
 notificationPanel
 .classList
 .add("show");
-  notificationPanel.style.display =
+
+notificationPanel.style.display =
 "block";
 
 notificationPanel.style.visibility =
@@ -3779,4 +3787,4 @@ startDashboard
 </script>
 
 </body>
-</html>
+</html>    
