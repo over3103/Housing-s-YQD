@@ -334,10 +334,10 @@ async function registerSupabaseUser({
 
         if (
             !password ||
-            password.length < 6
+            password.length < 8
         ) {
             throw new Error(
-                "Le mot de passe doit contenir au moins 6 caractères."
+                "Le mot de passe doit contenir au moins 8 caractères."
             );
         }
 
@@ -683,10 +683,10 @@ async function updateSupabasePassword(
 
         if (
             !newPassword ||
-            newPassword.length < 6
+            newPassword.length < 8
         ) {
             throw new Error(
-                "Le nouveau mot de passe doit contenir au moins 6 caractères."
+                "Le nouveau mot de passe doit contenir au moins 8 caractères."
             );
         }
 
